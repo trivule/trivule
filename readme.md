@@ -6,6 +6,14 @@
 
 The goal of Quickv is to simplify the validation process and save time for developers, allowing them to focus on other aspects of application development. By providing a fast and easy-to-use validation solution, **Quickv** can be an attractive choice for developers looking for an effective solution to add client-side validation to their HTML forms without sacrificing a lot of time in the process.
 
+## Installation
+You can install `Quickv` in one of the following ways:
+### Via a CDN
+Include the CDN in your project by adding the following tag before the `</body>` tag of your HTML structure:
+```html
+<script  src="https://cdn.jsdelivr.net/npm/quickv@1.0.0/dist/index.js"></script>
+```
+
 ## Usage
 
 Quickv offers three validation methods: isolated **input** validation, isolated **form** validation, or general validation of all forms on your site. This allows you to choose the method that best suits your needs and effectively validate user-submitted data, whether it be for a single field, an entire form, or for all forms on your website.

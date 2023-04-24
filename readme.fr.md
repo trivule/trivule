@@ -6,6 +6,18 @@ Quickv est une bibliothèque JavaScript légère et facile à utiliser pour la v
 
 L'objectif de Quickv est de simplifier le processus de validation et d'économiser du temps aux développeurs, leur permettant de se concentrer sur d'autres aspects du développement de l'application. En offrant une solution de validation rapide et facile à utiliser, **Quickv** peut être un choix attractif pour les développeurs qui recherchent une solution efficace pour ajouter une validation côté client à leurs formulaires HTML sans sacrifier beaucoup de temps dans le processus.
 
+  
+
+## Installation 
+Vous pouvez installer ``` Quickv``` de l'une de ses façons
+### Via un cdn
+Incluez le cdn dans votre projet
+[https://cdn.jsdelivr.net/npm/quickv@1.0.0/dist/index.js](https://cdn.jsdelivr.net/npm/quickv@1.0.0/dist/index.js)
+ou copiez coller la balise suivante avant la balise body de votre structure HTML
+```html
+<script  src="https://cdn.jsdelivr.net/npm/quickv@1.0.0/dist/index.js"></script>
+```
+
 ## Utilisation
 
 Quickv offre trois méthodes de validation : la validation isolée d'un champ de saisie (**input**), la validation isolée d'un formulaire (**form**) ou la validation générale de tous les formulaires de votre site.

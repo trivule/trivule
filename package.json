@@ -1,9 +1,14 @@
 {
   "name": "quickv",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Quickv is a lightweight form validation library for web applications",
   "main": "dist/index.js",
-  "typings": "dist/src/*.d.ts",
+  "types": "dist/src/*.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/quick-v/quickv"
+  },
+  "docs": "https://github.com/quick-v/quickv/blob/main/readme.md",
   "scripts": {
     "test": "jest",
     "dev": "webpack build --watch",
