@@ -244,12 +244,9 @@ After that, you can use your rules as html attributes
 
 ---
 ### Documentation and Test
-French: [Documentation](https://linktodocumentation)
+French: [Documentation](https://github.com/quick-v/quickv/blob/main/readme.fr.md)
 
-English: [Documentation](https://linktodocumentation)
-
-Live test : [See live test here]()
-
+English: [Documentation](https://github.com/quick-v/quickv/blob/main/readme.md)
 
 ### Contributing
 

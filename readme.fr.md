@@ -199,11 +199,9 @@ Une fois ceci fait, c'est fini, vous pouvez utiliser vos règles comme des attri
 
 
 ### Documentation et Test
-Français: [Documentation](https://linktodocumentation)
+Français: [Documentation](https://github.com/quick-v/quickv/blob/main/readme.fr.md)
 
-Anglais: [Documentation](https://linktodocumentation)
-
-Test en ligne : [Voir le test en ligne]()
+Anglais: [Documentation](https://github.com/quick-v/quickv/blob/main/readme.md)
 
 
 ### Contribution
