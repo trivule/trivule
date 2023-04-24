@@ -6,12 +6,31 @@
 
 The goal of Quickv is to simplify the validation process and save time for developers, allowing them to focus on other aspects of application development. By providing a fast and easy-to-use validation solution, **Quickv** can be an attractive choice for developers looking for an effective solution to add client-side validation to their HTML forms without sacrificing a lot of time in the process.
 
+
 ## Installation
 You can install `Quickv` in one of the following ways:
-### Via a CDN
-Include the CDN in your project by adding the following tag before the `</body>` tag of your HTML structure:
+### Via un cdn
+Copy the _Quickv_ code from the CDN and paste it into a file named `quickv1.0.0.js`, and then include the `quickv1.0.0.js` file in your project. [Copy the code](https://cdn.jsdelivr.net/npm/quickv@1.0.0/dist/index.js). You can make it easy by copying the following script tag before the closing body tag of your HTML structure:
 ```html
 <script  src="https://cdn.jsdelivr.net/npm/quickv@1.0.0/dist/index.js"></script>
+```
+Vous pouvez faire simple en copiant la balise suivante avant la balise body de votre structure HTML
+
+```html
+<script  src="https://cdn.jsdelivr.net/npm/quickv@1.0.0/dist/index.js"></script>
+```
+
+### via npm
+
+Go to the root of the project where you want to use `Quickv`, open your terminal, and type:
+```bash
+npm install  quickv
+```
+You can then use `Quickv` in your project by importing it:
+```js
+import  *  as  quickv  from  "quickv";
+const  qv=  new  quickv.Quickv()
+qv.init()
 ```
 
 ## Usage
@@ -263,8 +282,6 @@ Contributions are always welcome!
 See `contributing.md` for ways to get started.
 
 Please adhere to this project's `code of conduct`.
-
-
 
 ### License
 

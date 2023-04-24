@@ -189,7 +189,7 @@
         </p>
       </div>
     </form>
-    <script src="https://cdn.jsdelivr.net/npm/quickv@1.0.0/dist/index.js"></script>
+    <script src="dist/index.js"></script>
     <script>
       /**
        * For using the rule you have juste to use foo:Joe
@@ -197,7 +197,7 @@
       const foo = (value, param) => {
         return value === param;
       };
-      const qv = new Qv();
+      const qv = new Quickv();
       //Add new rule
       qv.rule("foo", foo, "Invalid foo input");
 

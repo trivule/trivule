@@ -1,8 +1,6 @@
-import { IQvConfig } from "./../../dist/src/contracts/config.d";
-import { RuleCallBack } from "../contracts";
+import { IQvConfig, RuleCallBack } from "../contracts";
 import { BaseInputValidator } from "./base-input-validator";
 import { QvBag } from "./qv-bag";
-import { QvConfig } from "../qv.config";
 /**
  * @author Claude Fassinou
  */
