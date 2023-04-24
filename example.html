@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      [data-qv-feedback] {
+        color: red;
+      }
+      input,
+      textarea,
+      select,
+      input[type="file"] {
+        margin: 0;
+        padding: 0;
+        border: none;
+        outline: none;
+        background: none;
+        font-family: inherit;
+        font-size: inherit;
+        color: inherit;
+        display: block;
+        width: 100%;
+        border-radius: 10px;
+      }
+
+      input,
+      textarea,
+      select {
+        border: 1px solid #ccc;
+        padding: 8px;
+        transition: border-color 0.3s ease;
+      }
+
+      input:hover,
+      textarea:hover,
+      select:hover,
+      input[type="file"]:hover {
+        border-color: #999;
+      }
+
+      input:focus,
+      textarea:focus,
+      select:focus,
+      input[type="file"]:focus {
+        border-color: #007bff;
+      }
+      input.error,
+      textarea.error,
+      select.error,
+      input[type="file"].error {
+        border-left: 4px solid #ff0000;
+        border-color: #ff0000;
+      }
+
+      input.success,
+      textarea.success,
+      select.success,
+      input[type="file"].success {
+        border-left: 4px solid #28a745;
+        border-color: #28a745;
+      }
+      label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: bold;
+      }
+      .help {
+        display: block;
+        margin-top: 4px;
+        font-size: 14px;
+        color: #777;
+      }
+      button,
+      input[type="button"],
+      input[type="submit"],
+      input[type="reset"] {
+        display: inline-block;
+        margin: 0;
+        padding: 12px 24px;
+        font-size: 16px;
+        font-weight: bold;
+        text-align: center;
+        text-decoration: none;
+        white-space: nowrap;
+        cursor: pointer;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+      }
+
+      button:not(:disabled):hover,
+      input[type="button"]:not(:disabled):hover,
+      input[type="submit"]:not(:disabled):hover,
+      input[type="reset"]:not(:disabled):hover {
+        background-color: #0056b3;
+      }
+
+      button:not(:disabled):focus,
+      input[type="button"]:not(:disabled):focus,
+      input[type="submit"]:not(:disabled):focus,
+      input[type="reset"]:not(:disabled):focus {
+        outline: none;
+        box-shadow: 0 0 0 2px #007bff;
+      }
+      button:disabled,
+      input[type="button"]:disabled,
+      input[type="submit"]:disabled,
+      input[type="reset"]:disabled {
+        cursor: not-allowed;
+        background-color: #e0e0e0;
+        color: #777;
+      }
+    </style>
+    <title>Quickv</title>
+  </head>
+  <body>
+    <form action="" style="max-width: 500px; margin: 80px auto">
+      <h1>Quickv live testing</h1>
+      <div>
+        <label class="label">Age</label>
+        <div class="form-control">
+          <input
+            class="input"
+            type="text"
+            name="age"
+            data-qv-rules="required|int|between:18,80"
+            data-qv-messages="L'âge est requis | {1,2}Veuillez renseigner un âge raisonable"
+            data-qv-show="full"
+          />
+        </div>
+        <div data-qv-feedback="age"></div>
+        <p class="help">Rules applied: required|int|between:18,30</p>
+      </div>
+
+      <div>
+        <label class="file-label"> Choose a file… </label>
+        <input
+          type="file"
+          name="resume"
+          data-qv-rules="required|file|between:1MB,5MB"
+          data-qv-events="change"
+          data-qv-messages="{2}La taille du fichier doit être compris entre 1MB et 5MB"
+        />
+        <div data-qv-feedback="resume"></div>
+        <p class="help">Rules applied: required|file|between:1MB,5MB</p>
+      </div>
+
+      <div>
+        <label class="label">Status</label>
+        <select
+          name="status"
+          data-qv-rules="required|in:Pending,Canceled,Failed,Success"
+        >
+          <option value="" selected>Select one</option>
+          <option>Pending</option>
+          <option>Canceled</option>
+          <option>Failed</option>
+          <option>Success</option>
+          <option>Error value</option>
+        </select>
+        <div data-qv-feedback="status"></div>
+        <p class="help">
+          Rules applied: required|in:Pending,Canceled,Failed,Success
+        </p>
+      </div>
+      <div>
+        <label for="">Message</label>
+        <textarea
+          data-qv-rules="required|startWithUpper|startWith:Salut,Bonjour|minlength:80|maxlength:200|endWith:Merci.,Cordialement."
+          name="message"
+          data-qv-events="mouseover|mouseout|keyup"
+          data-qv-messages="Le message est requis | Votre message doit commencer par une lettre majuscule| Votre message doit commencer par Salut, ou Bonjour| Le message est trop court| Koo, c'est trop long votre message | Votre message doit se terminer par une formule de politesse  (Merci. ou Cordialement.)"
+          cols="30"
+          rows="3"
+        ></textarea>
+        <div data-qv-feedback="message"></div>
+        <p class="help">
+          Rules applied:
+          required|startWithUpper|startWith:Salut,Bonjour|minlength:80|maxlength:200|endWith:Merci.,Cordialement.
+        </p>
+        <p class="help">
+          Validation triger events: <strong>mouseover|mouseout|keyup</strong>
+        </p>
+        <p>
+          <button data-qv-submit>Submit</button>
+        </p>
+      </div>
+    </form>
+    <script src="quickv.js"></script>
+    <script>
+      /**
+       * For using the rule you have juste to use foo:Joe
+       * */
+      const foo = (value, param) => {
+        return value === param;
+      };
+      const qv = new Qv();
+      //Add new rule
+      qv.rule("foo", foo, "Invalid foo input");
+
+      //Initiate with configuration
+      qv.init({
+        validClass: "success",
+        invalidClass: "error",
+      });
+    </script>
+  </body>
+</html>
