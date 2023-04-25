@@ -10,16 +10,10 @@ The goal of Quickv is to simplify the validation process and save time for devel
 ## Installation
 You can install `Quickv` in one of the following ways:
 ### Via un cdn
-Copy the _Quickv_ code from the CDN and paste it into a file named `quickv1.0.0.js`, and then include the `quickv1.0.0.js` file in your project. [Copy the code](https://cdn.jsdelivr.net/npm/quickv@1.0.0/dist/index.js). You can make it easy by copying the following script tag before the closing body tag of your HTML structure:
+Copy the _Quickv_ code from the CDN and paste it into a file named `quickv1.1.0.js`, and then include the `quickv1.1.0.js` file in your project. [Copy the code](https://cdn.jsdelivr.net/npm/quickv@1.1.0/dist/index.js). You can make it easy by copying the following script tag before the closing body tag of your HTML structure:
 ```html
-<script  src="https://cdn.jsdelivr.net/npm/quickv@1.0.0/dist/index.js"></script>
+<script  src="https://cdn.jsdelivr.net/npm/quickv@1.1.0/dist/index.js"></script>
 ```
-Vous pouvez faire simple en copiant la balise suivante avant la balise body de votre structure HTML
-
-```html
-<script  src="https://cdn.jsdelivr.net/npm/quickv@1.0.0/dist/index.js"></script>
-```
-
 ### via npm
 
 Go to the root of the project where you want to use `Quickv`, open your terminal, and type:
@@ -60,7 +54,7 @@ qv.init();
 Example
 
 ```js
-const qv = new Qv();
+const qv = new Quickv();
 qv.init();
 ```
 
@@ -73,7 +67,7 @@ By using these classes, you can easily validate your forms with Quickv, but be s
 - Initialize as follows:
 
   ```js
-  const qv = new Qv();
+  const qv = new Quickv();
   qv.init();
   ```
 

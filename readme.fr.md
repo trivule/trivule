@@ -11,11 +11,11 @@ L'objectif de Quickv est de simplifier le processus de validation et d'économis
 ## Installation 
 Vous pouvez installer ``` Quickv``` de l'une de ses façons
 ### Via un cdn
-Copier le code *Quickv* depuis le cdn et coller dans un fichier `quickv1.0.0.js`, et ensuite incluez le fichier `quickv1.0.0.js` dans votre projet
-[Copier le code](https://cdn.jsdelivr.net/npm/quickv@1.0.0/dist/index.js).
+Copier le code *Quickv* depuis le cdn et coller dans un fichier `quickv1.1.0.js`, et ensuite incluez le fichier `quickv1.1.0.js` dans votre projet
+[Copier le code](https://cdn.jsdelivr.net/npm/quickv@1.1.0/dist/index.js).
 Vous pouvez faire simple en copiant la balise suivante avant la balise body de votre structure HTML
 ```html
-<script  src="https://cdn.jsdelivr.net/npm/quickv@1.0.0/dist/index.js"></script>
+<script  src="https://cdn.jsdelivr.net/npm/quickv@1.1.0/dist/index.js"></script>
 ```
 ### via npm 
 Aller à la racine du projet où vous souhaitez utiliser `Quickv`, ouvrez votre terminal et taper:
@@ -53,7 +53,7 @@ qv.init();
 3- Pour valider tous les formulaires de votre site de façon générale, vous pouvez utiliser la classe `Qv` ou `Quickv` de Quickv. Ces classes ne prennent rien dans leur constructeur et recherchent tous les formulaires de votre site pour leur appliquer une instance de `QvForm`. Cependant, veuillez noter que cette méthode peut ne pas fonctionner correctement avec certains frameworks comme Angular qui manipulent le DOM de manière spécifique. Dans ce cas, vous pouvez utiliser les méthodes 1 et 2 pour une meilleure intégration.
 
 ```js
-const qv = new Qv();
+const qv = new Quickv();
 qv.init();
 ```
 
@@ -65,7 +65,7 @@ En utilisant ces classes, vous pouvez facilement valider vos formulaires avec Qu
 - Initialisez comme ci:
 
 ```js
-const qv = new Qv();
+const qv = new Quickv();
 qv.init();
 ```
 
