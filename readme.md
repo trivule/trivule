@@ -10,9 +10,9 @@ The goal of Quickv is to simplify the validation process and save time for devel
 ## Installation
 You can install `Quickv` in one of the following ways:
 ### Via un cdn
-Copy the _Quickv_ code from the CDN and paste it into a file named `quickv1.1.0.js`, and then include the `quickv1.1.0.js` file in your project. [Copy the code](https://cdn.jsdelivr.net/npm/quickv@1.1.0/dist/index.js). You can make it easy by copying the following script tag before the closing body tag of your HTML structure:
+Copy the _Quickv_ code from the CDN and paste it into a file named `quickv1.2.0.js`, and then include the `quickv1.2.0.js` file in your project. [Copy the code](https://cdn.jsdelivr.net/npm/quickv@1.2.0/dist/index.js). You can make it easy by copying the following script tag before the closing body tag of your HTML structure:
 ```html
-<script  src="https://cdn.jsdelivr.net/npm/quickv@1.1.0/dist/index.js"></script>
+<script  src="https://cdn.jsdelivr.net/npm/quickv@1.2.0/dist/index.js"></script>
 ```
 ### via npm
 
