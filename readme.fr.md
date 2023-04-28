@@ -128,6 +128,15 @@ Si vous souhaitez déclencher la validation d'un champ selon certains événemen
 
 Il peut arriver que vous souhaitiez appliquer un style spécifique à un champ en fonction de son état de validité (valide ou invalide). Pour cela, vous pouvez utiliser les attributs `data-qv-invalid-class` et `data-qv-valid-class`. Par exemple, vous pouvez définir `data-qv-invalid-class` avec la valeur "invalid-css" pour appliquer une classe CSS spécifique lorsque le formulaire est invalide. Ainsi, les classes que vous avez définies seront automatiquement appliquées en fonction de l'état de validité du formulaire.
 
+
+### Attributs disponibles
+
+-   **data-qv-rules**: C'est l'attribut requis et le plus important. Il permet de définir les règles de validation. Une règle est une chaîne de caractères prédéfinie par Quickv. Cet attribut permet de spécifier une liste de règles séparées par le symbole pipe (|).
+-   **data-qv-messages**: Cet attribut est optionnel et permet de spécifier une liste de messages d'erreur séparés par le symbole (|), suivant l'ordre d'assignation des règles de validation. Cependant, il n'est pas obligatoire de spécifier tous les messages. Vous pouvez également spécifier le message d'une règle en le précédant d'un marqueur de position `{i,h,...}`. Avec `i,h,...` étant des entiers représentant la position des règles. **_Il est important de noter que la première règle est à l'index 0_**
+-   **data-qv-feedback**: Permet d'afficher les messages d'erreur. Il prend comme valeur le nom du champ de formulaire dont il devra afficher le message. Il peut être placé n'importe où sur la page, mais Quickv recommande de le placer le plus près possible de l'input auquel il est associé.
+-   **data-qv-submit**: Il permet de désactiver ou d'activer le bouton de soumission en fonction de la validité du formulaire.
+
+
 ### Quelques règles de validation que vous pouvez tester
 
 ###### Règles générales
