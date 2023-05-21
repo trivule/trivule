@@ -95,11 +95,14 @@ En tapant dans le champ d'âge et en soumettant le formulaire en cliquant sur le
 Si vous ne souhaitez pas désactiver le formulaire par défaut, il vous suffit de supprimer l'attribut `data-qv-submit` du bouton de soumission dans votre code HTML.
 
 ### Dans Angular
+Vous pouvez voir ici un exemple d'utilisation de Quickv dans Angular [ici](https://github.com/Claudye/ng-quickv)
+---
 
 ### Dans Reactjs
 
-Vous pouvez voir une démo d'utilisation de Quickv avec Reactjs [ici](https://meschack.github.io/quickv-test)
+Vous pouvez voir ici un exemple d'utilisation de Quickv dans Reactjs [ici](https://github.com/Meschack/quickv-test/tree/react-test)
 
+---
 ## Customisation
 
 Quickv vous de nombreux attributs pour valider votre formulaire sans écrire le moindre code JS

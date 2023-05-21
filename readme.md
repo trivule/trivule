@@ -98,12 +98,12 @@ By typing in the age field and submitting the form by clicking the **_Submit_** 
 If you do not want to disable the default form, simply remove the `data-qv-submit` attribute from the submit button in your HTML code.
 
 ### In Angular
-
+You can see here an example of using Quickv in Angular [here](https://github.com/Claudye/ng-quickv)
 ---
 
 ### In Reactjs
 
-You can see a Quickv usage demo with Reactjs [here](https://meschack.github.io/quickv-test)
+You can see here an example of using Quickv in Reactjs [here](https://github.com/Meschack/quickv-test/tree/react-test)
 
 ---
 
