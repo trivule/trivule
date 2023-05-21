@@ -5,6 +5,15 @@ import { QvInput } from "./qv-input";
 
 /**
  * @author Claude Fassinou
+ * QvForm is responsible for applying live validation to an HTML form.
+ * Creates an instance of QvForm.
+ * @param formElement The HTML form element to apply live validation to.
+ * Example:
+ * ```
+ * const formElement = document.getElementById("myForm") as HTMLFormElement;
+ * const qvForm = new QvForm(formElement);
+ * qvForm.init();
+ * ```
  */
 export class QvForm {
   /**
@@ -48,7 +57,15 @@ export class QvForm {
       this.submitButton = submitButton;
     }
   }
-
+  /**
+   * Initializes live validation on the form element.
+   * @param config Optional configuration object for QvForm.
+   * Example:
+   * ```
+   * const qvForm = new QvForm(formElement);
+   * qvForm.init();
+   * ```
+   */
   init(config?: IQvConfig) {
     this.setConfig(config);
     this.disableButton();

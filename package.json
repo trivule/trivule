@@ -1,9 +1,13 @@
 {
   "name": "quickv",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Quickv is a lightweight form validation library for web applications",
-  "main": "dist/index.js",
-  "types": "types/src/index.d.ts",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./types/src/index.d.ts",
+  "files": [
+    "./dist"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/quick-v/quickv"
@@ -11,8 +15,10 @@
   "docs": "https://github.com/quick-v/quickv/blob/main/readme.md",
   "scripts": {
     "test": "jest",
-    "dev": "webpack build --watch",
-    "build": "webpack build"
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "build:watch": "tsc && vite build --watch",
+    "preview": "vite preview"
   },
   "keywords": [
     "Validation, Form validation"
@@ -20,15 +26,13 @@
   "author": "Fassinou Claude (dev.claudy@gmail.com)",
   "license": "MIT",
   "devDependencies": {
-    "@types/jest": "^29.5.0",
+    "@types/jest": "^29.5.1",
     "jest": "^29.5.0",
     "jest-environment-jsdom": "^29.5.0",
     "ts-jest": "^29.0.5",
-    "ts-loader": "^9.4.2",
     "ts-node": "^10.9.1",
     "typescript": "^5.0.3",
-    "webpack": "^5.75.0",
-    "webpack-cli": "^5.0.1"
+    "vite": "^4.3.2"
   },
   "dependencies": {
     "dayjs": "^1.11.7"

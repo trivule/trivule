@@ -1,4 +1,4 @@
-import { Rule } from "./rules";
+import { Rule } from "./rule";
 
 /**
  * Qv.Input.validated event details

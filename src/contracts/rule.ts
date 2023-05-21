@@ -1,6 +1,3 @@
-/**
- * Availlable rule
- */
 export type Rule =
   | "required"
   | "email"

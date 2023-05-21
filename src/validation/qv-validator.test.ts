@@ -1,4 +1,4 @@
-import { Rule } from "../contracts/rules";
+import { Rule } from "../contracts/rule";
 import { Qvalidator } from "./qv-validator";
 
 describe("Validator", () => {

@@ -195,8 +195,8 @@ export abstract class AbstractInputValidator {
 
   private setInputValidationClass() {
     //Set class from config
-    this.invalidClass = this.config.invalidClass;
-    this.validClass = this.config.validClass;
+    this.invalidClass = this.config.invalidClass ?? "";
+    this.validClass = this.config.validClass ?? "";
 
     //Overwrite class if they on attribute
     this.invalidClass =

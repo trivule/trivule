@@ -3,6 +3,14 @@ import { QvConfig } from "../qv.config";
 import { QvBag } from "./qv-bag";
 import { QvForm } from "./qv-form";
 /**
+ *
+ * Initializes Quickv and applies form validation to all forms in the document.
+ * @param config Optional configuration object for Quickv.
+ * Example:
+ * ```
+ * const quickv = new Quickv();
+ * quickv.init();
+ * ```
  * @author Claude Fassinou
  */
 export class Quickv {
@@ -23,10 +31,14 @@ export class Quickv {
       });
   }
   /**
-   * Add new rule
-   * @param ruleName
-   * @param call
-   * @param message
+   * Adds a new validation rule to Quickv's rule bag.
+   * @param ruleName The name of the rule.
+   * @param call The rule callback function.
+   * @param message Optional error message for the rule.
+   * Example:
+   * ```
+   * quickv.rule('customRule', (value) => value === 'foo', 'Value must be "foo"');
+   * ```
    */
   rule(ruleName: string, call: RuleCallBack, message?: string) {
     QvBag.rule(ruleName, call, message);

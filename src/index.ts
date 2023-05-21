@@ -1,22 +1,18 @@
-import * as quickv from "./validation";
-
-export * from "./validation";
-export * from "./rules";
-export * from "./contracts";
-export * from "./messages";
-export * from "./qv.config";
-export * from "./utils";
+import { QvConfig } from "./qv.config";
+import { Quickv, QvForm, QvInput } from "./validation";
 
 declare global {
   interface Window {
-    QvInput: typeof quickv.QvInput;
-    QvForm: typeof quickv.QvForm;
-    Quickv: typeof quickv.Quickv;
+    QvInput: typeof QvInput;
+    QvForm: typeof QvForm;
+    Quickv: typeof Quickv;
   }
 }
 
 if (typeof window !== "undefined") {
-  window.QvInput = quickv.QvInput;
-  window.QvForm = quickv.QvForm;
-  window.Quickv = quickv.Quickv;
+  window.QvInput = window.QvInput ?? QvInput;
+  window.QvForm = window.QvForm ?? QvForm;
+  window.Quickv = window.Quickv ?? Quickv;
 }
+
+export { Quickv, QvForm, QvInput, QvConfig };

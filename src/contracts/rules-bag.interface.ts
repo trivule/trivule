@@ -1,5 +1,5 @@
 import { RuleCallBack } from "./rule-callback";
-import { Rule } from "./rules";
+import { Rule } from "./rule";
 
 export type RulesBag = {
   [ruleName in Rule]: RuleCallBack;
