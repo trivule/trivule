@@ -806,7 +806,7 @@ class j extends Je {
     });
   }
   /**
-   * Add new rule
+   * Add new rule to input element
    * @param ruleName
    * @param call
    * @param message

@@ -39,7 +39,7 @@ export class QvInput extends BaseInputValidator {
     });
   }
   /**
-   * Add new rule
+   * Add new rule to input element
    * @param ruleName
    * @param call
    * @param message

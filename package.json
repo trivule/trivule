@@ -4,9 +4,10 @@
   "description": "Quickv is a lightweight form validation library for web applications",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
-  "types": "./types/src/index.d.ts",
+  "typings": "./types/src/index.d.ts",
   "files": [
-    "./dist"
+    "./dist",
+    "./types"
   ],
   "repository": {
     "type": "git",
