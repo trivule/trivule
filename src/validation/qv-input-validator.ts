@@ -3,15 +3,16 @@ import { Qvalidator } from "./qv-validator";
 import { AbstractInputValidator } from "./abstract-input";
 import { IQvConfig, InputEventDetails } from "../contracts";
 import { QvMessages } from "../messages";
+import { CssSelector, ValidatableInput } from "../contracts/types";
 
-export class BaseInputValidator extends AbstractInputValidator {
+export class QvInputValidator extends AbstractInputValidator {
   /**
    * Quickv Validator
    */
   protected validator!: Qvalidator;
 
   constructor(
-    inputElement: HTMLInputElement,
+    inputElement: ValidatableInput,
     config?: IQvConfig,
     emitEvent = true
   ) {

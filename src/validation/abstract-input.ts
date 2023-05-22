@@ -1,5 +1,6 @@
 import { QValidation, QvBag } from ".";
 import { IQvConfig, Rule, RulesMessages } from "../contracts";
+import { CssSelector, ValidatableInput } from "../contracts/types";
 import { ValidationErrorMessage } from "../messages";
 import { QvConfig } from "../qv.config";
 import { getRule } from "../utils";
@@ -52,7 +53,7 @@ export abstract class AbstractInputValidator {
   protected events: string[] = ["blur", "input", "change"];
 
   constructor(
-    selector: HTMLInputElement,
+    selector: ValidatableInput,
     config?: IQvConfig,
     protected emitEvent = true
   ) {
@@ -97,17 +98,23 @@ export abstract class AbstractInputValidator {
     }
   }
 
-  private setInputElement(inputElement: any) {
-    if (!(inputElement instanceof HTMLElement)) {
+  /**
+   * Sets the input element for validation.
+   * This method should be called before calling the 'init' method.
+   * @param {ValidatableInput} inputElement - The input element or selector string representing the input element.
+   * @throws {Error} If the input element is not valid or cannot be found.
+   */
+  private setInputElement(inputElement: ValidatableInput) {
+    if (!(inputElement instanceof Element)) {
       const el = document.querySelector(inputElement);
       if (el) {
         inputElement = el;
       }
     }
 
-    if (!(inputElement instanceof HTMLElement)) {
+    if (!(inputElement instanceof Element)) {
       throw new Error(
-        "The 'inputElement' parameter must be of type HTMLElement."
+        "The 'inputElement' parameter must be valide 'ValidatableInput' type."
       );
     }
 

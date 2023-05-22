@@ -134,65 +134,7 @@
         <div data-qv-feedback="age"></div>
         <p class="help">Rules applied: required|int|between:18,30</p>
       </div>
-
-      <div>
-        <label class="file-label"> Choose a file… </label>
-        <input
-          type="file"
-          name="resume"
-          data-qv-rules="required|file|between:1MB,5MB"
-          data-qv-events="change"
-          data-qv-messages="{2}La taille du fichier doit être compris entre 1MB et 5MB"
-        />
-        <div data-qv-feedback="resume"></div>
-        <p class="help">Rules applied: required|file|between:1MB,5MB</p>
-      </div>
-
-      <div>
-        <label class="label">Status</label>
-        <select
-          name="status"
-          data-qv-rules="required|in:Pending,Canceled,Failed,Success"
-        >
-          <option value="" selected>Select one</option>
-          <option>Pending</option>
-          <option>Canceled</option>
-          <option>Failed</option>
-          <option>Success</option>
-          <option>Error value</option>
-        </select>
-        <div data-qv-feedback="status"></div>
-        <p class="help">
-          Rules applied: required|in:Pending,Canceled,Failed,Success
-        </p>
-      </div>
-      <div>
-        <label for="">Message</label>
-        <textarea
-          data-qv-rules="required|startWithUpper|startWith:Salut,Bonjour|minlength:80|maxlength:200|endWith:Merci.,Cordialement."
-          name="message"
-          data-qv-events="mouseover|mouseout|keyup"
-          data-qv-messages="Le message est requis | Votre message doit commencer par une lettre majuscule| Votre message doit commencer par Salut, ou Bonjour| Le message est trop court| Koo, c'est trop long votre message | Votre message doit se terminer par une formule de politesse  (Merci. ou Cordialement.)"
-          cols="30"
-          rows="3"
-        ></textarea>
-        <div data-qv-feedback="message"></div>
-        <p class="help">
-          Rules applied:
-          required|startWithUpper|startWith:Salut,Bonjour|minlength:80|maxlength:200|endWith:Merci.,Cordialement.
-        </p>
-        <p class="help">
-          Validation triger events: <strong>mouseover|mouseout|keyup</strong>
-        </p>
-        <p>
-          <button data-qv-submit>Submit</button>
-        </p>
-      </div>
     </form>
-    <script src="https://cdn.jsdelivr.net/npm/quickv@1.2.0/dist/index.js"></script>
-    <script>
-      const qv = new Quickv();
-      qv.init();
-    </script>
+    <script src="/src/example.ts" type="module"></script>
   </body>
 </html>

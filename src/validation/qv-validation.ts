@@ -6,6 +6,7 @@ import { getRule } from "../utils";
  */
 export class QValidation {
   private rulesBag: RulesBag = QvBag.allRules();
+
   private errors: Rule[] = [];
 
   validate(input: any, rules: Rule[]) {

@@ -1,6 +1,7 @@
 import { IQvConfig, RuleCallBack } from "../contracts";
-import { BaseInputValidator } from "./base-input-validator";
+import { QvInputValidator } from "./qv-input-validator";
 import { QvBag } from "./qv-bag";
+import { ValidatableInput } from "../contracts/types";
 
 /**
  * QvInput is responsible for applying live validation to an HTML input element.
@@ -14,9 +15,9 @@ import { QvBag } from "./qv-bag";
  * qvInput.init();
  * ```
  */
-export class QvInput extends BaseInputValidator {
+export class QvInput extends QvInputValidator {
   constructor(
-    inputElement: HTMLInputElement,
+    inputElement: ValidatableInput,
     config?: IQvConfig,
     emitEvent = true
   ) {
@@ -46,5 +47,11 @@ export class QvInput extends BaseInputValidator {
    */
   rule(ruleName: string, call: RuleCallBack, message?: string) {
     QvBag.rule(ruleName, call, message);
+  }
+
+  destroy() {
+    this.events.forEach((e) => {
+      this.inputElement.removeEventListener(e, this.validate);
+    });
   }
 }
