@@ -48,4 +48,9 @@ export class QvInput extends QvInputValidator {
   rule(ruleName: string, call: RuleCallBack, message?: string) {
     QvBag.rule(ruleName, call, message);
   }
+
+  with(param: QvInputParms) {
+    this._setParams(param);
+    this.validator.setParams(this.param);
+  }
 }

@@ -70,10 +70,23 @@ export type QvInputParms = {
    */
   autoValidate?: boolean;
 
+  /**
+   * The attribute that will be used to display the error message instead of using the input name directly
+   */
   attribute?: string;
 
+  /**
+   *If this field is true, the validation will stop at the first error. And will display the error at the same time
+   */
   failsOnfirst?: boolean;
-
+  /**
+   * If this field is true, each time the validation has been performed,
+   * a qv.input.validated event will be emitted, on which we can connect listeners for example
+   */
   emitEvent?: boolean;
+
+  /**
+   * This field is useful for customizing error messages. By to rewrite the default messages
+   */
   errors?: RulesMessages;
 };

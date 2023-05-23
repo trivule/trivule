@@ -1,4 +1,4 @@
-import { QvBag } from ".";
+import { QValidation, QvBag } from ".";
 import { IQvConfig, Rule, RulesMessages } from "../contracts";
 import { QvInputParms, ValidatableInput } from "../contracts/types";
 import { ValidationErrorMessage } from "../messages";
@@ -9,6 +9,10 @@ import { getRule } from "../utils";
  * @author Claude Fassinou
  */
 export abstract class AbstractInputValidator {
+  /**
+   * Quickv Validator
+   */
+  protected validator!: QValidation;
   //Qv config
   protected config: IQvConfig = QvConfig;
   /** Input element which must be validate */
@@ -59,11 +63,12 @@ export abstract class AbstractInputValidator {
     config?: IQvConfig,
     params?: QvInputParms
   ) {
+    this.validator = new QValidation(this.param);
     this.setConfig(config);
     this.setInputElement(selector);
     this._setParams(params);
 
-    this.setInputRules();
+    this.setRules(params?.rules);
     this.setInputName();
     this.setFeedbackElement();
     this.setShowMessage();
@@ -71,12 +76,13 @@ export abstract class AbstractInputValidator {
 
     this._setErrors();
     this._setEvent(params?.events);
+    this.validator.setParams(this.param);
   }
   /**
    *Set input rules from input
    * @returns
    */
-  protected setInputRules(rules?: string[]) {
+  setRules(rules?: string[]) {
     let ruleSrring: any = this.inputElement.dataset.qvRules ?? "";
     if (ruleSrring) {
       for (const rule of ruleSrring.split("|") as Rule[]) {
@@ -296,7 +302,7 @@ export abstract class AbstractInputValidator {
     }
   }
 
-  private _setParams(param?: QvInputParms) {
+  protected _setParams(param?: QvInputParms) {
     if (typeof param === "object" && typeof param !== "undefined") {
       this.param = { ...this.param, ...param };
     }

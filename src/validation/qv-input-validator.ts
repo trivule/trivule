@@ -1,21 +1,14 @@
 import { AbstractInputValidator } from "./abstract-input";
 import { IQvConfig, InputEventDetails } from "../contracts";
 import { QvInputParms, ValidatableInput } from "../contracts/types";
-import { QValidation } from "./qv-validation";
 
 export class QvInputValidator extends AbstractInputValidator {
-  /**
-   * Quickv Validator
-   */
-  protected validator!: QValidation;
-
   constructor(
     inputElement: ValidatableInput,
     config?: IQvConfig,
     params?: QvInputParms
   ) {
     super(inputElement, config, params);
-    this.validator = new QValidation(this.param);
   }
   /**
    * Performs validation on the input element. And emits qv.input.validated event if necessary.

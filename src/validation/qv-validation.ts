@@ -40,12 +40,10 @@ export class QValidation {
    */
   private _qvmessages: Record<string, string> = {};
 
-  constructor(param: QvInputParms) {
-    this._attr = param.attribute ?? "";
-    this._failOnfirst = param.failsOnfirst !== undefined && param.failsOnfirst;
-
-    this._rules = param.rules ?? [];
-    this._qvmessages = param.errors ?? {};
+  constructor(param?: QvInputParms) {
+    if (param) {
+      this.setParams(param);
+    }
   }
 
   /**
@@ -186,5 +184,13 @@ export class QValidation {
 
   get value(): InputValueType {
     return this._value;
+  }
+
+  setParams(param: QvInputParms) {
+    this._attr = param.attribute ?? "";
+    this._failOnfirst = param.failsOnfirst !== undefined && param.failsOnfirst;
+
+    this._rules = param.rules ?? [];
+    this._qvmessages = param.errors ?? {};
   }
 }
