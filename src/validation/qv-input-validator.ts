@@ -1,22 +1,21 @@
-import { Rule } from "../contracts/rule";
-import { Qvalidator } from "./qv-validator";
 import { AbstractInputValidator } from "./abstract-input";
 import { IQvConfig, InputEventDetails } from "../contracts";
-import { QvMessages } from "../messages";
-import { CssSelector, ValidatableInput } from "../contracts/types";
+import { QvInputParms, ValidatableInput } from "../contracts/types";
+import { QValidation } from "./qv-validation";
 
 export class QvInputValidator extends AbstractInputValidator {
   /**
    * Quickv Validator
    */
-  protected validator!: Qvalidator;
+  protected validator!: QValidation;
 
   constructor(
     inputElement: ValidatableInput,
     config?: IQvConfig,
-    emitEvent = true
+    params?: QvInputParms
   ) {
-    super(inputElement, config, emitEvent);
+    super(inputElement, config, params);
+    this.validator = new QValidation(this.param);
   }
   /**
    * Performs validation on the input element. And emits qv.input.validated event if necessary.
@@ -74,11 +73,11 @@ export class QvInputValidator extends AbstractInputValidator {
    * ```
    * const qvInput = new QvInput(inputElement);
    * const messages = qvInput.getMessages();
-   * console.log(messages); // Output: { ruleName1: 'Message 1', ruleName2: 'Message 2', ... }
+   * console.log(messages);
    * ```
    */
-  getMessages(): Record<string, string> {
-    return this.messages;
+  getMessages(): (string | null)[] {
+    return this.validator.getMessages();
   }
 
   /**
@@ -96,25 +95,14 @@ export class QvInputValidator extends AbstractInputValidator {
    * ```
    */
   valid() {
-    const input: Record<string, any> = {};
-    const rules: Record<string, Rule[]> = {};
-
-    input[this.name] = this.getValue();
-    rules[this.name] = this.rules;
-
-    const qvMessages = new QvMessages();
-
-    qvMessages.setMessages(this.messages);
-
-    this.validator = Qvalidator.make(rules, input, qvMessages);
-
-    return this.validator.isValid();
+    this.validator.value = this.getValue();
+    return this.validator.passes();
   }
   /**
    * Emit event if input change
    */
   private emitChangeEvent() {
-    if (this.emitEvent) {
+    if (this.param.emitEvent) {
       this.inputElement.dispatchEvent(
         new CustomEvent<InputEventDetails>("qv.input.validated", {
           detail: {
@@ -128,8 +116,8 @@ export class QvInputValidator extends AbstractInputValidator {
     }
   }
 
-  getErrors(): string[] {
-    return this._errors;
+  getErrors(): Record<string, string> {
+    return this.validator.getErrors();
   }
   /**
    * Check if the input element has failed validation.
@@ -146,5 +134,11 @@ export class QvInputValidator extends AbstractInputValidator {
    */
   fails(): boolean {
     return !this.valid();
+  }
+
+  destroy() {
+    this.param.events?.forEach((e) => {
+      this.inputElement.removeEventListener(e, this.validate);
+    });
   }
 }

@@ -128,7 +128,9 @@ export class QvForm {
       this.container
         .querySelectorAll<HTMLElement>("[data-qv-rules]")
         .forEach((el) => {
-          new QvInput(el as HTMLInputElement, this.config, false).validate();
+          new QvInput(el as HTMLInputElement, this.config, {
+            emitEvent: false,
+          }).validate();
         });
       if (!this.isValid()) {
         submitEvent.preventDefault();

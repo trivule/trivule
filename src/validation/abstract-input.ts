@@ -1,6 +1,6 @@
-import { QValidation, QvBag } from ".";
+import { QvBag } from ".";
 import { IQvConfig, Rule, RulesMessages } from "../contracts";
-import { CssSelector, ValidatableInput } from "../contracts/types";
+import { QvInputParms, ValidatableInput } from "../contracts/types";
 import { ValidationErrorMessage } from "../messages";
 import { QvConfig } from "../qv.config";
 import { getRule } from "../utils";
@@ -47,32 +47,36 @@ export abstract class AbstractInputValidator {
   /** Wich class assign to input if validation failed */
   protected invalidClass = "is-invalid";
 
-  /**
-   * Defaults event with trigge validat
-   */
-  protected events: string[] = ["blur", "input", "change"];
+  protected param: QvInputParms = {
+    emitEvent: true,
+    autoValidate: true,
+    failsOnfirst: true,
+    events: ["blur", "input", "change"],
+  };
 
   constructor(
     selector: ValidatableInput,
     config?: IQvConfig,
-    protected emitEvent = true
+    params?: QvInputParms
   ) {
     this.setConfig(config);
     this.setInputElement(selector);
+    this._setParams(params);
+
     this.setInputRules();
     this.setInputName();
     this.setFeedbackElement();
     this.setShowMessage();
     this.setInputValidationClass();
 
-    this.getElementQvMessages();
-    this.setEvent();
+    this._setErrors();
+    this._setEvent(params?.events);
   }
   /**
    *Set input rules from input
    * @returns
    */
-  protected setInputRules() {
+  protected setInputRules(rules?: string[]) {
     let ruleSrring: any = this.inputElement.dataset.qvRules ?? "";
     if (ruleSrring) {
       for (const rule of ruleSrring.split("|") as Rule[]) {
@@ -85,17 +89,24 @@ export abstract class AbstractInputValidator {
         }
       }
     }
+    this.rules = (rules as Rule[]) ?? this.rules;
+
+    this.param.rules = this.rules;
     return this;
   }
 
   abstract validate(): boolean;
 
-  protected setEvent() {
+  protected _setEvent(events?: string[]) {
     const ev = this.inputElement.dataset.qvEvents;
 
     if (ev) {
-      this.events = ev.split("|");
+      this.param.events = ev.split("|").length
+        ? ev.split("|")
+        : this.param.events;
     }
+
+    this.param.events = events ?? this.param.events;
   }
 
   /**
@@ -123,9 +134,6 @@ export abstract class AbstractInputValidator {
 
   private setInputName() {
     let name: string | undefined = this.inputElement.name;
-    if (this.inputElement.dataset.qvName) {
-      name = this.inputElement.dataset.qvName;
-    }
 
     if (
       name === undefined ||
@@ -136,11 +144,18 @@ export abstract class AbstractInputValidator {
     }
 
     this.name = name;
+    let attr = this.name;
+
+    if (this.inputElement.dataset.qvName) {
+      attr = this.inputElement.dataset.qvName;
+    }
+
+    this.param.attribute = attr;
   }
 
   set errors(value: any) {
     if (value) {
-      this._errors = value[this.name] ?? [];
+      this._errors = value ?? [];
     }
     this.showErrorMessages();
   }
@@ -163,6 +178,7 @@ export abstract class AbstractInputValidator {
       parentElement = parentElement.parentElement;
     }
     this.feedbackElement = feedbackElement;
+    this.param.feedbackElement = this.param.feedbackElement ?? feedbackElement;
   }
 
   /**
@@ -234,7 +250,7 @@ export abstract class AbstractInputValidator {
     }
   }
 
-  private getElementQvMessages() {
+  private _setErrors(errors?: RulesMessages) {
     const elMessages = this.inputElement.dataset.qvMessages;
     let oms: RulesMessages = {} as any;
     for (let i = 0; i < this.rules.length; i++) {
@@ -245,16 +261,22 @@ export abstract class AbstractInputValidator {
         messages = vem.getMessages();
       }
       const customMessage = messages !== undefined ? messages[i] : "";
-      const rule = new QValidation().getRule(this.rules[i]).ruleName;
-
+      const rule = getRule(this.rules[i]).ruleName;
       if (typeof customMessage == "string" && customMessage.length > 0) {
         oms[rule] = customMessage;
       } else {
         oms[rule] = QvBag.getMessage(rule);
       }
     }
-
-    this.messages = oms;
+    if (
+      typeof errors !== "undefined" &&
+      typeof errors === "object" &&
+      Object.values(errors).length > 0
+    ) {
+      this.param.errors = errors;
+    } else {
+      this.param.errors = oms;
+    }
   }
 
   getName() {
@@ -271,6 +293,12 @@ export abstract class AbstractInputValidator {
     this.config = QvConfig;
     if (config && typeof config === "object") {
       this.config = { ...this.config, ...config };
+    }
+  }
+
+  private _setParams(param?: QvInputParms) {
+    if (typeof param === "object" && typeof param !== "undefined") {
+      this.param = { ...this.param, ...param };
     }
   }
 }
