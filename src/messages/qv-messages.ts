@@ -44,7 +44,7 @@ export class QvMessages {
    * @returns
    */
   setMessages(messages: RulesMessages) {
-    this.messages = messages;
+    this.messages = { ...this.messages, ...messages };
     return this;
   }
 
