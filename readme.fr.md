@@ -6,28 +6,34 @@ Quickv est une bibliothèque JavaScript légère et facile à utiliser pour la v
 
 L'objectif de Quickv est de simplifier le processus de validation et d'économiser du temps aux développeurs, leur permettant de se concentrer sur d'autres aspects du développement de l'application. En offrant une solution de validation rapide et facile à utiliser, **Quickv** peut être un choix attractif pour les développeurs qui recherchent une solution efficace pour ajouter une validation côté client à leurs formulaires HTML sans sacrifier beaucoup de temps dans le processus.
 
-  
+## Installation
 
-## Installation 
-Vous pouvez installer ``` Quickv``` de l'une de ses façons
+Vous pouvez installer ` Quickv` de l'une de ses façons
+
 ### Via un cdn
-Copier le code *Quickv* depuis le cdn et coller dans un fichier `quickv1.2.0.js`, et ensuite incluez le fichier `quickv1.2.0.js` dans votre projet
+
+Copier le code _Quickv_ depuis le cdn et coller dans un fichier `quickv1.2.0.js`, et ensuite incluez le fichier `quickv1.2.0.js` dans votre projet
 [Copier le code](https://cdn.jsdelivr.net/npm/quickv@1.2.0/dist/index.js).
 Vous pouvez faire simple en copiant la balise suivante avant la balise body de votre structure HTML
+
 ```html
-<script  src="https://cdn.jsdelivr.net/npm/quickv@1.2.0/dist/index.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/quickv@1.2.0/dist/index.js"></script>
 ```
-### via npm 
+
+### via npm
+
 Aller à la racine du projet où vous souhaitez utiliser `Quickv`, ouvrez votre terminal et taper:
+
 ```bash
     npm install quickv
 ```
 
 Vous pouvez alors utilisez `Quickv` dans votre projet en l'important:
+
 ```js
-  import * as quickv from "quickv";
-  const qv= new quickv.Quickv()
-  qv.init()
+import * as quickv from "quickv";
+const qv = new quickv.Quickv();
+qv.init();
 ```
 
 ## Utilisation
@@ -95,14 +101,15 @@ En tapant dans le champ d'âge et en soumettant le formulaire en cliquant sur le
 Si vous ne souhaitez pas désactiver le formulaire par défaut, il vous suffit de supprimer l'attribut `data-qv-submit` du bouton de soumission dans votre code HTML.
 
 ### Dans Angular
-Vous pouvez voir ici un exemple d'utilisation de Quickv dans Angular [ici](https://github.com/Claudye/ng-quickv)
----
+
+## Vous pouvez voir ici un exemple d'utilisation de Quickv dans Angular [ici](https://github.com/Claudye/ng-quickv)
 
 ### Dans Reactjs
 
 Vous pouvez voir ici un exemple d'utilisation de Quickv dans Reactjs [ici](https://github.com/Meschack/quickv-test/tree/react-test)
 
 ---
+
 ## Customisation
 
 Quickv vous de nombreux attributs pour valider votre formulaire sans écrire le moindre code JS
@@ -131,14 +138,12 @@ Si vous souhaitez déclencher la validation d'un champ selon certains événemen
 
 Il peut arriver que vous souhaitiez appliquer un style spécifique à un champ en fonction de son état de validité (valide ou invalide). Pour cela, vous pouvez utiliser les attributs `data-qv-invalid-class` et `data-qv-valid-class`. Par exemple, vous pouvez définir `data-qv-invalid-class` avec la valeur "invalid-css" pour appliquer une classe CSS spécifique lorsque le formulaire est invalide. Ainsi, les classes que vous avez définies seront automatiquement appliquées en fonction de l'état de validité du formulaire.
 
-
 ### Attributs disponibles
 
--   **data-qv-rules**: C'est l'attribut requis et le plus important. Il permet de définir les règles de validation. Une règle est une chaîne de caractères prédéfinie par Quickv. Cet attribut permet de spécifier une liste de règles séparées par le symbole pipe (|).
--   **data-qv-messages**: Cet attribut est optionnel et permet de spécifier une liste de messages d'erreur séparés par le symbole (|), suivant l'ordre d'assignation des règles de validation. Cependant, il n'est pas obligatoire de spécifier tous les messages. Vous pouvez également spécifier le message d'une règle en le précédant d'un marqueur de position `{i,h,...}`. Avec `i,h,...` étant des entiers représentant la position des règles. **_Il est important de noter que la première règle est à l'index 0_**
--   **data-qv-feedback**: Permet d'afficher les messages d'erreur. Il prend comme valeur le nom du champ de formulaire dont il devra afficher le message. Il peut être placé n'importe où sur la page, mais Quickv recommande de le placer le plus près possible de l'input auquel il est associé.
--   **data-qv-submit**: Il permet de désactiver ou d'activer le bouton de soumission en fonction de la validité du formulaire.
-
+- **data-qv-rules**: C'est l'attribut requis et le plus important. Il permet de définir les règles de validation. Une règle est une chaîne de caractères prédéfinie par Quickv. Cet attribut permet de spécifier une liste de règles séparées par le symbole pipe (|).
+- **data-qv-messages**: Cet attribut est optionnel et permet de spécifier une liste de messages d'erreur séparés par le symbole (|), suivant l'ordre d'assignation des règles de validation. Cependant, il n'est pas obligatoire de spécifier tous les messages. Vous pouvez également spécifier le message d'une règle en le précédant d'un marqueur de position `{i,h,...}`. Avec `i,h,...` étant des entiers représentant la position des règles. **_Il est important de noter que la première règle est à l'index 0_**
+- **data-qv-feedback**: Permet d'afficher les messages d'erreur. Il prend comme valeur le nom du champ de formulaire dont il devra afficher le message. Il peut être placé n'importe où sur la page, mais Quickv recommande de le placer le plus près possible de l'input auquel il est associé.
+- **data-qv-submit**: Il permet de désactiver ou d'activer le bouton de soumission en fonction de la validité du formulaire.
 
 ### Quelques règles de validation que vous pouvez tester
 
@@ -233,12 +238,60 @@ qv.init();
 
 Une fois ceci fait, c'est fini, vous pouvez utiliser vos règles comme des attributs html
 
+---
+
+## Nouvelles fonctionnalités
+
+### QvInputParams
+
+L'interface `QvInputParams` représente un objet d'attributs utilisés pour paramétrer la validation dans Quickv.
+
+L'interface `QvInputParams` vous permet de définir des règles de validation, des messages d'erreurs personnalisés, l'élément HTML à utiliser pour afficher ces messages, ... pour un élément d'entrée, en spécifiant un objet de paramètres qui seront utilisés lors de la validation.
+
+### Performance
+
+Quickv a introduit des améliorations de performance pour optimiser le processus de validation. Il vérifie maintenant si une valeur a déjà été validée avec la même règle. Si la valeur a déjà été validée précédemment, Quickv évite de la revalider et renvoie plutôt le statut de validation mis en cache. Cela permet de minimiser les appels de validation redondants et d'améliorer les performances globales.
+
+En mettant en cache les résultats de validation, Quickv réduit la charge de calcul liée à la revalidation de la même valeur plusieurs fois lorsqu'elle n'a pas changé.
+
+### Personnalisation
+
+Quickv offre une façon flexible de personnaliser les valeurs d'attribut en utilisant la classe `QvInput`. Au lieu de spécifier directement les valeurs d'attribut dans les attributs HTML (par exemple `data-qv-rules`), vous pouvez les définir de manière programmative à l'aide de code JavaScript.
+
+Exemple 1
+
+```typescript
+const qvInput = new QvInput("input", {}, { rules: ["required", "email"] });
+qvInput.init();
+```
+
+Dans cet exemple, la classe `QvInput` est instanciée et prend trois paramètres :
+
+- un sélecteur d'élément d'entrée ("input")
+
+- des configurations (représentant un objet pouvant contenir les clés `invalidClass` et `validClass` contenant respectivement en valeur les classes CSS à utiliser pour styliser l'élément d'entrée lorsqu'il est invalide ou valide)
+
+- des paramètres supplémentaires en tant qu'options, incluant l'attribut `rules` avec les règles de validation spécifiées.
+
+Exemple 2
+
+```typescript
+const qvInput = new QvInput("input");
+qvInput.with({ rules: ["required", "email"] });
+qvInput.init();
+```
+
+Cette approche alternative montre l'utilisation de la méthode `with` de la classe `QvInput` pour définir les paramètres séparément après l'instanciation. Encore une fois, l'attribut `rules` est spécifié avec les règles de validation souhaitées.
+
+En utilisant la classe `QvInput`, vous pouvez configurer dynamiquement les paramètres dans le code JavaScript, ce qui offre plus de flexibilité tout en évitant d'encombrer vos fichiers HTML avec des attributs `data-qv-`.
+
+Retrouvez l'ensemble des types [ici](./src/contracts/types.ts)
 
 ### Documentation et Test
+
 Français: [Documentation](https://github.com/quick-v/quickv/blob/main/readme.fr.md)
 
 Anglais: [Documentation](https://github.com/quick-v/quickv/blob/main/readme.md)
-
 
 ### Contribution
 
@@ -248,8 +301,6 @@ Consultez le fichier `contributing.md` pour savoir comment commencer.
 
 Veuillez vous conformer au `code de conduite` de ce projet.
 
-
-
 ### License
 
 Ce projet est sous licence MIT. Consultez le fichier **LICENSE** pour plus de détails.
@@ -257,4 +308,5 @@ Ce projet est sous licence MIT. Consultez le fichier **LICENSE** pour plus de d�
 ### Credits
 
 Cette bibliothèque a été développée par [Claude Fassinou](https://github.com/Claudye) pour [Quickv](https://github.com/quickv).
+
 **_Happy coding_**
