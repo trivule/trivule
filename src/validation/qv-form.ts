@@ -1,4 +1,9 @@
-import { IQvConfig, RuleCallBack } from "../contracts";
+import {
+  EventCallback,
+  IQvConfig,
+  RuleCallBack,
+  ValidatableForm,
+} from "../contracts";
 import { QvConfig } from "../qv.config";
 import { QvBag } from "./qv-bag";
 import { QvInput } from "./qv-input";
@@ -32,11 +37,11 @@ export class QvForm {
 
   protected config: IQvConfig = QvConfig;
 
-  constructor(container: HTMLElement) {
+  constructor(container: ValidatableForm) {
     this.setContainer(container);
   }
 
-  private setContainer(container: any) {
+  private setContainer(container: ValidatableForm) {
     if (!(container instanceof HTMLElement)) {
       const el = document.querySelector(container);
       if (el) {
@@ -77,6 +82,14 @@ export class QvForm {
     this.handle();
     this.onSubmit();
     this.setInputs();
+
+    this.onFails((e) => {
+      this.disableButton();
+    });
+
+    this.onPasses((e) => {
+      this.enableButton();
+    });
   }
 
   private disableButton() {
@@ -91,19 +104,14 @@ export class QvForm {
   }
 
   private handle() {
-    const validate = () => {
-      if (this.isValid()) {
-        this.enableButton();
-      } else {
-        this.disableButton();
-      }
-    };
-
     ["change", "qv.input.validated"].forEach((ev) => {
-      this.container.addEventListener(ev, (e) => {
+      this.on(ev, (e) => {
         e.stopPropagation();
-        validate();
-        this.setInputs();
+        if (this.isValid()) {
+          this.emit("qv.form.passes");
+        } else {
+          this.emit("qv.form.fails");
+        }
       });
     });
   }
@@ -121,7 +129,7 @@ export class QvForm {
     });
   }
   /**
-   * Handle validation befor process submtion
+   * Handle validation before process submtion
    */
   private onSubmit() {
     this.container.addEventListener("submit", (submitEvent) => {
@@ -133,7 +141,10 @@ export class QvForm {
           }).validate();
         });
       if (!this.isValid()) {
+        this.emit("qv.form.fails");
         submitEvent.preventDefault();
+      } else {
+        this.emit("qv.form.passes");
       }
     });
   }
@@ -162,5 +173,58 @@ export class QvForm {
     if (config && typeof config === "object") {
       this.config = { ...this.config, ...config };
     }
+  }
+
+  /**
+   * Attach an event listener to the container element.
+   *
+   * @param e - The name of the event to listen to.
+   * @param fn - The callback function to execute when the event occurs.
+   * This function takes an event of type `Event` as a parameter and returns nothing.
+   * Example: `(event) => { ... }`
+   */
+  on(e: string, fn: EventCallback): void {
+    this.container.addEventListener(e, fn);
+  }
+
+  /**
+   * Emits a custom event to the container element.
+   *
+   * @param e - The name of the custom event to emit.
+   * @param data - The additional data to pass with the event.
+   */
+  emit(e: string, data?: any): void {
+    const event = new CustomEvent(e, { detail: data });
+    this.container.dispatchEvent(event);
+  }
+
+  /**
+   * Attaches an event listener to the "qv.form.fails" event.
+   * This event is triggered when the form fails validation.
+   * @param fn - The callback function to execute when the event occurs.
+   * Example:
+   * ```typescript
+   * qvForm.onFails((e) => {
+   *   console.log("Form validation failed", e);
+   * });
+   * ```
+   */
+  onFails(fn: EventCallback): void {
+    this.on("qv.form.fails", fn);
+  }
+
+  /**
+   * Attaches an event listener to the "qv.form.passes" event.
+   * This event is triggered when the form passes validation.
+   * @param fn - The callback function to execute when the event occurs.
+   * Example:
+   * ```typescript
+   * qvForm.onPasses((e) => {
+   *   console.log("Form validation passed", e);
+   * });
+   * ```
+   */
+  onPasses(fn: EventCallback): void {
+    this.on("qv.form.passes", fn);
   }
 }

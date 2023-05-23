@@ -18,6 +18,13 @@ export type ValidatableInput =
   | "textarea"
   | "input";
 
+/**
+ * Represents a validatable HTML form element.
+ */
+export type ValidatableForm = HTMLFormElement | "form";
+/**
+ * The possible input types expected to be gotten
+ */
 export type InputValueType =
   | string
   | Blob
@@ -90,3 +97,10 @@ export type QvInputParms = {
    */
   errors?: RulesMessages;
 };
+
+/**
+ * Callback function for handling events.
+ *
+ * @param event - The event object.
+ */
+export type EventCallback = (event: Event) => void;

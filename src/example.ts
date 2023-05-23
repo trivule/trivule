@@ -1,7 +1,5 @@
-import { QvInput } from "./validation";
+import { QvForm, QvInput } from "./validation";
 
-const qvInput = new QvInput("input");
-qvInput.with({
-  rules: ["required", "email"],
-});
-qvInput.init();
+const qvForm = new QvForm("form");
+
+qvForm.init();
