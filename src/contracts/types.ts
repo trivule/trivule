@@ -21,7 +21,7 @@ export type ValidatableInput =
 /**
  * Represents a validatable HTML form element.
  */
-export type ValidatableForm = HTMLFormElement | "form";
+export type ValidatableForm = HTMLFormElement | string | "form";
 /**
  * The possible input types expected to be gotten
  */
@@ -104,3 +104,10 @@ export type QvInputParms = {
  * @param event - The event object.
  */
 export type EventCallback = (event: Event) => void;
+
+export type QvFormConfig = {
+  /**
+   * Specifies whether the form will be validated as the user types in the form fields
+   */
+  auto?: boolean;
+};

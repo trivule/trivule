@@ -1,10 +1,9 @@
 import {
   EventCallback,
-  IQvConfig,
+  QvFormConfig,
   RuleCallBack,
   ValidatableForm,
 } from "../contracts";
-import { QvConfig } from "../qv.config";
 import { QvBag } from "./qv-bag";
 import { QvInput } from "./qv-input";
 
@@ -24,7 +23,7 @@ export class QvForm {
   /**
    * The html form
    */
-  private container!: HTMLElement;
+  private container!: HTMLFormElement;
 
   /**
    * The inputs rules
@@ -35,15 +34,22 @@ export class QvForm {
    */
   submitButton!: HTMLElement;
 
-  protected config: IQvConfig = QvConfig;
+  /**
+   * Qv Config object
+   */
+  protected config: QvFormConfig = {
+    auto: true,
+  };
 
-  constructor(container: ValidatableForm) {
+  constructor(container: ValidatableForm, config?: QvFormConfig) {
     this.setContainer(container);
+    this.setConfig(config);
+    this._initQvInputs();
   }
 
   private setContainer(container: ValidatableForm) {
     if (!(container instanceof HTMLElement)) {
-      const el = document.querySelector(container);
+      const el = document.querySelector<HTMLFormElement>(container);
       if (el) {
         container = el;
       }
@@ -64,18 +70,20 @@ export class QvForm {
   }
   /**
    * Initializes live validation on the form element.
-   * @param config Optional configuration object for QvForm.
    * Example:
    * ```
    * const qvForm = new QvForm(formElement);
    * qvForm.init();
    * ```
    */
-  init(config?: IQvConfig) {
-    this.setConfig(config);
-    this.disableButton();
+  init() {
+    this._runQvInputs();
+    if (this.config.auto) {
+      this.disableButton();
+      this.validateOnChange();
+      this.validateOnQvValidated();
+    }
 
-    this.handle();
     this.onSubmit();
 
     this.onFails((e) => {
@@ -99,18 +107,52 @@ export class QvForm {
       this.submitButton.removeAttribute("disabled");
     }
   }
-
-  private handle() {
-    ["change", "qv.input.validated"].forEach((ev) => {
-      this.on(ev, (e) => {
-        e.stopPropagation();
-        if (this.isValid()) {
-          this.emit("qv.form.passes");
-        } else {
-          this.emit("qv.form.fails");
-        }
-      });
-    });
+  /**
+   * Registers an event listener for the "change" event on the container element.
+   * If a callback function is provided, it will be executed befor validated the form.
+   *
+   * @param fn - The callback function to execute before Quickv will handle the form validation.
+   *            Its takes the current instance of QvForm as argument
+   * @example
+   * const qvForm = new QvForm(formElement);
+   *
+   * qvForm.validateOnChange((qvFormInstance) => {
+   *  // Some code
+   * });
+   *
+   */
+  validateOnChange(fn?: CallableFunction) {
+    this.__call(fn, this);
+    this.on("change", this._handle.bind(this));
+  }
+  /**
+   * Registers an event listener for the "qv.input.validated" event on the container element.
+   * If a callback function is provided, it will be executed before Quickv handle the form validation.
+   *
+   * @param fn - The callback function to execute.
+   *
+   * @example
+   * const qvForm = new QvForm(formElement);
+   *
+   * qvForm.validateOnQvValidated((qvFormInstance) => {
+   *   // Some code
+   * });
+   *
+   */
+  validateOnQvValidated(fn?: CallableFunction) {
+    this.__call(fn, this);
+    this.on("qv.input.validated", this._handle.bind(this));
+  }
+  /**
+   * Listen for change events, qv.input.validated and validate the form each time
+   */
+  private _handle(e: Event) {
+    e.stopPropagation();
+    if (this.isValid()) {
+      this.emit("qv.form.passes");
+    } else {
+      this.emit("qv.form.fails");
+    }
   }
 
   /**
@@ -118,24 +160,25 @@ export class QvForm {
    * @returns
    */
   isValid() {
-    const inputs = [
-      ...this.container.querySelectorAll<HTMLInputElement>("[data-qv-rules]"),
-    ];
-    return inputs.every((input) => {
-      return new QvInput(input).valid();
+    return this._qvInputs.every((qiv) => {
+      return qiv.valid();
     });
   }
   /**
    * Handle validation before process submtion
    */
   private onSubmit() {
-    this.container.addEventListener("submit", (submitEvent) => {
+    this.on("submit", (submitEvent) => {
       this.container
         .querySelectorAll<HTMLElement>("[data-qv-rules]")
         .forEach((el) => {
-          new QvInput(el as HTMLInputElement, this.config, {
-            emitEvent: false,
-          }).validate();
+          new QvInput(
+            el as HTMLInputElement,
+            {},
+            {
+              emitEvent: false,
+            }
+          ).validate();
         });
       if (!this.isValid()) {
         this.emit("qv.form.fails");
@@ -156,8 +199,7 @@ export class QvForm {
     QvBag.rule(ruleName, call, message);
   }
 
-  protected setConfig(config?: IQvConfig) {
-    this.config = QvConfig;
+  protected setConfig(config?: QvFormConfig) {
     if (config && typeof config === "object") {
       this.config = { ...this.config, ...config };
     }
@@ -216,34 +258,116 @@ export class QvForm {
     this.on("qv.form.passes", fn);
   }
 
+  /**
+   * Attaches an event listener to the "qv.form.updated" event.
+   * When this event is triggered, the method initializes and runs the QvInputs for the form,
+   * and then calls the provided function with the form instance as a parameter.
+   * @param fn - The function to be called when the event occurs.
+   * This function takes the form instance as a parameter and returns nothing.
+   * Example:
+   * ```typescript
+   * qvForm.observeChanges((form) => {
+   *   console.log("Form updated", form);
+   * });
+   * ```
+   */
   observeChanges(fn?: EventCallback): void {
     this.on("qv.form.updated", (e) => {
-      this.container
-        .querySelectorAll<HTMLInputElement>("[data-qv-rules]")
-        .forEach((el) => {
-          const qiv = new QvInput(el as HTMLInputElement);
-          qiv.init();
-        });
-      if (fn) {
-        fn(this);
-      }
+      this.destroy();
+      this.setContainer(this.container);
+      this._initQvInputs();
+      this._runQvInputs();
+      this.__call(fn, this);
     });
   }
-
+  /**
+   * Triggers the validation process for the form.
+   * This method emits the "qv.input.validated" event, which initiates the validation of all form inputs.
+   * Example:
+   * ```typescript
+   * qvForm.validate();
+   * ```
+   */
   validate() {
     this.emit("qv.input.validated");
   }
+  /**
+   * Attaches an event listener to the "qv.form.init" event.
+   * This event is triggered when the form is initialized.
+   * @param fn - The callback function to execute when the event occurs.
+   * Example:
+   * ```typescript
+   * qvForm.onInit((e) => {
+   *   console.log("Form initialized", e);
+   * });
+   * ```
+   */
   onInit(fn?: EventCallback) {
     if (typeof fn == "function") {
-      fn(this);
+      this.__call(fn, this);
     }
   }
 
+  /**
+   * Initializes QvInputs for the form.
+   */
   private _initQvInputs() {
-    this.container
-      .querySelectorAll<HTMLElement>("[data-qv-rules]")
-      .forEach((el) => {
-        new QvInput(el as HTMLInputElement, this.config);
-      });
+    const qvInputs = Array.from(
+      this.container.querySelectorAll<HTMLElement>("[data-qv-rules]")
+    ).map((el) => new QvInput(el as HTMLInputElement));
+
+    this._qvInputs.push(...qvInputs);
+  }
+
+  /**
+   * Runs the init method on each QvInput instance.
+   */
+  private _runQvInputs() {
+    for (const qiv of this._qvInputs) {
+      qiv.init();
+    }
+  }
+  /**
+   * Invokes the provided function with the given parameters if it is a valid function.
+   * @param fn - The function to be called.
+   * @param params - The parameters to be passed to the function.
+   */
+  private __call(fn?: CallableFunction, ...params: any) {
+    if (typeof fn == "function") {
+      fn(...params);
+    }
+  }
+
+  /**
+   * Destroys the QvForm instance and performs any necessary cleanup.
+   * This method removes event handlers, destroys QvInput instances,
+   * and clears the internal array of QvInput instances.
+   *
+   * Example:
+   * ```typescript
+   * const formElement = document.getElementById("myForm") as HTMLFormElement;
+   * const qvForm = new QvForm(formElement);
+   * qvForm.init();
+   *
+   * // Use the form...
+   *
+   * // When the form is no longer needed, destroy the QvForm instance
+   * qvForm.destroy();
+   * ```
+   */
+  destroy(): void {
+    // Remove event handlers
+    this.container.removeEventListener("submit", this.onSubmit);
+
+    // Supprimer les gestionnaires d'événements pour les changements
+    ["change", "qv.input.validated"].forEach((ev) => {
+      this.container.removeEventListener(ev, this._handle);
+    });
+
+    for (const qvInput of this._qvInputs) {
+      qvInput.destroy();
+    }
+    this._qvInputs = [];
+    this.emit("qv.form.destroy");
   }
 }

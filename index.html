@@ -46,10 +46,10 @@
       input[type="file"]:focus {
         border-color: #007bff;
       }
-      input.error,
-      textarea.error,
-      select.error,
-      input[type="file"].error {
+      input.is-invalid,
+      textarea.is-invalid,
+      select.is-invalid,
+      input[type="file"].is-invalid {
         border-left: 4px solid #ff0000;
         border-color: #ff0000;
       }
@@ -117,7 +117,7 @@
     <title>Quickv</title>
   </head>
   <body>
-    <form action="" style="max-width: 500px; margin: 80px auto">
+    <form id="myForm" action="" style="max-width: 500px; margin: 80px auto">
       <h1>Quickv live testing</h1>
       <div>
         <label class="label">Age</label>
@@ -132,8 +132,10 @@
         <div data-qv-feedback="age"></div>
         <p class="help">Rules applied: required|int|between:18,30</p>
       </div>
-      <button>Submit</button>
+      <!-- New "Add Name" button -->
+      <button type="submit" data-qv-submit>Submit</button>
     </form>
+
     <script src="/src/example.ts" type="module"></script>
   </body>
 </html>

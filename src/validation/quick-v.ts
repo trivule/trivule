@@ -27,7 +27,7 @@ export class Quickv {
     document
       .querySelectorAll<HTMLFormElement>("form")
       .forEach((formElement) => {
-        new QvForm(formElement).init(this.config);
+        new QvForm(formElement).init();
       });
   }
   /**
