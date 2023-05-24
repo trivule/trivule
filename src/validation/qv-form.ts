@@ -29,7 +29,7 @@ export class QvForm {
   /**
    * The inputs rules
    */
-  inputs: Record<string, any> = {};
+  private _qvInputs: QvInput[] = [];
   /**
    * The submition input
    */
@@ -74,14 +74,9 @@ export class QvForm {
   init(config?: IQvConfig) {
     this.setConfig(config);
     this.disableButton();
-    this.container
-      .querySelectorAll<HTMLElement>("[data-qv-rules]")
-      .forEach((el) => {
-        new QvInput(el as HTMLInputElement, this.config).init();
-      });
+
     this.handle();
     this.onSubmit();
-    this.setInputs();
 
     this.onFails((e) => {
       this.disableButton();
@@ -90,6 +85,8 @@ export class QvForm {
     this.onPasses((e) => {
       this.enableButton();
     });
+
+    this.emit("qv.form.init");
   }
 
   private disableButton() {
@@ -147,15 +144,6 @@ export class QvForm {
         this.emit("qv.form.passes");
       }
     });
-  }
-
-  private setInputs() {
-    this.container
-      .querySelectorAll<HTMLInputElement>("[data-qv-rules]")
-      .forEach((el) => {
-        const qiv = new QvInput(el as HTMLInputElement);
-        this.inputs[qiv.getName()] = qiv.getValue();
-      });
   }
 
   /**
@@ -226,5 +214,36 @@ export class QvForm {
    */
   onPasses(fn: EventCallback): void {
     this.on("qv.form.passes", fn);
+  }
+
+  observeChanges(fn?: EventCallback): void {
+    this.on("qv.form.updated", (e) => {
+      this.container
+        .querySelectorAll<HTMLInputElement>("[data-qv-rules]")
+        .forEach((el) => {
+          const qiv = new QvInput(el as HTMLInputElement);
+          qiv.init();
+        });
+      if (fn) {
+        fn(this);
+      }
+    });
+  }
+
+  validate() {
+    this.emit("qv.input.validated");
+  }
+  onInit(fn?: EventCallback) {
+    if (typeof fn == "function") {
+      fn(this);
+    }
+  }
+
+  private _initQvInputs() {
+    this.container
+      .querySelectorAll<HTMLElement>("[data-qv-rules]")
+      .forEach((el) => {
+        new QvInput(el as HTMLInputElement, this.config);
+      });
   }
 }
