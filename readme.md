@@ -274,7 +274,7 @@ After that, you can use your rules as html attributes
 
 ## New features
 
-### Type (src/contracts/types.ts)
+
 
 ### QvInputParams
 
