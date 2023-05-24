@@ -1,30 +1,37 @@
 # Quickv
 
-`Quickv` *(pronounced as 'cue-v' in French)* is a lightweight and easy-to-use JavaScript library for client-side validation of HTML forms. With Quickv, you can quickly and easily add validation rules to your form fields using custom HTML attributes, without needing a lot of extra JavaScript code. Quickv's custom HTML attributes are simple to understand and use, allowing developers to set up a robust validation system quickly without devoting a lot of time to creating custom validation functions or writing complex JavaScript code. If you're looking for a simple and effective solution for client-side validation of your HTML forms, Quickv may be the ideal tool for you.
+`Quickv` _(pronounced as 'cue-v' in French)_ is a lightweight and easy-to-use JavaScript library for client-side validation of HTML forms. With Quickv, you can quickly and easily add validation rules to your form fields using custom HTML attributes, without needing a lot of extra JavaScript code. Quickv's custom HTML attributes are simple to understand and use, allowing developers to set up a robust validation system quickly without devoting a lot of time to creating custom validation functions or writing complex JavaScript code. If you're looking for a simple and effective solution for client-side validation of your HTML forms, Quickv may be the ideal tool for you.
 
 ## Why use Quickv?
 
 The goal of Quickv is to simplify the validation process and save time for developers, allowing them to focus on other aspects of application development. By providing a fast and easy-to-use validation solution, **Quickv** can be an attractive choice for developers looking for an effective solution to add client-side validation to their HTML forms without sacrificing a lot of time in the process.
 
-
 ## Installation
+
 You can install `Quickv` in one of the following ways:
+
 ### Via un cdn
+
 Copy the _Quickv_ code from the CDN and paste it into a file named `quickv1.2.0.js`, and then include the `quickv1.2.0.js` file in your project. [Copy the code](https://cdn.jsdelivr.net/npm/quickv@1.2.0/dist/index.js). You can make it easy by copying the following script tag before the closing body tag of your HTML structure:
+
 ```html
-<script  src="https://cdn.jsdelivr.net/npm/quickv@1.2.0/dist/index.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/quickv@1.2.0/dist/index.js"></script>
 ```
+
 ### via npm
 
 Go to the root of the project where you want to use `Quickv`, open your terminal, and type:
+
 ```bash
 npm install  quickv
 ```
+
 You can then use `Quickv` in your project by importing it:
+
 ```js
-import  *  as  quickv  from  "quickv";
-const  qv=  new  quickv.Quickv()
-qv.init()
+import * as quickv from "quickv";
+const qv = new quickv.Quickv();
+qv.init();
 ```
 
 ## Usage
@@ -98,8 +105,8 @@ By typing in the age field and submitting the form by clicking the **_Submit_** 
 If you do not want to disable the default form, simply remove the `data-qv-submit` attribute from the submit button in your HTML code.
 
 ### In Angular
-You can see here an example of using Quickv in Angular [here](https://github.com/Claudye/ng-quickv)
----
+
+## You can see here an example of using Quickv in Angular [here](https://github.com/Claudye/ng-quickv)
 
 ### In Reactjs
 
@@ -264,7 +271,56 @@ qv.init();
 After that, you can use your rules as html attributes
 
 ---
+
+## New features
+
+
+
+### QvInputParams
+
+The `QvInputParams` interface represents an attribute object used to configure validation in Quickv.
+
+The `QvInputParams` interface allows you to define validation rules, custom error messages, the HTML element to display these messages, and more for an input element by specifying a parameter object that will be used during validation.
+
+### Performance
+
+Quickv has introduced performance improvements to optimize the validation process. It now checks if a value has already been validated with the same rule. If the value has been previously validated, Quickv avoids revalidating it and instead returns the cached validation status. This helps minimize redundant validation calls and improves overall performance.
+
+By caching the validation results, Quickv reduces the computational overhead of revalidating the same value multiple times when it hasn't changed.
+
+### Customization
+
+Quickv provides a flexible way to customize attribute values using the `QvInput` class. Instead of directly specifying attribute values in HTML attributes (e.g., `data-qv-rules`), you can programmatically define them using JavaScript code.
+
+Example 1:
+
+```typescript
+const qvInput = new QvInput("input", {}, { rules: ["required", "email"] });
+qvInput.init();
+```
+
+In this example, the `QvInput` class is instantiated with three parameters:
+
+- An input element selector ("input").
+- Configurations (an object that can contain keys `invalidClass` and `validClass` with their corresponding CSS classes to style the input element when it is invalid or valid).
+- Additional options, including the `rules` attribute with the specified validation rules.
+
+Example 2:
+
+```typescript
+const qvInput = new QvInput("input");
+qvInput.with({ rules: ["required", "email"] });
+qvInput.init();
+```
+
+This alternative approach demonstrates the use of the `with` method of the `QvInput` class to set the parameters separately after instantiation. Again, the `rules` attribute is specified with the desired validation rules.
+
+By using the `QvInput` class, you can dynamically configure the parameters in JavaScript code, offering more flexibility and avoiding cluttering your HTML files with `data-qv-` attributes.
+
+Find all the types [here](./src/contracts/types.ts).
+
 ### Documentation and Test
+
 French: [Documentation](https://github.com/quick-v/quickv/blob/main/readme.fr.md)
 
 English: [Documentation](https://github.com/quick-v/quickv/blob/main/readme.md)
