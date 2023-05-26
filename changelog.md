@@ -30,7 +30,6 @@ The `QvForm` class is responsible for applying live validation to an HTML form. 
 #### Usage Example:
 
 ```typescript
-import { QvForm } from 'qv-form';
 
 // Select the HTML form element
 const formElement = document.getElementById("myForm") as HTMLFormElement;

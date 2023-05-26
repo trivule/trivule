@@ -20,6 +20,9 @@ import { QvInput } from "./qv-input";
  * ```
  */
 export class QvForm {
+  private _emitOnFails = true;
+
+  private _emitOnPasses = true;
   /**
    * The html form
    */
@@ -149,9 +152,9 @@ export class QvForm {
   private _handle(e: Event) {
     e.stopPropagation();
     if (this.isValid()) {
-      this.emit("qv.form.passes");
+      this._emitQvOnPassesEvent();
     } else {
-      this.emit("qv.form.fails");
+      this._emitQvOnFailsEvent();
     }
   }
 
@@ -181,10 +184,10 @@ export class QvForm {
           ).validate();
         });
       if (!this.isValid()) {
-        this.emit("qv.form.fails");
+        this._emitQvOnFailsEvent();
         submitEvent.preventDefault();
       } else {
-        this.emit("qv.form.passes");
+        this._emitQvOnPassesEvent();
       }
     });
   }
@@ -369,5 +372,32 @@ export class QvForm {
     }
     this._qvInputs = [];
     this.emit("qv.form.destroy");
+  }
+
+  /**
+   * Emits the "qv.form.fails" event if the form fails validation.
+   * This method is called when the form is considered invalid, meaning at least one input fails validation.
+   */
+  private _emitQvOnFailsEvent() {
+    //If qv.form.fails
+    if (this._emitOnFails) {
+      this.emit("qv.form.fails");
+      this._emitOnFails = false;
+      //Open _emitOnPasses, for the next qv.form.passes event
+      this._emitOnPasses = true;
+    }
+  }
+  /**
+   * Emits the "qv.form.passes" event if the form passes validation.
+   * This method is called when the form is considered valid, meaning all inputs pass validation.
+   */
+  private _emitQvOnPassesEvent() {
+    //If qv.form.passes
+    if (this._emitOnPasses) {
+      this.emit("qv.form.passes");
+      this._emitOnPasses = false;
+      //Open _emitOnFails, for the next qv.form.fails event
+      this._emitOnFails = true;
+    }
   }
 }
