@@ -5,6 +5,7 @@ import {
   ValidatableForm,
 } from "../contracts";
 import { QvLocal } from "../locale/qv-local";
+import { FormValidator } from "../rules/form/form-validator";
 import { QvBag } from "./qv-bag";
 import { QvInput } from "./qv-input";
 
@@ -23,6 +24,7 @@ import { QvInput } from "./qv-input";
 export class QvForm {
   private _emitOnFails = true;
 
+  private _formValidator!: FormValidator;
   private _emitOnPasses = true;
   /**
    * The html form
@@ -49,6 +51,7 @@ export class QvForm {
     this.setContainer(container);
     this.setConfig(config);
     this._initQvInputs();
+    this._formValidator = new FormValidator(this.container);
   }
 
   private setContainer(container: ValidatableForm) {
@@ -414,5 +417,13 @@ export class QvForm {
       //Open _emitOnFails, for the next qv.form.fails event
       this._emitOnFails = true;
     }
+  }
+  /**
+   * Syncronize form rules with the global rules
+   */
+  private _syncRules() {
+    this._formValidator.getFormRules().forEach((r) => {
+      this.rule(r.ruleName, r.call);
+    });
   }
 }
