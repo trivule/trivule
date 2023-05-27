@@ -110,4 +110,8 @@ export type QvFormConfig = {
    * Specifies whether the form will be validated as the user types in the form fields
    */
   auto?: boolean;
+
+  local?: {
+    lang?: string;
+  };
 };

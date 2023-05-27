@@ -1,6 +1,7 @@
 import { QValidation, QvBag } from ".";
 import { IQvConfig, Rule, RulesMessages } from "../contracts";
 import { QvInputParms, ValidatableInput } from "../contracts/types";
+import { QvLocal } from "../locale/qv-local";
 import { ValidationErrorMessage } from "../messages";
 import { QvConfig } from "../qv.config";
 import { getRule } from "../utils";
@@ -271,7 +272,7 @@ export abstract class AbstractInputValidator {
       if (typeof customMessage == "string" && customMessage.length > 0) {
         oms[rule] = customMessage;
       } else {
-        oms[rule] = QvBag.getMessage(rule);
+        oms[rule] = QvLocal.getRuleMessage(rule, QvLocal.LANG);
       }
     }
     if (

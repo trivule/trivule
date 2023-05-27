@@ -4,6 +4,7 @@ import {
   RuleCallBack,
   ValidatableForm,
 } from "../contracts";
+import { QvLocal } from "../locale/qv-local";
 import { QvBag } from "./qv-bag";
 import { QvInput } from "./qv-input";
 
@@ -203,9 +204,23 @@ export class QvForm {
   }
 
   protected setConfig(config?: QvFormConfig) {
+    let lang =
+      document.querySelector("html")?.getAttribute("data-qv-lang") ||
+      document.querySelector("html")?.getAttribute("lang");
+
+    if (this.container.dataset.qvLang) {
+      lang = this.container.dataset.qvLang;
+    }
     if (config && typeof config === "object") {
       this.config = { ...this.config, ...config };
+      if (config.local) {
+        const local = config.local;
+        if (local.lang) {
+          lang = local.lang;
+        }
+      }
     }
+    QvLocal.LANG = lang ?? QvLocal.DEFAULT_LANG;
   }
 
   /**

@@ -1,11 +1,15 @@
 import { Rule, RulesMessages } from "../contracts";
+import { QvLocal } from "../locale/qv-local";
 import { spliteParam } from "../utils";
-import { QvBag } from "../validation/qv-bag";
 /**
  * @author Claude Fassinou
  */
 export class QvMessages {
-  protected messages = QvBag.allMessages();
+  protected messages!: RulesMessages;
+
+  constructor(local?: string) {
+    this.messages = QvLocal.getMessages(local);
+  }
 
   getRulesMessages(rules: Rule[]): string[] {
     const messages: string[] = [];
