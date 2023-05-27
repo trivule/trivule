@@ -125,17 +125,30 @@
     >
       <h1>Quickv live testing</h1>
       <div>
-        <label class="label">Age</label>
+        <label class="label">Email</label>
         <div class="form-control">
           <input
             class="input"
-            data-qv-rules="required|int"
+            data-qv-rules="required|email"
             type="text"
-            name="age"
+            name="email"
           />
         </div>
-        <div data-qv-feedback="age"></div>
-        <p class="help">Rules applied: required|int|between:18,30</p>
+        <div data-qv-feedback="email"></div>
+        <p class="help">Rules applied: required|email</p>
+      </div>
+      <div>
+        <label class="label">Confirm email</label>
+        <div class="form-control">
+          <input
+            class="input"
+            data-qv-rules="required|same:email"
+            type="text"
+            name="email_confirmation"
+          />
+        </div>
+        <div data-qv-feedback="email_confirmation"></div>
+        <p class="help">Rules applied: same:email</p>
       </div>
       <!-- New "Add Name" button -->
       <button type="submit" data-qv-submit>Submit</button>

@@ -28,4 +28,15 @@ export class QvLocal {
     const messages: Record<string | Rule, string> = QvLocal.getMessages(local);
     return messages[rule] ?? messages["default"];
   }
+
+  static addMessage(rule: string, message: string, local?: string) {
+    const messages = QvLocal.getMessages(local);
+    messages[rule] = message;
+    QvLocal.putMessages(messages, local);
+  }
+
+  static putMessages(messages: RulesMessages, local?: string) {
+    local = local || QvLocal.DEFAULT_LANG;
+    QvLocal._message[local] = messages;
+  }
 }

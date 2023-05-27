@@ -49,9 +49,9 @@ export class QvForm {
 
   constructor(container: ValidatableForm, config?: QvFormConfig) {
     this.setContainer(container);
+    this._formValidator = new FormValidator(this.container);
     this.setConfig(config);
     this._initQvInputs();
-    this._formValidator = new FormValidator(this.container);
   }
 
   private setContainer(container: ValidatableForm) {
@@ -224,6 +224,8 @@ export class QvForm {
       }
     }
     QvLocal.LANG = lang ?? QvLocal.DEFAULT_LANG;
+
+    this._syncRules();
   }
 
   /**
@@ -423,7 +425,7 @@ export class QvForm {
    */
   private _syncRules() {
     this._formValidator.getFormRules().forEach((r) => {
-      this.rule(r.ruleName, r.call);
+      this.rule(r.ruleName, r.call.bind(this._formValidator));
     });
   }
 }

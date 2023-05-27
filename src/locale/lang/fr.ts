@@ -34,4 +34,9 @@ export const fr_messages: RulesMessages = {
   date: "Ce champ doit être une date valide",
   before: "La date doit être antérieure à (:beforeDate)",
   after: "La date doit être postérieure à (:afterDate)",
+  same: "Ce champ doit être identique à la valeur du champ :same",
+  requiredIf:
+    "Le champ :field est requis lorsque le champ :other a la valeur actuelle",
+  requiredWhen:
+    "Le champ :field est requis lorsque les champs :otherFields sont présents",
 };
