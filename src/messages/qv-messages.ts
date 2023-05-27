@@ -8,7 +8,7 @@ export class QvMessages {
   protected messages!: RulesMessages;
 
   constructor(local?: string) {
-    this.messages = QvLocal.getMessages(local);
+    this.messages = QvLocal.getMessages(local ?? QvLocal.LANG);
   }
 
   getRulesMessages(rules: Rule[]): string[] {

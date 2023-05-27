@@ -275,6 +275,7 @@ export abstract class AbstractInputValidator {
         oms[rule] = QvLocal.getRuleMessage(rule, QvLocal.LANG);
       }
     }
+
     if (
       typeof errors !== "undefined" &&
       typeof errors === "object" &&

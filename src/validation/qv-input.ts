@@ -2,6 +2,7 @@ import { IQvConfig, RuleCallBack } from "../contracts";
 import { QvInputValidator } from "./qv-input-validator";
 import { QvBag } from "./qv-bag";
 import { QvInputParms, ValidatableInput } from "../contracts/types";
+import { QvLocal } from "../locale/qv-local";
 
 /**
  * QvInput is responsible for applying live validation to an HTML input element.
@@ -52,5 +53,9 @@ export class QvInput extends QvInputValidator {
   with(param: QvInputParms) {
     this._setParams(param);
     this.validator.setParams(this.param);
+  }
+
+  whereName(inputName: string): boolean {
+    return this.name === inputName;
   }
 }

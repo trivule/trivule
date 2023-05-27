@@ -1,6 +1,7 @@
 import {
   EventCallback,
   QvFormConfig,
+  QvInputParms,
   RuleCallBack,
   ValidatableForm,
 } from "../contracts";
@@ -223,6 +224,7 @@ export class QvForm {
         }
       }
     }
+
     QvLocal.LANG = lang ?? QvLocal.DEFAULT_LANG;
 
     this._syncRules();
@@ -427,5 +429,47 @@ export class QvForm {
     this._formValidator.getFormRules().forEach((r) => {
       this.rule(r.ruleName, r.call.bind(this._formValidator));
     });
+  }
+
+  /**
+   * Validate form input using javascript code.
+   * Use this method to configure or update the parameters for a particular input in the form.
+   *
+   * @param inputName - The name of the input for which to specify the parameters.
+   * @param params - The additional parameters to set for the input.
+   *
+   * @example
+   * const formElement = document.getElementById("myForm") as HTMLFormElement;
+   * const qvForm = new QvForm(formElement);
+   * // Configure additional parameters for an input
+   * qvForm.with("inputName", { rules: ['required','email']});
+   * qvForm.init();
+   *
+   */
+  with(inputName: string, params: QvInputParms) {
+    const qvInput = this._qvInputs.find((qiv) => qiv.whereName(inputName));
+    if (qvInput) {
+      const qvInputIndex = this._qvInputs.indexOf(qvInput);
+      qvInput.with(params);
+      this._qvInputs[qvInputIndex] = qvInput;
+    }
+  }
+  /**
+   * Sets multiple input parameters for multiple inputs in the form.
+   * @param inputs - An object containing input names as keys and their corresponding parameters as values.
+   * Example:
+   * ```typescript
+   * const inputs = {
+   *   input1: {  QvInputParms for input1   },
+   *   input2: {  QvInputParms for input2   },
+   *   // ...
+   * };
+   * qvForm.withMany(inputs);
+   * ```
+   */
+  withMany(inputs: Record<string, QvInputParms>) {
+    for (const [inputName, params] of Object.entries(inputs)) {
+      this.with(inputName, params);
+    }
   }
 }

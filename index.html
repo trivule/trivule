@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-qv-lang="fr">
+<html lang="fr">
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -117,22 +117,12 @@
     <title>Quickv</title>
   </head>
   <body>
-    <form
-      id="myForm"
-      action=""
-      style="max-width: 500px; margin: 80px auto"
-      data-qv-lang="en"
-    >
+    <form id="myForm" action="" style="max-width: 500px; margin: 80px auto">
       <h1>Quickv live testing</h1>
       <div>
         <label class="label">Email</label>
         <div class="form-control">
-          <input
-            class="input"
-            data-qv-rules="required|email"
-            type="text"
-            name="email"
-          />
+          <input data-qv-rules type="text" name="email" />
         </div>
         <div data-qv-feedback="email"></div>
         <p class="help">Rules applied: required|email</p>
@@ -140,12 +130,7 @@
       <div>
         <label class="label">Confirm email</label>
         <div class="form-control">
-          <input
-            class="input"
-            data-qv-rules="required|same:email"
-            type="text"
-            name="email_confirmation"
-          />
+          <input data-qv-rules type="text" name="email_confirmation" />
         </div>
         <div data-qv-feedback="email_confirmation"></div>
         <p class="help">Rules applied: same:email</p>
