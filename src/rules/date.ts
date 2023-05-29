@@ -21,7 +21,7 @@ export const isDate: RuleCallBack = (input) => {
  * @returns `true` if the input date is before the comparison date, `false` otherwise.
  */
 export const beforeDate: RuleCallBack = (input, date) => {
-  if (date == "now") {
+  if (date === "now") {
     date = now();
   }
   return dayjs(input).isBefore(date);
@@ -32,10 +32,19 @@ export const beforeDate: RuleCallBack = (input, date) => {
  *
  * @param input - The date to check, as a string in ISO 8601 format or a `Date` object.
  * @param date - The date to compare against, as a string in ISO 8601 format or the string "now" to use the current date and time. date can be `now
+ * @example
+ * ```js
+ *  {
+ *    rules:['after:now']
+ * }
+ * ```
+ * ```html
+ * <input data-qv-rules="after:now" />
+ * ```
  * @returns `true` if the input date is after the comparison date, `false` otherwise.
  */
 export const afterDate: RuleCallBack = (input, date) => {
-  if (date == "now") {
+  if (date === "now") {
     date = now();
   }
   return dayjs(input).isAfter(date);
@@ -62,7 +71,24 @@ export const dateBetween: RuleCallBack = (input, date) => {
  *
  * @param input - The string to check.
  * @returns `true` if the input string represents a valid time in 24-hour format, `false` otherwise.
+ * @example
+ * ```js
+ * {
+ *    rules:['time']
+ * }
+ * ```
+ * ```html
+ * <input data-qv-rules="time" />
+ * ```
+ *
  */
-export const isTime: RuleCallBack = (input) => {
+export const isTime: RuleCallBack = (input: string) => {
+  // If the input does not have three parts separated by colons (H:m:i)
+  if (input.split(":").length < 3) {
+    // Complete the input with ":00" until it has the format H:m:i
+    while (input.split(":").length < 3) {
+      input += ":00";
+    }
+  }
   return /^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$/.test(input);
 };

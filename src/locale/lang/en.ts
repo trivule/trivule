@@ -38,4 +38,11 @@ export const en_messages: RulesMessages = {
   requiredIf: "The :field is required once the :other have the current value",
   requiredWhen: "The :field is required when :otherFields are present",
   phone: "This phone number appears to be invalid.",
+  time: "The :field must be a valid time",
+  startWithLetter: "The :field must start with a letter.",
+  excludes: "The :field field must not contain :excludes.",
+  hasLetter: "The :field field must contain at least one letter.",
+  regex: "This field is invalid",
+  lower: "The :field input must be lower",
+  upper: "The :field input must be upper",
 };

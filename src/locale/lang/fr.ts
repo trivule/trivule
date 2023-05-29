@@ -40,4 +40,11 @@ export const fr_messages: RulesMessages = {
   requiredWhen:
     "Le champ :field est requis lorsque les champs :otherFields sont présents",
   phone: "Ce numéro de téléphone semble être invalide",
+  time: "Le champ :field doit être une heure valide.",
+  startWithLetter: "Le champ :field doit commencer par une lettre",
+  excludes: "Le champ :field ne doit pas contenir :excludes.",
+  hasLetter: "Le champ :field doit conteni au moins une lettre",
+  regex: "Le champ :field est invalide.",
+  lower: "Le champ :field doit être en minuscule",
+  upper: "Le champ :field doit être en majuscule",
 };

@@ -95,3 +95,7 @@ The `QvForm` class constructor creates an instance of `QvForm` and accepts the f
 - `on(e: string, fn: EventCallback)`: Attaches an event listener to the container element. It listens to the specified event and executes the provided callback function when the event occurs.
 
 - `emit(e: string, data?: any)`: Emits a custom event to the container element with the specified event name
+
+### Rules
+time, phone, before, after and between
+contains (should contains all)

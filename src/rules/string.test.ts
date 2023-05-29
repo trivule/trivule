@@ -226,7 +226,7 @@ describe("contains", () => {
   it("should return true when input contains substring", () => {
     expect(contains("Hello, world!", "world")).toBe(true);
     expect(contains("Hello, world!", "world,!")).toBe(true);
-    expect(contains("Hello, world!", "world,Others")).toBe(true);
+    expect(contains("Hello, world!", "world,Others")).toBe(false);
   });
 
   it("should return false when input does not contain substring", () => {

@@ -1,4 +1,4 @@
-import { size, between, required } from ".";
+import { size, between, required, regex } from ".";
 
 describe("required", () => {
   it("should return false for undefined input", () => {
@@ -54,5 +54,27 @@ describe("size", () => {
     // Test with invalid format
     expect(() => size(file1, "1XYZ")).toThrowError();
     expect(() => size(file1, "5")).toThrowError();
+  });
+});
+
+describe("regex", () => {
+  test("returns true if the input matches the regex pattern", () => {
+    const pattern = "^[A-Z]+$";
+    const input = "ACB";
+    expect(regex(input, pattern)).toBe(true);
+  });
+
+  test("returns false if the input does not match the regex pattern", () => {
+    const pattern = "^[A-Za-z]$";
+    const input = "abc123";
+    expect(regex(input, pattern)).toBe(false);
+  });
+
+  test("throws an error if an invalid regex string is provided", () => {
+    const pattern = "abc[";
+    const input = "abcdef";
+    expect(() => {
+      regex(input, pattern);
+    }).toThrow();
   });
 });

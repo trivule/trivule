@@ -6,14 +6,13 @@ import { CountryPhoneValidator } from "./phone/country-phone-validator";
  *
  * @param input
  * @param params
- * @example
  * phone(phoneNumber) //Validate globally
  * phone(phoneNumber,'US') //Validate for a country
  * phone(phoneNumber,'US,FR,BJ') // Vlaidate for one of the countries listed
  *
  * @example
  * //Validate as rule
- * ```ts
+ * ```js
  * {
  *  rules:['phone'] // or ['phone:US,FR,BJ']
  * }

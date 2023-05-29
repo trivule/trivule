@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -120,12 +120,18 @@
     <form id="myForm" action="" style="max-width: 500px; margin: 80px auto">
       <h1>Quickv live testing</h1>
       <div>
-        <label class="label">Email</label>
+        <label class="label">Date</label>
         <div class="form-control">
-          <input type="text" data-qv-rules="required|phone" name="phone" />
+          <input
+            type="date"
+            data-qv-valid-class="success"
+            data-qv-rules="required|date|after:now"
+            data-qv-messages="{2}La date doit être postérieure à aujourd'hui"
+            name="date"
+          />
         </div>
-        <div data-qv-feedback="phone"></div>
-        <p class="help">Rules applied: required|email</p>
+        <div data-qv-feedback="date"></div>
+        <p class="help">Rules applied: required|date|after:now</p>
       </div>
       <button type="submit" data-qv-submit>Submit</button>
     </form>

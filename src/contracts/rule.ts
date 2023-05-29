@@ -30,4 +30,11 @@ export type Rule =
   | "before"
   | "after"
   | "phone"
-  | "url";
+  | "url"
+  | "time"
+  | "startWithLetter"
+  | "hasLetter"
+  | "excludes"
+  | "regex"
+  | "lower"
+  | "upper";

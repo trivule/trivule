@@ -25,8 +25,14 @@ import {
   nullable,
   startWithLower,
   passwordRule,
+  startWithLetter,
+  excludes,
+  containsLetter,
+  regex,
+  lower,
+  upper,
 } from "../rules";
-import { afterDate, beforeDate, isDate } from "../rules/date";
+import { afterDate, beforeDate, isDate, isTime } from "../rules/date";
 import { QvLocal } from "../locale/qv-local";
 import { phone } from "../rules/phone";
 interface IQvBag {
@@ -66,6 +72,13 @@ export class QvBag implements IQvBag {
     before: beforeDate,
     after: afterDate,
     phone: phone,
+    time: isTime,
+    startWithLetter: startWithLetter,
+    excludes: excludes,
+    hasLetter: containsLetter,
+    regex: regex,
+    lower: lower,
+    upper: upper,
   };
 
   /**
