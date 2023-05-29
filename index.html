@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -122,20 +122,11 @@
       <div>
         <label class="label">Email</label>
         <div class="form-control">
-          <input data-qv-rules type="text" name="email" />
+          <input type="text" data-qv-rules="required|phone" name="phone" />
         </div>
-        <div data-qv-feedback="email"></div>
+        <div data-qv-feedback="phone"></div>
         <p class="help">Rules applied: required|email</p>
       </div>
-      <div>
-        <label class="label">Confirm email</label>
-        <div class="form-control">
-          <input data-qv-rules type="text" name="email_confirmation" />
-        </div>
-        <div data-qv-feedback="email_confirmation"></div>
-        <p class="help">Rules applied: same:email</p>
-      </div>
-      <!-- New "Add Name" button -->
       <button type="submit" data-qv-submit>Submit</button>
     </form>
 

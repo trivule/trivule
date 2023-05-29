@@ -28,6 +28,7 @@ import {
 } from "../rules";
 import { afterDate, beforeDate, isDate } from "../rules/date";
 import { QvLocal } from "../locale/qv-local";
+import { phone } from "../rules/phone";
 interface IQvBag {
   [key: string | Rule]: any;
 }
@@ -64,6 +65,7 @@ export class QvBag implements IQvBag {
     date: isDate,
     before: beforeDate,
     after: afterDate,
+    phone: phone,
   };
 
   /**

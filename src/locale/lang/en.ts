@@ -37,4 +37,5 @@ export const en_messages: RulesMessages = {
   same: "This field must be same as :same field value",
   requiredIf: "The :field is required once the :other have the current value",
   requiredWhen: "The :field is required when :otherFields are present",
+  phone: "This phone number appears to be invalid.",
 };

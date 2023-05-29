@@ -29,4 +29,5 @@ export type Rule =
   | "date"
   | "before"
   | "after"
+  | "phone"
   | "url";

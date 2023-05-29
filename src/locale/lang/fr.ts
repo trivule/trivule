@@ -39,4 +39,5 @@ export const fr_messages: RulesMessages = {
     "Le champ :field est requis lorsque le champ :other a la valeur actuelle",
   requiredWhen:
     "Le champ :field est requis lorsque les champs :otherFields sont présents",
+  phone: "Ce numéro de téléphone semble être invalide",
 };

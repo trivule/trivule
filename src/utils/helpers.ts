@@ -27,3 +27,8 @@ export const spliteParam = (value: string, carac: string = ","): any[] => {
 export const throwEmptyArgsException = (fnc: string) => {
   throw new Error(`Please provide <<${fnc}>> rule arguments`);
 };
+
+export function now(): string {
+  const now = new Date();
+  return now.toISOString();
+}
