@@ -1,10 +1,11 @@
 import { QvForm } from "./validation";
+
 /**
  * Support internationalization
  */
 const qvForm = new QvForm("#myForm", {
   local: {
-    lang: "fr",
+    lang: "es",
   },
 });
 //Valide many inputs without using data-qv attribut

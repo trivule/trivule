@@ -2,7 +2,6 @@ import { IQvConfig, RuleCallBack } from "../contracts";
 import { QvInputValidator } from "./qv-input-validator";
 import { QvBag } from "./qv-bag";
 import { QvInputParms, ValidatableInput } from "../contracts/types";
-import { QvLocal } from "../locale/qv-local";
 
 /**
  * QvInput is responsible for applying live validation to an HTML input element.

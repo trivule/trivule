@@ -39,4 +39,17 @@ export class QvLocal {
     local = local || QvLocal.DEFAULT_LANG;
     QvLocal._message[local] = messages;
   }
+
+  static translate(lang: string, messages: RulesMessages) {
+    if (typeof lang !== "string" || !lang.length)
+      throw new Error(
+        "The first argument must be a string with one or more characters"
+      );
+
+    if (typeof messages !== "object" || typeof messages === undefined)
+      throw new Error(
+        "The second argument must be a valid key/value pair object"
+      );
+    QvLocal._message[lang] = messages;
+  }
 }

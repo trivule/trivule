@@ -38,7 +38,7 @@ export class QvMessages {
     if (!parsedMessage.includes(":field")) {
       replacements = replacements.slice(1);
     }
-    parsedMessage = this.replace(message, parsedMessage, replacements);
+    parsedMessage = this._replace(message, parsedMessage, replacements);
 
     return parsedMessage;
   }
@@ -52,7 +52,7 @@ export class QvMessages {
     return this;
   }
 
-  private replace(message: string, parsedMessage: any, replacements: any) {
+  private _replace(message: string, parsedMessage: any, replacements: any) {
     // Recherche toutes les sous-chaînes commençant par ':'
     const matches = message.match(/:[a-zA-Z]+/g);
 

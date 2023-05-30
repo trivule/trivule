@@ -92,7 +92,7 @@ export class QvForm {
       this.validateOnQvValidated();
     }
 
-    this.onSubmit();
+    this._onSubmit();
 
     this.onFails((e) => {
       this.disableButton();
@@ -175,7 +175,7 @@ export class QvForm {
   /**
    * Handle validation before process submtion
    */
-  private onSubmit() {
+  private _onSubmit() {
     this.on("submit", (submitEvent) => {
       this.container
         .querySelectorAll<HTMLElement>("[data-qv-rules]")
@@ -382,7 +382,7 @@ export class QvForm {
    */
   destroy(): void {
     // Remove event handlers
-    this.container.removeEventListener("submit", this.onSubmit);
+    this.container.removeEventListener("submit", this._onSubmit);
 
     // Supprimer les gestionnaires d'événements pour les changements
     ["change", "qv.input.validated"].forEach((ev) => {
