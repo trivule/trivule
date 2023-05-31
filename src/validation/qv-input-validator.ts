@@ -1,14 +1,17 @@
 import { AbstractInputValidator } from "./abstract-input";
-import { IQvConfig, InputEventDetails } from "../contracts";
-import { QvInputParms, ValidatableInput } from "../contracts/types";
+import { IQvConfig } from "../contracts";
+import {
+  EventCallback,
+  QvInputParms,
+  ValidatableInput,
+} from "../contracts/types";
 
 export class QvInputValidator extends AbstractInputValidator {
-  constructor(
-    inputElement: ValidatableInput,
-    config?: IQvConfig,
-    params?: QvInputParms
-  ) {
-    super(inputElement, config, params);
+  private _emitOnPasses = true;
+  private _emitOnFails = true;
+
+  constructor(inputElement: ValidatableInput, params?: QvInputParms) {
+    super(inputElement, params);
   }
   /**
    * Performs validation on the input element. And emits qv.input.validated event if necessary.
@@ -24,12 +27,14 @@ export class QvInputValidator extends AbstractInputValidator {
    * }
    * ```
    */
-  validate() {
-    const valid = this.valid();
-    this.setValidationClass(valid);
+  validate(emitEmit = true) {
+    this.valid();
+    this.setValidationClass();
     this.errors = this.validator.getMessages();
-    this.emitChangeEvent();
-    return valid;
+    if (emitEmit) {
+      this.emitChangeEvent();
+    }
+    return this._passed;
   }
 
   /**
@@ -89,23 +94,65 @@ export class QvInputValidator extends AbstractInputValidator {
    */
   valid() {
     this.validator.value = this.getValue();
-    return this.validator.passes();
+    return (this._passed = this.validator.passes());
+  }
+
+  /**
+   * Emits a custom event to the inputElement element.
+   *
+   * @param e - The name of the custom event to emit.
+   * @param data - The additional data to pass with the event.
+   */
+  emit(e: string, data?: any): void {
+    const event = new CustomEvent(e, { detail: data, bubbles: true });
+    this.inputElement.dispatchEvent(event);
+  }
+
+  /**
+   * Attach an event listener to the inputElement element.
+   *
+   * @param e - The name of the event to listen to.
+   * @param fn - The callback function to execute when the event occurs.
+   * This function takes an event of type `Event` as a parameter and returns nothing.
+   * Example: `(event) => { ... }`
+   */
+  on(e: string, fn: EventCallback): void {
+    this.inputElement.addEventListener(e, fn);
   }
   /**
    * Emit event if input change
    */
   private emitChangeEvent() {
     if (this.param.emitEvent) {
-      this.inputElement.dispatchEvent(
-        new CustomEvent<InputEventDetails>("qv.input.validated", {
-          detail: {
-            rules: this.rules,
-            input: {},
-            element: this.inputElement,
-          },
-          bubbles: true,
-        })
-      );
+      if (this._passed) {
+        if (this._emitOnPasses) {
+          this.emit("qv.input.passes", {
+            detail: {
+              rules: this.rules,
+              input: {},
+              element: this.inputElement,
+            },
+          });
+          //Disable on passes emition until, validation failed
+          this._emitOnPasses = false;
+          //Enable on fails emitions
+          this._emitOnFails = true;
+        }
+      } else {
+        if (this._emitOnFails) {
+          this.emit("qv.input.fails", {
+            detail: {
+              rules: this.rules,
+              input: {},
+              element: this.inputElement,
+            },
+          });
+          //Enable on passes emitions
+          this._emitOnPasses = true;
+          // Disable on fails emitions, until validation passes
+          this._emitOnFails = false;
+        }
+      }
     }
   }
 
@@ -126,12 +173,19 @@ export class QvInputValidator extends AbstractInputValidator {
    * ```
    */
   fails(): boolean {
-    return !this.valid();
+    return !this.passes();
+  }
+  /**
+   *  Check if the validation was successful passed
+   * @returns
+   */
+  passes() {
+    return this._passed;
   }
 
   destroy() {
-    this.param.events?.forEach((e) => {
-      this.inputElement.removeEventListener(e, this.validate);
-    });
+    this.param.events = [];
+    this.rules = [];
+    this.param.rules = [];
   }
 }

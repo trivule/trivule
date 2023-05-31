@@ -51,7 +51,7 @@ describe("QvInput", () => {
         "data-qv-messages",
         "Required message | Min message"
       );
-      const validator = new QvInput(inputElement, undefined, {
+      const validator = new QvInput(inputElement, {
         failsOnfirst: false,
       });
       validator.validate();
@@ -71,7 +71,7 @@ describe("QvInput", () => {
         "data-qv-messages",
         "Required message | {1,2,3}Invalid email address"
       );
-      const validator = new QvInput(inputElement, undefined, {
+      const validator = new QvInput(inputElement, {
         failsOnfirst: false,
       });
 
@@ -160,7 +160,7 @@ describe("QvInput", () => {
       inputElement.setAttribute("data-qv-rules", "required|min:3");
       inputElement.name = "name";
       inputElement.value = ""; // Set the input value to empty
-      const validator = new QvInput(inputElement, undefined, {
+      const validator = new QvInput(inputElement, {
         failsOnfirst: false,
       });
 

@@ -16,7 +16,8 @@ export type ValidatableInput =
   | HTMLSelectElement
   | "select"
   | "textarea"
-  | "input";
+  | "input"
+  | string;
 
 /**
  * Represents a validatable HTML form element.
@@ -96,6 +97,15 @@ export type QvInputParms = {
    * This field is useful for customizing error messages. By to rewrite the default messages
    */
   errors?: RulesMessages;
+  /**
+   * The css class that will be added to the input each time the form is valid
+   */
+  validClass?: string;
+
+  /**
+   * The css class that will be added to the input each time the form is invalid
+   */
+  invalidClass?: string;
 };
 
 /**

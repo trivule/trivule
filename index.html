@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -117,24 +117,24 @@
     <title>Quickv</title>
   </head>
   <body>
-    <form id="myForm" action="" style="max-width: 500px; margin: 80px auto">
-      <h1>Quickv live testing</h1>
+    <form action="">
       <div>
-        <label class="label">Date</label>
-        <div class="form-control">
-          <input
-            type="date"
-            data-qv-valid-class="success"
-            data-qv-rules="required|date|after:now"
-            name="date"
-          />
-        </div>
-        <div data-qv-feedback="date"></div>
-        <p class="help">Rules applied: required|date|after:now</p>
+        <input
+          type="text"
+          data-qv-invalid-class="error"
+          data-qv-rules="required"
+          name="phone"
+        />
+        <div data-qv-feedback="phone"></div>
       </div>
-      <button type="submit" data-qv-submit>Submit</button>
+      <div>
+        <input type="text" data-qv-rules="required" name="email" />
+        <div data-qv-feedback="email"></div>
+      </div>
+      <p>
+        <input type="submit" value="Submit" data-qv-submit />
+      </p>
     </form>
-
     <script src="/src/example.ts" type="module"></script>
   </body>
 </html>

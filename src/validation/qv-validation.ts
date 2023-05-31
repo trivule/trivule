@@ -179,7 +179,15 @@ export class QValidation {
 
   set value(v: InputValueType) {
     this._value = v;
-    this.validate();
+
+    const isNullable = this._rules.includes("nullable");
+    if (isNullable) {
+      if (this._value || this._value === "0") {
+        this.validate();
+      }
+    } else {
+      this.validate();
+    }
   }
 
   get value(): InputValueType {
