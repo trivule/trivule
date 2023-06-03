@@ -116,9 +116,9 @@ Vous pouvez voir ici un exemple d'utilisation de Quickv dans Angular [ici](https
 
 Vous pouvez voir ici un exemple d'utilisation de Quickv dans Reactjs [ici](https://github.com/Meschack/quickv-test/tree/react-test)
 
-### In Vuejs
+### Dans Vuejs ou Nuxtjs
 
-Pour un projet vue 3, vous devez d'abord installer quickv
+Pour un projet vue 3 ou nuxt3, vous devez d'abord installer quickv
 
 `npm install  quickv`
 
