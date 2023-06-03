@@ -1,4 +1,5 @@
 import { Rule, RulesMessages } from "../contracts";
+import { is_string } from "../rules";
 import { en_messages } from "./lang/en";
 import { fr_messages } from "./lang/fr";
 
@@ -51,5 +52,16 @@ export class QvLocal {
         "The second argument must be a valid key/value pair object"
       );
     QvLocal._message[lang] = messages;
+  }
+
+  static rewrite(lang: string, rule: string | Rule, message: string) {}
+
+  static rewriteMany(lang: string, rule: string | Rule[], message: string[]) {}
+
+  static local(lang: string) {
+    if (!is_string(lang) || !lang.length) {
+      throw new Error("The langue must be a valid string");
+    }
+    QvLocal.DEFAULT_LANG = lang;
   }
 }

@@ -1,5 +1,4 @@
 import { AbstractInputValidator } from "./abstract-input";
-import { IQvConfig } from "../contracts";
 import {
   EventCallback,
   QvInputParms,
@@ -104,7 +103,7 @@ export class QvInputValidator extends AbstractInputValidator {
    * @param data - The additional data to pass with the event.
    */
   emit(e: string, data?: any): void {
-    const event = new CustomEvent(e, { detail: data, bubbles: true });
+    const event = new CustomEvent(e, { detail: data });
     this.inputElement.dispatchEvent(event);
   }
 

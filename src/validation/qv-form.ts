@@ -31,12 +31,7 @@ export class QvForm {
   private _emitOnPasses = true;
   private _emitOnFails = true;
 
-  private _triggerValidationEvents = [
-    "change",
-    "qv.input.passes",
-    "qv.input.fails",
-    "qv.form.validate",
-  ];
+  private _triggerValidationEvents = ["change", "qv.form.validate"];
   /**
    * The html form
    */
@@ -126,9 +121,9 @@ export class QvForm {
   }
 
   /**
-   * Registers an event listener for  this this__triggerValidationEvents event on the container element.
+   * Registers an event listener for  this this._triggerValidationEvents event on the container element.
    * If a callback function is provided, it will be executed before Quickv handle the form validation.
-   *
+   * For each QvInput instance attached to this class, the onPass and onFails methods will be executed with this handle method
    * @param fn - The callback function to execute.
    *
    * @example
@@ -141,7 +136,11 @@ export class QvForm {
    */
   validateOnQvEvent(fn?: CallableFunction) {
     this.__call(fn, this);
-
+    this._triggerValidationEvents.forEach((e) => {
+      this.on(e, (e) => {
+        this._handle();
+      });
+    });
     // Validates the entire form whenever a qv.input.passes or qv.input.fails event is listened to
     this._qvInputs.forEach((qvInput) => {
       qvInput.onFails(this._handle.bind(this));
