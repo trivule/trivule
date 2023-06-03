@@ -13,6 +13,13 @@ Vous pouvez installer ` Quickv` de l'une de ses façons
 ### Via un cdn
 
 Copier le code _Quickv_ depuis le cdn et coller dans un fichier `quickv1.2.0.js`, et ensuite incluez le fichier `quickv1.2.0.js` dans votre projet
+================================================================================================================
+
+Vous pouvez installer `` Quickv`` de l'une de ses façons
+
+### Via un cdn
+
+Copier le code *Quickv* depuis le cdn et coller dans un fichier `quickv1.2.0.js`, et ensuite incluez le fichier `quickv1.2.0.js` dans votre projet
 [Copier le code](https://cdn.jsdelivr.net/npm/quickv@1.2.0/dist/index.js).
 Vous pouvez faire simple en copiant la balise suivante avant la balise body de votre structure HTML
 
@@ -102,11 +109,58 @@ Si vous ne souhaitez pas désactiver le formulaire par défaut, il vous suffit d
 
 ### Dans Angular
 
-## Vous pouvez voir ici un exemple d'utilisation de Quickv dans Angular [ici](https://github.com/Claudye/ng-quickv)
+Vous pouvez voir ici un exemple d'utilisation de Quickv dans Angular [ici](https://github.com/Claudye/ng-quickv)
+------------------------------------------------------------------------
 
 ### Dans Reactjs
 
 Vous pouvez voir ici un exemple d'utilisation de Quickv dans Reactjs [ici](https://github.com/Meschack/quickv-test/tree/react-test)
+
+### In Vuejs
+
+Pour un projet vue 3, vous devez d'abord installer quickv
+
+`npm install  quickv`
+
+Après l'installation, dans la partie script de votre composant, vous devez le monter et injecter l'instance quickv.
+
+```javascript
+<script setup>
+  import { onMounted } from 'vue';
+  import  *  as  quickv  from  "quickv";
+
+
+  onMounted(() => {
+    const  qv=  new  quickv.Quickv()
+    qv.init()
+  })
+</script>
+
+```
+
+Pour vérifier que tout se passe bien, voici un exemple de modèle de vue minimaliste avec quickv.
+
+Pour un test rapide, vous pouvez ajouter le CDN tailwind.
+
+```html
+<template>
+  <form @submit.prevent="" action="">
+    <div>
+        <input
+          type="text"
+          name="age"
+          class="border "
+	  data-qv-valid-class="border border-green-500"
+          data-qv-invalid-class="border border-red-500"
+          data-qv-rules="required|number|between:18,35"
+          data-qv-messages="L'âge est requis | L'âge doit être un nombre | L'âge doit être compris entre 18 et 35"
+        />
+        <div data-qv-feedback="age" class="text-red-500"></div>
+    </div>
+    <button class="bg-blue-500 text-white px-3 py-2" data-qv-submit>Envoyer</button>
+  </form>
+</template>
+```
 
 ---
 
@@ -185,8 +239,6 @@ Voici quelques règles de validation qui s'appliquent aux chaînes de caractère
 - **endWith:x,x,...**: Passe si la chaîne se termine par l'une des valeurs spécifiées `x,y,z`.
 - **length:x** ou **len:x**: Passe si la longueur de la chaîne de caractères est exactement `x`.
 
-######
-
 Ces règles s'appliquent spécialement aux nombres
 **numeric** ou **number**: Passe si la valeur est un nombre
 **integer** ou **int**: Passe si la valeur est un nombre entier
@@ -238,8 +290,6 @@ qv.init();
 
 Une fois ceci fait, c'est fini, vous pouvez utiliser vos règles comme des attributs html
 
----
-
 ## Nouvelles fonctionnalités
 
 ### QvInputParams
@@ -268,9 +318,7 @@ qvInput.init();
 Dans cet exemple, la classe `QvInput` est instanciée et prend trois paramètres :
 
 - un sélecteur d'élément d'entrée ("input")
-
 - des configurations (représentant un objet pouvant contenir les clés `invalidClass` et `validClass` contenant respectivement en valeur les classes CSS à utiliser pour styliser l'élément d'entrée lorsqu'il est invalide ou valide)
-
 - des paramètres supplémentaires en tant qu'options, incluant l'attribut `rules` avec les règles de validation spécifiées.
 
 Exemple 2
@@ -287,7 +335,7 @@ En utilisant la classe `QvInput`, vous pouvez configurer dynamiquement les param
 
 Retrouvez l'ensemble des types [ici](./src/contracts/types.ts)
 
-### Documentation et Test
+Documentation et Test
 
 Français: [Documentation](https://github.com/quick-v/quickv/blob/main/readme.fr.md)
 
