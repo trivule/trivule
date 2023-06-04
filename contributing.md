@@ -9,10 +9,11 @@ If you encounter any problems or have ideas for improvements, feel free to open 
 If you'd like to make changes to the code, we encourage you to propose a pull request. Please follow these steps:
 
 1. Fork the repository and clone it locally. 
-2. Make the necessary modifications and thoroughly test them.
-3. Commit your changes: `git commit -m "Description of the changes"`.
-4. Push your changes to your repository
-5. Open a pull request on our GitHub repository and provide a detailed description of the changes you made.
+2. Switch to the branch you want to edit
+3. Make the necessary modifications and thoroughly test them.
+4. Commit your changes: `git commit -m "Description of the changes"`.
+5. Push your changes to your repository
+6. Open a pull request on our GitHub repository and provide a detailed description of the changes you made.
 
 We'll review your pull request as soon as possible and provide feedback. Please make sure to address any comments and update your pull request accordingly.
 

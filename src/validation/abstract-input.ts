@@ -272,7 +272,7 @@ export abstract class AbstractInputValidator {
       if (typeof customMessage == "string" && customMessage.length > 0) {
         oms[rule] = customMessage;
       } else {
-        oms[rule] = QvLocal.getRuleMessage(rule, QvLocal.LANG);
+        oms[rule] = QvLocal.getRuleMessage(rule, QvLocal.getLocal());
       }
     }
 
