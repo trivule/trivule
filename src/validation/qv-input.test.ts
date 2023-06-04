@@ -175,7 +175,7 @@ describe("QvInput", () => {
       const result = validator.getErrors();
 
       expect(result).toEqual({
-        required: "The name field is required",
+        required: "This field is required",
         min: "The name field must be greater than or equal to '3'",
       });
     });
