@@ -60,6 +60,7 @@ export abstract class AbstractInputValidator {
     events: ["blur", "input", "change"],
     validClass: "",
     invalidClass: "is-invalid",
+    type: "text",
   };
 
   constructor(selector: ValidatableInput, params?: QvInputParms) {
@@ -135,6 +136,8 @@ export abstract class AbstractInputValidator {
     }
 
     this.inputElement = inputElement as HTMLInputElement;
+
+    this.param.type = this.inputElement.type;
   }
 
   private setInputName() {

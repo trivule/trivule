@@ -106,6 +106,10 @@ export type QvInputParms = {
    * The css class that will be added to the input each time the form is invalid
    */
   invalidClass?: string;
+  /**
+   * Indicates input type
+   */
+  type?: string;
 };
 
 /**

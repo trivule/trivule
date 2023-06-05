@@ -1,4 +1,4 @@
-import { isFile, maxFileSize, minFileSize } from ".";
+import { fileBetween, isFile, maxFileSize, minFileSize } from ".";
 // Mocking a File object for testing
 const createFile = (name: any, size: any) => {
   const file = new File([], name, { type: "text/plain" });
@@ -85,5 +85,19 @@ describe("minFileSize", () => {
   it("should return false for non-file input", () => {
     // Test with a non-file input
     expect(minFileSize("test", "1KB")).toBe(false);
+  });
+});
+
+describe("fileBetween", () => {
+  const file = createFile("text.txt", 1024); // Create a sample File object for testing
+
+  it("should return true for file with size between min and max", () => {
+    const result1 = fileBetween(file, "1KB, 2KB");
+    expect(result1).toBe(true);
+  });
+
+  it("should return false for file with size not between in min and max", () => {
+    const result2 = fileBetween(file, "1MB, 2MB");
+    expect(result2).toBe(false);
   });
 });

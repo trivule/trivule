@@ -4,10 +4,42 @@ import { getRule } from "../utils";
 import { InputValueType, QvInputParms } from "../contracts/types";
 import { RuleExecuted } from ".";
 import { QvMessages } from "../messages";
+import { is_string } from "../rules";
+import { QvLocal } from "../locale/qv-local";
 /**
  * @author Claude Fassinou
  */
 export class QValidation {
+  private _rulesToMap = ["min", "max", "between", "size"];
+  /**
+   * Map of validation rules specific to field types.
+   * This map associates field types with the corresponding validation rules.
+   */
+  private _rulesFromTypes: Record<string, Record<string, string>> = {
+    min: {
+      text: "minlength",
+      file: "minFileSize",
+      date: "beforeDate",
+      "date-local": "beforeDate",
+    },
+    max: {
+      text: "maxlength",
+      file: "maxFileSize",
+      date: "afterDate",
+      "date-local": "afterDate",
+    },
+    between: {
+      text: "stringBetween",
+      file: "fileBetween",
+      date: "dateBetween",
+      "date-local": "dateBetween",
+    },
+    size: {
+      text: "length",
+    },
+  };
+
+  private _inputType = "text";
   /**
    * The list of rules that should be executed on the value
    */
@@ -63,11 +95,13 @@ export class QValidation {
     }
 
     for (const rule of rules) {
-      const { ruleName, params } = getRule(rule);
+      //Get rulename and param
+      let { ruleName, params } = getRule(rule);
+      let ruleToRun = this._getRuleToRunName(ruleName);
 
-      const ruleCallback = QvBag.getRule(ruleName);
+      const ruleCallback = QvBag.getRule(ruleToRun);
 
-      const ruleExec = this._makeRuleExcutedInstance(ruleName);
+      const ruleExec = this._makeRuleExcutedInstance(ruleToRun, ruleName);
 
       ruleExec.params = params;
 
@@ -106,7 +140,7 @@ export class QValidation {
     const r: Record<string, string> = {};
     for (const rx of this._ruleExecuted) {
       if (!rx.passed) {
-        r[rx.ruleName] = rx.message ?? "";
+        r[rx.orignalName] = rx.message ?? "";
       }
     }
     return r;
@@ -137,11 +171,11 @@ export class QValidation {
    * @param r
    * @returns
    */
-  private _makeRuleExcutedInstance(r: string | Rule) {
+  private _makeRuleExcutedInstance(r: string | Rule, originalRuleName: string) {
     let re = this._ruleExecuted.find((rx) => {
       return rx.isNamed(r);
     });
-    return re ?? new RuleExecuted(r);
+    return re ?? new RuleExecuted(r, originalRuleName);
   }
 
   private _addRuleExecuted(ruleExecuted: RuleExecuted) {
@@ -150,9 +184,21 @@ export class QValidation {
     }
   }
   private _parseRuleMessage(ruleExec: RuleExecuted) {
+    const orgMesage = QvLocal.getRuleMessage(ruleExec.orignalName);
+    const supliedMessage = this._qvmessages[ruleExec.orignalName];
+
+    if (supliedMessage !== orgMesage) {
+      this._qvmessages[ruleExec.ruleName] = supliedMessage;
+    } else {
+      this._qvmessages[ruleExec.ruleName] = QvLocal.getRuleMessage(
+        ruleExec.ruleName
+      );
+    }
+
     const qvMessages = new QvMessages().setMessages(
       this._qvmessages as RulesMessages
     );
+
     const message = qvMessages.parseMessage(
       this._attr,
       ruleExec.ruleName as Rule,
@@ -200,5 +246,21 @@ export class QValidation {
 
     this._rules = param.rules ?? [];
     this._qvmessages = param.errors ?? {};
+    this._inputType = param.type ?? this._inputType;
+  }
+
+  private _getRuleToRunName(ruleName: string) {
+    let ruleToRun = ruleName;
+    //If the rule can be mapped
+    if (this._rulesToMap.includes(ruleName)) {
+      const ruleMap = this._rulesFromTypes[ruleName];
+      if (ruleMap) {
+        const gettedRule = ruleMap[this._inputType];
+        if (is_string(gettedRule) && gettedRule.length > 0) {
+          ruleToRun = gettedRule as Rule;
+        }
+      }
+    }
+    return ruleToRun;
   }
 }

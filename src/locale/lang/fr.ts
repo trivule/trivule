@@ -47,4 +47,7 @@ export const fr_messages: RulesMessages = {
   regex: "Ce champ est invalide.",
   lower: "Ce champ doit être en minuscule",
   upper: "Ce champ doit être en majuscule",
+  fileBetween: "La taille du fichier doit être comprise entre :arg0 et :arg1",
+  stringBetween:
+    "La longueur de ce champ doit être comprise entre :arg0 et :arg1",
 };

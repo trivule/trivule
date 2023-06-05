@@ -47,4 +47,6 @@ export const en_messages: RulesMessages = {
   regex: "This field is invalid.",
   lower: "This field must be lowercase",
   upper: "This field must be uppercase",
+  fileBetween: "File size must be between :arg0 and :arg1",
+  stringBetween: "The length of this field must be between :arg0 and :arg1",
 };
