@@ -33,7 +33,8 @@ export type InputValueType =
   | number
   | null
   | boolean
-  | undefined;
+  | undefined
+  | FileList;
 
 /**
  * An Element or null type

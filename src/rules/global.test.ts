@@ -1,4 +1,4 @@
-import { size, between, required, regex } from ".";
+import { size, between, required, regex, inInput } from ".";
 
 describe("required", () => {
   it("should return false for undefined input", () => {
@@ -76,5 +76,27 @@ describe("regex", () => {
     expect(() => {
       regex(input, pattern);
     }).toThrow();
+  });
+});
+
+describe("inInput rule callback", () => {
+  it("should return true if the input is in the list", () => {
+    const input = "active";
+    const params = "active, inactive, suspended";
+    const result = inInput(input, params);
+    expect(result).toBe(true);
+  });
+
+  it("should return false if the input is not in the list", () => {
+    const input = "pending";
+    const params = "active, inactive, suspended";
+    const result = inInput(input, params);
+    expect(result).toBe(false);
+  });
+
+  it("should throw an error if params argument is empty", () => {
+    const input = "active";
+    const params = "";
+    expect(() => inInput(input, params)).toThrow();
   });
 });
