@@ -1,5 +1,10 @@
+import { isNumber } from "../number";
+import { is_string } from "../string";
 import { CountryPhoneValidatorInterface } from "./country-phone-validator.interface";
-
+/**
+ * This takes care of validating telephone numbers using a convention  validateCountryCode
+ * @author Claude Fassinou
+ */
 export class CountryPhoneValidator implements CountryPhoneValidatorInterface {
   protected _value: any;
   protected code?: string;
@@ -58,6 +63,9 @@ export class CountryPhoneValidator implements CountryPhoneValidatorInterface {
    * @throws Error if the validator method for a country code does not exist.
    */
   validPhoneNumber(): boolean {
+    if (!(is_string(this._value) || isNumber(this._value))) {
+      return false;
+    }
     if (typeof this.code === "string") {
       const results: boolean[] = [];
       //Parse code
