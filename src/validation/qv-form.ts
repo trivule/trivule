@@ -108,12 +108,18 @@ export class QvForm {
 
     this.emit("qv.form.init");
   }
-
+  /**
+   * Disable submission  button on failed
+   */
   private disableButton() {
     if (this.submitButton) {
       this.submitButton.setAttribute("disabled", "true");
     }
   }
+
+  /**
+   * Enable submission button on success
+   */
   private enableButton() {
     if (this.submitButton) {
       this.submitButton.removeAttribute("disabled");
@@ -313,22 +319,6 @@ export class QvForm {
    */
   validate() {
     this.emit("qv.form.validate");
-  }
-  /**
-   * Attaches an event listener to the "qv.form.init" event.
-   * This event is triggered when the form is initialized.
-   * @param fn - The callback function to execute when the event occurs.
-   * Example:
-   * ```typescript
-   * qvForm.onInit((e) => {
-   *   console.log("Form initialized", e);
-   * });
-   * ```
-   */
-  onInit(fn?: EventCallback) {
-    if (typeof fn == "function") {
-      this.__call(fn, this);
-    }
   }
 
   /**
