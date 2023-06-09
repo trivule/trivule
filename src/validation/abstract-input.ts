@@ -84,6 +84,7 @@ export abstract class AbstractInputValidator {
    */
   setRules(rules?: string[]) {
     let ruleSrring: any = this.inputElement.dataset.qvRules ?? "";
+
     if (ruleSrring) {
       for (const rule of ruleSrring.split("|") as Rule[]) {
         if (QvBag.hasRule(getRule(rule).ruleName)) {
