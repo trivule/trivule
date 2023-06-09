@@ -69,14 +69,10 @@ export class QvInput extends QvInputValidator {
       this.__call(fn);
     });
   }
-  /**
-   * Invokes the provided function with the given parameters if it is a valid function.
-   * @param fn - The function to be called.
-   * @param params - The parameters to be passed to the function.
-   */
-  private __call(fn?: CallableFunction, ...params: any) {
-    if (typeof fn == "function") {
-      fn(...params);
-    }
+
+  destroy() {
+    this.param.events = [];
+    this.rules = [];
+    this.param.rules = [];
   }
 }

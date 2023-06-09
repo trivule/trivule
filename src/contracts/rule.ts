@@ -1,3 +1,6 @@
+/**
+ * List of Quickv rules grouped by Rule type
+ */
 export type Rule =
   | "required"
   | "email"

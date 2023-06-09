@@ -60,6 +60,7 @@ export abstract class AbstractInputValidator {
     events: ["blur", "input", "change"],
     validClass: "",
     invalidClass: "is-invalid",
+    type: "text",
   };
 
   constructor(selector: ValidatableInput, params?: QvInputParms) {
@@ -83,6 +84,7 @@ export abstract class AbstractInputValidator {
    */
   setRules(rules?: string[]) {
     let ruleSrring: any = this.inputElement.dataset.qvRules ?? "";
+
     if (ruleSrring) {
       for (const rule of ruleSrring.split("|") as Rule[]) {
         if (QvBag.hasRule(getRule(rule).ruleName)) {
@@ -135,6 +137,8 @@ export abstract class AbstractInputValidator {
     }
 
     this.inputElement = inputElement as HTMLInputElement;
+
+    this.param.type = this.inputElement.type;
   }
 
   private setInputName() {
@@ -272,7 +276,7 @@ export abstract class AbstractInputValidator {
       if (typeof customMessage == "string" && customMessage.length > 0) {
         oms[rule] = customMessage;
       } else {
-        oms[rule] = QvLocal.getRuleMessage(rule, QvLocal.LANG);
+        oms[rule] = QvLocal.getRuleMessage(rule, QvLocal.getLocal());
       }
     }
 

@@ -8,7 +8,7 @@ export class QvMessages {
   protected messages!: RulesMessages;
 
   constructor(local?: string) {
-    this.messages = QvLocal.getMessages(local ?? QvLocal.LANG);
+    this.messages = QvLocal.getMessages(local ?? QvLocal.getLocal());
   }
 
   getRulesMessages(rules: Rule[]): string[] {
@@ -26,21 +26,17 @@ export class QvMessages {
   }
 
   parseMessage(
-    inputName: string,
+    attribute: string,
     rule: Rule,
     message: string,
-    replace?: string
+    oParams: string
   ): string {
-    let replacements = [inputName, ...spliteParam(replace ?? "")];
+    const args = this._createParamObject(spliteParam(oParams ?? ""));
 
-    let parsedMessage = message;
-    //Remove input if :field not present
-    if (!parsedMessage.includes(":field")) {
-      replacements = replacements.slice(1);
-    }
-    parsedMessage = this._replace(message, parsedMessage, replacements);
+    args["field"] = attribute;
+    message = this._replace(message, args);
 
-    return parsedMessage;
+    return message;
   }
   /**
    *
@@ -52,20 +48,27 @@ export class QvMessages {
     return this;
   }
 
-  private _replace(message: string, parsedMessage: any, replacements: any) {
-    // Recherche toutes les sous-chaînes commençant par ':'
-    const matches = message.match(/:[a-zA-Z]+/g);
-
-    // Si des sous-chaînes ont été trouvées
-    if (matches) {
-      // Pour chaque sous-chaîne, on la remplace par la valeur correspondante dans replacements
-      for (let i = 0; i < matches.length; i++) {
-        const replacement = replacements[i] ?? "";
-        // Remplacement de la sous-chaîne dans le message original
-        parsedMessage = parsedMessage.replace(matches[i], replacement);
+  private _replace(message: string, replacements: Record<string, any>) {
+    for (const positionalAgrName in replacements) {
+      if (
+        Object.prototype.hasOwnProperty.call(replacements, positionalAgrName)
+      ) {
+        const argValue = replacements[positionalAgrName];
+        message = message.replace(`:${positionalAgrName}`, argValue);
       }
     }
+    // Remove the field from the replacements before inject them
+    delete replacements["field"];
+    return message.replace(/\.\.\.arg/, Object.values(replacements).join(", "));
+  }
 
-    return parsedMessage;
+  private _createParamObject(params: any[]) {
+    const args: Record<string, any> = {};
+    for (let i = 0; i < params.length; i++) {
+      const value = params[i];
+      const argName = `arg${i}`;
+      args[argName] = value;
+    }
+    return args;
   }
 }

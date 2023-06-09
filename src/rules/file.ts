@@ -1,4 +1,5 @@
 import { RuleCallBack } from "../contracts";
+import { spliteParam } from "../utils";
 
 /**
  * Checks whether a given value is a `File` or `Blob` object.
@@ -90,4 +91,29 @@ export const minFileSize: RuleCallBack = (input, minSize) => {
   } else {
     return false;
   }
+};
+
+/**
+ * Checks whether the size of a given `File` or `Blob` object is between the specified minimum and maximum size.
+ *
+ * @param input - The `File` or `Blob` object to check.
+ * @param min_max - The string containing the minimum and maximum size values, separated by a delimiter.
+ * @example
+ * //Test function
+ * fileBetween(file,"1MB,5MB")
+ * //Rule usage
+ * ```javascript
+ * {
+ *  rules:["fileBetween:1MB,5MB"],
+ * }
+ * ```
+ * @example
+ * ```html
+ * <input data-qv-rules="fileBetween:1MB,5MB" />
+ * ```
+ * @returns `true` if the size of the input object is between the minimum and maximum size, `false` otherwise.
+ */
+export const fileBetween: RuleCallBack = (input, min_max) => {
+  const [min, max] = spliteParam(min_max ?? "");
+  return maxFileSize(input, max) && minFileSize(input, min);
 };

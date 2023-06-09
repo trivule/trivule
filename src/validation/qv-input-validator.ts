@@ -78,7 +78,7 @@ export class QvInputValidator extends AbstractInputValidator {
   }
 
   /**
-   * Performs validation on the input element using the defined validation rules. Don't emit qv.input.validated event
+   * Performs validation on the input element using the defined validation rules. Don't emit qv.input.passes or qv.input.fails event
    * @returns true if the input element is valid, false otherwise.
    * Example:
    * ```
@@ -181,10 +181,14 @@ export class QvInputValidator extends AbstractInputValidator {
   passes() {
     return this._passed;
   }
-
-  destroy() {
-    this.param.events = [];
-    this.rules = [];
-    this.param.rules = [];
+  /**
+   * Invokes the provided function with the given parameters if it is a valid function.
+   * @param fn - The function to be called.
+   * @param params - The parameters to be passed to the function.
+   */
+  protected __call(fn?: CallableFunction, ...params: any) {
+    if (typeof fn == "function") {
+      fn(...params);
+    }
   }
 }

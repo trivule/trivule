@@ -262,3 +262,28 @@ export const upper: RuleCallBack = (input, param?: string) => {
 export const lower: RuleCallBack = (input: string, param?: string) => {
   return input === input.toLocaleLowerCase();
 };
+
+/**
+ * Checks whether the length of a given string is between the specified minimum and maximum values.
+ *
+ * @param input - The string to check.
+ * @param min_max - The string containing the minimum and maximum values, separated by a delimiter.
+ * @example
+ * // Test function
+ * stringBetween("hello", "2, 5");
+ * // Rule usage
+ * ```javascript
+ * {
+ *   rules: ["stringBetween:2,5"],
+ * }
+ * ```
+ * @example
+ * ```html
+ * <input data-qv-rules="stringBetween:2,5" />
+ * ```
+ * @returns `true` if the length of the input string is between the minimum and maximum values, `false` otherwise.
+ */
+export const stringBetween: RuleCallBack = (input: string, min_max) => {
+  const [min, max] = spliteParam(min_max ?? "");
+  return minlength(input, min) && maxlength(input, max);
+};

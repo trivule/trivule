@@ -32,3 +32,24 @@ export function now(): string {
   const now = new Date();
   return now.toISOString();
 }
+
+export function isSubObject(
+  sub: Record<string, any>,
+  obj: Record<string, any>
+): boolean {
+  if (typeof sub !== "object" || sub === null || Array.isArray(sub)) {
+    return false;
+  }
+
+  if (typeof obj !== "object" || obj === null || Array.isArray(obj)) {
+    return false;
+  }
+
+  for (const key in sub) {
+    if (!(key in obj) || sub[key] !== obj[key]) {
+      return false;
+    }
+  }
+
+  return true;
+}
