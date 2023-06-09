@@ -51,12 +51,15 @@ describe("QvInput", () => {
         "data-qv-messages",
         "Required message | Min message"
       );
-      const validator = new QvInput(inputElement);
-
-      expect(validator.getMessages()).toEqual({
-        min: "Min message",
-        required: "Required message",
+      const validator = new QvInput(inputElement, {
+        failsOnfirst: false,
       });
+      validator.validate();
+
+      expect(validator.getMessages()).toEqual([
+        "Required message",
+        "Min message",
+      ]);
     });
     test("should return array of messages set via qv-messages with compensations messages", () => {
       const inputElement = document.createElement("input");
@@ -68,14 +71,16 @@ describe("QvInput", () => {
         "data-qv-messages",
         "Required message | {1,2,3}Invalid email address"
       );
-      const validator = new QvInput(inputElement);
-
-      expect(validator.getMessages()).toEqual({
-        min: "Invalid email address",
-        required: "Required message",
-        max: "Invalid email address",
-        email: "Invalid email address",
+      const validator = new QvInput(inputElement, {
+        failsOnfirst: false,
       });
+
+      validator.validate();
+      expect(validator.getMessages()).toEqual([
+        "Required message",
+        "Invalid email address",
+        "Invalid email address",
+      ]);
     });
 
     test("should return false if rules are empty", () => {
@@ -155,7 +160,9 @@ describe("QvInput", () => {
       inputElement.setAttribute("data-qv-rules", "required|min:3");
       inputElement.name = "name";
       inputElement.value = ""; // Set the input value to empty
-      const validator = new QvInput(inputElement);
+      const validator = new QvInput(inputElement, {
+        failsOnfirst: false,
+      });
 
       jest
         .spyOn(validator as any, "setValidationClass")
@@ -167,10 +174,10 @@ describe("QvInput", () => {
       validator.validate();
       const result = validator.getErrors();
 
-      expect(result).toEqual([
-        "The name field is required",
-        "The name field must be greater than or equal to '3'",
-      ]);
+      expect(result).toEqual({
+        required: "The name field is required",
+        min: "The name field must be greater than or equal to '3'",
+      });
     });
 
     test("should return empty error messages", () => {
@@ -191,7 +198,7 @@ describe("QvInput", () => {
       validator.validate();
       const result = validator.getErrors();
 
-      expect(result).toEqual([]);
+      expect(result).toEqual({});
     });
   });
 });

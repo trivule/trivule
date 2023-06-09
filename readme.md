@@ -1,30 +1,37 @@
 # Quickv
 
-`Quickv` *(pronounced as 'cue-v' in French)* is a lightweight and easy-to-use JavaScript library for client-side validation of HTML forms. With Quickv, you can quickly and easily add validation rules to your form fields using custom HTML attributes, without needing a lot of extra JavaScript code. Quickv's custom HTML attributes are simple to understand and use, allowing developers to set up a robust validation system quickly without devoting a lot of time to creating custom validation functions or writing complex JavaScript code. If you're looking for a simple and effective solution for client-side validation of your HTML forms, Quickv may be the ideal tool for you.
+`Quickv` _(pronounced as 'cue-v' in French)_ is a lightweight and easy-to-use JavaScript library for client-side validation of HTML forms. With Quickv, you can quickly and easily add validation rules to your form fields using custom HTML attributes, without needing a lot of extra JavaScript code. Quickv's custom HTML attributes are simple to understand and use, allowing developers to set up a robust validation system quickly without devoting a lot of time to creating custom validation functions or writing complex JavaScript code. If you're looking for a simple and effective solution for client-side validation of your HTML forms, Quickv may be the ideal tool for you.
 
 ## Why use Quickv?
 
 The goal of Quickv is to simplify the validation process and save time for developers, allowing them to focus on other aspects of application development. By providing a fast and easy-to-use validation solution, **Quickv** can be an attractive choice for developers looking for an effective solution to add client-side validation to their HTML forms without sacrificing a lot of time in the process.
 
-
 ## Installation
+
 You can install `Quickv` in one of the following ways:
+
 ### Via un cdn
+
 Copy the _Quickv_ code from the CDN and paste it into a file named `quickv1.2.0.js`, and then include the `quickv1.2.0.js` file in your project. [Copy the code](https://cdn.jsdelivr.net/npm/quickv@1.2.0/dist/index.js). You can make it easy by copying the following script tag before the closing body tag of your HTML structure:
+
 ```html
-<script  src="https://cdn.jsdelivr.net/npm/quickv@1.2.0/dist/index.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/quickv@1.2.0/dist/index.js"></script>
 ```
+
 ### via npm
 
 Go to the root of the project where you want to use `Quickv`, open your terminal, and type:
+
 ```bash
 npm install  quickv
 ```
+
 You can then use `Quickv` in your project by importing it:
+
 ```js
-import  *  as  quickv  from  "quickv";
-const  qv=  new  quickv.Quickv()
-qv.init()
+import * as quickv from "quickv";
+const qv = new quickv.Quickv();
+qv.init();
 ```
 
 ## Usage
@@ -63,7 +70,6 @@ By using these classes, you can easily validate your forms with Quickv, but be s
 ### In HTML and CSS Vanilla
 
 - Copy and include the `quickv.js` file in your project with the `script` tag
-
 - Initialize as follows:
 
   ```js
@@ -72,9 +78,7 @@ By using these classes, you can easily validate your forms with Quickv, but be s
   ```
 
   That's all you need to do as far as JavaScript, if you have no errors in the console, you can test Quickv
-
 - Create an HTML form, with the `form` tag
-
 - Create a field you want to validate and add attributes like the example below
 
   Exemple
@@ -98,14 +102,59 @@ By typing in the age field and submitting the form by clicking the **_Submit_** 
 If you do not want to disable the default form, simply remove the `data-qv-submit` attribute from the submit button in your HTML code.
 
 ### In Angular
+
 You can see here an example of using Quickv in Angular [here](https://github.com/Claudye/ng-quickv)
----
+-----------------------------------------------------------
 
 ### In Reactjs
 
 You can see here an example of using Quickv in Reactjs [here](https://github.com/Meschack/quickv-test/tree/react-test)
 
----
+### In Vuejs Or Nuxt
+
+For a vue 3 or nuxt3 project, you must first install quickv
+
+`npm install  quickv`
+
+After installation, in the script part of your component, you need to mount it and inject the quickV instance.
+
+```javascript
+<script setup>
+  import { onMounted } from 'vue';
+  import  *  as  quickv  from  "quickv";
+
+
+  onMounted(() => {
+    const  qv=  new  quickv.Quickv()
+    qv.init()
+  })
+</script>
+
+```
+
+To test if everything is going well, here is an example of a minimalist view template with quickv.
+
+For a quick test, you can add the tailwind CDN.
+
+```html
+<template>
+  <form @submit.prevent="" action="">
+    <div>
+        <input
+          type="text"
+          name="age"
+          class="border "
+	  data-qv-valid-class="border border-green-500"
+          data-qv-invalid-class="border border-red-500"
+          data-qv-rules="required|number|between:18,35"
+          data-qv-messages="Age is required | Age must be a number | Age must be between 18 and 35"
+        />
+        <div data-qv-feedback="age" class="text-red-500"></div>
+    </div>
+    <button class="bg-blue-500 text-white px-3 py-2" data-qv-submit>Submit</button>
+  </form>
+</template>
+```
 
 ## Customization
 
@@ -140,33 +189,22 @@ It may happen that you want to apply a specific style to a field depending on it
 #### General rules
 
 - `required` - The value is mandatory.
-
 - `nullable` - The value can be null, it will simply be ignored.
-
 - `min:x` - Checks if the field value is greater than or equal to x. This rule can be used to validate numbers, strings, and files.
 
   - If the field is a number or a string, the value of x must be an integer.
-
   - If the field is a file, the value of x must be expressed in **B, KB, MB, or GB**. Example: 2MB, 1KB, 3GB.
-
 - `max:x` - Checks if the field value is less than or equal to the specified maximum value. This rule works in the same way as the min rule.
-
 - `in:x,x,z,...` - The _in_ validation rule checks if the user input is included in a specified list of values.
-
 - `size:x` - This rule should be used with caution.
 
   - If the entered value is a file, it checks if the file size is less than or equal to x (B, KB, MB, or GB).
-
   - If the value is a string, it checks if the length of the string is exactly x (an integer).
-
   - If the value is a number, it passes if the number of digits (including separators) is exactly x (an integer).
-
 - `between:x,y` - Passes if the field value is between x and y.
 
   - If the field is a number, x and y must be numbers.
-
   - If the field is a date, x and y must also be valid dates.
-
   - If the field is a file, x and y must be expressed in **B, KB, MB, or GB**.
 
 #### Rules for character strings
@@ -174,17 +212,12 @@ It may happen that you want to apply a specific style to a field depending on it
 Here are some validation rules that apply to character strings:
 
 - `email` - Passes if the string is a valid email address.
-
 - `password` - Passes if the string meets the following conventions:
 
   - Has a minimum length of 8 characters.
-
   - Contains at least one uppercase and one lowercase letter.
-
   - Contains at least one of the following characters: **!@#$%^&\*(),.?":{}|<>**.
-
 - `string` - Passes if the value is a character string.
-
 - `contains:x,y,...etc` - Checks if the field value contains any of the specified substrings.
   Example: contains:http,ftp,ssh If the form field contains at least one of these values, the rule passes.
 - `minlength:x` - Checks if the length of a string is greater than or equal to the specified minimum
@@ -192,21 +225,15 @@ Here are some validation rules that apply to character strings:
 - `maxlength:x` - Checks if the length of a string is less than or equal to the specified maximum
   number x. The minlength and maxlength rules apply only to character strings and fail for any other data type.
 - `url` - Checks if the entered value is a valid URL.
-
 - `startWithUpper` - Checks if the string starts with an uppercase letter.
-
 - `startWithLower` - Checks if the string starts with a lowercase letter.
-
 - `startWith:x,x,...` - Passes if the string starts with one of the specified values x,y,z.
-
 - `endWith:x,x,...` - Passes if the string ends with one of the specified values x,y,z.
-
 - `length:x` or `len:x` - Passes if the length of the character string is exactly x.
 
 #### These rules apply specifically to numbers
 
 - `numeric` or `number` - Passes if the value is a number
-
 - `integer` or `int` - Passes if the value is an integer
 
 #### Files
@@ -214,17 +241,13 @@ Here are some validation rules that apply to character strings:
 > _These rules apply to files and should fail for any other data type_
 
 - `file` - Passes if the value is a file
-
 - `maxFileSize:x` - Passes if the file size is less than or equal to x (**B, KB, MB, GB**)
-
 - `minFileSize:x` - Passes if the file size is greater than or equal to x (**B, KB, MB, GB**)
 
 ### Dates
 
 - `date` - The rule passes if the field value is a valid date. This rule can be used to validate dates in forms and ensure that they are in the correct format.
-
 - `before:date` - The rule passes if the field value is a date earlier than the specified `date`. This rule can be used to validate dates in forms and ensure that they are earlier than a given reference date. The date must be specified in a valid format.
-
 - `after:date` - The rule passes if the field value is a date later than the specified `date`. This rule can be used to validate dates in forms and ensure that they are later than a given reference date. The date must be specified in a valid format.
 
 #### Booleans
@@ -244,8 +267,7 @@ It's very simple to add new rules !
 A rule is just a javascript function that takes two parameters and must return a boolean
 
 1. The value to validate (the current value of the input)
-
-1. Parameters (optional): These are the values after the colon (:)
+2. Parameters (optional): These are the values after the colon (:)
 
 ```js
 const unique = (input) => {
@@ -264,7 +286,55 @@ qv.init();
 After that, you can use your rules as html attributes
 
 ---
+
+
+## New features
+
+### QvInputParams
+
+The `QvInputParams` interface represents an attribute object used to configure validation in Quickv.
+
+The `QvInputParams` interface allows you to define validation rules, custom error messages, the HTML element to display these messages, and more for an input element by specifying a parameter object that will be used during validation.
+
+### Performance
+
+Quickv has introduced performance improvements to optimize the validation process. It now checks if a value has already been validated with the same rule. If the value has been previously validated, Quickv avoids revalidating it and instead returns the cached validation status. This helps minimize redundant validation calls and improves overall performance.
+
+By caching the validation results, Quickv reduces the computational overhead of revalidating the same value multiple times when it hasn't changed.
+
+### Customization
+
+Quickv provides a flexible way to customize attribute values using the `QvInput` class. Instead of directly specifying attribute values in HTML attributes (e.g., `data-qv-rules`), you can programmatically define them using JavaScript code.
+
+Example 1:
+
+```typescript
+const qvInput = new QvInput("input", {}, { rules: ["required", "email"] });
+qvInput.init();
+```
+
+In this example, the `QvInput` class is instantiated with three parameters:
+
+- An input element selector ("input").
+- Configurations (an object that can contain keys `invalidClass` and `validClass` with their corresponding CSS classes to style the input element when it is invalid or valid).
+- Additional options, including the `rules` attribute with the specified validation rules.
+
+Example 2:
+
+```typescript
+const qvInput = new QvInput("input");
+qvInput.with({ rules: ["required", "email"] });
+qvInput.init();
+```
+
+This alternative approach demonstrates the use of the `with` method of the `QvInput` class to set the parameters separately after instantiation. Again, the `rules` attribute is specified with the desired validation rules.
+
+By using the `QvInput` class, you can dynamically configure the parameters in JavaScript code, offering more flexibility and avoiding cluttering your HTML files with `data-qv-` attributes.
+
+Find all the types [here](./src/contracts/types.ts).
+
 ### Documentation and Test
+
 French: [Documentation](https://github.com/quick-v/quickv/blob/main/readme.fr.md)
 
 English: [Documentation](https://github.com/quick-v/quickv/blob/main/readme.md)

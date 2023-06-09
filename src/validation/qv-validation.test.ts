@@ -1,101 +1,41 @@
 import { QValidation } from ".";
-import { Rule } from "../contracts";
+import { RulesMessages } from "../contracts";
 
-describe("Validation", () => {
-  let validator: QValidation;
+describe("QValidation", () => {
+  let qValidation: QValidation;
 
   beforeEach(() => {
-    validator = new QValidation();
-  });
-
-  describe("validate", () => {
-    it("should throw an error if rules parameter is not an array or a string", () => {
-      expect(() => validator.validate({}, {} as any)).toThrow(
-        "The rule provided must be an array of Rule"
-      );
-    });
-
-    it("should throw an error if a rule is not defined in the rules bag", () => {
-      expect(() => validator.validate({}, ["nonexistent"] as any)).toThrow(
-        "The rule nonexistent is not defined"
-      );
-    });
-
-    it("should add the rule name to errors array if validation fails", () => {
-      validator.validate("", ["required"]);
-      expect(validator.getErrors()).toContain("required");
-    });
-
-    it("should not add the rule name to errors array if validation succeeds", () => {
-      validator.validate("abc", ["required", "string"]);
-      expect(validator.getErrors()).toEqual([]);
+    qValidation = new QValidation({
+      rules: ["required", "email"],
+      errors: {
+        required: "This field is required",
+        email: "Invalid email format",
+      } as RulesMessages,
     });
   });
 
-  describe("hasError", () => {
-    it("should return true if there are errors", () => {
-      validator.validate("", ["required"]);
-      expect(validator.hasErrors()).toBe(true);
-    });
-
-    it("should return false if there are no errors", () => {
-      validator.validate("abc", ["required", "string"]);
-      expect(validator.hasErrors()).toBe(false);
-    });
+  test("validate() should return true for a valid value", () => {
+    qValidation.value = "test@example.com";
+    const isValid = qValidation.validate();
+    expect(isValid).toBe(true);
+    expect(qValidation.hasErrors()).toBe(false);
+    expect(qValidation.getMessages()).toEqual([]);
   });
 
-  describe("getRule", () => {
-    it("should parse a rule with no parameters correctly", () => {
-      const qv = new QValidation();
-      const rule = "required";
-      const expected = {
-        ruleName: "required",
-        params: undefined,
-      };
+  test("validate() should return false for an invalid value", () => {
+    qValidation.value = "";
+    const isValid = qValidation.validate();
+    expect(isValid).toBe(false);
+    expect(qValidation.hasErrors()).toBe(true);
+    expect(qValidation.getMessages()).toEqual([
+      "This field is required",
+      "Invalid email format",
+    ]);
+  });
 
-      const result = qv.getRule(rule);
-
-      expect(result).toEqual(expected);
-    });
-
-    it("should parse a rule with parameters correctly", () => {
-      const qv = new QValidation();
-      const rule = "min:8";
-      const expected = {
-        ruleName: "min",
-        params: "8",
-      };
-
-      const result = qv.getRule(rule);
-
-      expect(result).toEqual(expected);
-    });
-
-    it("should parse a rule with parameters correctly", () => {
-      const qv = new QValidation();
-      const rule = "between:8,10";
-      const expected = {
-        ruleName: "between",
-        params: "8,10",
-      };
-
-      const result = qv.getRule(rule);
-
-      expect(result).toEqual(expected);
-    });
-
-    it("should parse a 'in' rule with parameters correctly", () => {
-      const qv = new QValidation();
-      const rule = "in:active,pending,status" as Rule;
-      const expected = {
-        ruleName: "in",
-        params: "active,pending,status",
-      };
-
-      const result = qv.getRule(rule);
-
-      expect(result).toEqual(expected);
-      expect(qv.validate("active", [rule])).toBe(true);
-    });
+  test("setRules() should update the rules", () => {
+    const newRules = ["required", "minlength:8"];
+    qValidation.setRules(newRules);
+    expect(qValidation.getRules()).toEqual(newRules);
   });
 });

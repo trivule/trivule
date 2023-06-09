@@ -1,11 +1,15 @@
 import { Rule, RulesMessages } from "../contracts";
+import { QvLocal } from "../locale/qv-local";
 import { spliteParam } from "../utils";
-import { QvBag } from "../validation/qv-bag";
 /**
  * @author Claude Fassinou
  */
 export class QvMessages {
-  protected messages = QvBag.allMessages();
+  protected messages!: RulesMessages;
+
+  constructor(local?: string) {
+    this.messages = QvLocal.getMessages(local ?? QvLocal.LANG);
+  }
 
   getRulesMessages(rules: Rule[]): string[] {
     const messages: string[] = [];
@@ -34,7 +38,7 @@ export class QvMessages {
     if (!parsedMessage.includes(":field")) {
       replacements = replacements.slice(1);
     }
-    parsedMessage = this.replace(message, parsedMessage, replacements);
+    parsedMessage = this._replace(message, parsedMessage, replacements);
 
     return parsedMessage;
   }
@@ -44,11 +48,11 @@ export class QvMessages {
    * @returns
    */
   setMessages(messages: RulesMessages) {
-    this.messages = messages;
+    this.messages = { ...this.messages, ...messages };
     return this;
   }
 
-  private replace(message: string, parsedMessage: any, replacements: any) {
+  private _replace(message: string, parsedMessage: any, replacements: any) {
     // Recherche toutes les sous-chaînes commençant par ':'
     const matches = message.match(/:[a-zA-Z]+/g);
 

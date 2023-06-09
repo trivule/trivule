@@ -1,10 +1,10 @@
 export class ValidationErrorMessage {
   constructor(private rules: string[], private messages: string[]) {
-    this.compensateMessages();
-    this.sanitizeMessage();
+    this._compensateMessages();
+    this._sanitizeMessage();
   }
 
-  private compensateMessages(): void {
+  private _compensateMessages(): void {
     const x = this.rules.length;
     // Vérifier si la longueur des messages et des règles est la même
     if (this.messages.length !== x) {
@@ -18,7 +18,7 @@ export class ValidationErrorMessage {
     }
   }
 
-  private sanitizeMessage() {
+  private _sanitizeMessage() {
     const regex = /{(\d+(?:,\s*\d+)*)}/g;
     // Iterate through each message and replace the regex pattern with an empty string
     this.messages = this.messages.map((message) => message.replace(regex, ""));

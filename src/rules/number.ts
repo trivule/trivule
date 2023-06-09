@@ -1,7 +1,13 @@
 import { maxlength, minlength } from "./string";
 import { RuleCallBack } from "../contracts/rule-callback";
 import { isFile, maxFileSize, minFileSize } from "./file";
-
+/**
+ * Checks if the input is at least the specified length.
+ *
+ * @param input - The input to check.
+ * @param min - The minimum length.
+ * @returns `true` if the input is at least the specified length, `false` otherwise.
+ */
 export const minRule: RuleCallBack = (input, min) => {
   if (isFile(input)) {
     return minFileSize(input, min);
@@ -19,7 +25,13 @@ export const minRule: RuleCallBack = (input, min) => {
     return minlength(input, min);
   }
 };
-
+/**
+ * Checks if the input is at most the specified length.
+ *
+ * @param input - The input to check.
+ * @param max - The maximum length.
+ * @returns `true` if the input is at most the specified length, `false` otherwise.
+ */
 export const maxRule: RuleCallBack = (input, max) => {
   if (isFile(input)) {
     return maxFileSize(input, max);
@@ -37,6 +49,12 @@ export const maxRule: RuleCallBack = (input, max) => {
   }
 };
 
+/**
+ * Checks if the input is an integer.
+ *
+ * @param input - The input to check.
+ * @returns `true` if the input is an integer, `false` otherwise.
+ */
 export const integer: RuleCallBack = (input) => {
   if (isNumber(input)) {
     return Number.isInteger(Number(input));
@@ -44,6 +62,12 @@ export const integer: RuleCallBack = (input) => {
   return false;
 };
 
+/**
+ * Checks if the input is a number.
+ *
+ * @param input - The input to check.
+ * @returns `true` if the input is a number, `false` otherwise.
+ */
 export const isNumber: RuleCallBack = (input) => {
   if (input === "" || input === null) {
     return false;

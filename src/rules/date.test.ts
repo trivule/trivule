@@ -47,13 +47,25 @@ describe("beforeDate", () => {
     expect(beforeDate(inputDate, referenceDate)).toBe(false);
   });
 
-  test("should throw an exception if the input is not a valid date", () => {
+  test("should return false if the input is not a valid date", () => {
     const inputDate = "2023-04-xx";
     const referenceDate = "2023-04-24";
     expect(beforeDate(inputDate, referenceDate)).toBe(false);
   });
 
-  test("should throw an exception if the reference date is not a valid date", () => {
+  test("should return true if date is before now", () => {
+    const inputDate = "2022-04-22";
+    const referenceDate = "now";
+    expect(beforeDate(inputDate, referenceDate)).toBe(true);
+  });
+
+  test("should return true if date is after now", () => {
+    const inputDate = "2050-01-01";
+    const referenceDate = "now";
+    expect(afterDate(inputDate, referenceDate)).toBe(true);
+  });
+
+  test("should return false if the reference date is not a valid date", () => {
     const inputDate = "2023-04-23";
     const referenceDate = "2023-04-xx";
     expect(beforeDate(inputDate, referenceDate)).toBe(false);

@@ -1,15 +1,22 @@
 import { QValidation, QvBag } from ".";
-import { IQvConfig, Rule, RulesMessages } from "../contracts";
+import { Rule, RulesMessages } from "../contracts";
+import { QvInputParms, ValidatableInput } from "../contracts/types";
+import { QvLocal } from "../locale/qv-local";
 import { ValidationErrorMessage } from "../messages";
-import { QvConfig } from "../qv.config";
 import { getRule } from "../utils";
 
 /**
  * @author Claude Fassinou
  */
 export abstract class AbstractInputValidator {
-  //Qv config
-  protected config: IQvConfig = QvConfig;
+  /**
+   * This status indicates the current state of the form
+   */
+  protected _passed = false;
+  /**
+   * Quickv Validator
+   */
+  protected validator!: QValidation;
   /** Input element which must be validate */
   protected inputElement!: HTMLInputElement;
   /** Error feedback element */
@@ -23,7 +30,7 @@ export abstract class AbstractInputValidator {
   /**
    * Input messages
    */
-  protected messages: RulesMessages = {} as any;
+  protected messages = {} as RulesMessages;
 
   /** Current input errors */
   protected _errors: string[] = [];
@@ -46,32 +53,35 @@ export abstract class AbstractInputValidator {
   /** Wich class assign to input if validation failed */
   protected invalidClass = "is-invalid";
 
-  /**
-   * Defaults event with trigge validat
-   */
-  protected events: string[] = ["blur", "input", "change"];
+  protected param: QvInputParms = {
+    emitEvent: true,
+    autoValidate: true,
+    failsOnfirst: true,
+    events: ["blur", "input", "change"],
+    validClass: "",
+    invalidClass: "is-invalid",
+  };
 
-  constructor(
-    selector: HTMLInputElement,
-    config?: IQvConfig,
-    protected emitEvent = true
-  ) {
-    this.setConfig(config);
+  constructor(selector: ValidatableInput, params?: QvInputParms) {
+    this.validator = new QValidation(this.param);
     this.setInputElement(selector);
-    this.setInputRules();
+    this._setParams(params);
+
+    this.setRules(params?.rules);
     this.setInputName();
     this.setFeedbackElement();
     this.setShowMessage();
-    this.setInputValidationClass();
+    this._setValidationClass();
 
-    this.getElementQvMessages();
-    this.setEvent();
+    this._setErrors();
+    this._setEvent(params?.events);
+    this.validator.setParams(this.param);
   }
   /**
    *Set input rules from input
    * @returns
    */
-  protected setInputRules() {
+  setRules(rules?: string[]) {
     let ruleSrring: any = this.inputElement.dataset.qvRules ?? "";
     if (ruleSrring) {
       for (const rule of ruleSrring.split("|") as Rule[]) {
@@ -84,30 +94,43 @@ export abstract class AbstractInputValidator {
         }
       }
     }
+    this.rules = (rules as Rule[]) ?? this.rules;
+
+    this.param.rules = this.rules;
     return this;
   }
 
   abstract validate(): boolean;
 
-  protected setEvent() {
+  protected _setEvent(events?: string[]) {
     const ev = this.inputElement.dataset.qvEvents;
 
     if (ev) {
-      this.events = ev.split("|");
+      this.param.events = ev.split("|").length
+        ? ev.split("|")
+        : this.param.events;
     }
+
+    this.param.events = events ?? this.param.events;
   }
 
-  private setInputElement(inputElement: any) {
-    if (!(inputElement instanceof HTMLElement)) {
-      const el = document.querySelector(inputElement);
+  /**
+   * Sets the input element for validation.
+   * This method should be called before calling the 'init' method.
+   * @param {ValidatableInput} inputElement - The input element or selector string representing the input element.
+   * @throws {Error} If the input element is not valid or cannot be found.
+   */
+  private setInputElement(inputElement: ValidatableInput) {
+    if (!(inputElement instanceof Element)) {
+      const el = document.querySelector<HTMLElement>(inputElement);
       if (el) {
-        inputElement = el;
+        inputElement = el as ValidatableInput;
       }
     }
 
-    if (!(inputElement instanceof HTMLElement)) {
+    if (!(inputElement instanceof Element)) {
       throw new Error(
-        "The 'inputElement' parameter must be of type HTMLElement."
+        "The 'inputElement' parameter must be valide 'ValidatableInput' type."
       );
     }
 
@@ -116,9 +139,6 @@ export abstract class AbstractInputValidator {
 
   private setInputName() {
     let name: string | undefined = this.inputElement.name;
-    if (this.inputElement.dataset.qvName) {
-      name = this.inputElement.dataset.qvName;
-    }
 
     if (
       name === undefined ||
@@ -129,11 +149,18 @@ export abstract class AbstractInputValidator {
     }
 
     this.name = name;
+    let attr = this.name;
+
+    if (this.inputElement.dataset.qvName) {
+      attr = this.inputElement.dataset.qvName;
+    }
+
+    this.param.attribute = attr;
   }
 
   set errors(value: any) {
     if (value) {
-      this._errors = value[this.name] ?? [];
+      this._errors = value ?? [];
     }
     this.showErrorMessages();
   }
@@ -156,6 +183,7 @@ export abstract class AbstractInputValidator {
       parentElement = parentElement.parentElement;
     }
     this.feedbackElement = feedbackElement;
+    this.param.feedbackElement = this.param.feedbackElement ?? feedbackElement;
   }
 
   /**
@@ -193,18 +221,20 @@ export abstract class AbstractInputValidator {
       : "first";
   }
 
-  private setInputValidationClass() {
+  private _setValidationClass() {
     //Set class from config
-    this.invalidClass = this.config.invalidClass ?? "";
-    this.validClass = this.config.validClass ?? "";
 
-    //Overwrite class if they on attribute
     this.invalidClass =
       this.inputElement.dataset.qvInvalidClass ?? this.invalidClass;
     this.validClass = this.inputElement.dataset.qvValidClass ?? this.validClass;
+
+    //Overwrite class if they on attribute
+    this.invalidClass = this.param.invalidClass ?? this.invalidClass;
+    this.validClass = this.param.validClass ?? this.validClass;
   }
 
-  protected setValidationClass(isValid: boolean) {
+  protected setValidationClass() {
+    const isValid = this._passed;
     const removeClass = (cls: string) => {
       if (cls.length > 0) {
         this.inputElement.classList.remove(cls);
@@ -227,7 +257,7 @@ export abstract class AbstractInputValidator {
     }
   }
 
-  private getElementQvMessages() {
+  private _setErrors(errors?: RulesMessages) {
     const elMessages = this.inputElement.dataset.qvMessages;
     let oms: RulesMessages = {} as any;
     for (let i = 0; i < this.rules.length; i++) {
@@ -238,16 +268,23 @@ export abstract class AbstractInputValidator {
         messages = vem.getMessages();
       }
       const customMessage = messages !== undefined ? messages[i] : "";
-      const rule = new QValidation().getRule(this.rules[i]).ruleName;
-
+      const rule = getRule(this.rules[i]).ruleName;
       if (typeof customMessage == "string" && customMessage.length > 0) {
         oms[rule] = customMessage;
       } else {
-        oms[rule] = QvBag.getMessage(rule);
+        oms[rule] = QvLocal.getRuleMessage(rule, QvLocal.LANG);
       }
     }
 
-    this.messages = oms;
+    if (
+      typeof errors !== "undefined" &&
+      typeof errors === "object" &&
+      Object.values(errors).length > 0
+    ) {
+      this.param.errors = errors;
+    } else {
+      this.param.errors = oms;
+    }
   }
 
   getName() {
@@ -260,10 +297,10 @@ export abstract class AbstractInputValidator {
       return this.inputElement.value;
     }
   }
-  protected setConfig(config?: IQvConfig) {
-    this.config = QvConfig;
-    if (config && typeof config === "object") {
-      this.config = { ...this.config, ...config };
+
+  protected _setParams(param?: QvInputParms) {
+    if (typeof param === "object" && typeof param !== "undefined") {
+      this.param = { ...this.param, ...param };
     }
   }
 }

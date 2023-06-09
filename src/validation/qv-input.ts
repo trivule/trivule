@@ -1,6 +1,11 @@
 import { IQvConfig, RuleCallBack } from "../contracts";
-import { BaseInputValidator } from "./base-input-validator";
+import { QvInputValidator } from "./qv-input-validator";
 import { QvBag } from "./qv-bag";
+import {
+  EventCallback,
+  QvInputParms,
+  ValidatableInput,
+} from "../contracts/types";
 
 /**
  * QvInput is responsible for applying live validation to an HTML input element.
@@ -14,13 +19,9 @@ import { QvBag } from "./qv-bag";
  * qvInput.init();
  * ```
  */
-export class QvInput extends BaseInputValidator {
-  constructor(
-    inputElement: HTMLInputElement,
-    config?: IQvConfig,
-    emitEvent = true
-  ) {
-    super(inputElement, config, emitEvent);
+export class QvInput extends QvInputValidator {
+  constructor(inputElement: ValidatableInput, param?: QvInputParms) {
+    super(inputElement, param);
   }
 
   /**
@@ -32,7 +33,7 @@ export class QvInput extends BaseInputValidator {
    * ```
    */
   init() {
-    this.events.forEach((e) => {
+    this.param.events?.forEach((e) => {
       this.inputElement.addEventListener(e, () => {
         this.validate();
       });
@@ -46,5 +47,36 @@ export class QvInput extends BaseInputValidator {
    */
   rule(ruleName: string, call: RuleCallBack, message?: string) {
     QvBag.rule(ruleName, call, message);
+  }
+
+  with(param: QvInputParms) {
+    this._setParams(param);
+    this.validator.setParams(this.param);
+  }
+
+  whereName(inputName: string): boolean {
+    return this.name === inputName;
+  }
+
+  onFails(fn: EventCallback) {
+    this.on("qv.input.fails", (e) => {
+      this.__call(fn);
+    });
+  }
+
+  onPasses(fn: EventCallback) {
+    this.on("qv.input.passes", (e) => {
+      this.__call(fn);
+    });
+  }
+  /**
+   * Invokes the provided function with the given parameters if it is a valid function.
+   * @param fn - The function to be called.
+   * @param params - The parameters to be passed to the function.
+   */
+  private __call(fn?: CallableFunction, ...params: any) {
+    if (typeof fn == "function") {
+      fn(...params);
+    }
   }
 }

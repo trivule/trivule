@@ -1,0 +1,108 @@
+[data-qv-feedback] {
+  color: red;
+}
+input,
+textarea,
+select,
+input[type="file"] {
+  margin: 0;
+  padding: 0;
+  border: none;
+  outline: none;
+  background: none;
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+  display: block;
+  width: 100%;
+  border-radius: 10px;
+}
+
+input,
+textarea,
+select {
+  border: 1px solid #ccc;
+  padding: 8px;
+  transition: border-color 0.3s ease;
+}
+
+input:hover,
+textarea:hover,
+select:hover,
+input[type="file"]:hover {
+  border-color: #999;
+}
+
+input:focus,
+textarea:focus,
+select:focus,
+input[type="file"]:focus {
+  border-color: #007bff;
+}
+input.is-invalid,
+textarea.is-invalid,
+select.is-invalid,
+input[type="file"].is-invalid {
+  border-left: 4px solid #ff0000;
+  border-color: #ff0000;
+}
+
+input.success,
+textarea.success,
+select.success,
+input[type="file"].success {
+  border-left: 4px solid #28a745;
+  border-color: #28a745;
+}
+label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+}
+.help {
+  display: block;
+  margin-top: 4px;
+  font-size: 14px;
+  color: #777;
+}
+button,
+input[type="button"],
+input[type="submit"],
+input[type="reset"] {
+  display: inline-block;
+  margin: 0;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+}
+
+button:not(:disabled):hover,
+input[type="button"]:not(:disabled):hover,
+input[type="submit"]:not(:disabled):hover,
+input[type="reset"]:not(:disabled):hover {
+  background-color: #0056b3;
+}
+
+button:not(:disabled):focus,
+input[type="button"]:not(:disabled):focus,
+input[type="submit"]:not(:disabled):focus,
+input[type="reset"]:not(:disabled):focus {
+  outline: none;
+  box-shadow: 0 0 0 2px #007bff;
+}
+button:disabled,
+input[type="button"]:disabled,
+input[type="submit"]:disabled,
+input[type="reset"]:disabled {
+  cursor: not-allowed;
+  background-color: #e0e0e0;
+  color: #777;
+} 
