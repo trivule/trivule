@@ -30,6 +30,8 @@ export class QvForm {
   private _formValidator!: FormValidator;
   private _emitOnPasses = true;
   private _emitOnFails = true;
+  private _qvEnabledClass = 'qvEnabled';
+  private _qvDisabledClass = 'qvDisabled';
 
   private _triggerValidationEvents = ["change", "qv.form.validate"];
   /**
@@ -91,6 +93,7 @@ export class QvForm {
    */
   init() {
     this._runQvInputs();
+    
     if (this.config.auto) {
       this.disableButton();
       this.validateOnQvEvent();
@@ -106,6 +109,7 @@ export class QvForm {
       this.enableButton();
     });
 
+    
     this.emit("qv.form.init");
   }
   /**
@@ -114,6 +118,19 @@ export class QvForm {
   private disableButton() {
     if (this.submitButton) {
       this.submitButton.setAttribute("disabled", "true");
+      if(this._qvDisabledClass) {
+        //removeClass enable
+        const classArrayEnabled:string[] = this._qvEnabledClass.split(' ')
+        for (const value of classArrayEnabled) {
+          this.submitButton.classList.remove(value)
+        }
+        //add class en disabled dataset
+        this._qvDisabledClass = this.submitButton.dataset.qvDisabledClass ?? "qvDisabled";
+        const classArray:string[] = this._qvDisabledClass.split(' ')
+        for (const value of classArray) {
+          this.submitButton.classList.add(value)
+        }
+      }
     }
   }
 
@@ -123,8 +140,24 @@ export class QvForm {
   private enableButton() {
     if (this.submitButton) {
       this.submitButton.removeAttribute("disabled");
+      if(this._qvEnabledClass) {
+        //removeClass disabled
+        const classArrayDisabled:string[] = this._qvDisabledClass.split(' ')
+        for (const value of classArrayDisabled) {
+          this.submitButton.classList.remove(value)
+        }
+        //add class en enabled dataset
+        this._qvEnabledClass = this.submitButton.dataset.qvEnabledClass ?? "qvEnabled";
+        const classArray:string[] = this._qvEnabledClass.split(' ')
+        for (const value of classArray) {
+          this.submitButton.classList.add(value)
+        }
+      }
     }
   }
+
+ 
+
 
   /**
    * Registers an event listener for  this this._triggerValidationEvents event on the container element.
