@@ -25,33 +25,9 @@ export class NativeValidation {
    */
   private _appliedRules: string[] = [];
 
-  constructor(inputElement: HTMLInputElement | string) {
-    this.setInputElement(inputElement);
-    this.getNativeRulesApplied();
-    this.merge();
-  }
-
-  /**
-   * Assigns the specified HTML input field to the `inputElement` property of the `NativeValidation` instance
-   *
-   * @param inputElement The HTML input element to which validation based on native validation rules will be applied.
-   */
-  private setInputElement(inputElement: HTMLInputElement | string) {
-    if (!(inputElement instanceof HTMLInputElement)) {
-      const el = document.querySelector<HTMLInputElement>(inputElement);
-
-      if (el) {
-        inputElement = el;
-      }
-    }
-
-    if (!(inputElement instanceof HTMLElement)) {
-      throw new Error(
-        "The 'inputElement' parameter must be of type HTMLInputElement."
-      );
-    }
-
+  constructor(inputElement: HTMLInputElement) {
     this.inputElement = inputElement;
+    this.getNativeRulesApplied();
   }
 
   /**
@@ -60,31 +36,32 @@ export class NativeValidation {
   private getNativeRulesApplied() {
     this._nativeRules.forEach((nativeRule) => {
       if (this.inputElement.hasAttribute(nativeRule)) {
-        this._appliedRules.push(nativeRule);
+        const rule =
+          nativeRule === "required"
+            ? nativeRule
+            : `${nativeRule}:${this.inputElement.getAttribute(nativeRule)}`;
+
+        this._appliedRules.push(rule);
       }
     });
   }
 
   /**
-   * Generates Quickv validation rules based on the native HTML validation rules applied to the targeted input field.
-   * @returns {string} The merged rule string, or an empty string if no rule is applied.
+   * Combines the native validation rules detected with the provided additional rules.
+   * @param {string} additionRules Additional rules to be merged with the native rules.
+   * @returns {string} The merged set of rules.
    */
-  private merge(): string {
-    let rules: string[] = [];
 
+  public merge(additionRules: string): string {
     if (this._appliedRules.length == 0) {
-      return "";
+      return additionRules;
     }
 
-    this._appliedRules.forEach((appliedRule) => {
-      const rule =
-        appliedRule === "required"
-          ? appliedRule
-          : `${appliedRule}:${this.inputElement.getAttribute(appliedRule)}`;
+    const mergedRules =
+      additionRules.length == 0
+        ? this._appliedRules.join("|")
+        : this._appliedRules.join("|") + "|" + additionRules;
 
-      rules.push(rule);
-    });
-
-    return rules.join("|");
+    return mergedRules;
   }
 }

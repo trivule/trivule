@@ -7,44 +7,41 @@ describe("NativeValidation", () => {
     inputElement = document.createElement("input");
   });
 
-  /* afterEach(() => {
-    inputElement = null;
-  }); */
-
-  it("should throw an error if inputElement parameter is not of type HTMLInputElement", () => {
-    expect(() => {
-      new NativeValidation("non-existing-element");
-    }).toThrowError(
-      "The 'inputElement' parameter must be of type HTMLInputElement."
-    );
-  });
-
   it("should correctly set the inputElement property when a valid HTMLInputElement is passed", () => {
     const validation = new NativeValidation(inputElement);
     expect(validation["inputElement"]).toBe(inputElement);
   });
 
-  it("should correctly set the inputElement property when a valid selector string is passed", () => {
-    document.body.appendChild(inputElement);
-
-    inputElement.setAttribute("id", "inputId");
-
-    const validation = new NativeValidation("#inputId");
-    expect(validation["inputElement"]).toBe(inputElement);
-  });
-
-  it("should return an empty string if no native rules are applied", () => {
-    const validation = new NativeValidation(inputElement);
-    const mergedRules = validation["merge"]();
-    expect(mergedRules).toBe("");
-  });
-
-  it("should merge native rules correctly", () => {
+  it("should get correctly all native rules applied on inputElement", () => {
     inputElement.setAttribute("required", "");
-    inputElement.setAttribute("maxlength", "10");
+    inputElement.setAttribute("minlength", "8");
 
     const validation = new NativeValidation(inputElement);
-    const mergedRules = validation["merge"]();
-    expect(mergedRules).toBe("required|maxlength:10");
+
+    expect(validation["_appliedRules"]).toEqual(["required", "minlength:8"]);
+  });
+
+  it("should return an provided additional rules if no native rules are applied", () => {
+    const validation = new NativeValidation(inputElement);
+    const mergedRules = validation["merge"]("required|int");
+    expect(mergedRules).toBe("required|int");
+  });
+
+  it("should correctly return native rules if no additional rules are provided", () => {
+    inputElement.setAttribute("required", "");
+    inputElement.setAttribute("minlength", "8");
+
+    const validation = new NativeValidation(inputElement);
+    const mergedRules = validation["merge"]("");
+    expect(mergedRules).toBe("required|minlength:8");
+  });
+
+  it("should return merged rules correctly", () => {
+    inputElement.setAttribute("required", "");
+    inputElement.setAttribute("minlength", "8");
+
+    const validation = new NativeValidation(inputElement);
+    const mergedRules = validation["merge"]("email|startWith:meshach");
+    expect(mergedRules).toBe("required|minlength:8|email|startWith:meshach");
   });
 });
