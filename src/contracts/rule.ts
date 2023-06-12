@@ -16,6 +16,7 @@ export type Rule =
   | "in"
   | "integer"
   | "int"
+  | "modulo"
   | "number"
   | "len"
   | "length"
