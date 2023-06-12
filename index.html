@@ -10,7 +10,22 @@
   </head>
   <body>
     <form action="">
-      <div>
+      <div> 
+        <label class="label">Age</label>
+        <div class="form-control">
+          <input
+            class="input"
+            data-qv-rules="required|int|min:8"
+            type="text"
+            name="age"
+            min="5"
+            max="9"
+            required
+          />
+        </div>
+        <div data-qv-feedback="age"></div>
+        <p class="help">Rules applied: required|int|min:8</p>
+
         <input
           type="text"
           data-qv-invalid-class="error"

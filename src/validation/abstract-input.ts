@@ -4,6 +4,7 @@ import { QvInputParms, ValidatableInput } from "../contracts/types";
 import { QvLocal } from "../locale/qv-local";
 import { ValidationErrorMessage } from "../messages";
 import { getRule } from "../utils";
+import { NativeValidation } from "./native-validation";
 
 /**
  * @author Claude Fassinou
@@ -83,10 +84,16 @@ export abstract class AbstractInputValidator {
    * @returns
    */
   setRules(rules?: string[]) {
+
+    let ruleString: any = this.inputElement.dataset.qvRules ?? "";
+    if (ruleString) {
+      for (const rule of ruleString.split("|") as Rule[]) {
+
     let ruleSrring: any = this.inputElement.dataset.qvRules ?? "";
 
     if (ruleSrring) {
       for (const rule of ruleSrring.split("|") as Rule[]) {
+
         if (QvBag.hasRule(getRule(rule).ruleName)) {
           this.rules.push(rule);
         } else {
@@ -98,7 +105,10 @@ export abstract class AbstractInputValidator {
     }
     this.rules = (rules as Rule[]) ?? this.rules;
 
-    this.param.rules = this.rules;
+    const nativeValidation = new NativeValidation(this.inputElement);
+
+    this.param.rules = nativeValidation.merge(this.rules);
+
     return this;
   }
 

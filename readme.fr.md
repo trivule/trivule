@@ -358,3 +358,92 @@ Ce projet est sous licence MIT. Consultez le fichier **LICENSE** pour plus de d�
 Cette bibliothèque a été développée par [Claude Fassinou](https://github.com/Claudye) pour [Quickv](https://github.com/quickv).
 
 **_Happy coding_**
+
+<!-- Nouveaux ajouts -->
+
+#### Fonctionnalité : Personnalisation
+
+- Dans les versions précédentes, l'attribut `qv-name` était utilisé pour remplacer le nom sur un élément `input` au cas où vous ne souhaitiez pas l'utiliser. Maintenant, il est utilisé pour personnaliser le nom utilisé dans le message d'erreur.
+  - Si votre balise `input` est :
+    ```html
+    <input class="input" type="text" name="age" />
+    ```
+    Le message d'erreur ressemblerait à quelque chose comme : *Le champ **age** est requis*.
+  - Cependant, si vous spécifiez l'attribut `qv-name` avec la valeur `"age condition"`, le message deviendra : *Le champ **condition d'âge** est requis*.
+  - Vous pouvez également spécifier l'attribut via du code JavaScript en utilisant la propriété `attribute` de `QvInputParams` :
+    ```javascript
+    {
+      attribute: "age condition"
+    }
+    ```
+
+#### Fonctionnalité : Événements
+
+- Ajout de deux événements : `qv.form.passes` et `qv.form.fails`. Ces événements vous permettent de savoir si le formulaire est valide ou non.
+
+#### Classe QvForm
+
+La classe `QvForm` est responsable de l'application de la validation en direct à un formulaire HTML. Elle permet aux développeurs de créer une instance de `QvForm` et d'interagir avec elle pour activer la validation en direct sur un formulaire.
+
+##### Exemple d'utilisation
+
+```typescript
+import { QvForm } from 'qv-form';
+
+// Sélectionnez l'élément de formulaire HTML
+const formElement = document.getElementById("myForm") as HTMLFormElement;
+
+// Créez une instance de QvForm
+const qvForm = new QvForm(formElement);
+
+// Initialisez le formulaire
+qvForm.init();
+```
+
+##### Constructeur
+
+Le constructeur de la classe `QvForm` crée une instance de `QvForm` et accepte les paramètres suivants :
+
+- `container` **(type ValidatableForm)** : L'élément de formulaire HTML ou une chaîne de sélecteur de l'élément de formulaire auquel appliquer la validation en direct.
+- `config` (Facultatif, type QvFormConfig) : Options de configuration pour `QvForm`.
+
+##### Méthodes
+
+- `init()` : Initialise la validation en direct sur l'élément de formulaire. Cette méthode configure les écouteurs d'événements, active la validation automatique et déclenche l'événement "qv.form.init". Exemple d'utilisation :
+  ```typescript
+  qvForm.init();
+  ```
+
+- `validateOnChange(fn?: CallableFunction)` : Enregistre un écouteur d'événements pour l'événement "change" sur l'élément de conteneur. Si une fonction de rappel est fournie, elle sera exécutée avant que Quickv ne gère la validation du formulaire.
+  ```typescript
+  qvForm.validateOnChange((event) => {
+    // Logique personnalisée pour gérer l'événement "change"
+  });
+  ```
+
+- `validateOnQvValidated(fn?: CallableFunction)` : Enregistre un écouteur d'événements pour l'événement
+
+ "qv.input.validated" sur l'élément de conteneur. Si une fonction de rappel est fournie, elle sera exécutée avant que Quickv ne gère la validation du formulaire.
+  ```typescript
+  qvForm.validateOnQvValidated((event) => {
+    // Logique personnalisée pour gérer l'événement "qv.input.validated"
+  });
+  ```
+
+- `isValid() : boolean` : Vérifie si le formulaire est valide en validant tous les champs du formulaire. Renvoie `true` si tous les champs sont valides, `false` sinon.
+
+- `validate()` : Déclenche le processus de validation du formulaire en émettant l'événement "`qv.input.validated`".
+
+- `onFails(fn: EventCallback)` : Attache un écouteur d'événements à l'événement "qv.form.fails". Cet événement est déclenché lorsque le formulaire échoue à la validation.
+
+- `onPasses(fn: EventCallback)` : Attache un écouteur d'événements à l'événement "qv.form.passes". Cet événement est déclenché lorsque le formulaire passe la validation.
+
+- `observeChanges(fn?: EventCallback)` : Attache un écouteur d'événements à l'événement "qv.form.updated". Cet événement est déclenché lorsque le formulaire est mis à jour, réinitialisant et exécutant les QvInputs pour le formulaire. La fonction fournie est appelée avec l'instance du formulaire en tant que paramètre.
+
+- `onInit(fn?: EventCallback)` : Attache un écouteur d'événements à l'événement "qv.form.init". Cet événement est déclenché lorsque le formulaire est initialisé.
+
+- `destroy()` : Détruit l'instance de `QvForm` et effectue le nettoyage. Cette méthode supprime les gestionnaires d'événements, détruit les instances de QvInput et vide le tableau interne des instances de QvInput.
+
+- `on(e: string, fn: EventCallback)` : Attache un écouteur d'événements à l'élément de conteneur. Il écoute l'événement spécifié et exécute la fonction de rappel fournie lorsque l'événement se produit.
+
+- `emit(e: string, data?: any)` : Émet un événement personnalisé à l'élément de conteneur avec le nom d'événement spécifié.
