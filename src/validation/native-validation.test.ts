@@ -23,8 +23,8 @@ describe("NativeValidation", () => {
 
   it("should return an provided additional rules if no native rules are applied", () => {
     const validation = new NativeValidation(inputElement);
-    const mergedRules = validation["merge"]("required|int");
-    expect(mergedRules).toBe("required|int");
+    const mergedRules = validation["merge"](["required", "int"]);
+    expect(mergedRules).toEqual(["required", "int"]);
   });
 
   it("should correctly return native rules if no additional rules are provided", () => {
@@ -32,8 +32,8 @@ describe("NativeValidation", () => {
     inputElement.setAttribute("minlength", "8");
 
     const validation = new NativeValidation(inputElement);
-    const mergedRules = validation["merge"]("");
-    expect(mergedRules).toBe("required|minlength:8");
+    const mergedRules = validation["merge"]([]);
+    expect(mergedRules).toEqual(["required", "minlength:8"]);
   });
 
   it("should return merged rules correctly", () => {
@@ -41,7 +41,30 @@ describe("NativeValidation", () => {
     inputElement.setAttribute("minlength", "8");
 
     const validation = new NativeValidation(inputElement);
-    const mergedRules = validation["merge"]("email|startWith:meshach");
-    expect(mergedRules).toBe("required|minlength:8|email|startWith:meshach");
+    const mergedRules = validation["merge"](["email", "startWith:meshach"]);
+    expect(mergedRules).toEqual([
+      "required",
+      "minlength:8",
+      "email",
+      "startWith:meshach",
+    ]);
+  });
+
+  it("should effectively remove duplicates when merging", () => {
+    inputElement.setAttribute("required", "");
+    inputElement.setAttribute("minlength", "8");
+
+    const validation = new NativeValidation(inputElement);
+    const mergedRules = validation["merge"]([
+      "email",
+      "startWith:meshach",
+      "minlength:5",
+    ]);
+    expect(mergedRules).toEqual([
+      "required",
+      "minlength:5",
+      "email",
+      "startWith:meshach",
+    ]);
   });
 });

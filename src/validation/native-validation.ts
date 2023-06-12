@@ -1,4 +1,5 @@
 import { Rule } from "../contracts";
+import { eliminateDuplicates } from "../utils";
 
 /**
  * Provides validation based on the set of native HTML validation rules assigned to the input field concerned
@@ -48,20 +49,22 @@ export class NativeValidation {
 
   /**
    * Combines the native validation rules detected with the provided additional rules.
-   * @param {string} additionRules Additional rules to be merged with the native rules.
+   * @param {string} additionalRules Additional rules to be merged with the native rules.
    * @returns {string} The merged set of rules.
    */
 
-  public merge(additionRules: string): string {
+  public merge(additionalRules: string[]): string[] {
     if (this._appliedRules.length == 0) {
-      return additionRules;
+      return additionalRules;
     }
 
     const mergedRules =
-      additionRules.length == 0
-        ? this._appliedRules.join("|")
-        : this._appliedRules.join("|") + "|" + additionRules;
+      additionalRules.length == 0
+        ? this._appliedRules
+        : this._appliedRules.concat(additionalRules);
 
-    return mergedRules;
+    const purgedRules = eliminateDuplicates(mergedRules);
+
+    return purgedRules;
   }
 }
