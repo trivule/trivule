@@ -1,5 +1,4 @@
 import { Rule } from "../contracts";
-import { eliminateDuplicates } from "../utils";
 
 /**
  * Provides validation based on the set of native HTML validation rules assigned to the input field concerned
@@ -37,11 +36,12 @@ export class NativeValidation {
   private getNativeRulesApplied() {
     this._nativeRules.forEach((nativeRule) => {
       if (this.inputElement.hasAttribute(nativeRule)) {
-        const rule =
-          nativeRule === "required"
-            ? nativeRule
-            : `${nativeRule}:${this.inputElement.getAttribute(nativeRule)}`;
-
+        const attributValue = this.inputElement.getAttribute(nativeRule);
+        let rule = nativeRule;
+        // if rule value exists
+        if (attributValue) {
+          rule = `${rule}:${attributValue}` as Rule;
+        }
         this._appliedRules.push(rule);
       }
     });
@@ -49,22 +49,23 @@ export class NativeValidation {
 
   /**
    * Combines the native validation rules detected with the provided additional rules.
-   * @param {string} additionalRules Additional rules to be merged with the native rules.
-   * @returns {string} The merged set of rules.
+   * @param {string[]} rules Additional rules to be merged with the native rules.
    */
 
-  public merge(additionalRules: string[]): string[] {
-    if (this._appliedRules.length == 0) {
-      return additionalRules;
-    }
+  public merge(rules: string[]): Rule[] {
+    const mergedRules: string[] = [...this._appliedRules];
 
-    const mergedRules =
-      additionalRules.length == 0
-        ? this._appliedRules
-        : this._appliedRules.concat(additionalRules);
+    rules.forEach((newRule) => {
+      const index = mergedRules.findIndex((rule) =>
+        rule.startsWith(newRule.split(":")[0])
+      );
+      if (index !== -1) {
+        mergedRules[index] = newRule;
+      } else {
+        mergedRules.push(newRule);
+      }
+    });
 
-    const purgedRules = eliminateDuplicates(mergedRules);
-
-    return purgedRules;
+    return mergedRules as Rule[];
   }
 }
