@@ -25,47 +25,20 @@ import {
   nullable,
   startWithLower,
   passwordRule,
+  startWithLetter,
+  excludes,
+  containsLetter,
+  regex,
+  lower,
+  upper,
 } from "../rules";
-import { afterDate, beforeDate, isDate } from "../rules/date";
+import { afterDate, beforeDate, isDate, isTime } from "../rules/date";
+import { QvLocal } from "../locale/qv-local";
+import { phone } from "../rules/phone";
 interface IQvBag {
   [key: string | Rule]: any;
 }
 export class QvBag implements IQvBag {
-  private static messages: RulesMessages = {
-    required: "The :field field is required",
-    email: "Please enter a valid email address",
-    maxlength: "The maximum number of characters allowed has been exceeded",
-    minlength: "The minimum number of characters allowed has not been reached",
-    min: "The :field field must be greater than or equal to ':min'",
-    max: "The :field field must be less than or equal to ':max'",
-    string: "Please enter a string of characters",
-    between: "This field value must be in ':min' and ':max'",
-    startWith: "The :field field must be started with ':startWith'",
-    endWith: "The :field field must be ended with ':endWith'",
-    contains: "The :field field must contain the value ':contains'",
-    in: "Please choose a correct value for the :field field",
-    integer: "The :field field must an integer",
-    int: "The :field field must an integer",
-    number: "This field must be a number",
-    numeric: "This field must be a number",
-    file: "This field must be a file",
-    url: "This field must be a valid url",
-    length: "The size of this must be :size",
-    len: "The size of this must be :size",
-    maxFileSize: "The file size must be smaller than :maxFileSize.",
-    minFileSize: "The file size must be larger than :minFileSize.",
-    size: "This field's size should be less than or equal to :size ",
-    boolean: "This field must be a boolean (yes or no) included",
-    startWithUpper: "This field must be started with capitale letter",
-    startWithLower: "This field must be started with capitale letter",
-    nullable: "",
-    password:
-      "The password must be at least 8 characters long and include an uppercase letter, a lowercase letter, a digit, and a special character.",
-    date: "This field must be a valid date",
-    before: "The date must be before (:beforeDate)",
-    after: "The date must be after (:afterDate)",
-  };
-
   private static rules: RulesBag = {
     required: required,
     email: email,
@@ -98,6 +71,14 @@ export class QvBag implements IQvBag {
     date: isDate,
     before: beforeDate,
     after: afterDate,
+    phone: phone,
+    time: isTime,
+    startWithLetter: startWithLetter,
+    excludes: excludes,
+    hasLetter: containsLetter,
+    regex: regex,
+    lower: lower,
+    upper: upper,
   };
 
   /**
@@ -124,8 +105,8 @@ export class QvBag implements IQvBag {
    * @param rule - The name of the validation rule
    * @param message - The error message for the validation rule
    */
-  static addMessage(rule: string, message: string) {
-    QvBag.messages[rule as Rule] = message;
+  static addMessage(rule: string, message: string, local?: string) {
+    QvLocal.addMessage(rule, message, local);
   }
 
   /**
@@ -140,14 +121,14 @@ export class QvBag implements IQvBag {
   static getRule(name: string) {
     return QvBag.rules[name as Rule];
   }
-  static getMessage(name: string | Rule): string {
-    return QvBag.messages[name as Rule];
+  static getMessage(name: string | Rule, local?: string): string {
+    return QvLocal.getRuleMessage(name, local);
   }
 
   static allRules() {
     return QvBag.rules;
   }
-  static allMessages() {
-    return QvBag.messages;
+  static allMessages(local?: string) {
+    return QvLocal.getMessages(local);
   }
 }

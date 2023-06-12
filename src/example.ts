@@ -1,5 +1,5 @@
+import { QvLocal } from "./locale/qv-local";
 import { QvForm, QvInput } from "./validation";
-
-const qvForm = new QvForm("#myForm");
-
+QvLocal.local("en");
+const qvForm = new QvForm("form");
 qvForm.init();

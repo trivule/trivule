@@ -1,9 +1,24 @@
 import { RuleCallBack } from "../contracts";
+import { spliteParam } from "../utils";
 
+/**
+ * Checks whether a given value is a `File` or `Blob` object.
+ *
+ * @param value - The value to check.
+ * @returns `true` if the input value is a `File` or `Blob` object, `false` otherwise.
+ */
 export const isFile: RuleCallBack = (value) => {
   return value instanceof File || value instanceof Blob;
 };
 
+/**
+ * Checks whether the size of a given `File` or `Blob` object is less than or equal to a given maximum size.
+ *
+ * @param input - The `File` or `Blob` object to check.
+ * @param maxSize - The maximum size in bytes, specified as a string with an optional unit of measurement (B, KB, MB, or GB).
+ * @returns `true` if the size of the input object is less than or equal to the maximum size, `false` otherwise.
+ * @throws If the `maxSize` parameter is not in a valid format, an error is thrown.
+ */
 export const maxFileSize: RuleCallBack = (input, maxSize) => {
   if (isFile(input)) {
     const file = input as File;
@@ -36,7 +51,16 @@ export const maxFileSize: RuleCallBack = (input, maxSize) => {
     return false;
   }
 };
-
+/**
+ * A validation rule that checks if the size of a file is greater than or equal to the specified minimum size.
+ *
+ * @param input The input value to validate. Should be a File or Blob object.
+ * @param minSize The minimum size of the file. Should be a string in the format '<number><unit>', where 'unit' can be one of 'B', 'KB', 'MB', 'GB'. For example, '1KB' represents 1 kilobyte, '2MB' represents 2 megabytes, etc.
+ *
+ * @returns A boolean value indicating whether the size of the file is greater than or equal to the specified minimum size.
+ *
+ * @throws An error if the minSize parameter is not a valid string in the format '<number><unit>'.
+ */
 export const minFileSize: RuleCallBack = (input, minSize) => {
   if (isFile(input)) {
     const file = input as File;
@@ -67,4 +91,29 @@ export const minFileSize: RuleCallBack = (input, minSize) => {
   } else {
     return false;
   }
+};
+
+/**
+ * Checks whether the size of a given `File` or `Blob` object is between the specified minimum and maximum size.
+ *
+ * @param input - The `File` or `Blob` object to check.
+ * @param min_max - The string containing the minimum and maximum size values, separated by a delimiter.
+ * @example
+ * //Test function
+ * fileBetween(file,"1MB,5MB")
+ * //Rule usage
+ * ```javascript
+ * {
+ *  rules:["fileBetween:1MB,5MB"],
+ * }
+ * ```
+ * @example
+ * ```html
+ * <input data-qv-rules="fileBetween:1MB,5MB" />
+ * ```
+ * @returns `true` if the size of the input object is between the minimum and maximum size, `false` otherwise.
+ */
+export const fileBetween: RuleCallBack = (input, min_max) => {
+  const [min, max] = spliteParam(min_max ?? "");
+  return maxFileSize(input, max) && minFileSize(input, min);
 };

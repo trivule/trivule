@@ -70,7 +70,6 @@ By using these classes, you can easily validate your forms with Quickv, but be s
 ### In HTML and CSS Vanilla
 
 - Copy and include the `quickv.js` file in your project with the `script` tag
-
 - Initialize as follows:
 
   ```js
@@ -79,9 +78,7 @@ By using these classes, you can easily validate your forms with Quickv, but be s
   ```
 
   That's all you need to do as far as JavaScript, if you have no errors in the console, you can test Quickv
-
 - Create an HTML form, with the `form` tag
-
 - Create a field you want to validate and add attributes like the example below
 
   Exemple
@@ -106,13 +103,58 @@ If you do not want to disable the default form, simply remove the `data-qv-submi
 
 ### In Angular
 
-## You can see here an example of using Quickv in Angular [here](https://github.com/Claudye/ng-quickv)
+You can see here an example of using Quickv in Angular [here](https://github.com/Claudye/ng-quickv)
+-----------------------------------------------------------
 
 ### In Reactjs
 
 You can see here an example of using Quickv in Reactjs [here](https://github.com/Meschack/quickv-test/tree/react-test)
 
----
+### In Vuejs Or Nuxt
+
+For a vue 3 or nuxt3 project, you must first install quickv
+
+`npm install  quickv`
+
+After installation, in the script part of your component, you need to mount it and inject the quickV instance.
+
+```javascript
+<script setup>
+  import { onMounted } from 'vue';
+  import  *  as  quickv  from  "quickv";
+
+
+  onMounted(() => {
+    const  qv=  new  quickv.Quickv()
+    qv.init()
+  })
+</script>
+
+```
+
+To test if everything is going well, here is an example of a minimalist view template with quickv.
+
+For a quick test, you can add the tailwind CDN.
+
+```html
+<template>
+  <form @submit.prevent="" action="">
+    <div>
+        <input
+          type="text"
+          name="age"
+          class="border "
+	  data-qv-valid-class="border border-green-500"
+          data-qv-invalid-class="border border-red-500"
+          data-qv-rules="required|number|between:18,35"
+          data-qv-messages="Age is required | Age must be a number | Age must be between 18 and 35"
+        />
+        <div data-qv-feedback="age" class="text-red-500"></div>
+    </div>
+    <button class="bg-blue-500 text-white px-3 py-2" data-qv-submit>Submit</button>
+  </form>
+</template>
+```
 
 ## Customization
 
@@ -147,33 +189,22 @@ It may happen that you want to apply a specific style to a field depending on it
 #### General rules
 
 - `required` - The value is mandatory.
-
 - `nullable` - The value can be null, it will simply be ignored.
-
 - `min:x` - Checks if the field value is greater than or equal to x. This rule can be used to validate numbers, strings, and files.
 
   - If the field is a number or a string, the value of x must be an integer.
-
   - If the field is a file, the value of x must be expressed in **B, KB, MB, or GB**. Example: 2MB, 1KB, 3GB.
-
 - `max:x` - Checks if the field value is less than or equal to the specified maximum value. This rule works in the same way as the min rule.
-
 - `in:x,x,z,...` - The _in_ validation rule checks if the user input is included in a specified list of values.
-
 - `size:x` - This rule should be used with caution.
 
   - If the entered value is a file, it checks if the file size is less than or equal to x (B, KB, MB, or GB).
-
   - If the value is a string, it checks if the length of the string is exactly x (an integer).
-
   - If the value is a number, it passes if the number of digits (including separators) is exactly x (an integer).
-
 - `between:x,y` - Passes if the field value is between x and y.
 
   - If the field is a number, x and y must be numbers.
-
   - If the field is a date, x and y must also be valid dates.
-
   - If the field is a file, x and y must be expressed in **B, KB, MB, or GB**.
 
 #### Rules for character strings
@@ -181,17 +212,12 @@ It may happen that you want to apply a specific style to a field depending on it
 Here are some validation rules that apply to character strings:
 
 - `email` - Passes if the string is a valid email address.
-
 - `password` - Passes if the string meets the following conventions:
 
   - Has a minimum length of 8 characters.
-
   - Contains at least one uppercase and one lowercase letter.
-
   - Contains at least one of the following characters: **!@#$%^&\*(),.?":{}|<>**.
-
 - `string` - Passes if the value is a character string.
-
 - `contains:x,y,...etc` - Checks if the field value contains any of the specified substrings.
   Example: contains:http,ftp,ssh If the form field contains at least one of these values, the rule passes.
 - `minlength:x` - Checks if the length of a string is greater than or equal to the specified minimum
@@ -199,21 +225,15 @@ Here are some validation rules that apply to character strings:
 - `maxlength:x` - Checks if the length of a string is less than or equal to the specified maximum
   number x. The minlength and maxlength rules apply only to character strings and fail for any other data type.
 - `url` - Checks if the entered value is a valid URL.
-
 - `startWithUpper` - Checks if the string starts with an uppercase letter.
-
 - `startWithLower` - Checks if the string starts with a lowercase letter.
-
 - `startWith:x,x,...` - Passes if the string starts with one of the specified values x,y,z.
-
 - `endWith:x,x,...` - Passes if the string ends with one of the specified values x,y,z.
-
 - `length:x` or `len:x` - Passes if the length of the character string is exactly x.
 
 #### These rules apply specifically to numbers
 
 - `numeric` or `number` - Passes if the value is a number
-
 - `integer` or `int` - Passes if the value is an integer
 
 #### Files
@@ -221,17 +241,13 @@ Here are some validation rules that apply to character strings:
 > _These rules apply to files and should fail for any other data type_
 
 - `file` - Passes if the value is a file
-
 - `maxFileSize:x` - Passes if the file size is less than or equal to x (**B, KB, MB, GB**)
-
 - `minFileSize:x` - Passes if the file size is greater than or equal to x (**B, KB, MB, GB**)
 
 ### Dates
 
 - `date` - The rule passes if the field value is a valid date. This rule can be used to validate dates in forms and ensure that they are in the correct format.
-
 - `before:date` - The rule passes if the field value is a date earlier than the specified `date`. This rule can be used to validate dates in forms and ensure that they are earlier than a given reference date. The date must be specified in a valid format.
-
 - `after:date` - The rule passes if the field value is a date later than the specified `date`. This rule can be used to validate dates in forms and ensure that they are later than a given reference date. The date must be specified in a valid format.
 
 #### Booleans
@@ -251,8 +267,7 @@ It's very simple to add new rules !
 A rule is just a javascript function that takes two parameters and must return a boolean
 
 1. The value to validate (the current value of the input)
-
-1. Parameters (optional): These are the values after the colon (:)
+2. Parameters (optional): These are the values after the colon (:)
 
 ```js
 const unique = (input) => {
@@ -272,9 +287,8 @@ After that, you can use your rules as html attributes
 
 ---
 
+
 ## New features
-
-
 
 ### QvInputParams
 

@@ -6,6 +6,7 @@ import {
   passwordRule,
   startWithLower,
   startWithUpper,
+  stringBetween,
   url,
 } from "./string";
 //Email
@@ -226,7 +227,7 @@ describe("contains", () => {
   it("should return true when input contains substring", () => {
     expect(contains("Hello, world!", "world")).toBe(true);
     expect(contains("Hello, world!", "world,!")).toBe(true);
-    expect(contains("Hello, world!", "world,Others")).toBe(true);
+    expect(contains("Hello, world!", "world,Others")).toBe(false);
   });
 
   it("should return false when input does not contain substring", () => {
@@ -255,5 +256,16 @@ describe("length", () => {
     expect(length(null, "0")).toBe(false);
     expect(length(undefined, "0")).toBe(false);
     expect(length(true, "0")).toBe(false);
+  });
+});
+describe("stringBetween", () => {
+  it("should return true for string with length between min and max", () => {
+    const result1 = stringBetween("hello", "2, 5");
+    expect(result1).toBe(true);
+  });
+
+  it("should return false for string with length not between min and max", () => {
+    const result2 = stringBetween("hello", "6, 10");
+    expect(result2).toBe(false);
   });
 });

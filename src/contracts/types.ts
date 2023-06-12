@@ -16,7 +16,8 @@ export type ValidatableInput =
   | HTMLSelectElement
   | "select"
   | "textarea"
-  | "input";
+  | "input"
+  | string;
 
 /**
  * Represents a validatable HTML form element.
@@ -32,7 +33,8 @@ export type InputValueType =
   | number
   | null
   | boolean
-  | undefined;
+  | undefined
+  | FileList;
 
 /**
  * An Element or null type
@@ -96,6 +98,19 @@ export type QvInputParms = {
    * This field is useful for customizing error messages. By to rewrite the default messages
    */
   errors?: RulesMessages;
+  /**
+   * The css class that will be added to the input each time the form is valid
+   */
+  validClass?: string;
+
+  /**
+   * The css class that will be added to the input each time the form is invalid
+   */
+  invalidClass?: string;
+  /**
+   * Indicates input type
+   */
+  type?: string;
 };
 
 /**
@@ -110,4 +125,8 @@ export type QvFormConfig = {
    * Specifies whether the form will be validated as the user types in the form fields
    */
   auto?: boolean;
+
+  local?: {
+    lang?: string;
+  };
 };

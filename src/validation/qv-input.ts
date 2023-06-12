@@ -1,7 +1,11 @@
 import { IQvConfig, RuleCallBack } from "../contracts";
 import { QvInputValidator } from "./qv-input-validator";
 import { QvBag } from "./qv-bag";
-import { QvInputParms, ValidatableInput } from "../contracts/types";
+import {
+  EventCallback,
+  QvInputParms,
+  ValidatableInput,
+} from "../contracts/types";
 
 /**
  * QvInput is responsible for applying live validation to an HTML input element.
@@ -16,12 +20,8 @@ import { QvInputParms, ValidatableInput } from "../contracts/types";
  * ```
  */
 export class QvInput extends QvInputValidator {
-  constructor(
-    inputElement: ValidatableInput,
-    config?: IQvConfig,
-    param?: QvInputParms
-  ) {
-    super(inputElement, config, param);
+  constructor(inputElement: ValidatableInput, param?: QvInputParms) {
+    super(inputElement, param);
   }
 
   /**
@@ -52,5 +52,27 @@ export class QvInput extends QvInputValidator {
   with(param: QvInputParms) {
     this._setParams(param);
     this.validator.setParams(this.param);
+  }
+
+  whereName(inputName: string): boolean {
+    return this.name === inputName;
+  }
+
+  onFails(fn: EventCallback) {
+    this.on("qv.input.fails", (e) => {
+      this.__call(fn);
+    });
+  }
+
+  onPasses(fn: EventCallback) {
+    this.on("qv.input.passes", (e) => {
+      this.__call(fn);
+    });
+  }
+
+  destroy() {
+    this.param.events = [];
+    this.rules = [];
+    this.param.rules = [];
   }
 }

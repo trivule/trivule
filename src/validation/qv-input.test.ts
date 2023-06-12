@@ -51,7 +51,7 @@ describe("QvInput", () => {
         "data-qv-messages",
         "Required message | Min message"
       );
-      const validator = new QvInput(inputElement, undefined, {
+      const validator = new QvInput(inputElement, {
         failsOnfirst: false,
       });
       validator.validate();
@@ -71,7 +71,7 @@ describe("QvInput", () => {
         "data-qv-messages",
         "Required message | {1,2,3}Invalid email address"
       );
-      const validator = new QvInput(inputElement, undefined, {
+      const validator = new QvInput(inputElement, {
         failsOnfirst: false,
       });
 
@@ -158,9 +158,9 @@ describe("QvInput", () => {
       // Arrange
       const inputElement = document.createElement("input");
       inputElement.setAttribute("data-qv-rules", "required|min:3");
-      inputElement.name = "name";
+      inputElement.name = "input-name";
       inputElement.value = ""; // Set the input value to empty
-      const validator = new QvInput(inputElement, undefined, {
+      const validator = new QvInput(inputElement, {
         failsOnfirst: false,
       });
 
@@ -175,8 +175,8 @@ describe("QvInput", () => {
       const result = validator.getErrors();
 
       expect(result).toEqual({
-        required: "The name field is required",
-        min: "The name field must be greater than or equal to '3'",
+        required: "This field is required",
+        min: "The minimum number of allowed characters is: 3",
       });
     });
 
@@ -184,7 +184,8 @@ describe("QvInput", () => {
       // Arrange
       const inputElement = document.createElement("input");
       inputElement.setAttribute("data-qv-rules", "required|min:3");
-      inputElement.name = "name";
+      inputElement.type = "number";
+      inputElement.name = "name-empty";
       inputElement.value = "4";
       const validator = new QvInput(inputElement);
 
