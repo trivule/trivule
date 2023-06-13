@@ -113,6 +113,15 @@
         background-color: #e0e0e0;
         color: #777;
       }
+
+      form {
+        max-width: 500px;
+        margin: auto;
+      }
+      div,
+      p {
+        margin-bottom: 10px;
+      }
     </style>
     <title>Quickv</title>
   </head>
@@ -123,7 +132,7 @@
         <div>
           <input
             class="border p-3"
-            data-qv-rules="required|int"
+            data-qv-rules
             type="number"
             name="age"
             min="2"
@@ -133,21 +142,37 @@
         <div data-qv-feedback="age"></div>
       </div>
       <div>
+        <label for="">Email</label>
+        <input type="text" data-qv-rules="required|email" name="email" />
+        <div data-qv-feedback="email"></div>
+      </div>
+      <div>
+        <label for="">Confirm email</label>
         <input
           type="text"
-          data-qv-rules="required"
-          placeholder="email"
-          class="border p-3"
-          name="email"
+          data-qv-rules="required|same:email"
+          name="confirm_email"
         />
-        <div data-qv-feedback="email"></div>
+        <div data-qv-feedback="confirm_email"></div>
+      </div>
+      <div>
+        <label class="label">Téléphone</label>
+        <input type="text" data-qv-rules="required|phone:FR" name="phone" />
+        <div data-qv-feedback="phone"></div>
+      </div>
+      <div>
+        <label class="label">Date</label>
+        <input
+          type="date"
+          data-qv-rules="required|date|after:now"
+          name="date"
+        />
+        <div data-qv-feedback="date"></div>
       </div>
       <p>
         <input
           type="submit"
           value="Submit"
-          data-qv-disabled-class="bg-gray-700 font-bold uppercase"
-          data-qv-enabled-class="bg-green-500"
           class="text-white p-3"
           data-qv-submit
         />
