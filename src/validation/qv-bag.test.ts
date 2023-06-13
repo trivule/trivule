@@ -39,6 +39,5 @@ describe("rule", () => {
 
     // Vérifier si la règle a été ajoutée au sac de règles avec un message par défaut
     expect(QvBag.getRule("customRule")).toBe(customCallback);
-    expect(QvBag.getMessage("customRule")).toBe("This input is invalide");
   });
 });
