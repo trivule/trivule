@@ -135,7 +135,10 @@ export class QValidation {
     }
     return !this.hasErrors();
   }
-
+  /**
+   * Get rule/message error
+   * @returns
+   */
   getErrors() {
     const r: Record<string, string> = {};
     for (const rx of this._ruleExecuted) {
@@ -145,23 +148,33 @@ export class QValidation {
     }
     return r;
   }
-
+  /**
+   * Check if validation failed
+   * @returns
+   */
   hasErrors(): boolean {
     return this._ruleExecuted.some((rx) => !rx.passed);
   }
+
   /**
-   *
    * This method is an alias for hasErrors(). It returns true if there are no errors, false otherwise
-   *
    */
   passes() {
     return !this.hasErrors();
   }
 
+  /**
+   * Set rules to run
+   * @param rules
+   */
   setRules(rules: Rule[] | string[]): void {
     this._rules = rules;
   }
 
+  /**
+   * Get rules to run
+   * @returns
+   */
   getRules() {
     return this._rules;
   }
@@ -223,6 +236,9 @@ export class QValidation {
     return mssages;
   }
 
+  /**
+   * Set the value and validate it automatically
+   */
   set value(v: InputValueType) {
     this._value = v;
 
@@ -239,6 +255,11 @@ export class QValidation {
   get value(): InputValueType {
     return this._value;
   }
+
+  /**
+   * Set validation parameters
+   * @param param
+   */
 
   setParams(param: QvInputParms) {
     this._attr = param.attribute ?? "";

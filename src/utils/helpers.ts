@@ -16,25 +16,6 @@ export const getRule = (
   }
 };
 
-export const eliminateDuplicates = (rules: string[]): string[] => {
-  return rules.reduce((accumulator: string[], currentValue) => {
-    const [currentRule, currentRuleValue] = currentValue.split(":");
-
-    const existingRuleIndex = accumulator.findIndex((rule) => {
-      const [existingRule, existingRuleValue] = rule.split(":");
-      return existingRule === currentRule;
-    });
-
-    if (existingRuleIndex === -1) {
-      accumulator.push(currentValue);
-    } else {
-      accumulator[existingRuleIndex] = currentValue;
-    }
-
-    return accumulator;
-  }, []);
-};
-
 export const spliteParam = (value: string, carac: string = ","): any[] => {
   if (typeof value !== "string") {
     return [];
