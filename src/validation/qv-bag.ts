@@ -89,9 +89,14 @@ export class QvBag implements IQvBag {
    * @param callback - The callback function for the custom rule
    * @param message - The error message for the custom rule
    */
-  static rule(rule: string, callback: RuleCallBack, message?: string) {
+  static rule(
+    rule: string,
+    callback: RuleCallBack,
+    message?: string,
+    local?: string
+  ) {
     QvBag.addRule(rule, callback);
-    QvBag.addMessage(rule, message ?? "This input is invalide");
+    QvBag.addMessage(rule, message, local);
   }
   /**
    * Add a custom validation rule to the rules bag
@@ -107,7 +112,7 @@ export class QvBag implements IQvBag {
    * @param rule - The name of the validation rule
    * @param message - The error message for the validation rule
    */
-  static addMessage(rule: string, message: string, local?: string) {
+  static addMessage(rule: string, message?: string, local?: string) {
     QvLocal.addMessage(rule, message, local);
   }
 

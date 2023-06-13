@@ -55,10 +55,12 @@ export class QvLocal {
    * @param message The new message
    * @param local The language code (optional)
    */
-  static addMessage(rule: string, message: string, local?: string) {
-    const messages = QvLocal.getMessages(local);
-    messages[rule] = message;
-    QvLocal.putMessages(messages, local);
+  static addMessage(rule: string, message?: string, local?: string) {
+    if (message) {
+      const messages = QvLocal.getMessages(local);
+      messages[rule] = message;
+      QvLocal.putMessages(messages, local);
+    }
   }
 
   /**
