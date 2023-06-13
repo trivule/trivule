@@ -86,3 +86,15 @@ export const isNumber: RuleCallBack = (input) => {
     typeof input !== "object"
   );
 };
+
+export const modulo: RuleCallBack = (input, mod) => {
+  if (!isNumber(mod)) {
+    throw new Error("Modulo rule parameter must be an integer");
+  }
+
+  if (isNumber(input)) {
+    return Number(input) % Number(mod) === 0;
+  }
+
+  return false;
+};

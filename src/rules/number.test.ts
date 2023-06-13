@@ -1,5 +1,5 @@
 import { between } from ".";
-import { integer, isNumber, maxRule, minRule } from "./number";
+import { integer, isNumber, maxRule, minRule, modulo } from "./number";
 
 test("minRule should return true when input is greater than or equal to min", () => {
   // Test with a string input
@@ -72,5 +72,25 @@ describe("number", () => {
     expect(isNumber("")).toBe(false);
     expect(isNumber(undefined)).toBe(false);
     expect(isNumber(null)).toBe(false);
+  });
+});
+
+describe("modulo", () => {
+  test("should throw an error if the input is not integer", () => {
+    expect(() => modulo(12, "hello world")).toThrowError(
+      "Modulo rule parameter must be an integer"
+    );
+  });
+
+  test("should return true if the number input is a multiple of modulo", () => {
+    expect(modulo(12, "4")).toBe(true);
+  });
+
+  test("should return false if the number input is not a multiple of modulo", () => {
+    expect(modulo(13, "4")).toBe(false);
+  });
+
+  test("should return false if the number input is not a number", () => {
+    expect(modulo("hello world", "4")).toBe(false);
   });
 });

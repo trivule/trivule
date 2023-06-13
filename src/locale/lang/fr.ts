@@ -23,6 +23,7 @@ export const fr_messages: RulesMessages = {
   length: "La taille de ce champ doit être :arg0",
   len: "La taille de ce champ doit être :arg0",
   maxFileSize: "La taille du fichier doit être inférieure à :arg0.",
+  modulo: "La valeur du champ :field doit être un multiple de :arg0",
   minFileSize: "La taille du fichier doit être supérieure à :arg0.",
   size: "La taille de ce champ doit être inférieure ou égale à :arg0",
   boolean: "Ce champ doit être un booléen (oui ou non)",
