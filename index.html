@@ -5,6 +5,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <style>
+      form {
+        width: 80%;
+        min-width: 355px;
+        margin: 0 auto;
+      }
+      form > div {
+        margin-bottom: 0.75rem;
+      }
       [data-qv-feedback] {
         color: red;
       }
@@ -22,7 +30,7 @@
         color: inherit;
         display: block;
         width: 100%;
-        border-radius: 10px;
+        border-radius: 5px;
       }
 
       input,
@@ -169,13 +177,31 @@
         />
         <div data-qv-feedback="date"></div>
       </div>
-      <p>
+      <div>
+        <label class="label">Montant</label>
         <input
+          type="text"
+          data-qv-rules="required|modulo:5"
+          class="border p-3"
+          placeholder="Entrez le montant de vos honoraires"
+          name="honoraires"
+        />
+        <div data-qv-feedback="honoraires"></div>
+      </div>
+      <p>
+        <button
           type="submit"
+<<<<<<< HEAD
           value="Submit"
+=======
+          data-qv-disabled-class="bg-gray-700 font-bold uppercase"
+          data-qv-enabled-class="bg-green-500"
+>>>>>>> 8dd10fe9e898f6e401444c432c74d14ac329bf29
           class="text-white p-3"
           data-qv-submit
-        />
+        >
+          Submit
+        </button>
       </p>
     </form>
     <script src="/src/example.ts" type="module"></script>
