@@ -358,7 +358,13 @@ export class QvForm {
   private _initQvInputs() {
     const qvInputs = Array.from(
       this.container.querySelectorAll<HTMLElement>("[data-qv-rules]")
-    ).map((el) => new QvInput(el as HTMLInputElement));
+    ).map(
+      (el) =>
+        new QvInput(el as HTMLInputElement, {
+          validClass: this.config.validClass,
+          invalidClass: this.config.invalidClass,
+        })
+    );
 
     this._qvInputs.push(...qvInputs);
   }

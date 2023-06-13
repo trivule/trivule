@@ -129,4 +129,13 @@ export type QvFormConfig = {
   local?: {
     lang?: string;
   };
+  /**
+   * The css valid class  that will be added to all the input in  the form
+   */
+  validClass?: string;
+
+  /**
+   * The css invalid class that will be added to all the input in the form
+   */
+  invalidClass?: string;
 };
