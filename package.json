@@ -15,7 +15,7 @@
   },
   "docs": "https://github.com/quick-v/quickv/blob/main/readme.md",
   "scripts": {
-    "test": "jest --testPathPattern=/src/rules/number.test.ts",
+    "test": "jest",
     "dev": "vite",
     "build": "tsc && vite build",
     "build:watch": "tsc && vite build --watch",
