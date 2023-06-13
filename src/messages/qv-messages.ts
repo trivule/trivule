@@ -10,7 +10,14 @@ export class QvMessages {
   constructor(local?: string) {
     this.messages = QvLocal.getMessages(local ?? QvLocal.getLocal());
   }
+  /**
 
+* Generates an array of messages for the given rules.
+* Uses the predefined messages for each rule if available,
+* otherwise, uses a default message of "The input value is not valid".
+* @param rules - An array of rules for which to generate messages.
+* @returns An array of messages corresponding to the provided rules.
+*/
   getRulesMessages(rules: Rule[]): string[] {
     const messages: string[] = [];
 
@@ -18,7 +25,7 @@ export class QvMessages {
       if (this.messages[rule]) {
         messages.push(this.messages[rule]);
       } else {
-        messages.push("Invalid input");
+        messages.push("The input value is not valid");
       }
     }
 

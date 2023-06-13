@@ -11,7 +11,7 @@ describe("QvMessages", () => {
 
   it("should get default message for invalid rules", () => {
     const messages = new QvMessages().getRulesMessages(["unknown" as any]);
-    expect(messages).toEqual(["Invalid input"]);
+    expect(messages).toEqual(["The input value is not valid"]);
   });
 
   it("should parse message correctly", () => {

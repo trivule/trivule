@@ -43,6 +43,10 @@ export class Quickv {
   rule(ruleName: string, call: RuleCallBack, message?: string) {
     QvBag.rule(ruleName, call, message);
   }
+  /**
+   * Set default configuration
+   * @param config
+   */
   protected setConfig(config?: IQvConfig) {
     this.config = QvConfig;
     if (config && typeof config === "object") {

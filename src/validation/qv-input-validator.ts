@@ -6,7 +6,13 @@ import {
 } from "../contracts/types";
 
 export class QvInputValidator extends AbstractInputValidator {
+  /**
+   * Check if pass event should be emitted
+   */
   private _emitOnPasses = true;
+  /**
+   * Check if fails event should be emitted
+   */
   private _emitOnFails = true;
 
   constructor(inputElement: ValidatableInput, params?: QvInputParms) {
