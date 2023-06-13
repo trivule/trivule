@@ -2,28 +2,28 @@ import { QvBag } from "./qv-bag";
 
 describe("QvBag", () => {
   it("should return true if a rule exists in the rules bag", () => {
-    // Ajouter une règle personnalisée au sac de règles
+    // Add a custom rule to the bag of rules
     QvBag.addRule("customRule", () => true);
 
-    // Vérifier si la règle customRule existe dans le sac de règles
+    // Check if the customRule exists in the bag of rules
     expect(QvBag.hasRule("customRule")).toBe(true);
   });
 
   it("should return false if a rule does not exist in the rules bag", () => {
-    // Vérifier si une règle inexistante dans le sac de règles retourne false
+    // Check whether a non-existent rule in the bag of rules returns false
     expect(QvBag.hasRule("nonexistentRule")).toBe(false);
   });
 });
 
 describe("rule", () => {
   it("should add a custom validation rule to the rules bag with a message", () => {
-    // Définir une fonction de rappel pour la règle personnalisée
+    // Define a callback function for the custom rule
     const customCallback = jest.fn();
 
-    // Appeler la méthode rule pour ajouter la règle personnalisée avec un message
+    // Call the rule method to add the custom rule with a message
     QvBag.rule("customRule", customCallback, "This is a custom error message");
 
-    // Vérifier si la règle et le message ont été ajoutés au sac de règles et de messages
+    // Check if the rule and message have been added to the bag of rules and messages
     expect(QvBag.getRule("customRule")).toBe(customCallback);
     expect(QvBag.getMessage("customRule")).toBe(
       "This is a custom error message"
@@ -31,13 +31,13 @@ describe("rule", () => {
   });
 
   it("should add a custom validation rule to the rules bag without a message", () => {
-    // Définir une fonction de rappel pour la règle personnalisée
+    // Define a callback function for the custom rule
     const customCallback = jest.fn();
 
-    // Appeler la méthode rule pour ajouter la règle personnalisée sans message
+    // Call the rule method to add the custom rule without a message
     QvBag.rule("customRule", customCallback);
 
-    // Vérifier si la règle a été ajoutée au sac de règles avec un message par défaut
+    // Check if the rule has been added to the bag of rules with a default message
     expect(QvBag.getRule("customRule")).toBe(customCallback);
   });
 });
