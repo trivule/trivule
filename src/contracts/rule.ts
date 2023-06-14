@@ -42,4 +42,5 @@ export type Rule =
   | "lower"
   | "upper"
   | "modulo"
+  | "mod"
   | "only";

@@ -82,6 +82,7 @@ export class QvBag implements IQvBag {
     regex: regex,
     lower: lower,
     upper: upper,
+    mod: modulo,
     only: only,
   };
 

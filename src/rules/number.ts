@@ -2,10 +2,14 @@ import { maxlength, minlength } from "./string";
 import { RuleCallBack } from "../contracts/rule-callback";
 import { isFile, maxFileSize, minFileSize } from "./file";
 /**
- * Checks if the input is at least the specified length.
- *
+ * When the value is a number, it checks whether the input value is greater than or equal to min
+ * When the value is a character string, it checks whether the number of characters is greater than or equal to min
  * @param input - The input to check.
  * @param min - The minimum length.
+ * @example
+ *  ```html
+ *  <input qv-rules="min:2"/>
+ * ```
  * @returns `true` if the input is at least the specified length, `false` otherwise.
  */
 export const minRule: RuleCallBack = (input, min) => {
@@ -26,10 +30,15 @@ export const minRule: RuleCallBack = (input, min) => {
   }
 };
 /**
- * Checks if the input is at most the specified length.
+ * When the value is a number, it checks whether the input value is less than or equal to max
+ * When the value is a character string, it checks whether the number of characters is less than or equal to max
  *
  * @param input - The input to check.
  * @param max - The maximum length.
+ *  @example
+ *  ```html
+ *  <input qv-rules="max:20"/>
+ * ```
  * @returns `true` if the input is at most the specified length, `false` otherwise.
  */
 export const maxRule: RuleCallBack = (input, max) => {
@@ -50,9 +59,13 @@ export const maxRule: RuleCallBack = (input, max) => {
 };
 
 /**
- * Checks if the input is an integer.
+ * Checks if the input is an integer. It has alias (int)
  *
  * @param input - The input to check.
+ * ```html
+ *  <input qv-rules="integer"/> or
+ *  <input qv-rules="int"/>
+ * ```
  * @returns `true` if the input is an integer, `false` otherwise.
  */
 export const integer: RuleCallBack = (input) => {
@@ -66,6 +79,9 @@ export const integer: RuleCallBack = (input) => {
  * Checks if the input is a number.
  *
  * @param input - The input to check.
+ * ```html
+ *  <input qv-rules="number"/>
+ * ```
  * @returns `true` if the input is a number, `false` otherwise.
  */
 export const isNumber: RuleCallBack = (input) => {
@@ -87,6 +103,15 @@ export const isNumber: RuleCallBack = (input) => {
   );
 };
 
+/**
+ * Checks whether a number is a multiple or divisible by another number. Has alias (mod)
+ * @param input - The input to check.
+ * ```html
+ *  <input qv-rules="modulo:2"/>
+ * <input qv-rules="mod:2"/>
+ * ```
+ * @returns `true` if the input is a number, `false` otherwise.
+ */
 export const modulo: RuleCallBack = (input, mod) => {
   if (!isNumber(mod)) {
     throw new Error("Modulo rule parameter must be an integer");

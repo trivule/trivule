@@ -11,14 +11,10 @@ import { CountryPhoneValidator } from "./phone/country-phone-validator";
  * phone(phoneNumber,'US,FR,BJ') // Vlaidate for one of the countries listed
  *
  * @example
- * //Validate as rule
- * ```js
- * {
- *  rules:['phone'] // or ['phone:US,FR,BJ']
- * }
- * ```
  * ```html
  *  <input data-qv-rules="phone:US,FR,BJ" />
+ * <!--valide phone globally--/>
+ *   <input data-qv-rules="phone" />
  * ```
  */
 export const phone: RuleCallBack = (input, params) => {

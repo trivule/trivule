@@ -5,6 +5,10 @@ import { spliteParam } from "../utils";
  * Checks whether a given value is a `File` or `Blob` object.
  *
  * @param value - The value to check.
+ * @example
+ *  ```html
+ * <input data-qv-rules="file" />
+ * ```
  * @returns `true` if the input value is a `File` or `Blob` object, `false` otherwise.
  */
 export const isFile: RuleCallBack = (value) => {
@@ -16,6 +20,10 @@ export const isFile: RuleCallBack = (value) => {
  *
  * @param input - The `File` or `Blob` object to check.
  * @param maxSize - The maximum size in bytes, specified as a string with an optional unit of measurement (B, KB, MB, or GB).
+ * @example
+ *  ```html
+ * <input data-qv-rules="maxFileSize:1MB" />
+ * ```
  * @returns `true` if the size of the input object is less than or equal to the maximum size, `false` otherwise.
  * @throws If the `maxSize` parameter is not in a valid format, an error is thrown.
  */
@@ -56,7 +64,10 @@ export const maxFileSize: RuleCallBack = (input, maxSize) => {
  *
  * @param input The input value to validate. Should be a File or Blob object.
  * @param minSize The minimum size of the file. Should be a string in the format '<number><unit>', where 'unit' can be one of 'B', 'KB', 'MB', 'GB'. For example, '1KB' represents 1 kilobyte, '2MB' represents 2 megabytes, etc.
- *
+ * @example
+ *  ```html
+ * <input data-qv-rules="minFileSize:1MB" />
+ * ```
  * @returns A boolean value indicating whether the size of the file is greater than or equal to the specified minimum size.
  *
  * @throws An error if the minSize parameter is not a valid string in the format '<number><unit>'.
@@ -98,15 +109,6 @@ export const minFileSize: RuleCallBack = (input, minSize) => {
  *
  * @param input - The `File` or `Blob` object to check.
  * @param min_max - The string containing the minimum and maximum size values, separated by a delimiter.
- * @example
- * //Test function
- * fileBetween(file,"1MB,5MB")
- * //Rule usage
- * ```javascript
- * {
- *  rules:["fileBetween:1MB,5MB"],
- * }
- * ```
  * @example
  * ```html
  * <input data-qv-rules="fileBetween:1MB,5MB" />

@@ -7,14 +7,19 @@ import {
   maxRule,
   minRule,
   is_string,
+  stringBetween,
 } from ".";
 import { spliteParam, throwEmptyArgsException } from "../utils";
 import { RuleCallBack } from "./../contracts/rule-callback";
-import { dateBetween } from "./date";
+import { dateBetween, isDate } from "./date";
 /**
  * Checks if the input is required.
  *
  * @param input - The input to check.
+ * @example
+ *  ```html
+ * <input data-qv-rules="required" />
+ * ```
  * @param options - Optional parameters.
  * @returns `true` if the input is not empty, `false` otherwise.
  */
@@ -28,9 +33,12 @@ export const nullable: RuleCallBack = (input) => {
 
 /**
  * Checks if the input is in the specified list.
- *
  * @param input - The input to check.
  * @param params - The list of values to check against.
+ * @example
+ *  ```html
+ * <input data-qv-rules="in:active,inactive" />
+ * ```
  * @returns `true` if the input is in the list, `false` otherwise.
  */
 export const inInput: RuleCallBack = (input, params) => {
@@ -42,9 +50,13 @@ export const inInput: RuleCallBack = (input, params) => {
 };
 /**
  * Checks if the input is at most the specified size.
- *
+ * If the input value is not a file, then the number of characters must be exactly maxSize
  * @param input - The input to check.
  * @param maxSize - The maximum size.
+ *  @example
+ *  ```html
+ * <input data-qv-rules="size:6" />
+ * ```
  * @returns `true` if the input is at most the specified size, `false` otherwise.
  */
 export const size: RuleCallBack = (input, maxSize) => {
@@ -58,6 +70,10 @@ export const size: RuleCallBack = (input, maxSize) => {
  * Checks if the input is a boolean value.
  *
  * @param value - The input to check.
+ * @example
+ *  ```html
+ * <input data-qv-rules="boolean" />
+ * ```
  * @returns `true` if the input is a boolean value, `false` otherwise.
  */
 export const isBoolean: RuleCallBack = (value) => {
@@ -81,9 +97,20 @@ export const isBoolean: RuleCallBack = (value) => {
 };
 /**
  * Checks if the input is between the specified minimum and maximum values.
- *
+ * This rule between validates data according to its type. It can be used to validate numbers, strings, dates, file size, etc.
  * @param input - The input to check.
  * @param min_max - The minimum and maximum values, separated by a comma.
+ * @example
+ * ```html
+ * <!--valide number-->
+ * <input type="number" data-qv-rules="between:6,7" />
+ * <!--valide string-->
+ * <input type="text" data-qv-rules="between:6,7" />
+ * <!--valide date-->
+ * <input type="date-local" data-qv-rules="between:01-01-2021,now" />
+ * <!--valide file size-->
+ * <input type="file" data-qv-rules="between:2MB,3MB" />
+ * ```
  * @returns `true` if the input is between the specified values, `false` otherwise.
  */
 export const between: RuleCallBack = (input, min_max) => {
@@ -94,7 +121,11 @@ export const between: RuleCallBack = (input, min_max) => {
   }
   // for date
   if (!isNumber(input) && !isFile(input)) {
-    return dateBetween(input, min_max);
+    if (isDate(input)) {
+      return dateBetween(input, min_max);
+    } else {
+      return stringBetween(input, min_max);
+    }
   }
   //for number
   min = Number(min);
@@ -118,7 +149,7 @@ export const between: RuleCallBack = (input, min_max) => {
  * @returns `true` if the input matches the regular expression, `false` otherwise.
  * @example
  * ```html
- *  <input qv-rules="regex:^[A-Z]+$"/>
+ *  <input data-qv-rules="regex:^[A-Z]+$"/>
  * ```
  */
 export const regex: RuleCallBack = (input: string, pattern?: string) => {
@@ -134,6 +165,9 @@ export const regex: RuleCallBack = (input: string, pattern?: string) => {
  *
  * @param input - The input to check.
  * @param param - The parameter specifying the expected type ("string" or "number").
+ *  ```html
+ *  <input data-qv-rules="only:letter"/>
+ * ```
  * @returns `true` if the input matches the expected type, `false` otherwise.
  */
 export const only: RuleCallBack = (input, param) => {

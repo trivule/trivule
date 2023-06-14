@@ -21,16 +21,15 @@ describe("required", () => {
 describe("between rule", () => {
   it("should return true if the input is between min and max", () => {
     expect(between(5, "0, 10")).toBe(true);
-    expect(between(0, "-5, 5")).toBe(true);
-    expect(between(5, " 5, 5")).toBe(true);
-    expect(between("5", " 5, 5")).toBe(true);
+    expect(between("11-03-2010", "05-03-2010, now")).toBe(true); // date comparison
+    expect(between("5", " 5, 5")).toBe(true); // compare number
+    expect(between("-5m", "0,4")).toBe(true); // compare string length
   });
 
   it("should return false if the input is not between min and max", () => {
     expect(between(5, "0,4")).toBe(false);
     expect(between(-5, "0,4")).toBe(false);
     expect(between("-5", "0,4")).toBe(false);
-    expect(between("-5m", "0,4")).toBe(false);
   });
 });
 

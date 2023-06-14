@@ -5,7 +5,12 @@ import { RuleCallBack } from "./../contracts/rule-callback";
  * Validates an email address.
  *
  * @param input The email address to validate.
- * @param options Optional parameters.
+ * @param options Optional parameters
+ *  @param param - The parameter specifying the expected type ("string" or "number").
+ * @example
+ *  ```html
+ *  <input data-qv-rules="email"/>
+ * ```
  * @returns Whether the email address is valid.
  */
 export const email: RuleCallBack = (input, ...options) => {
@@ -19,6 +24,10 @@ export const email: RuleCallBack = (input, ...options) => {
  *
  * @param input The input to validate.
  * @param length The minimum length.
+ * @example
+ *  ```html
+ *  <input data-qv-rules="minlength:8"/>
+ * ```
  * @returns Whether the input is at least the specified length.
  */
 export const minlength: RuleCallBack = (input, length) => {
@@ -33,6 +42,10 @@ export const minlength: RuleCallBack = (input, length) => {
  *
  * @param input The input to validate.
  * @param length The maximum length.
+ * @example
+ *  ```html
+ *  <input data-qv-rules="maxlength:8"/>
+ * ```
  * @returns Whether the input is no more than the specified length.
  */
 export const maxlength: RuleCallBack = (input, length) => {
@@ -55,6 +68,10 @@ export const is_string: RuleCallBack = (val: any) => {
  * Validates a URL.
  *
  * @param input The URL to validate.
+ *  @example
+ *  ```html
+ *  <input data-qv-rules="url"/>
+ * ```
  * @returns Whether the URL is valid.
  */
 export const url: RuleCallBack = (input) => {
@@ -66,6 +83,10 @@ export const url: RuleCallBack = (input) => {
  * Checks if the input starts with an uppercase letter.
  *
  * @param input The input to check.
+ *  @example
+ *  ```html
+ *  <input data-qv-rules="startWithUpper"/>
+ * ```
  * @returns Whether the input starts with an uppercase letter.
  */
 export const startWithUpper: RuleCallBack = (input) => {
@@ -80,6 +101,10 @@ export const startWithUpper: RuleCallBack = (input) => {
  * Checks if the input starts with a lowercase letter.
  *
  * @param input The input to check.
+ *  @example
+ *  ```html
+ *  <input data-qv-rules="startWithLower"/>
+ * ```
  * @returns Whether the input starts with a lowercase letter.
  */
 
@@ -96,6 +121,10 @@ export const startWithLower: RuleCallBack = (input) => {
  *
  * @param input - The string to check.
  * @param prefix - The prefixes to check for, as a comma-separated list of strings.
+ *  @example
+ *  ```html
+ *  <input data-qv-rules="startWith"/>
+ * ```
  * @returns `true` if the input string starts with any of the given prefixes, `false` otherwise.
  * @throws An exception with the message "Missing required argument: startWith" if the `prefix` parameter is falsy.
  */
@@ -115,6 +144,10 @@ export const startWith: RuleCallBack = (input, prefix) => {
  *
  * @param input - The string to check.
  * @param suffix - A comma-separated list of suffixes to check against.
+ *  @example
+ *  ```html
+ *  <input data-qv-rules="endWith"/>
+ * ```
  * @returns `true` if the input string ends with one of the specified suffixes, `false` otherwise.
  * @throws An exception with the message "Missing required argument: endWith" if the `suffix` parameter is falsy.
  */
@@ -130,10 +163,14 @@ export const endWith: RuleCallBack = (input, suffix) => {
 };
 
 /**
- * Checks if the input contains any of the specified substrings.
+ * Checks if the input contains all the specified substrings.
  *
  * @param input - The input to check.
  * @param substrings - A comma-separated  substrings to check for.
+ *  @example
+ *  ```html
+ *  <input data-qv-rules="contains:thanks,yes"/>
+ * ```
  * @returns `true` if the input contains any of the specified substrings, `false` otherwise.
  * @throws An exception with the message "Missing required argument: contains" if the `substrings` parameter is falsy.
  */
@@ -149,10 +186,15 @@ export const contains: RuleCallBack = (input, substring) => {
 };
 
 /**
- * Checks if the input has the specified length.
+ * Checks if the input has the specified length. Has alias (len)
  *
  * @param input - The input to check.
  * @param size - The desired length of the input.
+ * @example
+ *  ```html
+ *  <input data-qv-rules="length:9"/>
+ *  <input data-qv-rules="len:9"/>
+ * ```
  * @returns `true` if the input has the specified length, `false` otherwise.
  * @throws An exception with the message "The length rule argument must be an integer" if the `size` parameter is not an integer.
  */
@@ -182,6 +224,10 @@ export const length: RuleCallBack = (input: any, size: any) => {
  * A valid password is at least 8 characters long and contains at least one uppercase letter, one lowercase letter, one number, and one special character.
  *
  * @param input - The input to check.
+ * @example
+ *  ```html
+ *  <input data-qv-rules="password"/>
+ * ```
  * @returns `true` if the input is a valid password, `false` otherwise.
  */
 export const passwordRule: RuleCallBack = (input) => {
@@ -208,6 +254,10 @@ export const passwordRule: RuleCallBack = (input) => {
  * Checks if the input starts with a letter.
  *
  * @param input - The input to check.
+ * @example
+ *  ```html
+ *  <input data-qv-rules="startWithLetter"/>
+ * ```
  * @returns `true` if the input starts with a letter, `false` otherwise.
  */
 export const startWithLetter: RuleCallBack = (input) => {
@@ -222,6 +272,10 @@ export const startWithLetter: RuleCallBack = (input) => {
  * Checks if the input contains a letter.
  *
  * @param input - The input to check.
+ * @example
+ *  ```html
+ *  <input data-qv-rules="containsLetter"/>
+ * ```
  * @returns `true` if the input contains a letter, `false` otherwise.
  */
 export const containsLetter: RuleCallBack = (input) => {
@@ -236,6 +290,10 @@ export const containsLetter: RuleCallBack = (input) => {
  *
  * @param input - The input to check.
  * @param excludedChars - The characters to exclude,separatedby comma.
+ *  @example
+ *  ```html
+ *  <input data-qv-rules="excludes:-,@"/>
+ * ```
  * @returns `true` if the input does not contain any of the specified characters, `false` otherwise.
  */
 export const excludes: RuleCallBack = (input, excludedChars) => {
@@ -246,6 +304,10 @@ export const excludes: RuleCallBack = (input, excludedChars) => {
  *
  * @param input - The input to check.
  * @param param - The locale to use.
+ *   @example
+ *  ```html
+ *  <input data-qv-rules="upper"/>
+ * ```
  * @returns `true` if the input is all uppercase, `false` otherwise.
  */
 export const upper: RuleCallBack = (input, param?: string) => {
@@ -257,6 +319,10 @@ export const upper: RuleCallBack = (input, param?: string) => {
  *
  * @param input - The input to check.
  * @param param - The locale to use.
+ *   @example
+ *  ```html
+ *  <input data-qv-rules="lower"/>
+ * ```
  * @returns `true` if the input is all lowercase, `false` otherwise.
  */
 export const lower: RuleCallBack = (input: string, param?: string) => {
@@ -268,15 +334,6 @@ export const lower: RuleCallBack = (input: string, param?: string) => {
  *
  * @param input - The string to check.
  * @param min_max - The string containing the minimum and maximum values, separated by a delimiter.
- * @example
- * // Test function
- * stringBetween("hello", "2, 5");
- * // Rule usage
- * ```javascript
- * {
- *   rules: ["stringBetween:2,5"],
- * }
- * ```
  * @example
  * ```html
  * <input data-qv-rules="stringBetween:2,5" />

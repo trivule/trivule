@@ -23,7 +23,6 @@ export const en_messages: RulesMessages = {
   length: "The length of this field must be :arg0",
   len: "The length of this field must be :arg0",
   maxFileSize: "The file size must be less than :arg0.",
-  modulo: "The value of :field field must be a multiple of :arg0",
   minFileSize: "The file size must be greater than :arg0.",
   size: "The size of this field must be less than or equal to :arg0",
   boolean: "This field must be a boolean (yes or no)",
@@ -50,5 +49,7 @@ export const en_messages: RulesMessages = {
   upper: "This field must be uppercase",
   fileBetween: "File size must be between :arg0 and :arg1",
   stringBetween: "The length of this field must be between :arg0 and :arg1",
+  modulo: "The value of :field field must be a multiple of :arg0",
+  mod: "The value of :field field must be a multiple of :arg0",
   only: "The format of this field is not accepted, as it contains non-allowed characters",
 };
