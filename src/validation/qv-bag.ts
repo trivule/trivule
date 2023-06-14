@@ -32,6 +32,7 @@ import {
   lower,
   upper,
   modulo,
+  only,
 } from "../rules";
 import { afterDate, beforeDate, isDate, isTime } from "../rules/date";
 import { QvLocal } from "../locale/qv-local";
@@ -81,6 +82,7 @@ export class QvBag implements IQvBag {
     regex: regex,
     lower: lower,
     upper: upper,
+    only: only,
   };
 
   /**

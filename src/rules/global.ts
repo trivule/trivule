@@ -6,6 +6,7 @@ import {
   isNumber,
   maxRule,
   minRule,
+  is_string,
 } from ".";
 import { spliteParam, throwEmptyArgsException } from "../utils";
 import { RuleCallBack } from "./../contracts/rule-callback";
@@ -126,4 +127,26 @@ export const regex: RuleCallBack = (input: string, pattern?: string) => {
   }
   const regex = new RegExp(pattern);
   return regex.test(input);
+};
+
+/**
+ * Only accepts inputs of a specific type.
+ *
+ * @param input - The input to check.
+ * @param param - The parameter specifying the expected type ("string" or "number").
+ * @returns `true` if the input matches the expected type, `false` otherwise.
+ */
+export const only: RuleCallBack = (input, param) => {
+  if (param === "string") {
+    if (!is_string(input) || input.length === 0) {
+      return false;
+    }
+    return !/\d/.test(input); // Return true if input doesn't contain any digit
+  }
+
+  if (param === "number") {
+    return isNumber(input); // Use the isNumber function from quickv
+  }
+
+  return false; // Invalid parameter, return false
 };

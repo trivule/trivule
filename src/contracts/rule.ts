@@ -16,7 +16,6 @@ export type Rule =
   | "in"
   | "integer"
   | "int"
-  | "modulo"
   | "number"
   | "len"
   | "length"
@@ -41,4 +40,6 @@ export type Rule =
   | "excludes"
   | "regex"
   | "lower"
-  | "upper";
+  | "upper"
+  | "modulo"
+  | "only";

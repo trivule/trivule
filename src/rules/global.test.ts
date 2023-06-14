@@ -1,4 +1,4 @@
-import { size, between, required, regex, inInput } from ".";
+import { size, between, required, regex, inInput, only } from ".";
 
 describe("required", () => {
   it("should return false for undefined input", () => {
@@ -98,5 +98,41 @@ describe("inInput rule callback", () => {
     const input = "active";
     const params = "";
     expect(() => inInput(input, params)).toThrow();
+  });
+});
+
+describe("only", () => {
+  test("should return true if input is a string without any number", () => {
+    expect(only("Hello", "string")).toBe(true);
+    expect(only("QuickV", "string")).toBe(true);
+  });
+
+  test("should return false if input is a string with numbers", () => {
+    expect(only("Hello123", "string")).toBe(false);
+    expect(only("QuickV123", "string")).toBe(false);
+  });
+
+  test("should return false if input is not a string", () => {
+    expect(only(123, "string")).toBe(false);
+    expect(only(null, "string")).toBe(false);
+    expect(only(undefined, "string")).toBe(false);
+    expect(only(true, "string")).toBe(false);
+  });
+
+  test("should return true if input is a number", () => {
+    expect(only(123, "number")).toBe(true);
+    expect(only(0, "number")).toBe(true);
+  });
+
+  test("should return false if input is not a number", () => {
+    expect(only("Hello", "number")).toBe(false);
+    expect(only(null, "number")).toBe(false);
+    expect(only(undefined, "number")).toBe(false);
+    expect(only(true, "number")).toBe(false);
+  });
+
+  test("should return false for invalid parameter", () => {
+    expect(only("Hello", "invalid")).toBe(false);
+    expect(only(123, "invalid")).toBe(false);
   });
 });

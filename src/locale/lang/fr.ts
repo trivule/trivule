@@ -51,4 +51,5 @@ export const fr_messages: RulesMessages = {
   fileBetween: "La taille du fichier doit être comprise entre :arg0 et :arg1",
   stringBetween:
     "La longueur de ce champ doit être comprise entre :arg0 et :arg1",
+  only: "Le format de ce champ n'est pas accepté, il contient des caractères non autorisés",
 };

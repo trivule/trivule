@@ -4,6 +4,7 @@ import {
   maxlength,
   minlength,
   passwordRule,
+  startWithLetter,
   startWithLower,
   startWithUpper,
   stringBetween,
@@ -121,6 +122,29 @@ describe("startWithUpper", () => {
     expect(startWithUpper(null)).toBe(false);
     expect(startWithUpper(undefined)).toBe(false);
     expect(startWithUpper(true)).toBe(false);
+  });
+});
+
+describe("startWithLetter", () => {
+  test("should return true if input starts with letter", () => {
+    expect(startWithLetter("Hello")).toBe(true);
+  });
+
+  test("should return false if input does not start with letter", () => {
+    expect(startWithUpper("1hello")).toBe(false);
+    expect(startWithUpper("-test")).toBe(false);
+    expect(startWithUpper(" test")).toBe(false);
+  });
+
+  test("should return false for empty input", () => {
+    expect(startWithLetter("")).toBe(false);
+  });
+
+  test("should return false for non-string input", () => {
+    expect(startWithLetter(123)).toBe(false);
+    expect(startWithLetter(null)).toBe(false);
+    expect(startWithLetter(undefined)).toBe(false);
+    expect(startWithLetter(true)).toBe(false);
   });
 });
 

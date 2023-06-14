@@ -50,4 +50,5 @@ export const en_messages: RulesMessages = {
   upper: "This field must be uppercase",
   fileBetween: "File size must be between :arg0 and :arg1",
   stringBetween: "The length of this field must be between :arg0 and :arg1",
+  only: "The format of this field is not accepted, as it contains non-allowed characters",
 };
