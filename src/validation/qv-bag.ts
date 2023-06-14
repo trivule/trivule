@@ -1,3 +1,4 @@
+import { stringBetween } from "./../rules/string";
 import { minFileSize } from "./../rules/file";
 import { Rule, RuleCallBack, RulesBag, RulesMessages } from "../contracts";
 import {
@@ -82,6 +83,7 @@ export class QvBag implements IQvBag {
     regex: regex,
     lower: lower,
     upper: upper,
+    stringBetween: stringBetween,
     mod: modulo,
     only: only,
   };

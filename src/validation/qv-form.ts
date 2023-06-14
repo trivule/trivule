@@ -27,10 +27,26 @@ export class QvForm {
    * This status indicates the current state of the form
    */
   private _passed = false;
+  /**
+   * Form validator instance
+   */
   private _formValidator!: FormValidator;
+  /***
+   * Check that if passes event can be emitted
+   */
   private _emitOnPasses = true;
+  /***
+   * Check that if passes event can be emitted
+   */
   private _emitOnFails = true;
+
+  /**
+   * The class that indicates the submit button is enabled
+   */
   private _qvEnabledClass = "qvEnabled";
+  /**
+   * The class that indicates the submit button is disabled
+   */
   private _qvDisabledClass = "qvDisabled";
 
   private _triggerValidationEvents = ["change", "qv.form.validate"];

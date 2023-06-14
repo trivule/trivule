@@ -50,7 +50,7 @@ export const fr_messages: RulesMessages = {
   upper: "Ce champ doit être en majuscule",
   fileBetween: "La taille du fichier doit être comprise entre :arg0 et :arg1",
   stringBetween:
-    "La longueur de ce champ doit être comprise entre :arg0 et :arg1",
+    "Le nombre de caractères autorisés doit être compris entre :arg0 et :arg1",
   mod: "La valeur du champ :field doit être un multiple de :arg0",
   only: "Le format de ce champ n'est pas accepté, il contient des caractères non autorisés",
 };

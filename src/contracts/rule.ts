@@ -41,6 +41,7 @@ export type Rule =
   | "regex"
   | "lower"
   | "upper"
+  | "stringBetween"
   | "modulo"
   | "mod"
   | "only";

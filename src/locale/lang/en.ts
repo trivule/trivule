@@ -48,7 +48,8 @@ export const en_messages: RulesMessages = {
   lower: "This field must be lowercase",
   upper: "This field must be uppercase",
   fileBetween: "File size must be between :arg0 and :arg1",
-  stringBetween: "The length of this field must be between :arg0 and :arg1",
+  stringBetween:
+    "The number of characters allowed must be between :arg0 and :arg1",
   modulo: "The value of :field field must be a multiple of :arg0",
   mod: "The value of :field field must be a multiple of :arg0",
   only: "The format of this field is not accepted, as it contains non-allowed characters",
