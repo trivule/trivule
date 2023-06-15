@@ -63,6 +63,12 @@ describe("regex", () => {
     expect(regex(input, pattern)).toBe(true);
   });
 
+  test("returns true if the input matches the regex pattern with &pip;", () => {
+    const pattern = "^(Js&pip;Ts)$"; // &pip; will be replaced with |
+    const input = "Js";
+    expect(regex(input, pattern)).toBe(true);
+  });
+
   test("returns false if the input does not match the regex pattern", () => {
     const pattern = "^[A-Za-z]$";
     const input = "abc123";

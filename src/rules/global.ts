@@ -10,6 +10,7 @@ import {
   stringBetween,
 } from ".";
 import { spliteParam, throwEmptyArgsException } from "../utils";
+import { ArgumentParser } from "../validation/utils/argument-parser";
 import { RuleCallBack } from "./../contracts/rule-callback";
 import { dateBetween, isDate } from "./date";
 /**
@@ -156,7 +157,8 @@ export const regex: RuleCallBack = (input: string, pattern?: string) => {
   if (!pattern) {
     throw new Error("The regex rule argument must not be empty");
   }
-  const regex = new RegExp(pattern);
+  const parser = new ArgumentParser(pattern);
+  const regex = new RegExp(parser.replacePipes());
   return regex.test(input);
 };
 

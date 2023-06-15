@@ -95,8 +95,11 @@ describe("QvInput", () => {
     test("should return true if input is valid", () => {
       // Arrange
       const inputElement = document.createElement("input");
-      inputElement.setAttribute("data-qv-rules", "required|min:3");
-      inputElement.value = "test"; // Set the input value
+      inputElement.setAttribute(
+        "data-qv-rules",
+        "required|min:2|regex:^(Js&pip;Ts)$"
+      );
+      inputElement.value = "Js"; // Set the input value
       const validator = new QvInput(inputElement);
 
       expect(validator.valid()).toBe(true); // Assert that the input is valid
