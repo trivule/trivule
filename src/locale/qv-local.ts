@@ -1,7 +1,6 @@
 import { Rule, RulesMessages } from "../contracts";
 import { is_string } from "../rules";
 import { en_messages } from "./lang/en";
-import { fr_messages } from "./lang/fr";
 
 export class QvLocal {
   private static _useLang: string | null = null;
@@ -15,7 +14,6 @@ export class QvLocal {
 
   private static _message: Record<string, RulesMessages> = {
     en: en_messages,
-    fr: fr_messages,
   };
 
   /**
