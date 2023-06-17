@@ -1,6 +1,7 @@
 import { contains, endWith, startWith, length } from ".";
 import {
   email,
+  excludes,
   maxlength,
   minlength,
   passwordRule,
@@ -264,7 +265,22 @@ describe("contains", () => {
     expect(contains(undefined, "foo")).toBe(false);
   });
 });
+describe("excludes", () => {
+  it("should return true when input excludes substring", () => {
+    expect(excludes("Hello, world!", "sworld")).toBe(true);
+  });
 
+  it("should return false when input does not excludes substring", () => {
+    expect(excludes("Hello, world! foo", "foo")).toBe(false);
+    expect(excludes("Hello, world! foo", "&esp;")).toBe(false);
+  });
+
+  it("should return true when input is not a string or an array", () => {
+    expect(excludes(42, "foo")).toBe(true);
+    expect(excludes("", "&esp;")).toBe(true);
+    expect(excludes(undefined, "foo")).toBe(true);
+  });
+});
 describe("length", () => {
   it("should return true if specified length matches", () => {
     expect(length(12345, "5")).toBe(true);

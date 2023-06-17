@@ -1,5 +1,6 @@
 import { isNumber } from ".";
 import { spliteParam, throwEmptyArgsException } from "../utils";
+import { ArgumentParser } from "../validation/utils/argument-parser";
 import { RuleCallBack } from "./../contracts/rule-callback";
 /**
  * Validates an email address.
@@ -182,7 +183,9 @@ export const contains: RuleCallBack = (input, substring) => {
   if (!is_string(input)) {
     return false;
   }
-  return substrs.every((substr) => input.includes(substr));
+  return substrs.every((substr) => {
+    return input.includes(new ArgumentParser(substr).replaceSpaces());
+  });
 };
 
 /**
@@ -285,6 +288,7 @@ export const containsLetter: RuleCallBack = (input) => {
   const letterRegex = /[a-zA-Z]/;
   return letterRegex.test(input);
 };
+
 /**
  * Checks if the input does not contain any of the specified characters.
  *
