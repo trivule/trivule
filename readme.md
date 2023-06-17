@@ -62,7 +62,7 @@ The directory structure of the Quickv project is organized as follows:
 
 The Quickv library is available on [GitHub](https://github.com/quick-v/quickv) under an open-source license.
 
-We would be delighted to receive your contributions to the Quickv project. Please refer to our [contribution guidelines](https://quickv.vercel.app/docs/contribution) for more information. Also, make sure to review our [code of conduct](https://quickv.vercel.app/docs/code-of-conduct) before contributing.
+We would be delighted to receive your contributions to the Quickv project. Please refer to our [contribution guidelines](https://quickv.vercel.app/docs/contribution) for more information. Also, make sure to review our [code of conduct](https://quickv.vercel.app/docs/contribution#code-de-conduite) before contributing.
 
 Thank you to all the contributors who are involved in the development of Quickv.
 
@@ -73,7 +73,6 @@ If you have any questions or concerns, you can contact us via email at dev.claud
 
 
 
-Quickv is released under our [license](/docs/license) and developed by [Claude Fassinou](https://github.com/Claudye) and contributors.
+Quickv is released under our [license](https://quickv.vercel.app/docs/license) and developed by [Claude Fassinou](https://github.com/Claudye) and contributors.
 
-Best regards,
-[Claude Fassinou](https://github.com/Claudye)
+Best regards
