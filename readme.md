@@ -67,8 +67,7 @@ We would be delighted to receive your contributions to the Quickv project. Pleas
 Thank you to all the contributors who are involved in the development of Quickv.
 
 Useful links:
-- Discord: [https://discord.gg/wPPAfq5n](https://discord.gg/wPPAfq5n)
-- Twitter: [lien_twitter]
+- Discord: [https://discord.gg/wPPAfq5n](https://discord.gg/wPPAfq5n) 
 
 If you have any questions or concerns, you can contact us via email at dev.claudy@gmail.com.
 
