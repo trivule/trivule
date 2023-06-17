@@ -26,7 +26,7 @@ export const getRule = (
  * @param carac - The delimiter used to split the string. Defaults to ",".
  * @returns An array containing the split values.
  */
-export const spliteParam = (value: string, carac: string = ","): any[] => {
+export const spliteParam = (value?: string, carac: string = ","): any[] => {
   if (typeof value !== "string") {
     return [];
   }

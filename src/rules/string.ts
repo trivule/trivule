@@ -172,7 +172,7 @@ export const endWith: RuleCallBack = (input, suffix) => {
  *  ```html
  *  <input data-qv-rules="contains:thanks,yes"/>
  * ```
- * @returns `true` if the input contains any of the specified substrings, `false` otherwise.
+ * @returns `true` if the input contains all of the specified substrings, `false` otherwise.
  * @throws An exception with the message "Missing required argument: contains" if the `substrings` parameter is falsy.
  */
 export const contains: RuleCallBack = (input, substring) => {
@@ -293,7 +293,7 @@ export const containsLetter: RuleCallBack = (input) => {
  * Checks if the input does not contain any of the specified characters.
  *
  * @param input - The input to check.
- * @param excludedChars - The characters to exclude,separatedby comma.
+ * @param excludedChars - The characters to exclude, separated by comma.
  *  @example
  *  ```html
  *  <input data-qv-rules="excludes:-,@"/>
@@ -301,8 +301,18 @@ export const containsLetter: RuleCallBack = (input) => {
  * @returns `true` if the input does not contain any of the specified characters, `false` otherwise.
  */
 export const excludes: RuleCallBack = (input, excludedChars) => {
-  return !contains(input, excludedChars);
+  const chars = spliteParam(excludedChars);
+  if (!chars.length) {
+    throwEmptyArgsException("excludes");
+  }
+  if (!is_string(input)) {
+    return true;
+  }
+  return !chars.some((char) => {
+    return input.includes(new ArgumentParser(char).replaceSpaces());
+  });
 };
+
 /**
  * Checks if the input is all uppercase.
  *
