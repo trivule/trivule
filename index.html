@@ -150,6 +150,21 @@
         <div data-qv-feedback="age"></div>
       </div>
       <div>
+        <label class="label">Name</label>
+        <div>
+          <input
+            class="border p-3"
+            data-qv-rules="startWithUpper|startWithLetter|endWithLetter"
+            type="text"
+            name="name"
+            min="2"
+            max="15"
+            required
+          />
+        </div>
+        <div data-qv-feedback="name"></div>
+      </div>
+      <div>
         <label for="">Email</label>
         <input type="text" data-qv-rules="required|email" name="email" />
         <div data-qv-feedback="email"></div>
@@ -165,7 +180,7 @@
       </div>
       <div>
         <label class="label">Téléphone</label>
-        <input type="text" data-qv-rules="required|phone:FR" name="phone" />
+        <input type="text" data-qv-rules="required|phone:BJ" name="phone" />
         <div data-qv-feedback="phone"></div>
       </div>
       <div>
