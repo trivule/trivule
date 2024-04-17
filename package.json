@@ -1,6 +1,6 @@
 {
   "name": "trivule",
-  "version": "1.0.0-alpha.2",
+  "version": "1.0.0-alpha.0",
   "description": "Trivule is a lightweight form validation library for web applications",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",

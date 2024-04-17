@@ -8,9 +8,9 @@ import { CountryPhoneValidator } from "./phone/country-phone-validator";
  * @param params
  * @example
  * ```html
- *  <input data-tv-rules="phone:US,FR,BJ" />
+ *  <input data-tr-rules="phone:US,FR,BJ" />
  * <!--valide phone globally--/>
- *   <input data-tv-rules="phone" />
+ *   <input data-tr-rules="phone" />
  * ```
  */
 export const phone: RuleCallBack = (input, params) => {

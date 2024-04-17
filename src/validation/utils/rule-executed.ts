@@ -1,8 +1,8 @@
-import { InputValueType, Rule } from "../../contracts";
+import { InputralueType, Rule } from "../../contracts";
 
 export class RuleExecuted {
   passed: boolean = false;
-  valueTested: InputValueType;
+  valueTested: InputralueType;
   ruleName!: Rule | string;
   message: string | null = null;
   params: any;
@@ -17,7 +17,7 @@ export class RuleExecuted {
    * Returns true if for the given value, the validation was run and passed
    * @param value
    */
-  wasRunWith(value: InputValueType) {
+  wasRunWith(value: InputralueType) {
     return this.valueTested === value && this.run;
   }
 

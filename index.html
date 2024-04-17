@@ -13,7 +13,7 @@
       form > div {
         margin-bottom: 0.75rem;
       }
-      [data-tv-feedback] {
+      [data-tr-feedback] {
         color: red;
       }
       input,
@@ -140,21 +140,21 @@
         <div>
           <input
             class="border p-3"
-            data-tv-rules
+            data-tr-rules
             type="number"
             name="age"
             min="2"
             required
           />
         </div>
-        <div data-tv-feedback="age"></div>
+        <div data-tr-feedback="age"></div>
       </div>
       <div>
         <label class="label">Name</label>
         <div>
           <input
             class="border p-3"
-            data-tv-rules="startWithUpper|startWithLetter|endWithLetter"
+            data-tr-rules="startWithUpper|startWithLetter|endWithLetter"
             type="text"
             name="name"
             min="2"
@@ -162,31 +162,31 @@
             required
           />
         </div>
-        <div data-tv-feedback="name"></div>
+        <div data-tr-feedback="name"></div>
       </div>
       <div>
         <label for="">Email</label>
-        <input type="text" data-tv-rules="required|email" name="email" />
-        <div data-tv-feedback="email"></div>
+        <input type="text" data-tr-rules="required|email" name="email" />
+        <div data-tr-feedback="email"></div>
       </div>
       <div>
         <label for="">Confirm email</label>
         <input
           type="text"
-          data-tv-rules="required|same:email"
+          data-tr-rules="required|same:email"
           name="confirm_email"
         />
-        <div data-tv-feedback="confirm_email"></div>
+        <div data-tr-feedback="confirm_email"></div>
       </div>
 
       <div>
         <label class="label">Date</label>
         <input
           type="date"
-          data-tv-rules="required|date|after:now"
+          data-tr-rules="required|date|after:now"
           name="date"
         />
-        <div data-tv-feedback="date"></div>
+        <div data-tr-feedback="date"></div>
       </div>
 
       <p>
@@ -205,17 +205,17 @@
     </script>
     <script>
       //Translation example
-      TvLocal.translate("es", {
+      TrLocal.translate("es", {
         min: "El campo :field debe ser menor que :arg0",
         max: "El campo :field debe ser mayor que :arg0",
         required: "El campo :field es obligatorio",
       });
       //Some action if form validation fails
-      tv.onFails((tv) => {
+      tr.onFails((tr) => {
         //Code
       });
       // Add a new rules
-      tv.rule(
+      tr.rule(
         "username",
         (input) => {
           return input != "sudo";

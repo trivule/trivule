@@ -1,15 +1,15 @@
 import { Rule, RulesMessages } from "../contracts";
-import { TvBag } from "./tv-bag";
+import { TrBag } from "./tr-bag";
 import { getRule } from "../utils";
-import { InputValueType, TrivuleInputParms } from "../contracts/types";
+import { InputralueType, TrivuleInputParms } from "../contracts/types";
 import { RuleExecuted } from ".";
-import { TvMessages } from "../messages";
+import { TrMessages } from "../messages";
 import { is_string } from "../rules";
-import { TvLocal } from "../locale/tv-local";
+import { TrLocal } from "../locale/tr-local";
 /**
  * @author Claude Fassinou
  */
-export class TValidation {
+export class TrValidation {
   private _rulesToMap = ["min", "max", "between", "size"];
   /**
    * Map of validation rules specific to field types.
@@ -48,7 +48,7 @@ export class TValidation {
   /**
    * The current value to validate
    */
-  private _value: InputValueType = undefined;
+  private _value: InputralueType = undefined;
 
   /**
    * A list of rules run
@@ -70,7 +70,7 @@ export class TValidation {
    * An object containing the original validation rules errors as key-value pairs (record) of rule names and error
    * messages
    */
-  private _tvmessages: Record<string, string> = {};
+  private _trmessages: Record<string, string> = {};
 
   constructor(param?: TrivuleInputParms) {
     if (param) {
@@ -84,8 +84,8 @@ export class TValidation {
    * updates the _ruleExecuted array with the result of each rule execution.
    * It returns a boolean value indicating whether the validation passed (true) or not (false)
    * @example
-   * const tvalidation = new TValidation(param)
-   * tvalidation.validate()
+   * const tralidation = new TRalidation(param)
+   * tralidation.validate()
    */
   validate() {
     const rules = this._rules;
@@ -99,7 +99,7 @@ export class TValidation {
       let { ruleName, params } = getRule(rule);
       let ruleToRun = this._getRuleToRunName(ruleName);
 
-      const ruleCallback = TvBag.getRule(ruleToRun);
+      const ruleCallback = TrBag.getRule(ruleToRun);
 
       const ruleExec = this._makeRuleExcutedInstance(ruleToRun, ruleName);
 
@@ -197,25 +197,25 @@ export class TValidation {
     }
   }
   private _parseRuleMessage(ruleExec: RuleExecuted) {
-    const orgMesage = TvLocal.getRuleMessage(ruleExec.orignalName);
-    const supliedMessage = this._tvmessages[ruleExec.orignalName];
+    const orgMesage = TrLocal.getRuleMessage(ruleExec.orignalName);
+    const supliedMessage = this._trmessages[ruleExec.orignalName];
 
     if (supliedMessage !== orgMesage) {
-      this._tvmessages[ruleExec.ruleName] = supliedMessage;
+      this._trmessages[ruleExec.ruleName] = supliedMessage;
     } else {
-      this._tvmessages[ruleExec.ruleName] = TvLocal.getRuleMessage(
+      this._trmessages[ruleExec.ruleName] = TrLocal.getRuleMessage(
         ruleExec.ruleName
       );
     }
 
-    const tvMessages = new TvMessages().setMessages(
-      this._tvmessages as RulesMessages
+    const trMessages = new TrMessages().setMessages(
+      this._trmessages as RulesMessages
     );
 
-    const message = tvMessages.parseMessage(
+    const message = trMessages.parseMessage(
       this._attr,
       ruleExec.ruleName as Rule,
-      tvMessages.getRulesMessages([ruleExec.ruleName as Rule])[0],
+      trMessages.getRulesMessages([ruleExec.ruleName as Rule])[0],
       ruleExec.params
     );
 
@@ -239,7 +239,7 @@ export class TValidation {
   /**
    * Set the value and validate it automatically
    */
-  set value(v: InputValueType) {
+  set value(v: InputralueType) {
     this._value = v;
 
     const isNullable = this._rules.includes("nullable");
@@ -252,7 +252,7 @@ export class TValidation {
     }
   }
 
-  get value(): InputValueType {
+  get value(): InputralueType {
     return this._value;
   }
 
@@ -266,7 +266,7 @@ export class TValidation {
     this._failOnfirst = param.failsOnfirst !== undefined && param.failsOnfirst;
 
     this._rules = param.rules ?? [];
-    this._tvmessages = param.errors ?? {};
+    this._trmessages = param.errors ?? {};
     this._inputType = param.type ?? this._inputType;
   }
 

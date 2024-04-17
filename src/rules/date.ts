@@ -7,7 +7,7 @@ import { now, spliteParam, throwEmptyArgsException } from "../utils";
  * @param input The input string to be validated.
  * @example
  * ```html
- * <input type="date-local" data-tv-rules="date" />
+ * <input type="date-local" data-tr-rules="date" />
  * ```
  * @returns Returns true if the input is a valid date, false otherwise.
  */
@@ -22,7 +22,7 @@ export const isDate: RuleCallBack = (input) => {
  * @param date - The date to compare against, as a string in ISO 8601 format or the string "now" to use the current date and time. It can take the `now` value
  *   @example
  * ```html
- * <input type="date-local" data-tv-rules="before:2020-11-11" />
+ * <input type="date-local" data-tr-rules="before:2020-11-11" />
  * ```
  * @returns `true` if the input date is before the comparison date, `false` otherwise.
  */
@@ -45,7 +45,7 @@ export const beforeDate: RuleCallBack = (input, date) => {
  * }
  * ```
  * ```html
- * <input data-tv-rules="after:now" />
+ * <input data-tr-rules="after:now" />
  * ```
  * @returns `true` if the input date is after the comparison date, `false` otherwise.
  */
@@ -62,7 +62,7 @@ export const afterDate: RuleCallBack = (input, date) => {
  * @param input - The date to check, as a string in ISO 8601 format or a `Date` object.
  * @param date - The range of dates to compare against, as a string in the format "startDate,endDate", where startDate and endDate are strings in ISO 8601 format or the string "now" to use the current date and time.
  *  ```html
- * <input type="date-local" data-tv-rules="dateBetween:2020-11-11,now" />
+ * <input type="date-local" data-tr-rules="dateBetween:2020-11-11,now" />
  * ```
  * @returns `true` if the input date is between the start and end dates (inclusive), `false` otherwise.
  * @throws An exception with the message "Missing required argument: dateBetween" if the `date` parameter is falsy.
@@ -87,7 +87,7 @@ export const dateBetween: RuleCallBack = (input, date) => {
  * }
  * ```
  * ```html
- * <input data-tv-rules="time" />
+ * <input data-tr-rules="time" />
  * ```
  *
  */

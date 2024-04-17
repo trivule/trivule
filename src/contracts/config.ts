@@ -1,7 +1,7 @@
 /**
  * Configuration interface
  */
-export interface ITvConfig {
+export interface ITrConfig {
   invalidClass?: string;
   validClass?: string;
   local?: {

@@ -8,7 +8,7 @@ import { isFile, maxFileSize, minFileSize } from "./file";
  * @param min - The minimum length.
  * @example
  *  ```html
- *  <input tv-rules="min:2"/>
+ *  <input tr-rules="min:2"/>
  * ```
  * @returns `true` if the input is at least the specified length, `false` otherwise.
  */
@@ -37,7 +37,7 @@ export const minRule: RuleCallBack = (input, min) => {
  * @param max - The maximum length.
  *  @example
  *  ```html
- *  <input tv-rules="max:20"/>
+ *  <input tr-rules="max:20"/>
  * ```
  * @returns `true` if the input is at most the specified length, `false` otherwise.
  */
@@ -63,8 +63,8 @@ export const maxRule: RuleCallBack = (input, max) => {
  *
  * @param input - The input to check.
  * ```html
- *  <input tv-rules="integer"/> or
- *  <input tv-rules="int"/>
+ *  <input tr-rules="integer"/> or
+ *  <input tr-rules="int"/>
  * ```
  * @returns `true` if the input is an integer, `false` otherwise.
  */
@@ -80,7 +80,7 @@ export const integer: RuleCallBack = (input) => {
  *
  * @param input - The input to check.
  * ```html
- *  <input tv-rules="number"/>
+ *  <input tr-rules="number"/>
  * ```
  * @returns `true` if the input is a number, `false` otherwise.
  */
@@ -107,8 +107,8 @@ export const isNumber: RuleCallBack = (input) => {
  * Checks whether a number is a multiple or divisible by another number. Has alias (mod)
  * @param input - The input to check.
  * ```html
- *  <input tv-rules="modulo:2"/>
- * <input tv-rules="mod:2"/>
+ *  <input tr-rules="modulo:2"/>
+ * <input tr-rules="mod:2"/>
  * ```
  * @returns `true` if the input is a number, `false` otherwise.
  */
@@ -131,7 +131,7 @@ export const modulo: RuleCallBack = (input, mod) => {
  * @param threshold - The threshold value.
  * @example
  * ```html
- * <input tv-rules="lessThan:10"/>
+ * <input tr-rules="lessThan:10"/>
  * ```
  * @returns `true` if the input is less than the specified value, `false` otherwise.
  */
@@ -154,7 +154,7 @@ export const lessthan: RuleCallBack = (input, threshold) => {
  * @param threshold - The threshold value.
  * @example
  * ```html
- * <input tv-rules="greaterThan:5"/>
+ * <input tr-rules="greaterThan:5"/>
  * ```
  * @returns `true` if the input is greater than the specified value, `false` otherwise.
  */

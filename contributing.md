@@ -75,7 +75,7 @@ Explanation:
    For example, if you have an HTML field like this:
 
 ```html
-<input data-tv-rules="in:active, inactive, suspended" />
+<input data-tr-rules="in:active, inactive, suspended" />
 ```
 
 The values after the colon (`:`) are the parameters. In this case, the second argument would be a string like `"active, inactive, suspended"`. You can use the `splitParam(params ?? "")` function to get an array of individual values, for example, `['active', 'inactive', 'suspended']`.
@@ -145,12 +145,12 @@ export type Rule = "contains" | "in" | "startWithLetter" /*...*/;
 
 This also enables auto-completion in your code editor, but it's not the primary purpose of adding the rule to this type.
 
-If you're using a good TypeScript-aware tool, you may notice an error in the `./src/validation/tv-bag.ts` file. This file is where the rules are actually added to Trivule. Until a rule is added to this file, it won't be part of Trivule.
+If you're using a good TypeScript-aware tool, you may notice an error in the `./src/validation/tr-bag.ts` file. This file is where the rules are actually added to Trivule. Until a rule is added to this file, it won't be part of Trivule.
 
-In this file, the `TvBag` class is used to store the rules. You need to add your rule to the `rules` attribute of this class, like this:
+In this file, the `TrBag` class is used to store the rules. You need to add your rule to the `rules` attribute of this class, like this:
 
 ```typescript
-export class TvBag implements ITvBag {
+export class TrBag implements ITrBag {
   private static rules: RulesBag = {
     in: inInput,
   };
@@ -242,14 +242,14 @@ In the `./src/contracts/rule.ts` file, add the `in` rule to the `Rule` type:
 export type Rule = "contains" | "in" | "startWithLetter";
 ```
 
-#### Step 4: Add the callback to the TvBag class
+#### Step 4: Add the callback to the TrBag class
 
-In the `./src/validation/tv-bag.ts` file, add the `inInput` rule to the `rules` attribute of the `TvBag` class:
+In the `./src/validation/tr-bag.ts` file, add the `inInput` rule to the `rules` attribute of the `TrBag` class:
 
 ```typescript
 import { inInput } from "./rules/inInput";
 
-export class TvBag implements ITvBag {
+export class TrBag implements ITrBag {
   private static rules: RulesBag = {
     contains: contains,
     in: inInput,

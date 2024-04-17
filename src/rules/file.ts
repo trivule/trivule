@@ -7,7 +7,7 @@ import { spliteParam, throwEmptyArgsException } from "../utils";
  * @param value - The value to check.
  * @example
  *  ```html
- * <input data-tv-rules="file" />
+ * <input data-tr-rules="file" />
  * ```
  * @returns `true` if the input value is a `File` or `Blob` object, `false` otherwise.
  */
@@ -22,7 +22,7 @@ export const isFile: RuleCallBack = (value) => {
  * @param maxSize - The maximum size in bytes, specified as a string with an optional unit of measurement (B, KB, MB, or GB).
  * @example
  *  ```html
- * <input data-tv-rules="maxFileSize:1MB" />
+ * <input data-tr-rules="maxFileSize:1MB" />
  * ```
  * @returns `true` if the size of the input object is less than or equal to the maximum size, `false` otherwise.
  * @throws If the `maxSize` parameter is not in a valid format, an error is thrown.
@@ -66,7 +66,7 @@ export const maxFileSize: RuleCallBack = (input, maxSize) => {
  * @param minSize The minimum size of the file. Should be a string in the format '<number><unit>', where 'unit' can be one of 'B', 'KB', 'MB', 'GB'. For example, '1KB' represents 1 kilobyte, '2MB' represents 2 megabytes, etc.
  * @example
  *  ```html
- * <input data-tv-rules="minFileSize:1MB" />
+ * <input data-tr-rules="minFileSize:1MB" />
  * ```
  * @returns A boolean value indicating whether the size of the file is greater than or equal to the specified minimum size.
  *
@@ -111,7 +111,7 @@ export const minFileSize: RuleCallBack = (input, minSize) => {
  * @param min_max - The string containing the minimum and maximum size values, separated by a delimiter.
  * @example
  * ```html
- * <input data-tv-rules="fileBetween:1MB,5MB" />
+ * <input data-tr-rules="fileBetween:1MB,5MB" />
  * ```
  * @returns `true` if the size of the input object is between the minimum and maximum size, `false` otherwise.
  */
@@ -128,7 +128,7 @@ export const fileBetween: RuleCallBack = (input, min_max) => {
  *
  * @example
  * ```html
- * <input type="file" data-tv-rules="mimies:.pdf"
+ * <input type="file" data-tr-rules="mimies:.pdf"
  * ```
  * @returns `true` if the MIME type of the input object matches the specified MIME type, `false` otherwise.
  */

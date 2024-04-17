@@ -10,7 +10,7 @@ import { RuleCallBack } from "./../contracts/rule-callback";
  *  @param param - The parameter specifying the expected type ("string" or "number").
  * @example
  *  ```html
- *  <input data-tv-rules="email"/>
+ *  <input data-tr-rules="email"/>
  * ```
  * @returns Whether the email address is valid.
  */
@@ -27,7 +27,7 @@ export const email: RuleCallBack = (input, ...options) => {
  * @param length The minimum length.
  * @example
  *  ```html
- *  <input data-tv-rules="minlength:8"/>
+ *  <input data-tr-rules="minlength:8"/>
  * ```
  * @returns Whether the input is at least the specified length.
  */
@@ -45,7 +45,7 @@ export const minlength: RuleCallBack = (input, length) => {
  * @param length The maximum length.
  * @example
  *  ```html
- *  <input data-tv-rules="maxlength:8"/>
+ *  <input data-tr-rules="maxlength:8"/>
  * ```
  * @returns Whether the input is no more than the specified length.
  */
@@ -71,7 +71,7 @@ export const is_string: RuleCallBack = (val: any) => {
  * @param input The URL to validate.
  *  @example
  *  ```html
- *  <input data-tv-rules="url"/>
+ *  <input data-tr-rules="url"/>
  * ```
  * @returns Whether the URL is valid.
  */
@@ -86,7 +86,7 @@ export const url: RuleCallBack = (input) => {
  * @param input The input to check.
  *  @example
  *  ```html
- *  <input data-tv-rules="startWithUpper"/>
+ *  <input data-tr-rules="startWithUpper"/>
  * ```
  * @returns Whether the input starts with an uppercase letter.
  */
@@ -104,7 +104,7 @@ export const startWithUpper: RuleCallBack = (input) => {
  * @param input The input to check.
  *  @example
  *  ```html
- *  <input data-tv-rules="startWithLower"/>
+ *  <input data-tr-rules="startWithLower"/>
  * ```
  * @returns Whether the input starts with a lowercase letter.
  */
@@ -124,7 +124,7 @@ export const startWithLower: RuleCallBack = (input) => {
  * @param prefix - The prefixes to check for, as a comma-separated list of strings.
  *  @example
  *  ```html
- *  <input data-tv-rules="startWith"/>
+ *  <input data-tr-rules="startWith"/>
  * ```
  * @returns `true` if the input string starts with any of the given prefixes, `false` otherwise.
  * @throws An exception with the message "Missing required argument: startWith" if the `prefix` parameter is falsy.
@@ -147,7 +147,7 @@ export const startWith: RuleCallBack = (input, prefix) => {
  * @param suffix - A comma-separated list of suffixes to check against.
  *  @example
  *  ```html
- *  <input data-tv-rules="endWith"/>
+ *  <input data-tr-rules="endWith"/>
  * ```
  * @returns `true` if the input string ends with one of the specified suffixes, `false` otherwise.
  * @throws An exception with the message "Missing required argument: endWith" if the `suffix` parameter is falsy.
@@ -170,7 +170,7 @@ export const endWith: RuleCallBack = (input, suffix) => {
  * @param substrings - A comma-separated  substrings to check for.
  *  @example
  *  ```html
- *  <input data-tv-rules="contains:thanks,yes"/>
+ *  <input data-tr-rules="contains:thanks,yes"/>
  * ```
  * @returns `true` if the input contains all of the specified substrings, `false` otherwise.
  * @throws An exception with the message "Missing required argument: contains" if the `substrings` parameter is falsy.
@@ -195,8 +195,8 @@ export const contains: RuleCallBack = (input, substring) => {
  * @param size - The desired length of the input.
  * @example
  *  ```html
- *  <input data-tv-rules="length:9"/>
- *  <input data-tv-rules="len:9"/>
+ *  <input data-tr-rules="length:9"/>
+ *  <input data-tr-rules="len:9"/>
  * ```
  * @returns `true` if the input has the specified length, `false` otherwise.
  * @throws An exception with the message "The length rule argument must be an integer" if the `size` parameter is not an integer.
@@ -229,7 +229,7 @@ export const length: RuleCallBack = (input: any, size: any) => {
  * @param input - The input to check.
  * @example
  *  ```html
- *  <input data-tv-rules="password"/>
+ *  <input data-tr-rules="password"/>
  * ```
  * @returns `true` if the input is a valid password, `false` otherwise.
  */
@@ -259,7 +259,7 @@ export const passwordRule: RuleCallBack = (input) => {
  * @param input - The input to check.
  * @example
  *  ```html
- *  <input data-tv-rules="startWithLetter"/>
+ *  <input data-tr-rules="startWithLetter"/>
  * ```
  * @returns `true` if the input starts with a letter, `false` otherwise.
  */
@@ -277,7 +277,7 @@ export const startWithLetter: RuleCallBack = (input) => {
  * @param input - The input to check.
  * @example
  *  ```html
- *  <input data-tv-rules="endWithLetter"/>
+ *  <input data-tr-rules="endWithLetter"/>
  * ```
  * @returns `true` if the input ends with a letter, `false` otherwise.
  */
@@ -295,7 +295,7 @@ export const endWithLetter: RuleCallBack = (input) => {
  * @param input - The input to check.
  * @example
  *  ```html
- *  <input data-tv-rules="containsLetter"/>
+ *  <input data-tr-rules="containsLetter"/>
  * ```
  * @returns `true` if the input contains a letter, `false` otherwise.
  */
@@ -314,7 +314,7 @@ export const containsLetter: RuleCallBack = (input) => {
  * @param excludedChars - The characters to exclude, separated by comma.
  *  @example
  *  ```html
- *  <input data-tv-rules="excludes:-,@,&esp;"/>
+ *  <input data-tr-rules="excludes:-,@,&esp;"/>
  * ```
  * @returns `true` if the input does not contain any of the specified characters, `false` otherwise.
  */
@@ -338,7 +338,7 @@ export const excludes: RuleCallBack = (input, excludedChars) => {
  * @param param - The locale to use.
  *   @example
  *  ```html
- *  <input data-tv-rules="upper"/>
+ *  <input data-tr-rules="upper"/>
  * ```
  * @returns `true` if the input is all uppercase, `false` otherwise.
  */
@@ -353,7 +353,7 @@ export const upper: RuleCallBack = (input, param?: string) => {
  * @param param - The locale to use.
  *   @example
  *  ```html
- *  <input data-tv-rules="lower"/>
+ *  <input data-tr-rules="lower"/>
  * ```
  * @returns `true` if the input is all lowercase, `false` otherwise.
  */
@@ -368,7 +368,7 @@ export const lower: RuleCallBack = (input: string, param?: string) => {
  * @param min_max - The string containing the minimum and maximum values, separated by a delimiter.
  * @example
  * ```html
- * <input data-tv-rules="stringBetween:2,5" />
+ * <input data-tr-rules="stringBetween:2,5" />
  * ```
  * @returns `true` if the length of the input string is between the minimum and maximum values, `false` otherwise.
  */

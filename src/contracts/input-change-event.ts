@@ -1,7 +1,7 @@
 import { Rule } from "./rule";
 
 /**
- * Tv.Input.validated event details
+ * tr.input.validated event details
  */
 export type InputEventDetails = {
   rules: Rule[];

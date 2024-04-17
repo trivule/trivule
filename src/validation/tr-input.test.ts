@@ -1,11 +1,11 @@
-import { TrivuleInput } from "./tv-input";
+import { TrivuleInput } from "./tr-input";
 
 describe("TrivuleInput", () => {
   describe("getRules", () => {
     test("should return an array of rules for a given input field", () => {
       // Arrange
       const inputElement = document.createElement("input"); // Create an input element
-      inputElement.setAttribute("data-tv-rules", "required|min:30"); // Set rules for the input element
+      inputElement.setAttribute("data-tr-rules", "required|min:30"); // Set rules for the input element
       const rules = ["required", "min:30"];
       const validator = new TrivuleInput(inputElement);
 
@@ -28,7 +28,7 @@ describe("TrivuleInput", () => {
   describe("hasRules", () => {
     test("should return true if input have rules", () => {
       const inputElement = document.createElement("input"); // Create an input element
-      inputElement.setAttribute("data-tv-rules", "required|min:30");
+      inputElement.setAttribute("data-tr-rules", "required|min:30");
       const validator = new TrivuleInput(inputElement);
 
       expect(validator.hasRules()).toBe(true); // Assert that the result matches the expected rules array
@@ -44,11 +44,11 @@ describe("TrivuleInput", () => {
   });
 
   describe("getMessages", () => {
-    test("should return array of messages set via tv-messages", () => {
+    test("should return array of messages set via tr-messages", () => {
       const inputElement = document.createElement("input");
-      inputElement.setAttribute("data-tv-rules", "required|min:30");
+      inputElement.setAttribute("data-tr-rules", "required|min:30");
       inputElement.setAttribute(
-        "data-tv-messages",
+        "data-tr-messages",
         "Required message | Min message"
       );
       const validator = new TrivuleInput(inputElement, {
@@ -61,14 +61,14 @@ describe("TrivuleInput", () => {
         "Min message",
       ]);
     });
-    test("should return array of messages set via tv-messages with compensations messages", () => {
+    test("should return array of messages set via tr-messages with compensations messages", () => {
       const inputElement = document.createElement("input");
       inputElement.setAttribute(
-        "data-tv-rules",
+        "data-tr-rules",
         "required|min:30|max:60|email"
       );
       inputElement.setAttribute(
-        "data-tv-messages",
+        "data-tr-messages",
         "Required message | {1,2,3}Invalid email address"
       );
       const validator = new TrivuleInput(inputElement, {
@@ -96,7 +96,7 @@ describe("TrivuleInput", () => {
       // Arrange
       const inputElement = document.createElement("input");
       inputElement.setAttribute(
-        "data-tv-rules",
+        "data-tr-rules",
         "required|min:2|regex:^(Js&pip;Ts)$"
       );
       inputElement.value = "Js"; // Set the input value
@@ -108,7 +108,7 @@ describe("TrivuleInput", () => {
     test("should return false if input is invalid", () => {
       // Arrange
       const inputElement = document.createElement("input");
-      inputElement.setAttribute("data-tv-rules", "required|min:3");
+      inputElement.setAttribute("data-tr-rules", "required|min:3");
       inputElement.value = ""; // Set the input value to empty
       const validator = new TrivuleInput(inputElement);
 
@@ -120,12 +120,12 @@ describe("TrivuleInput", () => {
     test("should return true if input is valid", () => {
       // Arrange
       const inputElement = document.createElement("input");
-      inputElement.setAttribute("data-tv-rules", "required|min:3");
+      inputElement.setAttribute("data-tr-rules", "required|min:3");
       inputElement.value = "test"; // Set the input value
       const validator = new TrivuleInput(inputElement);
       jest
-        .spyOn(validator as any, "setValidationClass")
-        .mockImplementation(() => {}); // Mock setValidationClass to prevent side effects
+        .spyOn(validator as any, "setralidationClass")
+        .mockImplementation(() => {}); // Mock setralidationClass to prevent side effects
       jest
         .spyOn(validator as any, "emitChangeEvent")
         .mockImplementation(() => {}); // Mock emitChangeEvent to prevent side effects
@@ -138,12 +138,12 @@ describe("TrivuleInput", () => {
     test("should return false if input is invalid", () => {
       // Arrange
       const inputElement = document.createElement("input");
-      inputElement.setAttribute("data-tv-rules", "required|min:3");
+      inputElement.setAttribute("data-tr-rules", "required|min:3");
       inputElement.value = ""; // Set the input value to empty
       const validator = new TrivuleInput(inputElement);
       jest
-        .spyOn(validator as any, "setValidationClass")
-        .mockImplementation(() => {}); // Mock setValidationClass to prevent side effects
+        .spyOn(validator as any, "setralidationClass")
+        .mockImplementation(() => {}); // Mock setralidationClass to prevent side effects
       jest
         .spyOn(validator as any, "emitChangeEvent")
         .mockImplementation(() => {}); // Mock emitChangeEvent to prevent side effects
@@ -160,7 +160,7 @@ describe("TrivuleInput", () => {
     test("should return error messages", () => {
       // Arrange
       const inputElement = document.createElement("input");
-      inputElement.setAttribute("data-tv-rules", "required|min:3");
+      inputElement.setAttribute("data-tr-rules", "required|min:3");
       inputElement.name = "input-name";
       inputElement.value = ""; // Set the input value to empty
       const validator = new TrivuleInput(inputElement, {
@@ -168,8 +168,8 @@ describe("TrivuleInput", () => {
       });
 
       jest
-        .spyOn(validator as any, "setValidationClass")
-        .mockImplementation(() => {}); // Mock setValidationClass to prevent side effects
+        .spyOn(validator as any, "setralidationClass")
+        .mockImplementation(() => {}); // Mock setralidationClass to prevent side effects
       jest
         .spyOn(validator as any, "emitChangeEvent")
         .mockImplementation(() => {}); // Mock emitChangeEvent to prevent side effects
@@ -186,15 +186,15 @@ describe("TrivuleInput", () => {
     test("should return empty error messages", () => {
       // Arrange
       const inputElement = document.createElement("input");
-      inputElement.setAttribute("data-tv-rules", "required|min:3");
+      inputElement.setAttribute("data-tr-rules", "required|min:3");
       inputElement.type = "number";
       inputElement.name = "name-empty";
       inputElement.value = "4";
       const validator = new TrivuleInput(inputElement);
 
       jest
-        .spyOn(validator as any, "setValidationClass")
-        .mockImplementation(() => {}); // Mock setValidationClass to prevent side effects
+        .spyOn(validator as any, "setralidationClass")
+        .mockImplementation(() => {}); // Mock setralidationClass to prevent side effects
       jest
         .spyOn(validator as any, "emitChangeEvent")
         .mockImplementation(() => {}); // Mock emitChangeEvent to prevent side effects

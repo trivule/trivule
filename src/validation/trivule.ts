@@ -1,7 +1,7 @@
-import { ITvConfig, RuleCallBack } from "../contracts";
-import { TvConfig } from "../tv.config";
-import { TvBag } from "./tv-bag";
-import { TrivuleForm } from "./tv-form";
+import { ITrConfig, RuleCallBack } from "../contracts";
+import { TrConfig } from "../tr.config";
+import { TrBag } from "./tr-bag";
+import { TrivuleForm } from "./tr-form";
 /**
  *
  * Initializes Trivule and applies form validation to all forms in the document.
@@ -17,12 +17,12 @@ export class Trivule {
   /**
    * Default configuration
    */
-  protected config: ITvConfig = TvConfig;
+  protected config: ITrConfig = TrConfig;
   /**
    * Select all the form in the document and apply TrivuleForm for them
    * @param config
    */
-  init(config?: ITvConfig) {
+  init(config?: ITrConfig) {
     this.setConfig(config);
     document
       .querySelectorAll<HTMLFormElement>("form")
@@ -41,20 +41,20 @@ export class Trivule {
    * ```
    */
   rule(ruleName: string, call: RuleCallBack, message?: string) {
-    TvBag.rule(ruleName, call, message);
+    TrBag.rule(ruleName, call, message);
   }
   /**
    * Set default configuration
    * @param config
    */
-  protected setConfig(config?: ITvConfig) {
-    this.config = TvConfig;
+  protected setConfig(config?: ITrConfig) {
+    this.config = TrConfig;
     if (config && typeof config === "object") {
       this.config = { ...this.config, ...config };
     }
   }
 
   static Rule(ruleName: string, call: RuleCallBack, message?: string) {
-    TvBag.rule(ruleName, call, message);
+    TrBag.rule(ruleName, call, message);
   }
 }

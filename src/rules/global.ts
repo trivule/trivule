@@ -19,7 +19,7 @@ import { dateBetween, isDate } from "./date";
  * @param input - The input to check.
  * @example
  *  ```html
- * <input data-tv-rules="required" />
+ * <input data-tr-rules="required" />
  * ```
  * @param options - Optional parameters.
  * @returns `true` if the input is not empty, `false` otherwise.
@@ -38,7 +38,7 @@ export const nullable: RuleCallBack = (input) => {
  * @param params - The list of values to check against.
  * @example
  *  ```html
- * <input data-tv-rules="in:active,inactive" />
+ * <input data-tr-rules="in:active,inactive" />
  * ```
  * @returns `true` if the input is in the list, `false` otherwise.
  */
@@ -56,7 +56,7 @@ export const inInput: RuleCallBack = (input, params) => {
  * @param maxSize - The maximum size.
  *  @example
  *  ```html
- * <input data-tv-rules="size:6" />
+ * <input data-tr-rules="size:6" />
  * ```
  * @returns `true` if the input is at most the specified size, `false` otherwise.
  */
@@ -73,7 +73,7 @@ export const size: RuleCallBack = (input, maxSize) => {
  * @param value - The input to check.
  * @example
  *  ```html
- * <input data-tv-rules="boolean" />
+ * <input data-tr-rules="boolean" />
  * ```
  * @returns `true` if the input is a boolean value, `false` otherwise.
  */
@@ -104,13 +104,13 @@ export const isBoolean: RuleCallBack = (value) => {
  * @example
  * ```html
  * <!--valide number-->
- * <input type="number" data-tv-rules="between:6,7" />
+ * <input type="number" data-tr-rules="between:6,7" />
  * <!--valide string-->
- * <input type="text" data-tv-rules="between:6,7" />
+ * <input type="text" data-tr-rules="between:6,7" />
  * <!--valide date-->
- * <input type="date-local" data-tv-rules="between:01-01-2021,now" />
+ * <input type="date-local" data-tr-rules="between:01-01-2021,now" />
  * <!--valide file size-->
- * <input type="file" data-tv-rules="between:2MB,3MB" />
+ * <input type="file" data-tr-rules="between:2MB,3MB" />
  * ```
  * @returns `true` if the input is between the specified values, `false` otherwise.
  */
@@ -150,7 +150,7 @@ export const between: RuleCallBack = (input, min_max) => {
  * @returns `true` if the input matches the regular expression, `false` otherwise.
  * @example
  * ```html
- *  <input data-tv-rules="regex:^[A-Z]+$"/>
+ *  <input data-tr-rules="regex:^[A-Z]+$"/>
  * ```
  */
 export const regex: RuleCallBack = (input: string, pattern?: string) => {
@@ -168,7 +168,7 @@ export const regex: RuleCallBack = (input: string, pattern?: string) => {
  * @param input - The input to check.
  * @param param - The parameter specifying the expected type ("string" or "number").
  *  ```html
- *  <input data-tv-rules="only:letter"/>
+ *  <input data-tr-rules="only:letter"/>
  * ```
  * @returns `true` if the input matches the expected type, `false` otherwise.
  */
@@ -194,7 +194,7 @@ export const only: RuleCallBack = (input, param) => {
  * @param digitCount - The number of digits.
  * @example
  * ```html
- * <input data-tv-rules="digit:8"/>
+ * <input data-tr-rules="digit:8"/>
  * ```
  * @returns `true` if the input is a digit with the specified number of digits, `false` otherwise.
  */
@@ -204,8 +204,8 @@ export const digitRule: RuleCallBack = (input, digitCount) => {
   }
 
   if (isNumber(input)) {
-    const inputValue = String(input);
-    return /^\d+$/.test(inputValue) && inputValue.length === Number(digitCount);
+    const inputralue = String(input);
+    return /^\d+$/.test(inputralue) && inputralue.length === Number(digitCount);
   }
 
   return false;
@@ -218,7 +218,7 @@ export const digitRule: RuleCallBack = (input, digitCount) => {
  * @param maxDigitCount - The maximum number of digits.
  * @example
  * ```html
- * <input data-tv-rules="max_digit:10"/>
+ * <input data-tr-rules="max_digit:10"/>
  * ```
  * @returns `true` if the input is a digit with a number of digits less than or equal to the specified maximum, `false` otherwise.
  */
@@ -228,9 +228,9 @@ export const maxDigitRule: RuleCallBack = (input, maxDigitCount) => {
   }
 
   if (isNumber(input)) {
-    const inputValue = String(input);
+    const inputralue = String(input);
     return (
-      /^\d+$/.test(inputValue) && inputValue.length <= Number(maxDigitCount)
+      /^\d+$/.test(inputralue) && inputralue.length <= Number(maxDigitCount)
     );
   }
 
@@ -244,7 +244,7 @@ export const maxDigitRule: RuleCallBack = (input, maxDigitCount) => {
  * @param minDigitCount - The minimum number of digits.
  * @example
  * ```html
- * <input data-tv-rules="min_digit:5"/>
+ * <input data-tr-rules="min_digit:5"/>
  * ```
  * @returns `true` if the input is a digit with a number of digits greater than or equal to the specified minimum, `false` otherwise.
  */
@@ -254,9 +254,9 @@ export const minDigitRule: RuleCallBack = (input, minDigitCount) => {
   }
 
   if (isNumber(input)) {
-    const inputValue = String(input);
+    const inputralue = String(input);
     return (
-      /^\d+$/.test(inputValue) && inputValue.length >= Number(minDigitCount)
+      /^\d+$/.test(inputralue) && inputralue.length >= Number(minDigitCount)
     );
   }
 

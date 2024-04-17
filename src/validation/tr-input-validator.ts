@@ -1,11 +1,11 @@
-import { AbstractInputValidator } from "./abstract-input";
+import { AbstractInputralidator } from "./abstract-input";
 import {
   EventCallback,
   TrivuleInputParms,
   ValidatableInput,
 } from "../contracts/types";
 
-export class TrivuleInputValidator extends AbstractInputValidator {
+export class TrivuleInputralidator extends AbstractInputralidator {
   /**
    * Check if pass event should be emitted
    */
@@ -19,7 +19,7 @@ export class TrivuleInputValidator extends AbstractInputValidator {
     super(inputElement, params);
   }
   /**
-   * Performs validation on the input element. And emits tv.input.validated event if necessary.
+   * Performs validation on the input element. And emits tr.input.validated event if necessary.
    * @returns true if the input element is valid, false otherwise.
    * Example:
    * ```
@@ -34,7 +34,7 @@ export class TrivuleInputValidator extends AbstractInputValidator {
    */
   validate(emitEmit = true) {
     this.valid();
-    this.setValidationClass();
+    this.setralidationClass();
     this.errors = this.validator.getMessages();
     if (emitEmit) {
       this.emitChangeEvent();
@@ -84,7 +84,7 @@ export class TrivuleInputValidator extends AbstractInputValidator {
   }
 
   /**
-   * Performs validation on the input element using the defined validation rules. Don't emit tv.input.passes or tv.input.fails event
+   * Performs validation on the input element using the defined validation rules. Don't emit tr.input.passes or tr.input.fails event
    * @returns true if the input element is valid, false otherwise.
    * Example:
    * ```
@@ -98,7 +98,7 @@ export class TrivuleInputValidator extends AbstractInputValidator {
    * ```
    */
   valid() {
-    this.validator.value = this.getValue();
+    this.validator.value = this.getralue();
     return (this._passed = this.validator.passes());
   }
 
@@ -131,7 +131,7 @@ export class TrivuleInputValidator extends AbstractInputValidator {
     if (this.param.emitEvent) {
       if (this._passed) {
         if (this._emitOnPasses) {
-          this.emit("tv.input.passes", {
+          this.emit("tr.input.passes", {
             detail: {
               rules: this.rules,
               input: {},
@@ -145,7 +145,7 @@ export class TrivuleInputValidator extends AbstractInputValidator {
         }
       } else {
         if (this._emitOnFails) {
-          this.emit("tv.input.fails", {
+          this.emit("tr.input.fails", {
             detail: {
               rules: this.rules,
               input: {},

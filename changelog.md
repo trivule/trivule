@@ -1,12 +1,12 @@
 
-In previous versions, the `tv-name` attribute was used to replace the name on an `input` element in case the person didn't want to use it. Now it is used to customize the name used in the error message.
+In previous versions, the `tr-name` attribute was used to replace the name on an `input` element in case the person didn't want to use it. Now it is used to customize the name used in the error message.
 If your `input` tag is:
 ```html
 <input class="input" type="text" name="age" />
 ```
 The error message would be something like:
 *The **age** field is required*
-But if you specify the `tv-name` attribute with the value `"age condition"`, the message would become:
+But if you specify the `tr-name` attribute with the value `"age condition"`, the message would become:
 *The **age condition** field is required*
 
 Its equivalent if you want to specify via JavaScript code is the `attribute` property of the `TrivuleInputParms`
@@ -18,7 +18,7 @@ attribute: "age condition"
 ```
 
 
-- Add events tv.form.passes and tv.form.fails 
+- Add events tr.form.passes and tr.form.fails 
   These are events that can let you know when the form is valid or not.
 
 
@@ -51,7 +51,7 @@ The `TrivuleForm` class constructor creates an instance of `TrivuleForm` and acc
 
 #### Methods:
 
-- `init()`: Initializes live validation on the form element. This method sets up event listeners, enables auto-validation, and emits the "tv.form.init" event. Example usage:
+- `init()`: Initializes live validation on the form element. This method sets up event listeners, enables auto-validation, and emits the "tr.form.init" event. Example usage:
   ```typescript
   trivuleForm.init();
   ```
@@ -67,28 +67,28 @@ The `TrivuleForm` class constructor creates an instance of `TrivuleForm` and acc
   });
   ```
 
-- `validateOnTvValidated(fn?: CallableFunction)`:
-   * Registers an event listener for the "tv.input.validated" event on the container element.
+- `validateOnTr.Validated(fn?: CallableFunction)`:
+   * Registers an event listener for the "tr.input.validated" event on the container element.
    * If a callback function is provided, it will be executed before Trivule handle the form validation. 
    * @param fn - The callback function to execute.
    *   
   ```typescript
-  trivuleForm.onInputValidated((event) => {
-    // Custom logic to handle the "tv.input.validated" event
+  trivuleForm.onInpuTr.alidated((event) => {
+    // Custom logic to handle the "tr.input.validated" event
   });
   ```
 
 - `isValid(): boolean`: Checks if the form is valid by validating all form inputs. Returns `true` if all inputs are valid, `false` otherwise.
 
-- `validate()`: Triggers the validation process for the form by emitting the "`tv.input.validated`" event.
+- `validate()`: Triggers the validation process for the form by emitting the "`tr.input.validated`" event.
 
-- `onFails(fn: EventCallback)`: Attaches an event listener to the "tv.form.fails" event. This event is triggered when the form fails validation.
+- `onFails(fn: EventCallback)`: Attaches an event listener to the "tr.form.fails" event. This event is triggered when the form fails validation.
 
-- `onPasses(fn: EventCallback)`: Attaches an event listener to the "tv.form.passes" event. This event is triggered when the form passes validation.
+- `onPasses(fn: EventCallback)`: Attaches an event listener to the "tr.form.passes" event. This event is triggered when the form passes validation.
 
-- `observeChanges(fn?: EventCallback)`: Attaches an event listener to the "tv.form.updated" event. This event is triggered when the form is updated, and it reinitializes and runs the TrivuleInputs for the form. The provided function is called with the form instance as a parameter.
+- `observeChanges(fn?: EventCallback)`: Attaches an event listener to the "tr.form.updated" event. This event is triggered when the form is updated, and it reinitializes and runs the TrivuleInputs for the form. The provided function is called with the form instance as a parameter.
 
-- `onInit(fn?: EventCallback)`: Attaches an event listener to the "tv.form.init" event. This event is triggered when the form is initialized.
+- `onInit(fn?: EventCallback)`: Attaches an event listener to the "tr.form.init" event. This event is triggered when the form is initialized.
 
 - `destroy()`: Destroys the `TrivuleForm` instance and performs cleanup. This method removes event handlers, destroys TrivuleInput instances, and clears the internal array of TrivuleInput instances.
 

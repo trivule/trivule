@@ -27,7 +27,7 @@ export type ValidatableForm = HTMLElement | string | "form";
 /**
  * The possible input types expected to be gotten
  */
-export type InputValueType =
+export type InputralueType =
   | string
   | Blob
   | File
@@ -48,7 +48,7 @@ export type ElementOrNull = HTMLElement | null;
 export type WayDisplayError = "first" | "last" | "full";
 
 /**
- * Input parameters that can be passed to TrivuleInput instance instead of tv-attributes
+ * Input parameters that can be passed to TrivuleInput instance instead of tr-attributes
  */
 export type TrivuleInputParms = {
   /**
@@ -91,7 +91,7 @@ export type TrivuleInputParms = {
   failsOnfirst?: boolean;
   /**
    * If this field is true, each time the validation has been performed,
-   * a tv.input.validated event will be emitted, on which we can connect listeners for example
+   * a tr.input.validated event will be emitted, on which we can connect listeners for example
    */
   emitEvent?: boolean;
 
@@ -147,4 +147,4 @@ export type TrivuleFormConfig = {
   invalidClass?: string;
 };
 
-export type TrivuleFormHandler = (tv: TrivuleForm) => unknown;
+export type TrivuleFormHandler = (tr: TrivuleForm) => unknown;

@@ -1,14 +1,14 @@
 import { Rule, RulesMessages } from "../contracts";
-import { TvLocal } from "../locale/tv-local";
+import { TrLocal } from "../locale/tr-local";
 import { spliteParam } from "../utils";
 /**
  * @author Claude Fassinou
  */
-export class TvMessages {
+export class TrMessages {
   protected messages!: RulesMessages;
 
   constructor(local?: string) {
-    this.messages = TvLocal.getMessages(local ?? TvLocal.getLocal());
+    this.messages = TrLocal.getMessages(local ?? TrLocal.getLocal());
   }
   /**
 

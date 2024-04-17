@@ -7,10 +7,10 @@ import {
   RuleCallBack,
   ValidatableForm,
 } from "../contracts";
-import { TvLocal } from "../locale/tv-local";
+import { TrLocal } from "../locale/tr-local";
 import { FormValidator } from "../rules/form/form-validator";
-import { TvBag } from "./tv-bag";
-import { TrivuleInput } from "./tv-input";
+import { TrBag } from "./tr-bag";
+import { TrivuleInput } from "./tr-input";
 
 /**
  * @author Claude Fassinou
@@ -45,13 +45,13 @@ export class TrivuleForm {
   /**
    * The class that indicates the submit button is enabled
    */
-  private _tvEnabledClass = "tvEnabled";
+  private _trEnabledClass = "trEnabled";
   /**
    * The class that indicates the submit button is disabled
    */
-  private _tvDisabledClass = "tvDisabled";
+  private _trDisabledClass = "trDisabled";
 
-  private _triggerValidationEvents = ["change", "tv.form.updated"];
+  private _triggerValidationEvents = ["change", "tr.form.updated"];
   /**
    * The html form
    */
@@ -67,7 +67,7 @@ export class TrivuleForm {
   submitButton!: HTMLElement;
 
   /**
-   * Tv Config object
+   * Tr Config object
    */
   protected config: TrivuleFormConfig = {
     auto: true,
@@ -95,7 +95,7 @@ export class TrivuleForm {
     this.container = container;
 
     const submitButton =
-      this.container.querySelector<HTMLElement>("[data-tv-submit]");
+      this.container.querySelector<HTMLElement>("[data-tr-submit]");
 
     if (submitButton) {
       this.submitButton = submitButton;
@@ -112,10 +112,10 @@ export class TrivuleForm {
   init() {
     if (this.config.auto) {
       this.disableButton();
-      this.validateOnTvEvent();
+      this.validateOnTrEvent();
     }
 
-    this.emit("tv.form.init", this);
+    this.emit("tr.form.init", this);
 
     this._onSubmit();
 
@@ -133,16 +133,16 @@ export class TrivuleForm {
   disableButton() {
     if (this.submitButton) {
       this.submitButton.setAttribute("disabled", "true");
-      if (this._tvDisabledClass) {
+      if (this._trDisabledClass) {
         //removeClass enable
-        const classArrayEnabled: string[] = this._tvEnabledClass.split(" ");
+        const classArrayEnabled: string[] = this._trEnabledClass.split(" ");
         for (const value of classArrayEnabled) {
           this.submitButton.classList.remove(value);
         }
         //add class en disabled dataset
-        this._tvDisabledClass =
-          this.submitButton.dataset.tvDisabledClass ?? "tvDisabled";
-        const classArray: string[] = this._tvDisabledClass.split(" ");
+        this._trDisabledClass =
+          this.submitButton.dataset.trDisabledClass ?? "trDisabled";
+        const classArray: string[] = this._trDisabledClass.split(" ");
         for (const value of classArray) {
           this.submitButton.classList.add(value);
         }
@@ -156,16 +156,16 @@ export class TrivuleForm {
   enableButton() {
     if (this.submitButton) {
       this.submitButton.removeAttribute("disabled");
-      if (this._tvEnabledClass) {
+      if (this._trEnabledClass) {
         //removeClass disabled
-        const classArrayDisabled: string[] = this._tvDisabledClass.split(" ");
+        const classArrayDisabled: string[] = this._trDisabledClass.split(" ");
         for (const value of classArrayDisabled) {
           this.submitButton.classList.remove(value);
         }
         //add class en enabled dataset
-        this._tvEnabledClass =
-          this.submitButton.dataset.tvEnabledClass ?? "tvEnabled";
-        const classArray: string[] = this._tvEnabledClass.split(" ");
+        this._trEnabledClass =
+          this.submitButton.dataset.trEnabledClass ?? "trEnabled";
+        const classArray: string[] = this._trEnabledClass.split(" ");
         for (const value of classArray) {
           this.submitButton.classList.add(value);
         }
@@ -182,19 +182,19 @@ export class TrivuleForm {
    * @example
    * const trivuleForm = new TrivuleForm(formElement);
    *
-   * trivuleForm.validateOnTvEvent((trivuleFormInstance) => {
+   * trivuleForm.validateOnTrEvent((trivuleFormInstance) => {
    *   // Some code
    * });
    *
    */
-  validateOnTvEvent(fn?: CallableFunction) {
+  validateOnTrEvent(fn?: CallableFunction) {
     this.__call(fn, this);
     this._triggerValidationEvents.forEach((e) => {
       this.on(e, (e) => {
         this._handle();
       });
     });
-    // Validates the entire form whenever a tv.input.passes or tv.input.fails event is listened to
+    // Validates the entire form whenever a tr.input.passes or tr.input.fails event is listened to
     this._trivuleInputs.forEach((trivuleInput) => {
       trivuleInput.onFails(this._handle.bind(this));
       trivuleInput.onPasses(this._handle.bind(this));
@@ -206,9 +206,9 @@ export class TrivuleForm {
   private _handle() {
     this._passed = this.isValid();
     if (this._passed) {
-      this._emitTvOnPassesEvent();
+      this._emitTrOnPassesEvent();
     } else {
-      this._emitTvOnFailsEvent();
+      this._emitTrOnFailsEvent();
     }
   }
 
@@ -244,9 +244,9 @@ export class TrivuleForm {
           // Test whether each rule passed
           if (!results.every((passed) => passed)) {
             submitEvent.preventDefault();
-            this._emitTvOnFailsEvent();
+            this._emitTrOnFailsEvent();
           } else {
-            this._emitTvOnPassesEvent();
+            this._emitTrOnPassesEvent();
           }
         }
       });
@@ -260,16 +260,16 @@ export class TrivuleForm {
    * @param message
    */
   rule(ruleName: string, call: RuleCallBack, message?: string) {
-    TvBag.rule(ruleName, call, message);
+    TrBag.rule(ruleName, call, message);
   }
 
   protected setConfig(config?: TrivuleFormConfig) {
     let lang =
-      document.querySelector("html")?.getAttribute("data-tv-lang") ||
+      document.querySelector("html")?.getAttribute("data-tr-lang") ||
       document.querySelector("html")?.getAttribute("lang");
 
-    if (this.container.dataset.tvLang) {
-      lang = this.container.dataset.tvLang;
+    if (this.container.dataset.trLang) {
+      lang = this.container.dataset.trLang;
     }
     if (config && typeof config === "object") {
       this.config = { ...this.config, ...config };
@@ -281,7 +281,7 @@ export class TrivuleForm {
       }
     }
 
-    TvLocal.LANG = lang ?? TvLocal.DEFAULT_LANG;
+    TrLocal.LANG = lang ?? TrLocal.DEFAULT_LANG;
 
     this._syncRules();
   }
@@ -310,7 +310,7 @@ export class TrivuleForm {
   }
 
   /**
-   * Attaches an event listener to the "tv.form.fails" event.
+   * Attaches an event listener to the "tr.form.fails" event.
    * This event is triggered when the form fails validation.
    * @param fn - The callback function to execute when the event occurs.
    * Example:
@@ -321,13 +321,13 @@ export class TrivuleForm {
    * ```
    */
   onFails(fn: TrivuleFormHandler): void {
-    this.on("tv.form.fails", (e) => {
+    this.on("tr.form.fails", (e) => {
       this.__call(fn, (e as CustomEvent).detail);
     });
   }
 
   /**
-   * Attaches an event listener to the "tv.form.passes" event.
+   * Attaches an event listener to the "tr.form.passes" event.
    * This event is triggered when the form passes validation.
    * @param fn - The callback function to execute when the event occurs.
    * Example:
@@ -338,13 +338,13 @@ export class TrivuleForm {
    * ```
    */
   onPasses(fn: TrivuleFormHandler): void {
-    this.on("tv.form.passes", (e) => {
+    this.on("tr.form.passes", (e) => {
       this.__call(fn, (e as CustomEvent).detail);
     });
   }
 
   /**
-   * Attaches an event listener to the "tv.form.validate" event.
+   * Attaches an event listener to the "tr.form.validate" event.
    * This event is triggered when the form is validated.
    * @param fn - The callback function to execute when the event occurs.
    * Example:
@@ -355,13 +355,13 @@ export class TrivuleForm {
    * ```
    */
   onValidate(fn: TrivuleFormHandler): void {
-    this.on("tv.form.validate", (e) => {
+    this.on("tr.form.validate", (e) => {
       this.__call(fn, (e as CustomEvent).detail);
     });
   }
 
   /**
-   * Attaches an event listener to the "tv.form.updated" event.
+   * Attaches an event listener to the "tr.form.updated" event.
    * When this event is triggered, the method initializes and runs the TrivuleInputs for the form,
    * and then calls the provided function with the form instance as a parameter.
    * @param fn - The function to be called when the event occurs.
@@ -374,7 +374,7 @@ export class TrivuleForm {
    * ```
    */
   observeChanges(fn?: EventCallback): void {
-    this.on("tv.form.updated", (e) => {
+    this.on("tr.form.updated", (e) => {
       this.destroyInputs();
       this._initTrivuleInputs();
       this.__call(fn, this);
@@ -382,14 +382,14 @@ export class TrivuleForm {
   }
   /**
    * Triggers the validation process for the form.
-   * This method emits the "tv.form.update" event, which initiates the validation of all form inputs.
+   * This method emits the "tr.form.update" event, which initiates the validation of all form inputs.
    * Example:
    * ```typescript
    * trivuleForm.update ();
    * ```
    */
   update() {
-    this.emit("tv.form.updated", this);
+    this.emit("tr.form.updated", this);
   }
 
   /**
@@ -400,7 +400,7 @@ export class TrivuleForm {
     trivuleInputs = !!trivuleInputs
       ? trivuleInputs
       : Array.from(
-          this.container.querySelectorAll<HTMLElement>("[data-tv-rules]")
+          this.container.querySelectorAll<HTMLElement>("[data-tr-rules]")
         );
 
     for (const el of trivuleInputs) {
@@ -446,7 +446,7 @@ export class TrivuleForm {
     this.container.removeEventListener("submit", this._onSubmit);
 
     const evs = this._triggerValidationEvents.filter(
-      (event) => event !== "tv.form.updated"
+      (event) => event !== "tr.form.updated"
     );
     evs.forEach((ev) => {
       this.container.removeEventListener(ev, this._handle);
@@ -454,34 +454,34 @@ export class TrivuleForm {
 
     this.destroyInputs();
     this._trivuleInputs = [];
-    this.emit("tv.form.destroy");
+    this.emit("tr.form.destroy");
   }
 
   /**
-   * Emits the "tv.form.fails" event if the form fails validation.
+   * Emits the "tr.form.fails" event if the form fails validation.
    * This method is called when the form is considered invalid, meaning at least one input fails validation.
    */
-  private _emitTvOnFailsEvent() {
-    //If tv.form.fails
+  private _emitTrOnFailsEvent() {
+    //If tr.form.fails
     if (this._emitOnFails) {
-      this.emit("tv.form.fails", this);
-      this.emit("tv.form.validate", this);
+      this.emit("tr.form.fails", this);
+      this.emit("tr.form.validate", this);
       this._emitOnFails = false;
-      //Open _emitOnPasses, for the next tv.form.passes event
+      //Open _emitOnPasses, for the next tr.form.passes event
       this._emitOnPasses = true;
     }
   }
   /**
-   * Emits the "tv.form.passes" event if the form passes validation.
+   * Emits the "tr.form.passes" event if the form passes validation.
    * This method is called when the form is considered valid, meaning all inputs pass validation.
    */
-  private _emitTvOnPassesEvent() {
-    //If tv.form.passes
+  private _emitTrOnPassesEvent() {
+    //If tr.form.passes
     if (this._emitOnPasses) {
-      this.emit("tv.form.passes", this);
-      this.emit("tv.form.validate", this);
+      this.emit("tr.form.passes", this);
+      this.emit("tr.form.validate", this);
       this._emitOnPasses = false;
-      //Open _emitOnFails, for the next tv.form.fails event
+      //Open _emitOnFails, for the next tr.form.fails event
       this._emitOnFails = true;
     }
   }
@@ -539,13 +539,13 @@ export class TrivuleForm {
   }
 
   onInit(fn: TrivuleFormHandler) {
-    this.on("tv.form.init", (event: any) => {
+    this.on("tr.form.init", (event: any) => {
       this.__call(fn, event.detail);
     });
   }
 
   onUpdate(fn: TrivuleFormHandler) {
-    this.on("tv.form.updated", (event: any) => {
+    this.on("tr.form.updated", (event: any) => {
       this.__call(fn, event.detail);
     });
   }

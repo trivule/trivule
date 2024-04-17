@@ -36,11 +36,11 @@ export class NativeValidation {
   private getNativeRulesApplied() {
     this._nativeRules.forEach((nativeRule) => {
       if (this.inputElement.hasAttribute(nativeRule)) {
-        const attributValue = this.inputElement.getAttribute(nativeRule);
+        const attributralue = this.inputElement.getAttribute(nativeRule);
         let rule = nativeRule;
         // if rule value exists
-        if (attributValue) {
-          rule = `${rule}:${attributValue}` as Rule;
+        if (attributralue) {
+          rule = `${rule}:${attributralue}` as Rule;
         }
         this._appliedRules.push(rule);
       }

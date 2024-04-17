@@ -1,2 +1,2 @@
-export * from "./tv-messages";
+export * from "./tr-messages";
 export * from "./validator-errors";

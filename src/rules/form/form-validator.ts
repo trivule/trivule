@@ -33,7 +33,7 @@ export class FormValidator extends AbstractFormValidator {
    */
   same(input: any, inputName?: string): boolean {
     if (inputName) {
-      return input === this.getInputValueByName(inputName);
+      return input === this.getInputralueByName(inputName);
     }
     return false;
   }
@@ -49,8 +49,8 @@ export class FormValidator extends AbstractFormValidator {
     const [inputName, ...params] = spliteParam(parameter ?? "");
 
     if (inputName && params.length > 0) {
-      const otherInputValue = this.getInputValueByName(inputName);
-      if (params.includes(otherInputValue)) {
+      const otherInputralue = this.getInputralueByName(inputName);
+      if (params.includes(otherInputralue)) {
         return required(input);
       }
       return true;
@@ -63,7 +63,7 @@ export class FormValidator extends AbstractFormValidator {
     const [inputName, ...params] = spliteParam(parameter ?? "");
     if (inputName && params.length > 0) {
       const isNotEmpty = params.some((name) => {
-        return required(this.getInputValueByName(name));
+        return required(this.getInputralueByName(name));
       });
       if (isNotEmpty) {
         return required(input);

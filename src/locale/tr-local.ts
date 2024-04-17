@@ -2,7 +2,7 @@ import { Rule, RulesMessages } from "../contracts";
 import { is_string } from "../rules";
 import { en_messages } from "./lang/en";
 
-export class TvLocal {
+export class TrLocal {
   private static _useLang: string | null = null;
 
   /**
@@ -10,7 +10,7 @@ export class TvLocal {
    */
   static DEFAULT_LANG = "en";
 
-  static LANG = TvLocal.DEFAULT_LANG;
+  static LANG = TrLocal.DEFAULT_LANG;
 
   private static _message: Record<string, RulesMessages> = {
     en: en_messages,
@@ -24,10 +24,10 @@ export class TvLocal {
    * @returns The messages object for the specified language
    */
   static getMessages(local?: string) {
-    local = local ?? TvLocal.DEFAULT_LANG;
-    let messages = TvLocal._message[local];
+    local = local ?? TrLocal.DEFAULT_LANG;
+    let messages = TrLocal._message[local];
     if (!messages) {
-      messages = TvLocal._message[TvLocal.DEFAULT_LANG];
+      messages = TrLocal._message[TrLocal.DEFAULT_LANG];
     }
     return messages;
   }
@@ -41,7 +41,7 @@ export class TvLocal {
    * @returns The message for the specified rule and language, or the default message if not found
    */
   static getRuleMessage(rule: string | Rule, local?: string) {
-    const messages: Record<string | Rule, string> = TvLocal.getMessages(local);
+    const messages: Record<string | Rule, string> = TrLocal.getMessages(local);
     return messages[rule] ?? messages["default"];
   }
 
@@ -55,9 +55,9 @@ export class TvLocal {
    */
   static addMessage(rule: string, message?: string, local?: string) {
     if (message) {
-      const messages = TvLocal.getMessages(local);
+      const messages = TrLocal.getMessages(local);
       messages[rule] = message;
-      TvLocal.putMessages(messages, local);
+      TrLocal.putMessages(messages, local);
     }
   }
 
@@ -73,13 +73,13 @@ export class TvLocal {
       throw new Error("The 'messages' argument must be a non-empty object");
     }
 
-    local = local || TvLocal.DEFAULT_LANG;
+    local = local || TrLocal.DEFAULT_LANG;
 
-    const existingMessages = TvLocal._message[local] || {};
+    const existingMessages = TrLocal._message[local] || {};
 
     const mergedMessages = { ...existingMessages, ...messages };
 
-    TvLocal._message[local] = mergedMessages;
+    TrLocal._message[local] = mergedMessages;
   }
 
   /**
@@ -99,7 +99,7 @@ export class TvLocal {
         "The second argument must be a valid key/value pair object"
       );
 
-    TvLocal._message[lang] = { ...TvLocal.getMessages(lang), ...messages };
+    TrLocal._message[lang] = { ...TrLocal.getMessages(lang), ...messages };
   }
 
   /**
@@ -111,7 +111,7 @@ export class TvLocal {
    * @param message The new message
    */
   static rewrite(lang: string, rule: string | Rule, message: string) {
-    TvLocal.addMessage(rule, message, lang);
+    TrLocal.addMessage(rule, message, lang);
   }
 
   /**
@@ -142,7 +142,7 @@ export class TvLocal {
     for (let i = 0; i < rules.length; i++) {
       const rule = rules[i];
       const message = messages[i];
-      TvLocal.rewrite(lang, rule, message);
+      TrLocal.rewrite(lang, rule, message);
     }
   }
 
@@ -156,7 +156,7 @@ export class TvLocal {
     if (!is_string(lang) || !lang.length) {
       throw new Error("The language must be a valid string");
     }
-    TvLocal._useLang = lang;
+    TrLocal._useLang = lang;
   }
 
   /**
@@ -166,6 +166,6 @@ export class TvLocal {
    * @returns The currently set language code
    */
   static getLocal() {
-    return TvLocal._useLang ?? TvLocal.LANG;
+    return TrLocal._useLang ?? TrLocal.LANG;
   }
 }

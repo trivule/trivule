@@ -41,12 +41,12 @@ import {
   greaterthan,
 } from "../rules";
 import { afterDate, beforeDate, isDate, isTime } from "../rules/date";
-import { TvLocal } from "../locale/tv-local";
+import { TrLocal } from "../locale/tr-local";
 import { phone } from "../rules/phone";
-interface ITvBag {
+interface ITrBag {
   [key: string | Rule]: any;
 }
-export class TvBag implements ITvBag {
+export class TrBag implements ITrBag {
   private static rules: RulesBag = {
     required: required,
     email: email,
@@ -114,8 +114,8 @@ export class TvBag implements ITvBag {
     message?: string,
     local?: string
   ) {
-    TvBag.addRule(rule, callback);
-    TvBag.addMessage(rule, message, local);
+    TrBag.addRule(rule, callback);
+    TrBag.addMessage(rule, message, local);
   }
   /**
    * Add a custom validation rule to the rules bag
@@ -123,7 +123,7 @@ export class TvBag implements ITvBag {
    * @param callback - The callback function for the custom rule
    */
   static addRule(rule: string, callback: RuleCallBack) {
-    TvBag.rules[rule as keyof RulesBag] = callback;
+    TrBag.rules[rule as keyof RulesBag] = callback;
   }
 
   /**
@@ -132,7 +132,7 @@ export class TvBag implements ITvBag {
    * @param message - The error message for the validation rule
    */
   static addMessage(rule: string, message?: string, local?: string) {
-    TvLocal.addMessage(rule, message, local);
+    TrLocal.addMessage(rule, message, local);
   }
 
   /**
@@ -141,20 +141,20 @@ export class TvBag implements ITvBag {
    * @returns True if the rule exists, false otherwise
    */
   static hasRule(rule: string): boolean {
-    return rule in TvBag.rules;
+    return rule in TrBag.rules;
   }
 
   static getRule(name: string) {
-    return TvBag.rules[name as Rule];
+    return TrBag.rules[name as Rule];
   }
   static getMessage(name: string | Rule, local?: string): string {
-    return TvLocal.getRuleMessage(name, local);
+    return TrLocal.getRuleMessage(name, local);
   }
 
   static allRules() {
-    return TvBag.rules;
+    return TrBag.rules;
   }
   static allMessages(local?: string) {
-    return TvLocal.getMessages(local);
+    return TrLocal.getMessages(local);
   }
 }

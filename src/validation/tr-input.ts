@@ -1,6 +1,6 @@
-import { ITvConfig, RuleCallBack } from "../contracts";
-import { TrivuleInputValidator } from "./tv-input-validator";
-import { TvBag } from "./tv-bag";
+import { ITrConfig, RuleCallBack } from "../contracts";
+import { TrivuleInputralidator } from "./tr-input-validator";
+import { TrBag } from "./tr-bag";
 import {
   EventCallback,
   TrivuleInputParms,
@@ -19,7 +19,7 @@ import {
  * trivuleInput.init();
  * ```
  */
-export class TrivuleInput extends TrivuleInputValidator {
+export class TrivuleInput extends TrivuleInputralidator {
   constructor(inputElement: ValidatableInput, param?: TrivuleInputParms) {
     super(inputElement, param);
   }
@@ -46,7 +46,7 @@ export class TrivuleInput extends TrivuleInputValidator {
    * @param message
    */
   rule(ruleName: string, call: RuleCallBack, message?: string) {
-    TvBag.rule(ruleName, call, message);
+    TrBag.rule(ruleName, call, message);
   }
 
   with(param: TrivuleInputParms) {
@@ -59,13 +59,13 @@ export class TrivuleInput extends TrivuleInputValidator {
   }
 
   onFails(fn: EventCallback) {
-    this.on("tv.input.fails", (e) => {
+    this.on("tr.input.fails", (e) => {
       this.__call(fn);
     });
   }
 
   onPasses(fn: EventCallback) {
-    this.on("tv.input.passes", (e) => {
+    this.on("tr.input.passes", (e) => {
       this.__call(fn);
     });
   }

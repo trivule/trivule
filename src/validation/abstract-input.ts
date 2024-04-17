@@ -1,7 +1,7 @@
-import { TValidation, TvBag } from ".";
+import { TrValidation, TrBag } from ".";
 import { Rule, RulesMessages } from "../contracts";
 import { TrivuleInputParms, ValidatableInput } from "../contracts/types";
-import { TvLocal } from "../locale/tv-local";
+import { TrLocal } from "../locale/tr-local";
 import { ValidationErrorMessage } from "../messages";
 import { getRule } from "../utils";
 import { NativeValidation } from "./native-validation";
@@ -9,7 +9,7 @@ import { NativeValidation } from "./native-validation";
 /**
  * @author Claude Fassinou
  */
-export abstract class AbstractInputValidator {
+export abstract class AbstractInputralidator {
   /**
    * This status indicates the current state of the form
    */
@@ -17,7 +17,7 @@ export abstract class AbstractInputValidator {
   /**
    * Trivule Validator
    */
-  protected validator!: TValidation;
+  protected validator!: TrValidation;
   /** Input element which must be validate */
   protected inputElement!: HTMLInputElement;
   /** Error feedback element */
@@ -65,7 +65,7 @@ export abstract class AbstractInputValidator {
   };
 
   constructor(selector: ValidatableInput, params?: TrivuleInputParms) {
-    this.validator = new TValidation(this.param);
+    this.validator = new TrValidation(this.param);
     this.setInputElement(selector);
     this._setParams(params);
 
@@ -73,7 +73,7 @@ export abstract class AbstractInputValidator {
     this.setInputName();
     this.setFeedbackElement();
     this.setShowMessage();
-    this._setValidationClass();
+    this._setralidationClass();
 
     this._setErrors();
     this._setEvent(params?.events);
@@ -84,13 +84,13 @@ export abstract class AbstractInputValidator {
    * @returns
    */
   setRules(rules?: string[]) {
-    let ruleSrring: string = this.inputElement.dataset.tvRules ?? "";
+    let ruleSrring: string = this.inputElement.dataset.trRules ?? "";
 
     if (ruleSrring) {
       const rulesClean = ruleSrring.split("|").filter((r) => r.length > 0);
       //Register each rule
       for (const rule of rulesClean as Rule[]) {
-        if (TvBag.hasRule(getRule(rule).ruleName)) {
+        if (TrBag.hasRule(getRule(rule).ruleName)) {
           this.rules.push(rule);
         } else {
           throw new Error(
@@ -99,7 +99,7 @@ export abstract class AbstractInputValidator {
         }
       }
     }
-    //Merge with natve attributes validation rules
+    //Merge with natre attributes validation rules
     const nativeValidation = new NativeValidation(this.inputElement);
     //Merge rules
     this.rules = nativeValidation.merge((rules as Rule[]) ?? this.rules);
@@ -111,7 +111,7 @@ export abstract class AbstractInputValidator {
   abstract validate(): boolean;
 
   protected _setEvent(events?: string[]) {
-    const ev = this.inputElement.dataset.tvEvents;
+    const ev = this.inputElement.dataset.trEvents;
 
     if (ev) {
       this.param.events = ev.split("|").length
@@ -163,8 +163,8 @@ export abstract class AbstractInputValidator {
     this.name = name;
     let attr = this.name;
 
-    if (this.inputElement.dataset.tvName) {
-      attr = this.inputElement.dataset.tvName;
+    if (this.inputElement.dataset.trName) {
+      attr = this.inputElement.dataset.trName;
     }
 
     this.param.attribute = attr;
@@ -178,7 +178,7 @@ export abstract class AbstractInputValidator {
   }
 
   /**
-   * Searches for the closest HTML element with a custom data attribute "data-tv-feedback"
+   * Searches for the closest HTML element with a custom data attribute "data-tr-feedback"
    * that is associated with the current input element, and stores a reference to it.
    *
    */
@@ -190,7 +190,7 @@ export abstract class AbstractInputValidator {
 
     while (parentElement && !feedbackElement) {
       feedbackElement = parentElement.querySelector(
-        `[data-tv-feedback='${this.name}']`
+        `[data-tr-feedback='${this.name}']`
       );
       parentElement = parentElement.parentElement;
     }
@@ -199,7 +199,7 @@ export abstract class AbstractInputValidator {
   }
 
   /**
-   * Shows error messages based on the value of the "tv-show" attribute
+   * Shows error messages based on the value of the "tr-show" attribute
    * The "showMessage" property determines how the error messages are displayed.
    *
    */
@@ -227,25 +227,25 @@ export abstract class AbstractInputValidator {
    * Get and set the ways error message will be displayed
    */
   private setShowMessage() {
-    this.showMessage = this.inputElement.dataset.tvShow ?? "first";
+    this.showMessage = this.inputElement.dataset.trShow ?? "first";
     this.showMessage = this.showMessages.includes(this.showMessage)
       ? this.showMessage
       : "first";
   }
 
-  private _setValidationClass() {
+  private _setralidationClass() {
     //Set class from config
 
     this.invalidClass =
-      this.inputElement.dataset.tvInvalidClass ?? this.invalidClass;
-    this.validClass = this.inputElement.dataset.tvValidClass ?? this.validClass;
+      this.inputElement.dataset.trInvalidClass ?? this.invalidClass;
+    this.validClass = this.inputElement.dataset.trValidClass ?? this.validClass;
 
     //Overwrite class if they on attribute
     this.invalidClass = this.param.invalidClass ?? this.invalidClass;
     this.validClass = this.param.validClass ?? this.validClass;
   }
 
-  protected setValidationClass() {
+  protected setralidationClass() {
     const isValid = this._passed;
     const removeClass = (cls: string) => {
       if (cls.length > 0) {
@@ -261,16 +261,16 @@ export abstract class AbstractInputValidator {
     if (isValid) {
       this.invalidClass.split(" ").forEach(removeClass);
       this.validClass.split(" ").forEach(addClass);
-      this.inputElement.setAttribute("data-tv-valid", "1");
+      this.inputElement.setAttribute("data-tr-valid", "1");
     } else {
       this.validClass.split(" ").forEach(removeClass);
       this.invalidClass.split(" ").forEach(addClass);
-      this.inputElement.setAttribute("data-tv-valid", "0");
+      this.inputElement.setAttribute("data-tr-valid", "0");
     }
   }
 
   private _setErrors(errors?: RulesMessages) {
-    const elMessages = this.inputElement.dataset.tvMessages;
+    const elMessages = this.inputElement.dataset.trMessages;
     let oms: RulesMessages = {} as any;
     for (let i = 0; i < this.rules.length; i++) {
       let messages =
@@ -284,7 +284,7 @@ export abstract class AbstractInputValidator {
       if (typeof customMessage == "string" && customMessage.length > 0) {
         oms[rule] = customMessage;
       } else {
-        oms[rule] = TvLocal.getRuleMessage(rule, TvLocal.getLocal());
+        oms[rule] = TrLocal.getRuleMessage(rule, TrLocal.getLocal());
       }
     }
 
@@ -302,7 +302,7 @@ export abstract class AbstractInputValidator {
   getName() {
     return this.name;
   }
-  getValue() {
+  getralue() {
     if (this.inputElement.type.toLowerCase() == "file") {
       return this.inputElement.files ? this.inputElement.files[0] : null;
     } else {
