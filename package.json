@@ -15,7 +15,7 @@
   },
   "docs": "https://github.com/trivule/trivule/blob/main/readme.md",
   "scripts": {
-    "test": "jest --watchAll",
+    "test": "jest",
     "dev": "vite",
     "build": "tsc && vite build",
     "build:watch": "tsc && vite build --watch",
