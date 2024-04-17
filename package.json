@@ -1,0 +1,41 @@
+{
+  "name": "trivule",
+  "version": "2.0.0-alpha.2",
+  "description": "Trivule is a lightweight form validation library for web applications",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "typings": "./types/src/index.d.ts",
+  "files": [
+    "./dist",
+    "./types"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/trivule/trivule"
+  },
+  "docs": "https://github.com/trivule/trivule/blob/main/readme.md",
+  "scripts": {
+    "test": "jest --watchAll",
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "build:watch": "tsc && vite build --watch",
+    "preview": "vite preview"
+  },
+  "keywords": [
+    "Validation, Form validation"
+  ],
+  "author": "Fassinou Claude (dev.claudy@gmail.com)",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/jest": "^29.5.1",
+    "jest": "^29.5.0",
+    "jest-environment-jsdom": "^29.5.0",
+    "ts-jest": "^29.0.5",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.0.3",
+    "vite": "^4.3.2"
+  },
+  "dependencies": {
+    "dayjs": "^1.11.7"
+  }
+}
