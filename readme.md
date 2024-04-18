@@ -9,9 +9,9 @@ Trivule is a user-friendly JavaScript library for HTML form validation. It allow
 4. Trivule is an open-source and free library.
 
 
-To get started with Trivule, please refer to the comprehensive documentation available [here](https://trivule.vercel.app/). You can also follow a quick tutorial of less than 5 minutes [here](https://trivule.vercel.app/docs/tutorial) to familiarize yourself with Trivule.
+To get started with Trivule, please refer to the comprehensive documentation available [here](http://www.trivule.com/). You can also follow a quick tutorial of less than 5 minutes [here](http://www.trivule.com/docs/tutorial) to familiarize yourself with Trivule.
 
-[Documentation](https://trivule.vercel.app)
+[Documentation](http://www.trivule.com/)
 
 ## Development
 If you would like to contribute to the development of Trivule or customize the library, here's what you need:
@@ -62,7 +62,7 @@ The directory structure of the Trivule project is organized as follows:
 
 The Trivule library is available on [GitHub](https://github.com/trivule/trivule) under an open-source license.
 
-We would be delighted to receive your contributions to the Trivule project. Please refer to our [contribution guidelines](https://trivule.vercel.app/docs/contribution) for more information. Also, make sure to review our [code of conduct](https://trivule.vercel.app/docs/contribution#code-de-conduite) before contributing.
+We would be delighted to receive your contributions to the Trivule project. Please refer to our [contribution guidelines](http://www.trivule.com/docs/contribution) for more information. Also, make sure to review our [code of conduct](http://www.trivule.com/docs/contribution#code-de-conduite) before contributing.
 
 Thank you to all the contributors who are involved in the development of Trivule.
 
@@ -73,7 +73,7 @@ If you have any questions or concerns, you can contact us via email at dev.claud
 
 
 
-Trivule is released under our [license](https://trivule.vercel.app/docs/license) and developed by [Claude Fassinou](https://github.com/Claudye) and contributors.
+Trivule is released under our [license](http://www.trivule.com/docs/license) and developed by [Claude Fassinou](https://github.com/Claudye) and contributors.
 
 Best regards
 
