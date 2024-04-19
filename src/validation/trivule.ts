@@ -27,7 +27,7 @@ export class Trivule {
     document
       .querySelectorAll<HTMLFormElement>("form")
       .forEach((formElement) => {
-        new TrivuleForm(formElement).init();
+        new TrivuleForm(formElement, this.config).init();
       });
   }
   /**
@@ -49,6 +49,7 @@ export class Trivule {
    */
   protected setConfig(config?: ITrConfig) {
     this.config = TrConfig;
+
     if (config && typeof config === "object") {
       this.config = { ...this.config, ...config };
     }
