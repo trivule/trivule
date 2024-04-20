@@ -54,7 +54,8 @@ export class TrValidation {
    * A list of rules run
    */
   private _ruleExecuted: RuleExecuted[] = [];
-
+  /**
+ 
   /**
    * A boolean value indicating whether the validation rules should
    * fail on the first error or continue executing all rules
@@ -118,6 +119,7 @@ export class TrValidation {
         ruleExec.valueTested = this._value;
         ruleExec.run = true;
       }
+      // If rule is setup to stop on first fails
       if (this._failOnfirst) {
         if (!ruleExec.passed) {
           this._parseRuleMessage(ruleExec);
@@ -283,5 +285,8 @@ export class TrValidation {
       }
     }
     return ruleToRun;
+  }
+  getRuleExecuted(): RuleExecuted[] {
+    return this._ruleExecuted;
   }
 }

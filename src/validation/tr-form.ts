@@ -1,11 +1,11 @@
 import {
   EventCallback,
-  EventCallbackWithDetails,
   TrivuleFormConfig,
   TrivuleFormHandler,
   TrivuleInputParms,
   RuleCallBack,
   ValidatableForm,
+  ITrivuleInputObject,
 } from "../contracts";
 import { TrLocal } from "../locale/tr-local";
 import { FormValidator } from "../rules/form/form-validator";
@@ -199,6 +199,62 @@ export class TrivuleForm {
       trivuleInput.onFails(this._handle.bind(this));
       trivuleInput.onPasses(this._handle.bind(this));
     });
+  }
+  /**
+   * Retrieves all inputs from the form.
+   * @param strict - If true, returns objects with only name, value, and validation status of each input; otherwise, returns TrivuleInput instances.
+   * @returns An array of all inputs based on the strict flag.
+   */
+
+  inputs(strict = true): ITrivuleInputObject[] | TrivuleInput[] {
+    if (strict) {
+      return this._trivuleInputs.map(this.getInputsMap);
+    }
+    return this._trivuleInputs;
+  }
+  /**
+   * Retrieves the list of validated inputs.
+   * @param strict - If true, returns objects with only name, value, and validation status of each input; otherwise, returns TrivuleInput instances.
+   * @returns An array of validated inputs based on the strict flag.
+   */
+
+  validated(strict: boolean = false): ITrivuleInputObject[] | TrivuleInput[] {
+    if (strict) {
+      return this._trivuleInputs
+        .filter((t) => t.passes())
+        .map(this.getInputsMap);
+    }
+    return this._trivuleInputs.filter((t) => t.passes());
+  }
+  /**
+   * Retrieves the list of failed inputs.
+   * @param strict - If true, returns objects with only name, value, and validation status of each input; otherwise, returns TrivuleInput instances.
+   * @returns An array of failed inputs based on the strict flag.
+   */
+
+  failed(strict: boolean = false): ITrivuleInputObject[] | TrivuleInput[] {
+    if (strict) {
+      return this._trivuleInputs
+        .filter((t) => t.fails())
+        .map(this.getInputsMap);
+    }
+    return this._trivuleInputs.filter((t) => t.fails());
+  }
+  /**
+   * Converts a TrivuleInput instance into an ITrivuleInputObject format.
+   * @param trivuleInput - The TrivuleInput instance to convert.
+   * @returns An object representing the input data: name, value, and validation status.
+   */
+  private getInputsMap(trivuleInput: TrivuleInput): ITrivuleInputObject {
+    return {
+      name: trivuleInput.getName(),
+      value: trivuleInput.getValue(),
+      valid: trivuleInput.passes(),
+      rules: trivuleInput.getRules(),
+      ruleExecuted: trivuleInput.getRuleExecuted().map((rule) => {
+        return { rule: rule.ruleName, passed: rule.passed };
+      }),
+    };
   }
   /**
    * Check if inputs are valid, and emit the corresponding event if necessary
@@ -465,11 +521,11 @@ export class TrivuleForm {
     //If tr.form.fails
     if (this._emitOnFails) {
       this.emit("tr.form.fails", this);
-      this.emit("tr.form.validate", this);
       this._emitOnFails = false;
       //Open _emitOnPasses, for the next tr.form.passes event
       this._emitOnPasses = true;
     }
+    this.emit("tr.form.validate", this);
   }
   /**
    * Emits the "tr.form.passes" event if the form passes validation.
@@ -479,11 +535,12 @@ export class TrivuleForm {
     //If tr.form.passes
     if (this._emitOnPasses) {
       this.emit("tr.form.passes", this);
-      this.emit("tr.form.validate", this);
       this._emitOnPasses = false;
       //Open _emitOnFails, for the next tr.form.fails event
       this._emitOnFails = true;
     }
+
+    this.emit("tr.form.validate", this);
   }
   /**
    * Syncronize form rules with the global rules

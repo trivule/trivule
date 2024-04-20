@@ -1,6 +1,9 @@
 import { InputralueType, Rule } from "../../contracts";
 
 export class RuleExecuted {
+  /**
+   * Test if the rule passed
+   */
   passed: boolean = false;
   valueTested: InputralueType;
   ruleName!: Rule | string;

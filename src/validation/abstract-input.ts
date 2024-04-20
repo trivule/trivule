@@ -302,7 +302,7 @@ export abstract class AbstractInputralidator {
   getName() {
     return this.name;
   }
-  getralue() {
+  getValue() {
     if (this.inputElement.type.toLowerCase() == "file") {
       return this.inputElement.files ? this.inputElement.files[0] : null;
     } else {

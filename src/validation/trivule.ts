@@ -15,6 +15,11 @@ import { TrivuleForm } from "./tr-form";
  */
 export class Trivule {
   /**
+   * Forms to validate array
+   */
+  private _trForms: TrivuleForm[] = [];
+
+  /**
    * Default configuration
    */
   protected config: ITrConfig = TrConfig;
@@ -27,7 +32,9 @@ export class Trivule {
     document
       .querySelectorAll<HTMLFormElement>("form")
       .forEach((formElement) => {
-        new TrivuleForm(formElement, this.config).init();
+        const trForm = new TrivuleForm(formElement, this.config);
+        trForm.init();
+        this._trForms.push(trForm);
       });
   }
   /**
@@ -43,6 +50,11 @@ export class Trivule {
   rule(ruleName: string, call: RuleCallBack, message?: string) {
     TrBag.rule(ruleName, call, message);
   }
+
+  forms(): TrivuleForm[] {
+    return this._trForms;
+  }
+
   /**
    * Set default configuration
    * @param config
