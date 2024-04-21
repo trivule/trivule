@@ -67,7 +67,7 @@ We would be delighted to receive your contributions to the Trivule project. Plea
 Thank you to all the contributors who are involved in the development of Trivule.
 
 Useful links:
-- Discord: [https://discord.gg/wPPAfq5n](https://discord.gg/wPPAfq5n) 
+- Discord: [https://discord.gg/6xKyDWA8TQ(https://discord.gg/6xKyDWA8TQ) 
 
 If you have any questions or concerns, you can contact us via email at dev.claudy@gmail.com.
 
