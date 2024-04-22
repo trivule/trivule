@@ -5,16 +5,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <style>
-      form {
-        width: 80%;
-        min-width: 355px;
-        margin: 0 auto;
-      }
-      form > div {
-        margin-bottom: 0.75rem;
-      }
       [data-tr-feedback] {
-        color: red;
+        color: rgb(231, 47, 47);
+        font-family: "Courier New", Courier, monospace;
+        margin-top: 5px;
+        font-size: 12px;
+        font-weight: 400;
       }
       input,
       textarea,
@@ -130,71 +126,38 @@
       p {
         margin-bottom: 10px;
       }
+      .disabled {
+        opacity: 0.5;
+        pointer-events: none;
+      }
+      .enabled {
+        opacity: 1;
+        pointer-events: auto;
+      }
+
+      .form {
+        width: 350px;
+        font-family: sans-serif;
+        font-weight: bold;
+        padding: 20px;
+        margin: 20px;
+      }
     </style>
     <title>Trivule</title>
   </head>
   <body>
-    <form action="">
-      <div>
-        <label class="label">Age</label>
-        <div>
-          <input
-            class="border p-3"
-            data-tr-rules
-            type="number"
-            name="age"
-            min="2"
-            required
-          />
-        </div>
-        <div data-tr-feedback="age"></div>
-      </div>
-      <div>
-        <label class="label">Name</label>
-        <div>
-          <input
-            class="border p-3"
-            data-tr-rules="startWithUpper|startWithLetter|endWithLetter"
-            type="text"
-            name="name"
-            min="2"
-            max="15"
-            required
-          />
-        </div>
-        <div data-tr-feedback="name"></div>
-      </div>
-      <div>
-        <label for="">Email</label>
-        <input type="text" data-tr-rules="required|email" name="email" />
-        <div data-tr-feedback="email"></div>
-      </div>
-      <div>
-        <label for="">Confirm email</label>
-        <input
-          type="text"
-          data-tr-rules="required|same:email"
-          name="confirm_email"
-        />
-        <div data-tr-feedback="confirm_email"></div>
-      </div>
+    <div class="form">
+      <label class="label"> Indicate your birth day</label>
+      <input
+        type="date"
+        data-tr-rules="required|before:2006-01-01"
+        data-tr-messages="The birth day is required|You must be at least 18 years old"
+        data-tr-valid-class="success"
+        name="birthDay"
+      />
+      <div data-tr-feedback="birthDay"></div>
+    </div>
 
-      <div>
-        <label class="label">Date</label>
-        <input
-          type="date"
-          data-tr-rules="required|date|after:now"
-          name="date"
-        />
-        <div data-tr-feedback="date"></div>
-      </div>
-
-      <p>
-        <button type="submit" value="Submit" class="text-white p-3">
-          Submit
-        </button>
-      </p>
-    </form>
-    <script src="/src/example.ts" type="module"></script>
+    <script type="module" src="/src/example.ts"></script>
   </body>
 </html>

@@ -3,7 +3,7 @@ import { Rule, RulesMessages } from "../contracts";
 import { TrivuleInputParms, ValidatableInput } from "../contracts/types";
 import { TrLocal } from "../locale/tr-local";
 import { ValidationErrorMessage } from "../messages";
-import { getRule } from "../utils";
+import { getRule, tr_attr_get } from "../utils";
 import { NativeValidation } from "./native-validation";
 
 /**
@@ -73,7 +73,7 @@ export abstract class AbstractInputralidator {
     this.setInputName();
     this.setFeedbackElement();
     this.setShowMessage();
-    this._setralidationClass();
+    this._setTrValidationClass();
 
     this._setErrors();
     this._setEvent(params?.events);
@@ -233,16 +233,20 @@ export abstract class AbstractInputralidator {
       : "first";
   }
 
-  private _setralidationClass() {
-    //Set class from config
-
-    this.invalidClass =
-      this.inputElement.dataset.trInvalidClass ?? this.invalidClass;
-    this.validClass = this.inputElement.dataset.trValidClass ?? this.validClass;
-
-    //Overwrite class if they on attribute
+  private _setTrValidationClass() {
     this.invalidClass = this.param.invalidClass ?? this.invalidClass;
     this.validClass = this.param.validClass ?? this.validClass;
+
+    this.invalidClass = tr_attr_get(
+      this.inputElement,
+      "invalid-class",
+      this.invalidClass
+    );
+    this.validClass = tr_attr_get(
+      this.inputElement,
+      "valid-class",
+      this.validClass
+    );
   }
 
   protected setralidationClass() {

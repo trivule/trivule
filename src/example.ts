@@ -1,9 +1,4 @@
-import { Trivule, TrivuleForm, TrivuleInput } from "./validation";
-const tr = new TrivuleForm("form", {
-  validClass: "success",
-});
-tr.init();
+import { TrivuleInput } from "./validation";
 
-tr.onValidate((tr) => {
-  console.log(tr.inputs(true));
-});
+const trInput = new TrivuleInput("input");
+trInput.init();

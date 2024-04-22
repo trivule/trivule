@@ -1,4 +1,5 @@
 import { Rule } from "../contracts";
+import { is_string } from "../rules";
 
 /**
  * Parses a rule string and extracts the rule name and parameters.
@@ -79,4 +80,27 @@ export function isSubObject(
   }
 
   return true;
+}
+
+export function dataset_get<T = any>(
+  element: HTMLElement,
+  name: string,
+  defaults: any = null,
+  toJson = false
+): T {
+  let value = element.getAttribute(`data-${name}`);
+  if (!!value && toJson) {
+    value = JSON.parse(value);
+  }
+
+  return !!value || (is_string(value) && !!value?.length) ? value : defaults;
+}
+
+export function tr_attr_get<T = any>(
+  element: HTMLElement,
+  name: string,
+  defaults: any = null,
+  toJson = false
+): T {
+  return dataset_get<T>(element, `tr-${name}`, defaults, toJson);
 }

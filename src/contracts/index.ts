@@ -10,6 +10,14 @@ export interface ITrivuleInputObject {
     passed: boolean;
   }[];
 }
+
+export type InputType =
+  | "string"
+  | "date"
+  | "boolean"
+  | "number"
+  | "file"
+  | "date-local";
 export * from "./rule";
 export * from "./input-change-event";
 export * from "./rule-callback";
