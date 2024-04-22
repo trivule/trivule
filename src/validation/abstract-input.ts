@@ -84,7 +84,7 @@ export abstract class AbstractInputralidator {
    * @returns
    */
   setRules(rules?: string[]) {
-    let ruleSrring: string = this.inputElement.dataset.trRules ?? "";
+    let ruleSrring: string = tr_attr_get(this.inputElement, "rules");
 
     if (ruleSrring) {
       const rulesClean = ruleSrring.split("|").filter((r) => r.length > 0);
@@ -111,7 +111,7 @@ export abstract class AbstractInputralidator {
   abstract validate(): boolean;
 
   protected _setEvent(events?: string[]) {
-    const ev = this.inputElement.dataset.trEvents;
+    const ev = tr_attr_get(this.inputElement, "events", "");
 
     if (ev) {
       this.param.events = ev.split("|").length
@@ -161,11 +161,7 @@ export abstract class AbstractInputralidator {
     }
 
     this.name = name;
-    let attr = this.name;
-
-    if (this.inputElement.dataset.trName) {
-      attr = this.inputElement.dataset.trName;
-    }
+    let attr = tr_attr_get(this.inputElement, "name") ?? this.name;
 
     this.param.attribute = attr;
   }
@@ -227,7 +223,7 @@ export abstract class AbstractInputralidator {
    * Get and set the ways error message will be displayed
    */
   private setShowMessage() {
-    this.showMessage = this.inputElement.dataset.trShow ?? "first";
+    this.showMessage = tr_attr_get(this.inputElement, "show", "first");
     this.showMessage = this.showMessages.includes(this.showMessage)
       ? this.showMessage
       : "first";
@@ -274,7 +270,7 @@ export abstract class AbstractInputralidator {
   }
 
   private _setErrors(errors?: RulesMessages) {
-    const elMessages = this.inputElement.dataset.trMessages;
+    const elMessages = tr_attr_get<string>(this.inputElement, "messages", "");
     let oms: RulesMessages = {} as any;
     for (let i = 0; i < this.rules.length; i++) {
       let messages =

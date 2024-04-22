@@ -9,6 +9,7 @@ import {
 } from "../contracts";
 import { TrLocal } from "../locale/tr-local";
 import { FormValidator } from "../rules/form/form-validator";
+import { tr_attr_get } from "../utils";
 import { TrBag } from "./tr-bag";
 import { TrivuleInput } from "./tr-input";
 
@@ -45,11 +46,11 @@ export class TrivuleForm {
   /**
    * The class that indicates the submit button is enabled
    */
-  private _trEnabledClass = "trEnabled";
+  private _trEnabledClass = "enabled-class";
   /**
    * The class that indicates the submit button is disabled
    */
-  private _trDisabledClass = "trDisabled";
+  private _trDisabledClass = "tr-disabled";
 
   private _triggerValidationEvents = ["change", "tr.form.updated"];
   /**
@@ -140,8 +141,11 @@ export class TrivuleForm {
           this.submitButton.classList.remove(value);
         }
         //add class en disabled dataset
-        this._trDisabledClass =
-          this.submitButton.dataset.trDisabledClass ?? "trDisabled";
+        this._trDisabledClass = tr_attr_get(
+          this.submitButton,
+          "disabled-class",
+          this._trDisabledClass
+        );
         const classArray: string[] = this._trDisabledClass.split(" ");
         for (const value of classArray) {
           this.submitButton.classList.add(value);
@@ -163,8 +167,11 @@ export class TrivuleForm {
           this.submitButton.classList.remove(value);
         }
         //add class en enabled dataset
-        this._trEnabledClass =
-          this.submitButton.dataset.trEnabledClass ?? "trEnabled";
+        this._trEnabledClass = tr_attr_get(
+          this.submitButton,
+          "enabled-class",
+          this._trEnabledClass
+        );
         const classArray: string[] = this._trEnabledClass.split(" ");
         for (const value of classArray) {
           this.submitButton.classList.add(value);
@@ -321,12 +328,10 @@ export class TrivuleForm {
 
   protected setConfig(config?: TrivuleFormConfig) {
     let lang =
-      document.querySelector("html")?.getAttribute("data-tr-lang") ||
+      tr_attr_get(document.querySelector("html"), "lang") ||
       document.querySelector("html")?.getAttribute("lang");
 
-    if (this.container.dataset.trLang) {
-      lang = this.container.dataset.trLang;
-    }
+    lang = tr_attr_get(this.container, "lang", lang);
     if (config && typeof config === "object") {
       this.config = { ...this.config, ...config };
       if (config.local) {

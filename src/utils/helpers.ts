@@ -83,11 +83,14 @@ export function isSubObject(
 }
 
 export function dataset_get<T = any>(
-  element: HTMLElement,
+  element: HTMLElement | null | undefined,
   name: string,
   defaults: any = null,
   toJson = false
 ): T {
+  if (!element) {
+    return defaults;
+  }
   let value = element.getAttribute(`data-${name}`);
   if (!!value && toJson) {
     value = JSON.parse(value);
@@ -97,7 +100,7 @@ export function dataset_get<T = any>(
 }
 
 export function tr_attr_get<T = any>(
-  element: HTMLElement,
+  element: HTMLElement | null | undefined,
   name: string,
   defaults: any = null,
   toJson = false
