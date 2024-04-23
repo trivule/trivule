@@ -12,7 +12,10 @@ import { spliteParam, throwEmptyArgsException } from "../utils";
  * @returns `true` if the input value is a `File` or `Blob` object, `false` otherwise.
  */
 export const isFile: RuleCallBack = (value) => {
-  return value instanceof File || value instanceof Blob;
+  return {
+    passes: value instanceof File || value instanceof Blob,
+    value: value,
+  };
 };
 
 /**
@@ -28,7 +31,7 @@ export const isFile: RuleCallBack = (value) => {
  * @throws If the `maxSize` parameter is not in a valid format, an error is thrown.
  */
 export const maxFileSize: RuleCallBack = (input, maxSize) => {
-  if (isFile(input)) {
+  if (isFile(input).passes) {
     const file = input as File;
     const sizeInBytes = file.size;
     let maxSizeInBytes: number;
@@ -54,9 +57,15 @@ export const maxFileSize: RuleCallBack = (input, maxSize) => {
     } else {
       maxSizeInBytes = numericValue; // If no unit specified, consider it as bytes
     }
-    return sizeInBytes <= maxSizeInBytes;
+    return {
+      passes: sizeInBytes <= maxSizeInBytes,
+      value: input,
+    };
   } else {
-    return false;
+    return {
+      passes: false,
+      value: input,
+    };
   }
 };
 /**
@@ -98,9 +107,15 @@ export const minFileSize: RuleCallBack = (input, minSize) => {
     } else {
       minSizeInBytes = numericValue; // If no unit specified, consider it as bytes
     }
-    return sizeInBytes >= minSizeInBytes;
+    return {
+      passes: sizeInBytes >= minSizeInBytes,
+      value: input,
+    };
   } else {
-    return false;
+    return {
+      passes: false,
+      value: input,
+    };
   }
 };
 
@@ -117,7 +132,10 @@ export const minFileSize: RuleCallBack = (input, minSize) => {
  */
 export const fileBetween: RuleCallBack = (input, min_max) => {
   const [min, max] = spliteParam(min_max ?? "");
-  return maxFileSize(input, max) && minFileSize(input, min);
+  return {
+    passes: maxFileSize(input, max).passes && minFileSize(input, min).passes,
+    value: input,
+  };
 };
 
 /**
@@ -140,7 +158,7 @@ export const isMimes: RuleCallBack = (input, param: string) => {
     const file = input as File;
     const allowedMimes = param?.split(",").map((m) => m.trim()) ?? [];
 
-    return allowedMimes.some((allowedMime) => {
+    let passes = allowedMimes.some((allowedMime) => {
       allowedMime = allowedMime.replace(/\s/g, "");
       if (allowedMime === "*") {
         return true; // Wildcard (*) matches any MIME type
@@ -154,7 +172,14 @@ export const isMimes: RuleCallBack = (input, param: string) => {
         return file.type === allowedMime;
       }
     });
+    return {
+      passes: passes,
+      value: input,
+    };
   } else {
-    return false;
+    return {
+      passes: false,
+      value: input,
+    };
   }
 };

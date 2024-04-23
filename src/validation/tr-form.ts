@@ -1,14 +1,15 @@
 import {
   EventCallback,
-  EventCallbackWithDetails,
   TrivuleFormConfig,
   TrivuleFormHandler,
   TrivuleInputParms,
   RuleCallBack,
   ValidatableForm,
+  ITrivuleInputObject,
 } from "../contracts";
 import { TrLocal } from "../locale/tr-local";
 import { FormValidator } from "../rules/form/form-validator";
+import { tr_attr_get } from "../utils";
 import { TrBag } from "./tr-bag";
 import { TrivuleInput } from "./tr-input";
 
@@ -45,11 +46,11 @@ export class TrivuleForm {
   /**
    * The class that indicates the submit button is enabled
    */
-  private _trEnabledClass = "trEnabled";
+  private _trEnabledClass = "enabled-class";
   /**
    * The class that indicates the submit button is disabled
    */
-  private _trDisabledClass = "trDisabled";
+  private _trDisabledClass = "tr-disabled";
 
   private _triggerValidationEvents = ["change", "tr.form.updated"];
   /**
@@ -140,8 +141,11 @@ export class TrivuleForm {
           this.submitButton.classList.remove(value);
         }
         //add class en disabled dataset
-        this._trDisabledClass =
-          this.submitButton.dataset.trDisabledClass ?? "trDisabled";
+        this._trDisabledClass = tr_attr_get(
+          this.submitButton,
+          "disabled-class",
+          this._trDisabledClass
+        );
         const classArray: string[] = this._trDisabledClass.split(" ");
         for (const value of classArray) {
           this.submitButton.classList.add(value);
@@ -163,8 +167,11 @@ export class TrivuleForm {
           this.submitButton.classList.remove(value);
         }
         //add class en enabled dataset
-        this._trEnabledClass =
-          this.submitButton.dataset.trEnabledClass ?? "trEnabled";
+        this._trEnabledClass = tr_attr_get(
+          this.submitButton,
+          "enabled-class",
+          this._trEnabledClass
+        );
         const classArray: string[] = this._trEnabledClass.split(" ");
         for (const value of classArray) {
           this.submitButton.classList.add(value);
@@ -199,6 +206,62 @@ export class TrivuleForm {
       trivuleInput.onFails(this._handle.bind(this));
       trivuleInput.onPasses(this._handle.bind(this));
     });
+  }
+  /**
+   * Retrieves all inputs from the form.
+   * @param strict - If true, returns objects with only name, value, and validation status of each input; otherwise, returns TrivuleInput instances.
+   * @returns An array of all inputs based on the strict flag.
+   */
+
+  inputs(strict = true): ITrivuleInputObject[] | TrivuleInput[] {
+    if (strict) {
+      return this._trivuleInputs.map(this.getInputsMap);
+    }
+    return this._trivuleInputs;
+  }
+  /**
+   * Retrieves the list of validated inputs.
+   * @param strict - If true, returns objects with only name, value, and validation status of each input; otherwise, returns TrivuleInput instances.
+   * @returns An array of validated inputs based on the strict flag.
+   */
+
+  validated(strict: boolean = false): ITrivuleInputObject[] | TrivuleInput[] {
+    if (strict) {
+      return this._trivuleInputs
+        .filter((t) => t.passes())
+        .map(this.getInputsMap);
+    }
+    return this._trivuleInputs.filter((t) => t.passes());
+  }
+  /**
+   * Retrieves the list of failed inputs.
+   * @param strict - If true, returns objects with only name, value, and validation status of each input; otherwise, returns TrivuleInput instances.
+   * @returns An array of failed inputs based on the strict flag.
+   */
+
+  failed(strict: boolean = false): ITrivuleInputObject[] | TrivuleInput[] {
+    if (strict) {
+      return this._trivuleInputs
+        .filter((t) => t.fails())
+        .map(this.getInputsMap);
+    }
+    return this._trivuleInputs.filter((t) => t.fails());
+  }
+  /**
+   * Converts a TrivuleInput instance into an ITrivuleInputObject format.
+   * @param trivuleInput - The TrivuleInput instance to convert.
+   * @returns An object representing the input data: name, value, and validation status.
+   */
+  private getInputsMap(trivuleInput: TrivuleInput): ITrivuleInputObject {
+    return {
+      name: trivuleInput.getName(),
+      value: trivuleInput.getValue(),
+      valid: trivuleInput.passes(),
+      rules: trivuleInput.getRules(),
+      ruleExecuted: trivuleInput.getRuleExecuted().map((rule) => {
+        return { rule: rule.ruleName, passed: rule.passed };
+      }),
+    };
   }
   /**
    * Check if inputs are valid, and emit the corresponding event if necessary
@@ -265,12 +328,10 @@ export class TrivuleForm {
 
   protected setConfig(config?: TrivuleFormConfig) {
     let lang =
-      document.querySelector("html")?.getAttribute("data-tr-lang") ||
+      tr_attr_get(document.querySelector("html"), "lang") ||
       document.querySelector("html")?.getAttribute("lang");
 
-    if (this.container.dataset.trLang) {
-      lang = this.container.dataset.trLang;
-    }
+    lang = tr_attr_get(this.container, "lang", lang);
     if (config && typeof config === "object") {
       this.config = { ...this.config, ...config };
       if (config.local) {
@@ -465,11 +526,11 @@ export class TrivuleForm {
     //If tr.form.fails
     if (this._emitOnFails) {
       this.emit("tr.form.fails", this);
-      this.emit("tr.form.validate", this);
       this._emitOnFails = false;
       //Open _emitOnPasses, for the next tr.form.passes event
       this._emitOnPasses = true;
     }
+    this.emit("tr.form.validate", this);
   }
   /**
    * Emits the "tr.form.passes" event if the form passes validation.
@@ -479,11 +540,12 @@ export class TrivuleForm {
     //If tr.form.passes
     if (this._emitOnPasses) {
       this.emit("tr.form.passes", this);
-      this.emit("tr.form.validate", this);
       this._emitOnPasses = false;
       //Open _emitOnFails, for the next tr.form.fails event
       this._emitOnFails = true;
     }
+
+    this.emit("tr.form.validate", this);
   }
   /**
    * Syncronize form rules with the global rules

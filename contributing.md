@@ -11,7 +11,7 @@ If you encounter problems or have ideas for improvement, feel free to open an is
 If you'd like to make changes to the code, we encourage you to propose a pull request. Please follow the steps below:
 
 1. Fork the repository and clone it locally on your machine.
-2. Switch to the `2.0.0` branch you wish to work on.
+2. Switch to the `1.x` branch you wish to work on.
 3. Install the project's dependencies locally by running the following command:
 
 ```bash
@@ -43,7 +43,7 @@ The development team
 
 ### Step 1
 
-A Trivule rule is simply a callback function that handles validation according to your needs and must return a boolean value. It should implement the `RuleCallBack` interface defined in `./src/contracts/rule-callback.ts`.
+A Trivule rule is simply a callback function that handles validation according to your needs and must return a `ValidationState` value. It should implement the `RuleCallBack` interface defined in `./src/contracts/rule-callback.ts`.
 
 Based on the type of data your callback will validate, you should categorize it under one of the following files:
 
@@ -63,15 +63,18 @@ export const inInput: RuleCallBack = (input, params) => {
   if (!params) {
     throwEmptyArgsException("in");
   }
-  const list = splitParam(params as string);
-  return list.includes(input);
+  const list = spliteParam(params as string);
+  return {
+    passes: list.includes(input),
+    value: list,
+  };
 };
 ```
 
 Explanation:
 
-1. The first argument, `input`, corresponds to the current value of the field to be validated. It can be of types such as `string`, `Blob`, `File`, `number`, `null`, `boolean`, `undefined`, `FileList`.
-2. The second argument, `params`, corresponds to the possible arguments. The arguments are comma-separated strings. You can individually retrieve them using the `splitParam` function.
+1. The first argument, `input`, corresponds to the current value of the field to be validated. It can be of types such as `string`, `Blob`, `File`, `number`, `null`, `boolean`, `undefined`, `FileList`,`array` .
+2. The second argument, `params`, corresponds to the possible arguments. The arguments are  string or comma-separated strings. You can individually retrieve them using the `splitParam` function.
    For example, if you have an HTML field like this:
 
 ```html
@@ -82,7 +85,7 @@ The values after the colon (`:`) are the parameters. In this case, the second ar
 
 3. The rest of the code represents the logic of the callback. In this example, we check if the current value of the field is in the specified list and return the result.
 
-**_The callback must return a boolean value._**
+**_The callback must return a ValidationState object value._**
 
 #### Naming Convention
 
@@ -103,23 +106,24 @@ describe("inInput rule callback", () => {
   it("should return true if the input is in the list", () => {
     const input = "active";
     const params = "active, inactive, suspended";
-    const result = inInput(input, params);
+    const result = inInput(input, params).passes;
     expect(result).toBe(true);
   });
 
   it("should return false if the input is not in the list", () => {
     const input = "pending";
     const params = "active, inactive, suspended";
-    const result = inInput(input, params);
+    const result = inInput(input, params).passes;
     expect(result).toBe(false);
   });
 
-  it("should throw an error if the params argument is empty", () => {
+  it("should throw an error if params argument is empty", () => {
     const input = "active";
     const params = "";
     expect(() => inInput(input, params)).toThrow();
   });
 });
+
 ```
 
 You can run the tests using the following command:
@@ -132,7 +136,7 @@ Once your tests pass successfully, you can proceed to the next step.
 
 ### Step 3: Add the callback to the rules
 
-All Trivule rules are listed in the `Rule` type, which can be found in the `./src/contracts/rule.ts` file. You need to add your rule to this type for it to be recognized.
+Trivule rules are listed in the `Rule` type, which can be found in the `./src/contracts/rule.ts` file. You need to add your rule to this type for it to be recognized.
 
 Here's an example of adding the `in` rule:
 
@@ -161,7 +165,7 @@ export class TrBag implements ITrBag {
 
 In general, your rule is ready to be used once you have added it. However, you also need to assign a message to the rule. Otherwise, a default message will be used.
 
-To do this, you need to go to the `./src/local/lang` folder. There, you will find the two default languages supported by Trivule (English and French). You need to add the messages corresponding to your rule in these files.
+To do this, you need to go to the `./src/local/lang` folder. There, you will find the  default languages supported by Trivule (English). You need to add the messages corresponding to your rule in these files.
 
 Here's an example of adding messages for the `in` rule:
 
@@ -215,14 +219,14 @@ describe("inInput rule callback", () => {
   it("should return true if the input is in the list", () => {
     const input = "active";
     const params = "active, inactive, suspended";
-    const result = inInput(input, params);
+    const result = inInput(input, params).passes;
     expect(result).toBe(true);
   });
 
   it("should return false if the input is not in the list", () => {
     const input = "pending";
     const params = "active, inactive, suspended";
-    const result = inInput(input, params);
+    const result = inInput(input, params).passes;
     expect(result).toBe(false);
   });
 

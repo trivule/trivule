@@ -17,7 +17,10 @@ import { RuleCallBack } from "./../contracts/rule-callback";
 export const email: RuleCallBack = (input, ...options) => {
   const emailRegex =
     /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  return emailRegex.test(input);
+  return {
+    passes: emailRegex.test(input),
+    value: input,
+  };
 };
 
 /**
@@ -32,10 +35,10 @@ export const email: RuleCallBack = (input, ...options) => {
  * @returns Whether the input is at least the specified length.
  */
 export const minlength: RuleCallBack = (input, length) => {
-  if (!input) {
-    return false;
-  }
-  return is_string(input) ? input.length >= Number(length) : false;
+  return {
+    passes: is_string(input).passes ? input.length >= Number(length) : false,
+    value: input,
+  };
 };
 
 /**
@@ -50,10 +53,10 @@ export const minlength: RuleCallBack = (input, length) => {
  * @returns Whether the input is no more than the specified length.
  */
 export const maxlength: RuleCallBack = (input, length) => {
-  if (!input) {
-    return true;
-  }
-  return is_string(input) ? input.length <= Number(length) : false;
+  return {
+    passes: is_string(input).passes ? input.length <= Number(length) : true,
+    value: input,
+  };
 };
 /**
  * Checks if the input is a string.
@@ -62,7 +65,10 @@ export const maxlength: RuleCallBack = (input, length) => {
  * @returns Whether the input is a string.
  */
 export const is_string: RuleCallBack = (val: any) => {
-  return typeof val === "string";
+  return {
+    passes: typeof val === "string",
+    value: val,
+  };
 };
 
 /**
@@ -77,7 +83,10 @@ export const is_string: RuleCallBack = (val: any) => {
  */
 export const url: RuleCallBack = (input) => {
   const urlRegex = /^(ftp|http|https):\/\/[^ "]+$/;
-  return urlRegex.test(input);
+  return {
+    passes: urlRegex.test(input),
+    value: input,
+  };
 };
 
 /**
@@ -90,12 +99,18 @@ export const url: RuleCallBack = (input) => {
  * ```
  * @returns Whether the input starts with an uppercase letter.
  */
-export const startWithUpper: RuleCallBack = (input) => {
+export const startWithUpper: RuleCallBack = (input, local = "EN") => {
   if (typeof input !== "string" || input.length === 0) {
-    return false;
+    return {
+      passes: false,
+      value: input,
+    };
   }
   const regex = /^[A-Z]/;
-  return regex.test(input);
+  return {
+    passes: regex.test(input),
+    value: input,
+  };
 };
 
 /**
@@ -110,11 +125,20 @@ export const startWithUpper: RuleCallBack = (input) => {
  */
 
 export const startWithLower: RuleCallBack = (input) => {
-  if (typeof input !== "string" || input.length === 0) {
-    return false;
+  if (
+    typeof input !== "string" ||
+    input.length === 0 ||
+    input.charAt(0) === " "
+  ) {
+    return {
+      passes: false,
+      value: input,
+    };
   }
-  const regex = /^[a-z]/;
-  return regex.test(input);
+  return {
+    passes: input[0] == input[0].toLocaleLowerCase(),
+    value: input,
+  };
 };
 
 /**
@@ -134,10 +158,16 @@ export const startWith: RuleCallBack = (input, prefix) => {
     throwEmptyArgsException("startWith");
   }
   const prefixes = spliteParam(prefix ?? "");
-  if (!is_string(input)) {
-    return false;
+  if (!is_string(input).passes) {
+    return {
+      passes: false,
+      value: input,
+    };
   }
-  return prefixes.some((p) => input.startsWith(p));
+  return {
+    passes: prefixes.some((p) => input.startsWith(p)),
+    value: input,
+  };
 };
 
 /**
@@ -157,10 +187,16 @@ export const endWith: RuleCallBack = (input, suffix) => {
     throwEmptyArgsException("endWith");
   }
   const suffixes = spliteParam(suffix ?? "");
-  if (!is_string(input)) {
-    return false;
+  if (!is_string(input).passes) {
+    return {
+      passes: false,
+      value: input,
+    };
   }
-  return suffixes.some((s) => input.endsWith(s));
+  return {
+    passes: suffixes.some((s) => input.endsWith(s)),
+    value: input,
+  };
 };
 
 /**
@@ -180,12 +216,19 @@ export const contains: RuleCallBack = (input, substring) => {
     throwEmptyArgsException("contains");
   }
   const substrs = spliteParam(substring ?? "");
-  if (!is_string(input)) {
-    return false;
+  if (!is_string(input).passes) {
+    return {
+      passes: false,
+      value: input,
+    };
   }
-  return substrs.every((substr) => {
+  let passes = substrs.every((substr) => {
     return input.includes(new ArgumentParser(substr).replaceSpaces());
   });
+  return {
+    passes: passes,
+    value: input,
+  };
 };
 
 /**
@@ -202,7 +245,7 @@ export const contains: RuleCallBack = (input, substring) => {
  * @throws An exception with the message "The length rule argument must be an integer" if the `size` parameter is not an integer.
  */
 export const length: RuleCallBack = (input: any, size: any) => {
-  if (!isNumber(size)) {
+  if (!isNumber(size).passes) {
     throw new Error("The length rule argument must be an integer");
   }
   size = parseInt(size);
@@ -215,11 +258,14 @@ export const length: RuleCallBack = (input: any, size: any) => {
   ) {
     input = [];
   }
-
+  let passes = false;
   if (Array.isArray(input)) {
-    return input.length === size;
+    passes = input.length === size;
   }
-  return false;
+  return {
+    passes: passes,
+    value: input,
+  };
 };
 /**
  * Checks if the input is a valid password.
@@ -247,10 +293,16 @@ export const passwordRule: RuleCallBack = (input) => {
     !hasNumber ||
     !hasSpecialChar
   ) {
-    return false;
+    return {
+      passes: false,
+      value: input,
+    };
   }
 
-  return true;
+  return {
+    passes: true,
+    value: input,
+  };
 };
 
 /**
@@ -264,11 +316,21 @@ export const passwordRule: RuleCallBack = (input) => {
  * @returns `true` if the input starts with a letter, `false` otherwise.
  */
 export const startWithLetter: RuleCallBack = (input) => {
-  if (!is_string(input) || input.length === 0) {
-    return false;
+  if (
+    !is_string(input).passes ||
+    input.length === 0 ||
+    input.charAt(0) === " "
+  ) {
+    return {
+      passes: false,
+      value: input,
+    };
   }
-  const regex = /^[a-zA-Z]/;
-  return regex.test(input);
+  const regex = /^[0-9]/;
+  return {
+    passes: !regex.test(input),
+    value: input,
+  };
 };
 
 /**
@@ -282,11 +344,17 @@ export const startWithLetter: RuleCallBack = (input) => {
  * @returns `true` if the input ends with a letter, `false` otherwise.
  */
 export const endWithLetter: RuleCallBack = (input) => {
-  if (!is_string(input) || input.length === 0) {
-    return false;
+  if (!is_string(input).passes || input.length === 0) {
+    return {
+      passes: false,
+      value: input,
+    };
   }
-  const regex = /[a-zA-Z]$/;
-  return regex.test(input);
+  const regex = /[0-9]$/;
+  return {
+    passes: !regex.test(input),
+    value: input,
+  };
 };
 
 /**
@@ -301,10 +369,16 @@ export const endWithLetter: RuleCallBack = (input) => {
  */
 export const containsLetter: RuleCallBack = (input) => {
   if (typeof input !== "string") {
-    return false;
+    return {
+      passes: false,
+      value: input,
+    };
   }
-  const letterRegex = /[a-zA-Z]/;
-  return letterRegex.test(input);
+  const letterRegex = /^[0-9]$/;
+  return {
+    passes: !letterRegex.test(input),
+    value: input,
+  };
 };
 
 /**
@@ -323,12 +397,19 @@ export const excludes: RuleCallBack = (input, excludedChars) => {
   if (!chars.length) {
     throwEmptyArgsException("excludes");
   }
-  if (!is_string(input)) {
-    return true;
+  if (!is_string(input).passes) {
+    return {
+      passes: true,
+      value: input,
+    };
   }
-  return !chars.some((char) => {
-    return input.includes(new ArgumentParser(char).replaceSpaces());
-  });
+
+  return {
+    passes: !chars.some((char) => {
+      return input.includes(new ArgumentParser(char).replaceSpaces());
+    }),
+    value: input,
+  };
 };
 
 /**
@@ -343,7 +424,10 @@ export const excludes: RuleCallBack = (input, excludedChars) => {
  * @returns `true` if the input is all uppercase, `false` otherwise.
  */
 export const upper: RuleCallBack = (input, param?: string) => {
-  return input === input.toLocaleUpperCase();
+  return {
+    passes: input === input.toLocaleUpperCase(),
+    value: input,
+  };
 };
 
 /**
@@ -358,7 +442,10 @@ export const upper: RuleCallBack = (input, param?: string) => {
  * @returns `true` if the input is all lowercase, `false` otherwise.
  */
 export const lower: RuleCallBack = (input: string, param?: string) => {
-  return input === input.toLocaleLowerCase();
+  return {
+    passes: input === input.toLocaleLowerCase(),
+    value: input,
+  };
 };
 
 /**
@@ -374,5 +461,8 @@ export const lower: RuleCallBack = (input: string, param?: string) => {
  */
 export const stringBetween: RuleCallBack = (input: string, min_max) => {
   const [min, max] = spliteParam(min_max ?? "");
-  return minlength(input, min) && maxlength(input, max);
+  return {
+    passes: minlength(input, min).passes && maxlength(input, max).passes,
+    value: input,
+  };
 };

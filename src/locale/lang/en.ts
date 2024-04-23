@@ -62,4 +62,5 @@ export const en_messages: RulesMessages = {
   lthan: "This field must be a numeric value less than :arg0",
   greaterThan: "This field must be a numeric value greater than :arg0",
   gthan: "This field must be a numeric value greater than :arg0",
+  dateBetween: "The date must be between :arg0 and :arg1",
 };

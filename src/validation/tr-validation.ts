@@ -1,4 +1,4 @@
-import { Rule, RulesMessages } from "../contracts";
+import { InputType, Rule, RulesMessages } from "../contracts";
 import { TrBag } from "./tr-bag";
 import { getRule } from "../utils";
 import { InputralueType, TrivuleInputParms } from "../contracts/types";
@@ -10,35 +10,6 @@ import { TrLocal } from "../locale/tr-local";
  * @author Claude Fassinou
  */
 export class TrValidation {
-  private _rulesToMap = ["min", "max", "between", "size"];
-  /**
-   * Map of validation rules specific to field types.
-   * This map associates field types with the corresponding validation rules.
-   */
-  private _rulesFromTypes: Record<string, Record<string, string>> = {
-    min: {
-      text: "minlength",
-      file: "minFileSize",
-      date: "beforeDate",
-      "date-local": "beforeDate",
-    },
-    max: {
-      text: "maxlength",
-      file: "maxFileSize",
-      date: "afterDate",
-      "date-local": "afterDate",
-    },
-    between: {
-      text: "stringBetween",
-      file: "fileBetween",
-      date: "dateBetween",
-      "date-local": "dateBetween",
-    },
-    size: {
-      text: "length",
-    },
-  };
-
   private _inputType = "text";
   /**
    * The list of rules that should be executed on the value
@@ -54,7 +25,8 @@ export class TrValidation {
    * A list of rules run
    */
   private _ruleExecuted: RuleExecuted[] = [];
-
+  /**
+ 
   /**
    * A boolean value indicating whether the validation rules should
    * fail on the first error or continue executing all rules
@@ -94,10 +66,11 @@ export class TrValidation {
       throw new Error("The rule provided must be an array of Rule");
     }
 
+    let inputType = this._inputType as InputType;
     for (const rule of rules) {
       //Get rulename and param
       let { ruleName, params } = getRule(rule);
-      let ruleToRun = this._getRuleToRunName(ruleName);
+      let ruleToRun = ruleName;
 
       const ruleCallback = TrBag.getRule(ruleToRun);
 
@@ -114,19 +87,29 @@ export class TrValidation {
       if (ruleExec.wasRunWith(this._value)) {
         ruleExec.passed = ruleExec.passed;
       } else {
-        ruleExec.passed = ruleCallback(this._value, params);
+        const state = ruleCallback(this._value, params, inputType);
+        //Indicate if the rule passed
+        ruleExec.passed = state.passes;
+        //Get the value after validation
+        //The value may be converted by the validation callback
+        this._value = state.value;
+
+        inputType = state.type ?? inputType;
+        ruleToRun = state.alias ?? ruleName;
+        //
         ruleExec.valueTested = this._value;
         ruleExec.run = true;
       }
+      // If rule is setup to stop on first fails
       if (this._failOnfirst) {
         if (!ruleExec.passed) {
-          this._parseRuleMessage(ruleExec);
+          this._parseRuleMessage(ruleExec, ruleToRun);
           this._addRuleExecuted(ruleExec);
           break;
         }
       } else {
         if (!ruleExec.passed) {
-          this._parseRuleMessage(ruleExec);
+          this._parseRuleMessage(ruleExec, ruleToRun);
         } else {
           ruleExec.message = "";
         }
@@ -196,7 +179,7 @@ export class TrValidation {
       this._ruleExecuted.push(ruleExecuted);
     }
   }
-  private _parseRuleMessage(ruleExec: RuleExecuted) {
+  private _parseRuleMessage(ruleExec: RuleExecuted, aliasRule: string) {
     const orgMesage = TrLocal.getRuleMessage(ruleExec.orignalName);
     const supliedMessage = this._trmessages[ruleExec.orignalName];
 
@@ -204,7 +187,7 @@ export class TrValidation {
       this._trmessages[ruleExec.ruleName] = supliedMessage;
     } else {
       this._trmessages[ruleExec.ruleName] = TrLocal.getRuleMessage(
-        ruleExec.ruleName
+        aliasRule ?? ruleExec.ruleName
       );
     }
 
@@ -270,18 +253,7 @@ export class TrValidation {
     this._inputType = param.type ?? this._inputType;
   }
 
-  private _getRuleToRunName(ruleName: string) {
-    let ruleToRun = ruleName;
-    //If the rule can be mapped
-    if (this._rulesToMap.includes(ruleName)) {
-      const ruleMap = this._rulesFromTypes[ruleName];
-      if (ruleMap) {
-        const gettedRule = ruleMap[this._inputType];
-        if (is_string(gettedRule) && gettedRule.length > 0) {
-          ruleToRun = gettedRule as Rule;
-        }
-      }
-    }
-    return ruleToRun;
+  getRuleExecuted(): RuleExecuted[] {
+    return this._ruleExecuted;
   }
 }

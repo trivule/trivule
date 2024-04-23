@@ -3,7 +3,7 @@ import { Rule, RulesMessages } from "../contracts";
 import { TrivuleInputParms, ValidatableInput } from "../contracts/types";
 import { TrLocal } from "../locale/tr-local";
 import { ValidationErrorMessage } from "../messages";
-import { getRule } from "../utils";
+import { dataset_get, getRule, tr_attr_get } from "../utils";
 import { NativeValidation } from "./native-validation";
 
 /**
@@ -73,7 +73,7 @@ export abstract class AbstractInputralidator {
     this.setInputName();
     this.setFeedbackElement();
     this.setShowMessage();
-    this._setralidationClass();
+    this._setTrValidationClass();
 
     this._setErrors();
     this._setEvent(params?.events);
@@ -84,7 +84,11 @@ export abstract class AbstractInputralidator {
    * @returns
    */
   setRules(rules?: string[]) {
-    let ruleSrring: string = this.inputElement.dataset.trRules ?? "";
+    let ruleSrring: string = tr_attr_get(
+      this.inputElement,
+      "rules",
+      this.param.rules
+    );
 
     if (ruleSrring) {
       const rulesClean = ruleSrring.split("|").filter((r) => r.length > 0);
@@ -111,7 +115,7 @@ export abstract class AbstractInputralidator {
   abstract validate(): boolean;
 
   protected _setEvent(events?: string[]) {
-    const ev = this.inputElement.dataset.trEvents;
+    const ev = tr_attr_get(this.inputElement, "events", "");
 
     if (ev) {
       this.param.events = ev.split("|").length
@@ -161,11 +165,7 @@ export abstract class AbstractInputralidator {
     }
 
     this.name = name;
-    let attr = this.name;
-
-    if (this.inputElement.dataset.trName) {
-      attr = this.inputElement.dataset.trName;
-    }
+    let attr = tr_attr_get(this.inputElement, "name") ?? this.name;
 
     this.param.attribute = attr;
   }
@@ -227,22 +227,26 @@ export abstract class AbstractInputralidator {
    * Get and set the ways error message will be displayed
    */
   private setShowMessage() {
-    this.showMessage = this.inputElement.dataset.trShow ?? "first";
+    this.showMessage = tr_attr_get(this.inputElement, "show", "first");
     this.showMessage = this.showMessages.includes(this.showMessage)
       ? this.showMessage
       : "first";
   }
 
-  private _setralidationClass() {
-    //Set class from config
-
-    this.invalidClass =
-      this.inputElement.dataset.trInvalidClass ?? this.invalidClass;
-    this.validClass = this.inputElement.dataset.trValidClass ?? this.validClass;
-
-    //Overwrite class if they on attribute
+  private _setTrValidationClass() {
     this.invalidClass = this.param.invalidClass ?? this.invalidClass;
     this.validClass = this.param.validClass ?? this.validClass;
+
+    this.invalidClass = tr_attr_get(
+      this.inputElement,
+      "invalid-class",
+      this.invalidClass
+    );
+    this.validClass = tr_attr_get(
+      this.inputElement,
+      "valid-class",
+      this.validClass
+    );
   }
 
   protected setralidationClass() {
@@ -270,7 +274,7 @@ export abstract class AbstractInputralidator {
   }
 
   private _setErrors(errors?: RulesMessages) {
-    const elMessages = this.inputElement.dataset.trMessages;
+    const elMessages = tr_attr_get<string>(this.inputElement, "messages", "");
     let oms: RulesMessages = {} as any;
     for (let i = 0; i < this.rules.length; i++) {
       let messages =
@@ -302,7 +306,7 @@ export abstract class AbstractInputralidator {
   getName() {
     return this.name;
   }
-  getralue() {
+  getValue() {
     if (this.inputElement.type.toLowerCase() == "file") {
       return this.inputElement.files ? this.inputElement.files[0] : null;
     } else {
@@ -313,6 +317,10 @@ export abstract class AbstractInputralidator {
   protected _setParams(param?: TrivuleInputParms) {
     if (typeof param === "object" && typeof param !== "undefined") {
       this.param = { ...this.param, ...param };
+    }
+    const json = dataset_get(this.inputElement, "tr", null, true);
+    if (json) {
+      this.param = Object.assign(this.param, json);
     }
   }
 }

@@ -4,6 +4,7 @@ import {
   TrivuleInputParms,
   ValidatableInput,
 } from "../contracts/types";
+import { RuleExecuted } from "./utils/rule-executed";
 
 export class TrivuleInputralidator extends AbstractInputralidator {
   /**
@@ -15,6 +16,7 @@ export class TrivuleInputralidator extends AbstractInputralidator {
    */
   private _emitOnFails = true;
 
+  private _ruleExecuted: RuleExecuted[] = [];
   constructor(inputElement: ValidatableInput, params?: TrivuleInputParms) {
     super(inputElement, params);
   }
@@ -98,7 +100,8 @@ export class TrivuleInputralidator extends AbstractInputralidator {
    * ```
    */
   valid() {
-    this.validator.value = this.getralue();
+    this.validator.value = this.getValue();
+    this._ruleExecuted = this.validator.getRuleExecuted();
     return (this._passed = this.validator.passes());
   }
 
@@ -196,5 +199,9 @@ export class TrivuleInputralidator extends AbstractInputralidator {
     if (typeof fn == "function") {
       fn(...params);
     }
+  }
+
+  getRuleExecuted(): RuleExecuted[] {
+    return this.validator.getRuleExecuted();
   }
 }

@@ -8,6 +8,7 @@ import {
   minRule,
   is_string,
   stringBetween,
+  fileBetween,
 } from ".";
 import { spliteParam, throwEmptyArgsException } from "../utils";
 import { ArgumentParser } from "../validation/utils/argument-parser";
@@ -25,11 +26,17 @@ import { dateBetween, isDate } from "./date";
  * @returns `true` if the input is not empty, `false` otherwise.
  */
 export const required: RuleCallBack = (input, ...options) => {
-  return !!input && input !== "";
+  return {
+    passes: !!input && input !== "",
+    value: input,
+  };
 };
 
 export const nullable: RuleCallBack = (input) => {
-  return true;
+  return {
+    passes: true,
+    value: input,
+  };
 };
 
 /**
@@ -47,7 +54,10 @@ export const inInput: RuleCallBack = (input, params) => {
     throwEmptyArgsException("in");
   }
   const list = spliteParam(params as string);
-  return list.includes(input);
+  return {
+    passes: list.includes(input),
+    value: list,
+  };
 };
 /**
  * Checks if the input is at most the specified size.
@@ -61,7 +71,7 @@ export const inInput: RuleCallBack = (input, params) => {
  * @returns `true` if the input is at most the specified size, `false` otherwise.
  */
 export const size: RuleCallBack = (input, maxSize) => {
-  if (isFile(input)) {
+  if (isFile(input).passes) {
     return maxFileSize(input, maxSize);
   } else {
     return length(input, maxSize); // Apply length rule for non-file inputs
@@ -79,7 +89,7 @@ export const size: RuleCallBack = (input, maxSize) => {
  */
 export const isBoolean: RuleCallBack = (value) => {
   if (typeof value === "boolean") {
-    return true;
+    return { passes: true, value: Boolean(value) };
   }
   if (typeof value === "string") {
     value = value.toLowerCase();
@@ -91,10 +101,16 @@ export const isBoolean: RuleCallBack = (value) => {
       value === "yes" ||
       value === "no"
     ) {
-      return true;
+      return {
+        passes: true,
+        value: value == "true" || value == "1" || value == "yes" ? true : false,
+      };
     }
   }
-  return false;
+  return {
+    passes: false,
+    value: value,
+  };
 };
 /**
  * Checks if the input is between the specified minimum and maximum values.
@@ -114,33 +130,49 @@ export const isBoolean: RuleCallBack = (value) => {
  * ```
  * @returns `true` if the input is between the specified values, `false` otherwise.
  */
-export const between: RuleCallBack = (input, min_max) => {
+export const between: RuleCallBack = (input, min_max, type) => {
   var [min, max] = spliteParam(min_max ?? "");
   //for file
-  if (isFile(input)) {
-    return maxFileSize(input, max) && minFileSize(input, min);
+  if (type === "file") {
+    return {
+      passes: fileBetween(input, min_max, type).passes,
+      value: input,
+      alias: "fileBetween",
+    };
   }
   // for date
-  if (!isNumber(input) && !isFile(input)) {
-    if (isDate(input)) {
-      return dateBetween(input, min_max);
-    } else {
-      return stringBetween(input, min_max);
-    }
+  if (type == "date" || type == "date-local") {
+    return {
+      passes: dateBetween(input, min_max).passes,
+      value: input,
+      alias: "dateBetween",
+    };
   }
-  //for number
-  min = Number(min);
-  max = Number(max);
-  if (input !== undefined && input !== Number && input !== "") {
-    if (isNumber(min) && isNumber(max)) {
-      input = Number(input);
-      if (!isNumber(input)) {
-        return false;
+
+  if (type == "number") {
+    min = Number(min);
+    max = Number(max);
+    if (input !== undefined && input !== Number && input !== "") {
+      if (isNumber(min).passes && isNumber(max).passes) {
+        if (!isNumber(input).passes) {
+          return {
+            passes: false,
+            value: input,
+          };
+        }
+        return {
+          passes: maxRule(input, max).passes && minRule(input, min).passes,
+          value: Number(input),
+        };
       }
-      return maxRule(input, max) && minRule(input, min);
     }
   }
-  return false;
+
+  return {
+    passes: stringBetween(input, min_max).passes,
+    value: input,
+    alias: "stringBetween",
+  };
 };
 /**
  * Checks if the input matches the specified regular expression.
@@ -159,7 +191,10 @@ export const regex: RuleCallBack = (input: string, pattern?: string) => {
   }
   const parser = new ArgumentParser(pattern);
   const regex = new RegExp(parser.replacePipes());
-  return regex.test(input);
+  return {
+    passes: regex.test(input),
+    value: input,
+  };
 };
 
 /**
@@ -173,18 +208,23 @@ export const regex: RuleCallBack = (input: string, pattern?: string) => {
  * @returns `true` if the input matches the expected type, `false` otherwise.
  */
 export const only: RuleCallBack = (input, param) => {
+  let passes = false;
   if (param === "string") {
-    if (!is_string(input) || input.length === 0) {
-      return false;
+    if (!is_string(input).passes || input.length === 0) {
+      passes = false;
+    } else {
+      passes = !/\d/.test(input);
     }
-    return !/\d/.test(input); // Return true if input doesn't contain any digit
+  } else {
+    if (param === "number") {
+      passes = isNumber(input).passes;
+    }
   }
 
-  if (param === "number") {
-    return isNumber(input); // Use the isNumber function from trivule
-  }
-
-  return false; // Invalid parameter, return false
+  return {
+    passes: passes,
+    value: input,
+  }; // Invalid parameter, return false
 };
 
 /**
@@ -199,16 +239,20 @@ export const only: RuleCallBack = (input, param) => {
  * @returns `true` if the input is a digit with the specified number of digits, `false` otherwise.
  */
 export const digitRule: RuleCallBack = (input, digitCount) => {
-  if (!isNumber(digitCount)) {
+  if (!isNumber(digitCount).passes) {
     throw new Error("Digit rule parameter must be a number");
   }
-
-  if (isNumber(input)) {
+  let passes = false;
+  if (isNumber(input).passes) {
     const inputralue = String(input);
-    return /^\d+$/.test(inputralue) && inputralue.length === Number(digitCount);
+    passes =
+      /^\d+$/.test(inputralue) && inputralue.length === Number(digitCount);
   }
 
-  return false;
+  return {
+    passes: passes,
+    value: input,
+  };
 };
 
 /**
@@ -223,18 +267,21 @@ export const digitRule: RuleCallBack = (input, digitCount) => {
  * @returns `true` if the input is a digit with a number of digits less than or equal to the specified maximum, `false` otherwise.
  */
 export const maxDigitRule: RuleCallBack = (input, maxDigitCount) => {
-  if (!isNumber(maxDigitCount)) {
+  if (!isNumber(maxDigitCount).passes) {
     throw new Error("Max_digit rule parameter must be a number");
   }
 
-  if (isNumber(input)) {
+  let passes = false;
+  if (isNumber(input).passes) {
     const inputralue = String(input);
-    return (
-      /^\d+$/.test(inputralue) && inputralue.length <= Number(maxDigitCount)
-    );
+    passes =
+      /^\d+$/.test(inputralue) && inputralue.length <= Number(maxDigitCount);
   }
 
-  return false;
+  return {
+    passes: passes,
+    value: input,
+  };
 };
 
 /**
@@ -248,17 +295,20 @@ export const maxDigitRule: RuleCallBack = (input, maxDigitCount) => {
  * ```
  * @returns `true` if the input is a digit with a number of digits greater than or equal to the specified minimum, `false` otherwise.
  */
-export const minDigitRule: RuleCallBack = (input, minDigitCount) => {
-  if (!isNumber(minDigitCount)) {
+export const minDigitRule: RuleCallBack = (input, minDigitCount, type) => {
+  if (!isNumber(minDigitCount).passes) {
     throw new Error("Min_digit rule parameter must be a number");
   }
 
-  if (isNumber(input)) {
+  let passes = false;
+  if (isNumber(input).passes) {
     const inputralue = String(input);
-    return (
-      /^\d+$/.test(inputralue) && inputralue.length >= Number(minDigitCount)
-    );
+    passes =
+      /^\d+$/.test(inputralue) && inputralue.length >= Number(minDigitCount);
   }
 
-  return false;
+  return {
+    passes: passes,
+    value: input,
+  };
 };

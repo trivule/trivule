@@ -1,3 +1,4 @@
+import { ValidationState } from "../../contracts";
 import { spliteParam } from "../../utils";
 import { required } from "../global";
 import { AbstractFormValidator } from "./abstract-form-validator";
@@ -31,11 +32,17 @@ export class FormValidator extends AbstractFormValidator {
    * @param inputName
    * @returns
    */
-  same(input: any, inputName?: string): boolean {
+  same(input: any, inputName?: string): ValidationState {
     if (inputName) {
-      return input === this.getInputralueByName(inputName);
+      return {
+        passes: input === this.getInputralueByName(inputName),
+        value: input,
+      };
     }
-    return false;
+    return {
+      passes: false,
+      value: input,
+    };
   }
 
   /**
@@ -45,7 +52,7 @@ export class FormValidator extends AbstractFormValidator {
    * @param parameter
    * @returns
    */
-  requiredIf(input: any, parameter?: string) {
+  requiredIf(input: any, parameter?: string): ValidationState {
     const [inputName, ...params] = spliteParam(parameter ?? "");
 
     if (inputName && params.length > 0) {
@@ -53,24 +60,36 @@ export class FormValidator extends AbstractFormValidator {
       if (params.includes(otherInputralue)) {
         return required(input);
       }
-      return true;
+      return {
+        passes: true,
+        value: input,
+      };
     }
 
-    return false;
+    return {
+      passes: false,
+      value: input,
+    };
   }
 
   requiredWhen(input: any, parameter?: string) {
     const [inputName, ...params] = spliteParam(parameter ?? "");
     if (inputName && params.length > 0) {
       const isNotEmpty = params.some((name) => {
-        return required(this.getInputralueByName(name));
+        return required(this.getInputralueByName(name)).passes;
       });
       if (isNotEmpty) {
         return required(input);
       }
-      return true;
+      return {
+        passes: true,
+        value: input,
+      };
     }
 
-    return false;
+    return {
+      passes: false,
+      value: input,
+    };
   }
 }
