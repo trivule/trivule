@@ -3,7 +3,9 @@ import { TrBag } from "./tr-bag";
 describe("TrBag", () => {
   it("should return true if a rule exists in the rules bag", () => {
     // Add a custom rule to the bag of rules
-    TrBag.addRule("customRule", () => true);
+    TrBag.addRule("customRule", () => {
+      return { value: "", passes: true };
+    });
 
     // Check if the customRule exists in the bag of rules
     expect(TrBag.hasRule("customRule")).toBe(true);

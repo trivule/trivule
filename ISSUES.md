@@ -1,0 +1,8 @@
+- Rename startWithLetter to startWithString
+- Rename endWithLetter to endWithString
+- Rename containsLetter to containsString
+- Write text unit for form rules
+- Handle alias for min, max, between, size
+- Rule (only:number) must only:digit
+- Rename beforDate, afterDate, by dateBefore, dateAfter
+- Write the maxlength, minlength to accept array
