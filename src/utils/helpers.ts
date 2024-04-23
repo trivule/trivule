@@ -93,7 +93,11 @@ export function dataset_get<T = any>(
   }
   let value = element.getAttribute(`data-${name}`);
   if (!!value && toJson) {
-    value = JSON.parse(value);
+    try {
+      value = JSON.parse(value);
+    } catch (error) {
+      return defaults;
+    }
   }
 
   return !!value || (is_string(value) && !!value?.length) ? value : defaults;

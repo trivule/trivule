@@ -163,6 +163,7 @@ describe("TrivuleInput", () => {
       inputElement.setAttribute("data-tr-rules", "required|min:3");
       inputElement.name = "input-name";
       inputElement.value = ""; // Set the input value to empty
+      inputElement.type = "text";
       const validator = new TrivuleInput(inputElement, {
         failsOnfirst: false,
       });

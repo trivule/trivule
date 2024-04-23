@@ -12,21 +12,29 @@ import { isFile, maxFileSize, minFileSize } from "./file";
  * ```
  * @returns `true` if the input is at least the specified length, `false` otherwise.
  */
-export const minRule: RuleCallBack = (input, min) => {
-  if (isFile(input)) {
+export const minRule: RuleCallBack = (input, min, type) => {
+  if (isFile(input).passes || type == "file") {
     return minFileSize(input, min);
   }
   if (input === undefined || input === null) {
     input = 0;
   }
 
-  if (!isNumber(min)) {
+  if (!isNumber(min).passes) {
     throw new Error("Min rule parameter must be an integer");
   }
-  if (isNumber(input)) {
-    return Number(input) >= Number(min);
+
+  if (isNumber(input).passes) {
+    return {
+      passes: Number(input) >= Number(min),
+      value: Number(input),
+    };
   } else {
-    return minlength(input, min);
+    return {
+      passes: minlength(input, min).passes,
+      value: input,
+      alias: "minlength",
+    };
   }
 };
 /**
@@ -41,20 +49,27 @@ export const minRule: RuleCallBack = (input, min) => {
  * ```
  * @returns `true` if the input is at most the specified length, `false` otherwise.
  */
-export const maxRule: RuleCallBack = (input, max) => {
-  if (isFile(input)) {
+export const maxRule: RuleCallBack = (input, max, type) => {
+  if (isFile(input).passes || type == "file") {
     return maxFileSize(input, max);
   }
-  if (!isNumber(max)) {
+  if (!isNumber(max).passes) {
     throw new Error("Min rule parameter must be an integer");
   }
   if (input === undefined || input === null) {
     input = 0;
   }
-  if (isNumber(input)) {
-    return Number(input) <= Number(max);
+  if (isNumber(input).passes) {
+    return {
+      passes: Number(input) <= Number(max),
+      value: Number(input),
+    };
   } else {
-    return maxlength(input, max);
+    return {
+      passes: maxlength(input, max).passes,
+      value: input,
+      alias: "maxlength",
+    };
   }
 };
 
@@ -69,10 +84,16 @@ export const maxRule: RuleCallBack = (input, max) => {
  * @returns `true` if the input is an integer, `false` otherwise.
  */
 export const integer: RuleCallBack = (input) => {
-  if (isNumber(input)) {
-    return Number.isInteger(Number(input));
+  if (isNumber(input).passes) {
+    return {
+      passes: Number.isInteger(Number(input)),
+      value: parseInt(input),
+    };
   }
-  return false;
+  return {
+    passes: false,
+    value: input,
+  };
 };
 
 /**
@@ -85,22 +106,36 @@ export const integer: RuleCallBack = (input) => {
  * @returns `true` if the input is a number, `false` otherwise.
  */
 export const isNumber: RuleCallBack = (input) => {
-  if (input === "" || input === null) {
-    return false;
+  if (input === "" || input === null || input === undefined) {
+    return {
+      passes: false,
+      value: input,
+    };
   }
 
   if (input === "0" || input === 0) {
-    return true;
+    return {
+      passes: true,
+      value: 0,
+      type: "number",
+    };
   }
 
   if (input === "1" || input === 1) {
-    return true;
+    return {
+      passes: true,
+      value: 1,
+      type: "number",
+    };
   }
-  return (
-    !isNaN(Number(input)) &&
-    typeof input !== "boolean" &&
-    typeof input !== "object"
-  );
+  return {
+    passes:
+      !isNaN(Number(input)) &&
+      typeof input !== "boolean" &&
+      typeof input !== "object",
+    value: Number(input),
+    type: "number",
+  };
 };
 
 /**
@@ -113,15 +148,21 @@ export const isNumber: RuleCallBack = (input) => {
  * @returns `true` if the input is a number, `false` otherwise.
  */
 export const modulo: RuleCallBack = (input, mod) => {
-  if (!isNumber(mod)) {
+  if (!isNumber(mod).passes) {
     throw new Error("Modulo rule parameter must be an integer");
   }
 
-  if (isNumber(input)) {
-    return Number(input) % Number(mod) === 0;
+  if (isNumber(input).passes) {
+    return {
+      passes: Number(input) % Number(mod) === 0,
+      value: Number(input),
+    };
   }
 
-  return false;
+  return {
+    passes: false,
+    value: input,
+  };
 };
 
 /**
@@ -136,15 +177,21 @@ export const modulo: RuleCallBack = (input, mod) => {
  * @returns `true` if the input is less than the specified value, `false` otherwise.
  */
 export const lessthan: RuleCallBack = (input, threshold) => {
-  if (!isNumber(threshold)) {
+  if (!isNumber(threshold).passes) {
     throw new Error("Lessthan rule parameter must be a number");
   }
 
-  if (isNumber(input)) {
-    return Number(input) < Number(threshold);
+  if (isNumber(input).passes) {
+    return {
+      passes: Number(input) < Number(threshold),
+      value: input,
+    };
   }
 
-  return false;
+  return {
+    passes: false,
+    value: input,
+  };
 };
 
 /**
@@ -159,13 +206,19 @@ export const lessthan: RuleCallBack = (input, threshold) => {
  * @returns `true` if the input is greater than the specified value, `false` otherwise.
  */
 export const greaterthan: RuleCallBack = (input, threshold) => {
-  if (!isNumber(threshold)) {
+  if (!isNumber(threshold).passes) {
     throw new Error("Greaterthan rule parameter must be a number");
   }
 
-  if (isNumber(input)) {
-    return Number(input) > Number(threshold);
+  if (isNumber(input).passes) {
+    return {
+      passes: Number(input) > Number(threshold),
+      value: input,
+    };
   }
 
-  return false;
+  return {
+    passes: false,
+    value: input,
+  };
 };

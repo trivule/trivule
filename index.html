@@ -58,10 +58,10 @@
         border-color: #ff0000;
       }
 
-      input.success,
-      textarea.success,
-      select.success,
-      input[type="file"].success {
+      input.is-valid,
+      textarea.is-valid,
+      select.is-valid,
+      input[type="file"].is-valid {
         border-left: 4px solid #28a745;
         border-color: #28a745;
       }
@@ -150,9 +150,8 @@
       <label class="label"> Indicate your birth day</label>
       <input
         type="date"
-        data-tr-rules="required|before:2006-01-01"
-        data-tr-messages="The birth day is required|You must be at least 18 years old"
-        data-tr-valid-class="success"
+        data-tr-rules="required|dateBetween:1990-01-01 00:00,1999-12-31 23:00"
+        data-tr-messages="The birth day is required|You must be born between 1990 and 1999."
         name="birthDay"
       />
       <div data-tr-feedback="birthDay"></div>

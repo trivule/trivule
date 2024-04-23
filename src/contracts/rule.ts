@@ -53,4 +53,6 @@ export type Rule =
   | "lessThan"
   | "greaterThan"
   | "gthan"
-  | "lthan";
+  | "lthan"
+  | "fileBetween"
+  | "dateBetween";

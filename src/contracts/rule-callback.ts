@@ -1,8 +1,8 @@
-import { InputType } from ".";
+import { InputType, ValidationState } from ".";
 
 /**
  * Rule callback
  */
 export interface RuleCallBack {
-  (input: any, param?: any, type?: InputType): boolean;
+  (input: any, param?: any, type?: InputType): ValidationState;
 }

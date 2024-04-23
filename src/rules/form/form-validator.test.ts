@@ -11,7 +11,7 @@ describe("FormValidator", () => {
       const fieldValue = "foo";
 
       form.innerHTML = `<input name="${fieldName}" value="${fieldValue}"/>`;
-      const result = validator.same(input, fieldName);
+      const result = validator.same(input, fieldName).passes;
 
       expect(result).toBe(true);
     });
@@ -22,7 +22,7 @@ describe("FormValidator", () => {
       const fieldValue = "baz";
 
       form.innerHTML = `<input name="${fieldName}" value="${fieldValue}"/>`;
-      const result = validator.same(input, fieldName);
+      const result = validator.same(input, fieldName).passes;
 
       expect(result).toBe(false);
     });
@@ -30,7 +30,7 @@ describe("FormValidator", () => {
     test("should return false if no field name is specified", () => {
       const input = "foo";
 
-      const result = validator.same(input);
+      const result = validator.same(input).passes;
 
       expect(result).toBe(false);
     });
@@ -60,7 +60,7 @@ describe("FormValidator", () => {
     });
 
     test("should return true when input is equal to one of input2 value", () => {
-      const result = validator.requiredIf("", "input2,''");
+      const result = validator.requiredIf("", "input2,''").passes;
       expect(result).toBe(true);
     });
   });

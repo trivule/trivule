@@ -3,7 +3,7 @@ import { Rule, RulesMessages } from "../contracts";
 import { TrivuleInputParms, ValidatableInput } from "../contracts/types";
 import { TrLocal } from "../locale/tr-local";
 import { ValidationErrorMessage } from "../messages";
-import { getRule, tr_attr_get } from "../utils";
+import { dataset_get, getRule, tr_attr_get } from "../utils";
 import { NativeValidation } from "./native-validation";
 
 /**
@@ -84,7 +84,11 @@ export abstract class AbstractInputralidator {
    * @returns
    */
   setRules(rules?: string[]) {
-    let ruleSrring: string = tr_attr_get(this.inputElement, "rules");
+    let ruleSrring: string = tr_attr_get(
+      this.inputElement,
+      "rules",
+      this.param.rules
+    );
 
     if (ruleSrring) {
       const rulesClean = ruleSrring.split("|").filter((r) => r.length > 0);
@@ -313,6 +317,10 @@ export abstract class AbstractInputralidator {
   protected _setParams(param?: TrivuleInputParms) {
     if (typeof param === "object" && typeof param !== "undefined") {
       this.param = { ...this.param, ...param };
+    }
+    const json = dataset_get(this.inputElement, "tr", null, true);
+    if (json) {
+      this.param = Object.assign(this.param, json);
     }
   }
 }

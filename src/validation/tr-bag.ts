@@ -1,5 +1,6 @@
+import { dateBetween } from "./../rules/date";
 import { endWithLetter, stringBetween } from "../rules/string";
-import { isMimes, minFileSize } from "../rules/file";
+import { fileBetween, isMimes, minFileSize } from "../rules/file";
 import { Rule, RuleCallBack, RulesBag, RulesMessages } from "../contracts";
 import {
   between,
@@ -100,6 +101,8 @@ export class TrBag implements ITrBag {
     maxDigit: maxDigitRule,
     greaterThan: greaterthan,
     gthan: greaterthan,
+    fileBetween: fileBetween,
+    dateBetween: dateBetween,
   };
 
   /**

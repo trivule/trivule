@@ -12,12 +12,18 @@ export interface ITrivuleInputObject {
 }
 
 export type InputType =
-  | "string"
+  | "text"
   | "date"
   | "boolean"
   | "number"
   | "file"
   | "date-local";
+export type ValidationState = {
+  passes: boolean;
+  value: any;
+  alias?: Rule;
+  type?: InputType;
+};
 export * from "./rule";
 export * from "./input-change-event";
 export * from "./rule-callback";

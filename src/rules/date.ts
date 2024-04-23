@@ -12,7 +12,24 @@ import { now, spliteParam, throwEmptyArgsException } from "../utils";
  * @returns Returns true if the input is a valid date, false otherwise.
  */
 export const isDate: RuleCallBack = (input) => {
-  return dayjs(input, undefined, true).isValid();
+  const djs = dayjs(new Date(input), undefined, true);
+  if (!input) {
+    return {
+      passes: false,
+      value: input,
+    };
+  }
+  if (djs.isValid()) {
+    return {
+      passes: true,
+      value: djs.toISOString(),
+      type: "date",
+    };
+  }
+  return {
+    passes: false,
+    value: input,
+  };
 };
 
 /**
@@ -30,7 +47,20 @@ export const beforeDate: RuleCallBack = (input, date) => {
   if (date === "now") {
     date = now();
   }
-  return dayjs(input).isBefore(date);
+  if (!isDate(input).passes) {
+    return {
+      passes: false,
+      value: input,
+    };
+  }
+
+  if (!isDate(date).passes) {
+    throw new Error("Pease provide a valid argument for dateBefore rule");
+  }
+  return {
+    passes: dayjs(input).isBefore(date),
+    value: input,
+  };
 };
 
 /**
@@ -53,7 +83,21 @@ export const afterDate: RuleCallBack = (input, date) => {
   if (date === "now") {
     date = now();
   }
-  return dayjs(input).isAfter(date);
+
+  if (!isDate(input).passes) {
+    return {
+      passes: false,
+      value: input,
+    };
+  }
+
+  if (!isDate(date).passes) {
+    throw new Error("Pease provide a valid argument for afterDate rule");
+  }
+  return {
+    passes: dayjs(input).isAfter(date),
+    value: isDate(input).value,
+  };
 };
 
 /**
@@ -72,7 +116,11 @@ export const dateBetween: RuleCallBack = (input, date) => {
     throwEmptyArgsException("dateBetween");
   }
   const [startDate, endDate] = spliteParam(date ?? "");
-  return afterDate(input, startDate) && beforeDate(input, endDate);
+  return {
+    passes:
+      afterDate(input, startDate).passes && beforeDate(input, endDate).passes,
+    value: input,
+  };
 };
 
 /**
@@ -99,5 +147,8 @@ export const isTime: RuleCallBack = (input: string) => {
       input += ":00";
     }
   }
-  return /^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$/.test(input);
+  return {
+    passes: /^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$/.test(input),
+    value: input,
+  };
 };
