@@ -49,7 +49,6 @@ export const minRule: RuleCallBack = (input, min, type) => {
  *  ```html
  *  <input tr-rules="max:20"/>
  * ```
- * @returns `true` if the input is at most the specified length, `false` otherwise.
  */
 export const maxRule: RuleCallBack = (input, max, type) => {
   if (!isNumber(max).passes) {
@@ -88,7 +87,6 @@ export const maxRule: RuleCallBack = (input, max, type) => {
  *  <input tr-rules="integer"/> or
  *  <input tr-rules="int"/>
  * ```
- * @returns `true` if the input is an integer, `false` otherwise.
  */
 export const integer: RuleCallBack = (input) => {
   if (isNumber(input).passes) {
@@ -152,7 +150,6 @@ export const isNumber: RuleCallBack = (input) => {
  *  <input tr-rules="modulo:2"/>
  * <input tr-rules="mod:2"/>
  * ```
- * @returns `true` if the input is a number, `false` otherwise.
  */
 export const modulo: RuleCallBack = (input, mod) => {
   if (!isNumber(mod).passes) {
@@ -181,7 +178,6 @@ export const modulo: RuleCallBack = (input, mod) => {
  * ```html
  * <input tr-rules="lessThan:10"/>
  * ```
- * @returns `true` if the input is less than the specified value, `false` otherwise.
  */
 export const lessthan: RuleCallBack = (input, threshold) => {
   if (!isNumber(threshold).passes) {
@@ -210,7 +206,6 @@ export const lessthan: RuleCallBack = (input, threshold) => {
  * ```html
  * <input tr-rules="greaterThan:5"/>
  * ```
- * @returns `true` if the input is greater than the specified value, `false` otherwise.
  */
 export const greaterthan: RuleCallBack = (input, threshold) => {
   if (!isNumber(threshold).passes) {
