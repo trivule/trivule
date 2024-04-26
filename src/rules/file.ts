@@ -77,7 +77,6 @@ export const maxFileSize: RuleCallBack = (input, maxSize) => {
  *  ```html
  * <input data-tr-rules="minFileSize:1MB" />
  * ```
- * @returns A boolean value indicating whether the size of the file is greater than or equal to the specified minimum size.
  *
  * @throws An error if the minSize parameter is not a valid string in the format '<number><unit>'.
  */

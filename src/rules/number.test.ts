@@ -6,6 +6,7 @@ import {
   maxRule,
   minRule,
   modulo,
+  numberBetween,
 } from "./number";
 
 test("minRule should return true when input is greater than or equal to min", () => {
@@ -145,5 +146,47 @@ describe("greaterthan Rule", () => {
     expect(() => greaterthan(5, "abc")).toThrowError(
       "Greaterthan rule parameter must be a number"
     );
+  });
+});
+
+describe("numberBetween", () => {
+  it("Must passes if the input number is between the specified minimum and maximum values", () => {
+    let input = "5";
+    const params = "1,10";
+    let result = numberBetween(input, params);
+    expect(result.passes).toBe(true);
+
+    input = "1";
+    result = numberBetween(input, params);
+    expect(result.passes).toBe(true);
+    expect(result.value).toBe(1);
+  });
+
+  it("returns false if the input number is below the specified minimum value", () => {
+    const input = "0";
+    const params = "1,10";
+
+    const result = numberBetween(input, params);
+    expect(result.passes).toBe(false);
+    expect(result.value).toBe(0);
+  });
+
+  it("returns false if the input number is above the specified maximum value", () => {
+    const input = "15";
+    const params = "1,10";
+
+    const result = numberBetween(input, params);
+    expect(result.passes).toBe(false);
+  });
+
+  it("returns false if the input is not a number", () => {
+    // Define test inputs
+    const input = "not a number";
+    const params = "1,10";
+
+    const result = numberBetween(input, params);
+
+    expect(result.passes).toBe(false);
+    expect(result.value).toBe("not a number");
   });
 });

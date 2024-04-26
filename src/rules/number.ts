@@ -1,6 +1,7 @@
 import { maxlength, minlength } from "./string";
 import { RuleCallBack } from "../contracts/rule-callback";
 import { isFile, maxFileSize, minFileSize } from "./file";
+import { spliteParam } from "../utils";
 /**
  * When the value is a number, it checks whether the input value is greater than or equal to min
  * When the value is a character string, it checks whether the number of characters is greater than or equal to min
@@ -50,12 +51,17 @@ export const minRule: RuleCallBack = (input, min, type) => {
  * @returns `true` if the input is at most the specified length, `false` otherwise.
  */
 export const maxRule: RuleCallBack = (input, max, type) => {
-  if (isFile(input).passes || type == "file") {
-    return maxFileSize(input, max);
-  }
   if (!isNumber(max).passes) {
     throw new Error("Min rule parameter must be an integer");
   }
+  if (isFile(input).passes || type == "file") {
+    return {
+      passes: maxFileSize(input, max).passes,
+      value: input,
+      alias: "maxFileSize",
+    };
+  }
+
   if (input === undefined || input === null) {
     input = 0;
   }
@@ -220,5 +226,33 @@ export const greaterthan: RuleCallBack = (input, threshold) => {
   return {
     passes: false,
     value: input,
+  };
+};
+
+/**
+ * Checks if the input number is between the specified minimum and maximum values.
+ *
+ * @param input - The input to check.
+ * @param params - String separated  by comma (,)
+ * @example
+ * ```html
+ * <input data-tr-rules="numberBetween:1,10"/>
+ * ```
+ */
+export const numberBetween: RuleCallBack = (input, params) => {
+  if (!isNumber(input).passes) {
+    return {
+      passes: false,
+      value: input,
+    };
+  }
+
+  const [min, max] = spliteParam(params);
+  const inputValue = Number(input);
+
+  const passes = minRule(input, min).passes && maxRule(input, max).passes;
+  return {
+    passes: passes,
+    value: inputValue,
   };
 };

@@ -40,8 +40,9 @@ import {
   lessthan,
   maxDigitRule,
   greaterthan,
+  numberBetween,
 } from "../rules";
-import { afterDate, beforeDate, isDate, isTime } from "../rules/date";
+import { dateAfter, dateBefore, isDate, isTime } from "../rules/date";
 import { TrLocal } from "../locale/tr-local";
 import { phone } from "../rules/phone";
 interface ITrBag {
@@ -79,8 +80,8 @@ export class TrBag implements ITrBag {
     startWithLower: startWithLower,
     password: passwordRule,
     date: isDate,
-    before: beforeDate,
-    after: afterDate,
+    before: dateBefore,
+    after: dateAfter,
     phone: phone,
     time: isTime,
     startWithLetter: startWithLetter,
@@ -103,6 +104,7 @@ export class TrBag implements ITrBag {
     gthan: greaterthan,
     fileBetween: fileBetween,
     dateBetween: dateBetween,
+    numberBetween: numberBetween,
   };
 
   /**

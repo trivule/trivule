@@ -55,4 +55,5 @@ export type Rule =
   | "gthan"
   | "lthan"
   | "fileBetween"
-  | "dateBetween";
+  | "dateBetween"
+  | "numberBetween";

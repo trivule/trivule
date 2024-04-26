@@ -157,6 +157,10 @@
       <div data-tr-feedback="birthDay"></div>
     </div>
 
-    <script type="module" src="/src/example.ts"></script>
+    <script src="https://www.trivule.com/js/trivule.js"></script>
+    <script>
+      const trInput = new TrivuleInput("input[name=birthDay]");
+      trInput.init();
+    </script>
   </body>
 </html>

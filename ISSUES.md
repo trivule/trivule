@@ -2,7 +2,7 @@
 - Rename endWithLetter to endWithString
 - Rename containsLetter to containsString
 - Write text unit for form rules
-- Handle alias for min, max, between, size
+- Handle alias for min, max
 - Rule (only:number) must only:digit
-- Rename beforDate, afterDate, by dateBefore, dateAfter
+- Rename beforDate, dateAfter, by dateBefore, dateAfter
 - Write the maxlength, minlength to accept array

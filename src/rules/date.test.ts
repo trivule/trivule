@@ -1,5 +1,5 @@
 import { between } from "./global";
-import { afterDate, beforeDate, dateBetween, isDate } from "./date";
+import { dateAfter, dateBefore, dateBetween, isDate } from "./date";
 
 describe("isDate", () => {
   test("should return true for a valid date in UTC format", () => {
@@ -28,69 +28,69 @@ describe("isDate", () => {
   });
 });
 
-// Test for the beforeDate function
-describe("beforeDate", () => {
+// Test for the dateBefore function
+describe("dateBefore", () => {
   test("should return true if the input date is before the reference date", () => {
     const inputDate = "2023-04-23";
     const referenceDate = "2023-04-24";
-    expect(beforeDate(inputDate, referenceDate, "date").passes).toBe(true);
+    expect(dateBefore(inputDate, referenceDate, "date").passes).toBe(true);
   });
 
   test("should return false if the input date is after the reference date", () => {
     const inputDate = "2023-04-25";
     const referenceDate = "2023-04-24";
-    expect(beforeDate(inputDate, referenceDate).passes).toBe(false);
+    expect(dateBefore(inputDate, referenceDate).passes).toBe(false);
   });
 
   test("should return false if the input date is equal to the reference date", () => {
     const inputDate = "2023-04-24";
     const referenceDate = "2023-04-24";
-    expect(beforeDate(inputDate, referenceDate).passes).toBe(false);
+    expect(dateBefore(inputDate, referenceDate).passes).toBe(false);
   });
 
   test("should return false if the input is not a valid date", () => {
     const inputDate = "2023-04-xx";
     const referenceDate = "2023-04-24";
-    expect(beforeDate(inputDate, referenceDate).passes).toBe(false);
+    expect(dateBefore(inputDate, referenceDate).passes).toBe(false);
   });
 
   test("should return true if date is before now", () => {
     const inputDate = "2022-04-22";
     const referenceDate = "now";
-    expect(beforeDate(inputDate, referenceDate).passes).toBe(true);
+    expect(dateBefore(inputDate, referenceDate).passes).toBe(true);
   });
 
   test("should return true if date is after now", () => {
     const inputDate = "2050-01-01";
     const referenceDate = "now";
-    expect(afterDate(inputDate, referenceDate).passes).toBe(true);
+    expect(dateAfter(inputDate, referenceDate).passes).toBe(true);
   });
 });
 
-// Test for the afterDate function
-describe("afterDate", () => {
+// Test for the dateAfter function
+describe("dateAfter", () => {
   test("should return true if the input date is after the reference date", () => {
     const inputDate = "2023-04-25";
     const referenceDate = "2023-04-24";
-    expect(afterDate(inputDate, referenceDate).passes).toBe(true);
+    expect(dateAfter(inputDate, referenceDate).passes).toBe(true);
   });
 
   test("should return false if the input date is before the reference date", () => {
     const inputDate = "2023-04-23";
     const referenceDate = "2023-04-24";
-    expect(afterDate(inputDate, referenceDate).passes).toBe(false);
+    expect(dateAfter(inputDate, referenceDate).passes).toBe(false);
   });
 
   test("should return false if the input date is equal to the reference date", () => {
     const inputDate = "2023-04-24";
     const referenceDate = "2023-04-24";
-    expect(afterDate(inputDate, referenceDate).passes).toBe(false);
+    expect(dateAfter(inputDate, referenceDate).passes).toBe(false);
   });
 
   test("should throw an exception if the input is not a valid date", () => {
     const inputDate = "2023-04-xx";
     const referenceDate = "2023-04-24";
-    expect(afterDate(inputDate, referenceDate).passes).toBe(false);
+    expect(dateAfter(inputDate, referenceDate).passes).toBe(false);
   });
 });
 

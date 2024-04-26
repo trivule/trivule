@@ -43,7 +43,7 @@ export const isDate: RuleCallBack = (input) => {
  * ```
  * @returns `true` if the input date is before the comparison date, `false` otherwise.
  */
-export const beforeDate: RuleCallBack = (input, date) => {
+export const dateBefore: RuleCallBack = (input, date) => {
   if (date === "now") {
     date = now();
   }
@@ -79,7 +79,7 @@ export const beforeDate: RuleCallBack = (input, date) => {
  * ```
  * @returns `true` if the input date is after the comparison date, `false` otherwise.
  */
-export const afterDate: RuleCallBack = (input, date) => {
+export const dateAfter: RuleCallBack = (input, date) => {
   if (date === "now") {
     date = now();
   }
@@ -92,7 +92,7 @@ export const afterDate: RuleCallBack = (input, date) => {
   }
 
   if (!isDate(date).passes) {
-    throw new Error("Pease provide a valid argument for afterDate rule");
+    throw new Error("Pease provide a valid argument for dateAfter rule");
   }
   return {
     passes: dayjs(input).isAfter(date),
@@ -118,7 +118,7 @@ export const dateBetween: RuleCallBack = (input, date) => {
   const [startDate, endDate] = spliteParam(date ?? "");
   return {
     passes:
-      afterDate(input, startDate).passes && beforeDate(input, endDate).passes,
+      dateAfter(input, startDate).passes && dateBefore(input, endDate).passes,
     value: input,
   };
 };

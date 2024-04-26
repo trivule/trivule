@@ -1,7 +1,6 @@
 import {
   isFile,
   maxFileSize,
-  minFileSize,
   length,
   isNumber,
   maxRule,
@@ -72,9 +71,17 @@ export const inInput: RuleCallBack = (input, params) => {
  */
 export const size: RuleCallBack = (input, maxSize) => {
   if (isFile(input).passes) {
-    return maxFileSize(input, maxSize);
+    return {
+      passes: maxFileSize(input, maxSize).passes,
+      value: input,
+      alias: "maxFileSize",
+    };
   } else {
-    return length(input, maxSize); // Apply length rule for non-file inputs
+    return {
+      passes: length(input, maxSize).passes,
+      value: input,
+      alias: "length",
+    }; // Apply length rule for non-file inputs
   }
 };
 /**
@@ -163,6 +170,7 @@ export const between: RuleCallBack = (input, min_max, type) => {
         return {
           passes: maxRule(input, max).passes && minRule(input, min).passes,
           value: Number(input),
+          alias: "numberBetween",
         };
       }
     }
