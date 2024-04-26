@@ -11,18 +11,19 @@ import { spliteParam } from "../utils";
  *  ```html
  *  <input tr-rules="min:2"/>
  * ```
- * @returns `true` if the input is at least the specified length, `false` otherwise.
  */
 export const minRule: RuleCallBack = (input, min, type) => {
+  if (!isNumber(min).passes) {
+    throw new Error("Min rule parameter must be an integer");
+  }
   if (isFile(input).passes || type == "file") {
-    return minFileSize(input, min);
+    return {
+      passes: minFileSize(input, min, type).passes,
+      value: input,
+    };
   }
   if (input === undefined || input === null) {
     input = 0;
-  }
-
-  if (!isNumber(min).passes) {
-    throw new Error("Min rule parameter must be an integer");
   }
 
   if (isNumber(input).passes) {
