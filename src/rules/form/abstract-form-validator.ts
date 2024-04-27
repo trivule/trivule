@@ -11,7 +11,7 @@ export abstract class AbstractFormValidator {
     return this.form.querySelector<HTMLInputElement>(`[name=${inputName}]`);
   }
 
-  getInputralueByName(inputName: string) {
+  getInpuTrValueByName(inputName: string) {
     const input = this.getInputByName(inputName);
     return input ? input.value : undefined;
   }

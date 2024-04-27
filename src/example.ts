@@ -1,4 +1,3 @@
-import { TrivuleInput } from "./validation";
-
-const trInput = new TrivuleInput("input");
+import { TrivuleForm, TrivuleInput } from "./validation";
+const trInput = new TrivuleForm("#gift-form");
 trInput.init();

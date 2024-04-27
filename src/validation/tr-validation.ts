@@ -4,7 +4,6 @@ import { getRule } from "../utils";
 import { InputralueType, TrivuleInputParms } from "../contracts/types";
 import { RuleExecuted } from ".";
 import { TrMessages } from "../messages";
-import { is_string } from "../rules";
 import { TrLocal } from "../locale/tr-local";
 /**
  * @author Claude Fassinou
@@ -81,25 +80,20 @@ export class TrValidation {
       if (!ruleCallback) {
         throw new Error(`The rule ${ruleName} is not defined`);
       }
-      /**
-       * For the same value, same rule, if rule was executed it will not be executed again
-       */
-      if (ruleExec.wasRunWith(this._value)) {
-        ruleExec.passed = ruleExec.passed;
-      } else {
-        const state = ruleCallback(this._value, params, inputType);
-        //Indicate if the rule passed
-        ruleExec.passed = state.passes;
-        //Get the value after validation
-        //The value may be converted by the validation callback
-        this._value = state.value;
 
-        inputType = state.type ?? inputType;
-        ruleToRun = state.alias ?? ruleName;
-        //
-        ruleExec.valueTested = this._value;
-        ruleExec.run = true;
-      }
+      const state = ruleCallback(this._value, params, inputType);
+
+      //Indicate if the rule passed
+      ruleExec.passed = state.passes;
+      //Get the value after validation
+      //The value may be converted by the validation callback
+      this._value = state.value;
+
+      inputType = state.type ?? inputType;
+      ruleToRun = state.alias ?? ruleName;
+      //
+      ruleExec.valueTested = this._value;
+      ruleExec.run = true;
       // If rule is setup to stop on first fails
       if (this._failOnfirst) {
         if (!ruleExec.passed) {

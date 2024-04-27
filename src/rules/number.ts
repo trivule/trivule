@@ -89,10 +89,12 @@ export const maxRule: RuleCallBack = (input, max, type) => {
  * ```
  */
 export const integer: RuleCallBack = (input) => {
-  if (isNumber(input).passes) {
+  const numberRule = isNumber(input);
+  if (numberRule.passes) {
     return {
-      passes: Number.isInteger(Number(input)),
-      value: parseInt(input),
+      passes: Number.isInteger(numberRule.value),
+      value: parseInt(numberRule.value),
+      type: numberRule.type,
     };
   }
   return {

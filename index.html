@@ -139,28 +139,45 @@
         width: 350px;
         font-family: sans-serif;
         font-weight: bold;
-        padding: 20px;
-        margin: 20px;
+        padding: 10px;
       }
     </style>
     <title>Trivule</title>
   </head>
   <body>
-    <div class="form">
-      <label class="label"> Indicate your birth day</label>
-      <input
-        type="date"
-        data-tr-rules="required|dateBetween:1990-01-01 00:00,1999-12-31 23:00"
-        data-tr-messages="The birth day is required|You must be born between 1990 and 1999."
-        name="birthDay"
-      />
-      <div data-tr-feedback="birthDay"></div>
-    </div>
+    <form action="" id="gift-form">
+      <div class="form">
+        <label class="label"> Your age</label>
+        <input
+          type="text"
+          data-tr-rules="required|integer|between:16,50"
+          name="age"
+        />
+        <div data-tr-feedback="age"></div>
+      </div>
+      <div class="form">
+        <label class="label"> Indicate your birth day</label>
+        <input
+          type="date"
+          data-tr-rules="required|dateBetween:1990-01-01 00:00,1999-12-31 23:00"
+          data-tr-messages="The birth day is required|You must be born between 1990 and 1999."
+          name="birthDay"
+        />
+        <div data-tr-feedback="birthDay"></div>
+      </div>
 
-    <script src="https://www.trivule.com/js/trivule.js"></script>
-    <script>
-      const trInput = new TrivuleInput("input[name=birthDay]");
-      trInput.init();
-    </script>
+      <div class="form">
+        <label>Profession</label>
+        <select name="profession" data-tr-rules="required">
+          <option value="">Select one ...</option>
+          <option value="developer">Web developer</option>
+          <option value="designer">Web designer</option>
+        </select>
+        <div data-tr-feedback="profession"></div>
+      </div>
+    </form>
+
+    <script src="/src/example.ts" type="module"></script>
+    <script></script>
   </body>
 </html>

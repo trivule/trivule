@@ -35,7 +35,7 @@ export class FormValidator extends AbstractFormValidator {
   same(input: any, inputName?: string): ValidationState {
     if (inputName) {
       return {
-        passes: input === this.getInputralueByName(inputName),
+        passes: input === this.getInpuTrValueByName(inputName),
         value: input,
       };
     }
@@ -56,7 +56,7 @@ export class FormValidator extends AbstractFormValidator {
     const [inputName, ...params] = spliteParam(parameter ?? "");
 
     if (inputName && params.length > 0) {
-      const otherInputralue = this.getInputralueByName(inputName);
+      const otherInputralue = this.getInpuTrValueByName(inputName);
       if (params.includes(otherInputralue)) {
         return required(input);
       }
@@ -76,7 +76,7 @@ export class FormValidator extends AbstractFormValidator {
     const [inputName, ...params] = spliteParam(parameter ?? "");
     if (inputName && params.length > 0) {
       const isNotEmpty = params.some((name) => {
-        return required(this.getInputralueByName(name)).passes;
+        return required(this.getInpuTrValueByName(name)).passes;
       });
       if (isNotEmpty) {
         return required(input);
