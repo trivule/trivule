@@ -231,7 +231,6 @@ export const contains: RuleCallBack = (input, substring) => {
  *  <input data-tr-rules="length:9"/>
  *  <input data-tr-rules="len:9"/>
  * ```
- * @returns `true` if the input has the specified length, `false` otherwise.
  * @throws An exception with the message "The length rule argument must be an integer" if the `size` parameter is not an integer.
  */
 export const length: RuleCallBack = (input: any, size: any) => {
@@ -302,7 +301,6 @@ export const passwordRule: RuleCallBack = (input) => {
  *  ```html
  *  <input data-tr-rules="startWithString"/>
  * ```
- * @returns `true` if the input starts with a letter, `false` otherwise.
  */
 export const startWithString: RuleCallBack = (input) => {
   if (
@@ -353,7 +351,6 @@ export const endWithString: RuleCallBack = (input) => {
  *  ```html
  *  <input data-tr-rules="containsLetter"/>
  * ```
- * @returns `true` if the input contains a letter, `false` otherwise.
  */
 export const containsLetter: RuleCallBack = (input) => {
   if (typeof input !== "string") {
@@ -378,7 +375,6 @@ export const containsLetter: RuleCallBack = (input) => {
  *  ```html
  *  <input data-tr-rules="excludes:-,@,&esp;"/>
  * ```
- * @returns `true` if the input does not contain any of the specified characters, `false` otherwise.
  */
 export const excludes: RuleCallBack = (input, excludedChars) => {
   const chars = spliteParam(excludedChars);
@@ -409,7 +405,6 @@ export const excludes: RuleCallBack = (input, excludedChars) => {
  *  ```html
  *  <input data-tr-rules="upper"/>
  * ```
- * @returns `true` if the input is all uppercase, `false` otherwise.
  */
 export const upper: RuleCallBack = (input, param?: string) => {
   return {
@@ -427,7 +422,6 @@ export const upper: RuleCallBack = (input, param?: string) => {
  *  ```html
  *  <input data-tr-rules="lower"/>
  * ```
- * @returns `true` if the input is all lowercase, `false` otherwise.
  */
 export const lower: RuleCallBack = (input: string, param?: string) => {
   return {
@@ -445,7 +439,6 @@ export const lower: RuleCallBack = (input: string, param?: string) => {
  * ```html
  * <input data-tr-rules="stringBetween:2,5" />
  * ```
- * @returns `true` if the length of the input string is between the minimum and maximum values, `false` otherwise.
  */
 export const stringBetween: RuleCallBack = (input: string, min_max) => {
   const [min, max] = spliteParam(min_max ?? "");

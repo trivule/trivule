@@ -9,7 +9,6 @@ import { spliteParam, throwEmptyArgsException } from "../utils";
  *  ```html
  * <input data-tr-rules="file" />
  * ```
- * @returns `true` if the input value is a `File` or `Blob` object, `false` otherwise.
  */
 export const isFile: RuleCallBack = (value) => {
   return {
@@ -27,7 +26,6 @@ export const isFile: RuleCallBack = (value) => {
  *  ```html
  * <input data-tr-rules="maxFileSize:1MB" />
  * ```
- * @returns `true` if the size of the input object is less than or equal to the maximum size, `false` otherwise.
  * @throws If the `maxSize` parameter is not in a valid format, an error is thrown.
  */
 export const maxFileSize: RuleCallBack = (input, maxSize) => {
@@ -127,7 +125,6 @@ export const minFileSize: RuleCallBack = (input, minSize) => {
  * ```html
  * <input data-tr-rules="fileBetween:1MB,5MB" />
  * ```
- * @returns `true` if the size of the input object is between the minimum and maximum size, `false` otherwise.
  */
 export const fileBetween: RuleCallBack = (input, min_max) => {
   const [min, max] = spliteParam(min_max ?? "");
@@ -147,7 +144,6 @@ export const fileBetween: RuleCallBack = (input, min_max) => {
  * ```html
  * <input type="file" data-tr-rules="mimies:.pdf"
  * ```
- * @returns `true` if the MIME type of the input object matches the specified MIME type, `false` otherwise.
  */
 export const isMimes: RuleCallBack = (input, param: string) => {
   if (!param) {

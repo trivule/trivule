@@ -1,10 +1,10 @@
-## Contribute to our project
+## Contribute Trivule
 
-We welcome contributions from the community to improve our project. If you encounter problems, have ideas for improvements or would like to make changes to the code, please follow the steps below to contribute.
+We welcome contributions from the community to improve `Trivule`. If you encounter problems, have ideas for improvements or would like to make changes to the code, please follow the steps below to contribute.
 
 ### Open issues
 
-If you encounter problems or have ideas for improvement, feel free to open an issue on our GitHub repository. Be sure to provide as much detail as possible, including screenshots or sample code, to help us understand and resolve the issue.
+If you encounter problems or have ideas for improvement, feel free to open an issue [here](https://github.com/trivule/trivule/issues). Be sure to provide as much detail as possible, including screenshots or sample code, to help us understand and resolve the issue.
 
 ### Submit Pull Requests
 

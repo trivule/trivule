@@ -22,7 +22,6 @@ import { dateBetween, isDate } from "./date";
  * <input data-tr-rules="required" />
  * ```
  * @param options - Optional parameters.
- * @returns `true` if the input is not empty, `false` otherwise.
  */
 export const required: RuleCallBack = (input, ...options) => {
   return {
@@ -46,7 +45,6 @@ export const nullable: RuleCallBack = (input) => {
  *  ```html
  * <input data-tr-rules="in:active,inactive" />
  * ```
- * @returns `true` if the input is in the list, `false` otherwise.
  */
 export const inInput: RuleCallBack = (input, params) => {
   if (!params) {
@@ -67,7 +65,6 @@ export const inInput: RuleCallBack = (input, params) => {
  *  ```html
  * <input data-tr-rules="size:6" />
  * ```
- * @returns `true` if the input is at most the specified size, `false` otherwise.
  */
 export const size: RuleCallBack = (input, maxSize) => {
   if (isFile(input).passes) {
@@ -92,7 +89,6 @@ export const size: RuleCallBack = (input, maxSize) => {
  *  ```html
  * <input data-tr-rules="boolean" />
  * ```
- * @returns `true` if the input is a boolean value, `false` otherwise.
  */
 export const isBoolean: RuleCallBack = (value) => {
   if (typeof value === "boolean") {
@@ -135,7 +131,6 @@ export const isBoolean: RuleCallBack = (value) => {
  * <!--valide file size-->
  * <input type="file" data-tr-rules="between:2MB,3MB" />
  * ```
- * @returns `true` if the input is between the specified values, `false` otherwise.
  */
 export const between: RuleCallBack = (input, min_max, type) => {
   var [min, max] = spliteParam(min_max ?? "");
@@ -187,7 +182,6 @@ export const between: RuleCallBack = (input, min_max, type) => {
  *
  * @param input - The input to check.
  * @param pattern - The regular expression to match against.
- * @returns `true` if the input matches the regular expression, `false` otherwise.
  * @example
  * ```html
  *  <input data-tr-rules="regex:^[A-Z]+$"/>
@@ -243,7 +237,6 @@ export const only: RuleCallBack = (input, param) => {
  * ```html
  * <input data-tr-rules="digit:8"/>
  * ```
- * @returns `true` if the input is a digit with the specified number of digits, `false` otherwise.
  */
 export const digitRule: RuleCallBack = (input, digitCount) => {
   if (!isNumber(digitCount).passes) {
@@ -271,7 +264,6 @@ export const digitRule: RuleCallBack = (input, digitCount) => {
  * ```html
  * <input data-tr-rules="max_digit:10"/>
  * ```
- * @returns `true` if the input is a digit with a number of digits less than or equal to the specified maximum, `false` otherwise.
  */
 export const maxDigitRule: RuleCallBack = (input, maxDigitCount) => {
   if (!isNumber(maxDigitCount).passes) {
@@ -300,7 +292,6 @@ export const maxDigitRule: RuleCallBack = (input, maxDigitCount) => {
  * ```html
  * <input data-tr-rules="min_digit:5"/>
  * ```
- * @returns `true` if the input is a digit with a number of digits greater than or equal to the specified minimum, `false` otherwise.
  */
 export const minDigitRule: RuleCallBack = (input, minDigitCount, type) => {
   if (!isNumber(minDigitCount).passes) {

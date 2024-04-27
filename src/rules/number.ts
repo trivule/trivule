@@ -110,7 +110,6 @@ export const integer: RuleCallBack = (input) => {
  * ```html
  *  <input tr-rules="number"/>
  * ```
- * @returns `true` if the input is a number, `false` otherwise.
  */
 export const isNumber: RuleCallBack = (input) => {
   if (input === "" || input === null || input === undefined) {
