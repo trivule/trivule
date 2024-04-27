@@ -1,7 +1,7 @@
 {
   "name": "trivule",
   "version": "1.0.0-alpha.0",
-  "description": "Trivule is a lightweight form validation library for web applications",
+  "description": "Trivule is a user-friendly JavaScript library for HTML form validation.",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "typings": "./types/src/index.d.ts",
@@ -13,7 +13,7 @@
     "type": "git",
     "url": "https://github.com/trivule/trivule"
   },
-  "docs": "https://github.com/trivule/trivule/blob/main/readme.md",
+  "docs": "https://www.trivule.com/",
   "scripts": {
     "test": "jest",
     "dev": "vite",
@@ -22,9 +22,9 @@
     "preview": "vite preview"
   },
   "keywords": [
-    "Validation, Form validation"
+    "Validation, Form validation, HTML form validator"
   ],
-  "author": "Fassinou Claude (dev.claudy@gmail.com)",
+  "author": "Fassinou Claude (dev.claudy@gmail.com) and contributors",
   "license": "MIT",
   "devDependencies": {
     "@types/jest": "^29.5.1",

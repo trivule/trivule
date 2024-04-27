@@ -9,7 +9,6 @@ import { now, spliteParam, throwEmptyArgsException } from "../utils";
  * ```html
  * <input type="date-local" data-tr-rules="date" />
  * ```
- * @returns Returns true if the input is a valid date, false otherwise.
  */
 export const isDate: RuleCallBack = (input) => {
   const djs = dayjs(new Date(input), undefined, true);
@@ -41,7 +40,6 @@ export const isDate: RuleCallBack = (input) => {
  * ```html
  * <input type="date-local" data-tr-rules="before:2020-11-11" />
  * ```
- * @returns `true` if the input date is before the comparison date, `false` otherwise.
  */
 export const dateBefore: RuleCallBack = (input, date) => {
   if (date === "now") {
@@ -77,7 +75,6 @@ export const dateBefore: RuleCallBack = (input, date) => {
  * ```html
  * <input data-tr-rules="after:now" />
  * ```
- * @returns `true` if the input date is after the comparison date, `false` otherwise.
  */
 export const dateAfter: RuleCallBack = (input, date) => {
   if (date === "now") {
@@ -108,7 +105,6 @@ export const dateAfter: RuleCallBack = (input, date) => {
  *  ```html
  * <input type="date-local" data-tr-rules="dateBetween:2020-11-11,now" />
  * ```
- * @returns `true` if the input date is between the start and end dates (inclusive), `false` otherwise.
  * @throws An exception with the message "Missing required argument: dateBetween" if the `date` parameter is falsy.
  */
 export const dateBetween: RuleCallBack = (input, date) => {
@@ -127,7 +123,6 @@ export const dateBetween: RuleCallBack = (input, date) => {
  * Checks whether a given string represents a valid time in 24-hour format.
  *
  * @param input - The string to check.
- * @returns `true` if the input string represents a valid time in 24-hour format, `false` otherwise.
  * @example
  * ```js
  * {

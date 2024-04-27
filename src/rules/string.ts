@@ -12,7 +12,6 @@ import { RuleCallBack } from "./../contracts/rule-callback";
  *  ```html
  *  <input data-tr-rules="email"/>
  * ```
- * @returns Whether the email address is valid.
  */
 export const email: RuleCallBack = (input, ...options) => {
   const emailRegex =
@@ -32,7 +31,6 @@ export const email: RuleCallBack = (input, ...options) => {
  *  ```html
  *  <input data-tr-rules="minlength:8"/>
  * ```
- * @returns Whether the input is at least the specified length.
  */
 export const minlength: RuleCallBack = (input, length) => {
   return {
@@ -50,7 +48,6 @@ export const minlength: RuleCallBack = (input, length) => {
  *  ```html
  *  <input data-tr-rules="maxlength:8"/>
  * ```
- * @returns Whether the input is no more than the specified length.
  */
 export const maxlength: RuleCallBack = (input, length) => {
   return {
@@ -62,7 +59,6 @@ export const maxlength: RuleCallBack = (input, length) => {
  * Checks if the input is a string.
  *
  * @param val The input to check.
- * @returns Whether the input is a string.
  */
 export const is_string: RuleCallBack = (val: any) => {
   return {
@@ -79,7 +75,6 @@ export const is_string: RuleCallBack = (val: any) => {
  *  ```html
  *  <input data-tr-rules="url"/>
  * ```
- * @returns Whether the URL is valid.
  */
 export const url: RuleCallBack = (input) => {
   const urlRegex = /^(ftp|http|https):\/\/[^ "]+$/;
@@ -97,7 +92,6 @@ export const url: RuleCallBack = (input) => {
  *  ```html
  *  <input data-tr-rules="startWithUpper"/>
  * ```
- * @returns Whether the input starts with an uppercase letter.
  */
 export const startWithUpper: RuleCallBack = (input, local = "EN") => {
   if (typeof input !== "string" || input.length === 0) {
@@ -121,7 +115,6 @@ export const startWithUpper: RuleCallBack = (input, local = "EN") => {
  *  ```html
  *  <input data-tr-rules="startWithLower"/>
  * ```
- * @returns Whether the input starts with a lowercase letter.
  */
 
 export const startWithLower: RuleCallBack = (input) => {
@@ -150,7 +143,6 @@ export const startWithLower: RuleCallBack = (input) => {
  *  ```html
  *  <input data-tr-rules="startWith"/>
  * ```
- * @returns `true` if the input string starts with any of the given prefixes, `false` otherwise.
  * @throws An exception with the message "Missing required argument: startWith" if the `prefix` parameter is falsy.
  */
 export const startWith: RuleCallBack = (input, prefix) => {
@@ -179,7 +171,6 @@ export const startWith: RuleCallBack = (input, prefix) => {
  *  ```html
  *  <input data-tr-rules="endWith"/>
  * ```
- * @returns `true` if the input string ends with one of the specified suffixes, `false` otherwise.
  * @throws An exception with the message "Missing required argument: endWith" if the `suffix` parameter is falsy.
  */
 export const endWith: RuleCallBack = (input, suffix) => {
@@ -208,7 +199,6 @@ export const endWith: RuleCallBack = (input, suffix) => {
  *  ```html
  *  <input data-tr-rules="contains:thanks,yes"/>
  * ```
- * @returns `true` if the input contains all of the specified substrings, `false` otherwise.
  * @throws An exception with the message "Missing required argument: contains" if the `substrings` parameter is falsy.
  */
 export const contains: RuleCallBack = (input, substring) => {
@@ -277,7 +267,6 @@ export const length: RuleCallBack = (input: any, size: any) => {
  *  ```html
  *  <input data-tr-rules="password"/>
  * ```
- * @returns `true` if the input is a valid password, `false` otherwise.
  */
 export const passwordRule: RuleCallBack = (input) => {
   const minLength = 8;
