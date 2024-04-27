@@ -211,9 +211,8 @@ export const regex: RuleCallBack = (input: string, pattern?: string) => {
  * @param input - The input to check.
  * @param param - The parameter specifying the expected type ("string" or "number").
  *  ```html
- *  <input data-tr-rules="only:letter"/>
+ *  <input data-tr-rules="only:digit"/>
  * ```
- * @returns `true` if the input matches the expected type, `false` otherwise.
  */
 export const only: RuleCallBack = (input, param) => {
   let passes = false;
@@ -224,7 +223,7 @@ export const only: RuleCallBack = (input, param) => {
       passes = !/\d/.test(input);
     }
   } else {
-    if (param === "number") {
+    if (param === "digit") {
       passes = isNumber(input).passes;
     }
   }

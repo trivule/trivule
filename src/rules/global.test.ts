@@ -136,8 +136,9 @@ describe("only", () => {
   });
 
   test("should return true if input is a number", () => {
-    expect(only(123, "number").passes).toBe(true);
-    expect(only(0, "number").passes).toBe(true);
+    expect(only(123, "digit").passes).toBe(true);
+    expect(only(0, "digit").passes).toBe(true);
+    expect(only("0098", "digit").passes).toBe(true);
   });
 
   test("should return false if input is not a number", () => {
