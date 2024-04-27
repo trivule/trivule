@@ -40,6 +40,7 @@ npm install
 npm run dev
 ```
 This will start a local development server, and a link to the Trivule homepage (e.g., `http://localhost:5173`) will be displayed in your terminal.
+You can start to test by editing the `/src/example.ts`. It relate to the `index.html` file.
 
 To create the bundles, run the following command:
 ```bash

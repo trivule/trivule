@@ -56,8 +56,7 @@ Here's an example implementation of a callback for the `in` rule:
  * Checks if the input is in the specified list.
  *
  * @param input - The input to be checked.
- * @param params - The list of values to check against. Comma-separated string.
- * @returns `true` if the input is in the list, `false` otherwise.
+ * @param params - The list of values to check against. Comma-separated string. 
  */
 export const inInput: RuleCallBack = (input, params) => {
   if (!params) {
@@ -196,8 +195,7 @@ import {
 /**
  * Check if the input value is in the specified list.
  * @param input - The current value of the field to validate. It can be of types such as `string`, `Blob`, `File`, `number`, `null`, `boolean`, `undefined`, `FileList`.
- * @param params - The list of values to check against. Comma-separated string.
- * @returns `true` if the input is in the list, `false` otherwise.
+ * @param params - The list of values to check against. Comma-separated string. 
  */
 export const inInput: RuleCallBack = (input, params) => {
   if (!params) {
