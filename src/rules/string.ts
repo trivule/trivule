@@ -311,11 +311,11 @@ export const passwordRule: RuleCallBack = (input) => {
  * @param input - The input to check.
  * @example
  *  ```html
- *  <input data-tr-rules="startWithLetter"/>
+ *  <input data-tr-rules="startWithString"/>
  * ```
  * @returns `true` if the input starts with a letter, `false` otherwise.
  */
-export const startWithLetter: RuleCallBack = (input) => {
+export const startWithString: RuleCallBack = (input) => {
   if (
     !is_string(input).passes ||
     input.length === 0 ||
@@ -339,11 +339,10 @@ export const startWithLetter: RuleCallBack = (input) => {
  * @param input - The input to check.
  * @example
  *  ```html
- *  <input data-tr-rules="endWithLetter"/>
+ *  <input data-tr-rules="endWithString"/>
  * ```
- * @returns `true` if the input ends with a letter, `false` otherwise.
  */
-export const endWithLetter: RuleCallBack = (input) => {
+export const endWithString: RuleCallBack = (input) => {
   if (!is_string(input).passes || input.length === 0) {
     return {
       passes: false,

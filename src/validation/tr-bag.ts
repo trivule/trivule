@@ -1,5 +1,5 @@
 import { dateBetween } from "./../rules/date";
-import { endWithLetter, stringBetween } from "../rules/string";
+import { endWithString, stringBetween } from "../rules/string";
 import { fileBetween, isMimes, minFileSize } from "../rules/file";
 import { Rule, RuleCallBack, RulesBag, RulesMessages } from "../contracts";
 import {
@@ -27,7 +27,7 @@ import {
   nullable,
   startWithLower,
   passwordRule,
-  startWithLetter,
+  startWithString,
   excludes,
   containsLetter,
   regex,
@@ -84,8 +84,8 @@ export class TrBag implements ITrBag {
     after: dateAfter,
     phone: phone,
     time: isTime,
-    startWithLetter: startWithLetter,
-    endWithLetter: endWithLetter,
+    startWithString: startWithString,
+    endWithString: endWithString,
     excludes: excludes,
     hasLetter: containsLetter,
     regex: regex,

@@ -1,6 +1,2 @@
-- Rename startWithLetter to startWithString
-- Rename endWithLetter to endWithString
-- Rename containsLetter to containsString
-- Write unit test for the form rules 
-- Rule (only:number) must only:digit 
+- Write unit test for the form rules  
 - Write the maxlength, minlength to accept array

@@ -5,8 +5,8 @@ import {
   maxlength,
   minlength,
   passwordRule,
-  startWithLetter,
-  endWithLetter,
+  startWithString,
+  endWithString,
   startWithLower,
   startWithUpper,
   stringBetween,
@@ -127,32 +127,32 @@ describe("startWithUpper", () => {
   });
 });
 
-describe("startWithLetter", () => {
+describe("startWithString", () => {
   test("should return true if input starts with letter", () => {
-    expect(startWithLetter("Hello").passes).toBe(true);
-    expect(startWithLetter("-test").passes).toBe(true);
+    expect(startWithString("Hello").passes).toBe(true);
+    expect(startWithString("-test").passes).toBe(true);
   });
 
   test("should return false if input does not start with letter", () => {
-    expect(startWithLetter("1hello").passes).toBe(false);
-    expect(startWithLetter(" test").passes).toBe(false);
+    expect(startWithString("1hello").passes).toBe(false);
+    expect(startWithString(" test").passes).toBe(false);
   });
 
   test("should return false for empty input", () => {
-    expect(startWithLetter("").passes).toBe(false);
+    expect(startWithString("").passes).toBe(false);
   });
 
   test("should return false for non-string input", () => {
-    expect(startWithLetter(123).passes).toBe(false);
-    expect(startWithLetter(null).passes).toBe(false);
-    expect(startWithLetter(undefined).passes).toBe(false);
-    expect(startWithLetter(true).passes).toBe(false);
+    expect(startWithString(123).passes).toBe(false);
+    expect(startWithString(null).passes).toBe(false);
+    expect(startWithString(undefined).passes).toBe(false);
+    expect(startWithString(true).passes).toBe(false);
   });
 });
 
-describe("endWithLetter", () => {
+describe("endWithString", () => {
   test("should return true if input ends with letter", () => {
-    expect(endWithLetter("Hello").passes).toBe(true);
+    expect(endWithString("Hello").passes).toBe(true);
   });
 
   test("should return false if input does not end with letter", () => {
@@ -162,14 +162,14 @@ describe("endWithLetter", () => {
   });
 
   test("should return false for empty input", () => {
-    expect(endWithLetter("").passes).toBe(false);
+    expect(endWithString("").passes).toBe(false);
   });
 
   test("should return false for non-string input", () => {
-    expect(endWithLetter(123).passes).toBe(false);
-    expect(endWithLetter(null).passes).toBe(false);
-    expect(endWithLetter(undefined).passes).toBe(false);
-    expect(endWithLetter(true).passes).toBe(false);
+    expect(endWithString(123).passes).toBe(false);
+    expect(endWithString(null).passes).toBe(false);
+    expect(endWithString(undefined).passes).toBe(false);
+    expect(endWithString(true).passes).toBe(false);
   });
 });
 
