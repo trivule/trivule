@@ -1,0 +1,2 @@
+- Write unit test for the form rules  
+- Write the maxlength, minlength to accept array
