@@ -20,4 +20,4 @@ if (typeof window !== "undefined") {
   window.TrLocal = window.TrLocal ?? TrLocal;
 }
 
-export { Trivule, TrivuleForm, TrivuleInput, TrConfig, TrBag };
+export { Trivule, TrivuleForm, TrivuleInput, TrConfig, TrBag, TrLocal };
