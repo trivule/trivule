@@ -19,7 +19,7 @@ If you'd like to make changes to the code, we encourage you to propose a pull re
 ```
 
 4. Make any necessary changes and test them thoroughly. For example, you can add a new rule (see below for details).
-5. Commit your changes using the command `git commit -m "Description of changes"`.
+5. Commit your changes using the command `git commit -m "Clear description of changes"`.
 6. Transfer your changes to your forked repository.
 7. Open a pull request on our GitHub repository and provide a detailed description of the changes you've made.
 
