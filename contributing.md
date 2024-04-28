@@ -143,7 +143,7 @@ Here's an example of adding the `in` rule:
 /**
  * List of Trivule rules grouped by Rule type
  */
-export type Rule = "contains" | "in" | "startWithLetter" /*...*/;
+export type Rule = "contains" | "in" | "email" /*...*/;
 ```
 
 This also enables auto-completion in your code editor, but it's not the primary purpose of adding the rule to this type.

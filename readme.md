@@ -60,7 +60,7 @@ The Trivule library is available on [GitHub](https://github.com/trivule/trivule)
 
 Join the Trivule community:
 - Discord: [https://discord.gg/6xKyDWA8TQ](https://discord.gg/6xKyDWA8TQ)
-- Twitter: [https://twitter.com/trivule](https://twitter.com/trivule)
+- X: [https://twitter.com/trivule](https://twitter.com/trivule)
 
 
 ## License
