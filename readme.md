@@ -71,4 +71,4 @@ Best regards
 
 ## Security
 
-If you discover any security-related issues, please contact me directly at [mailto:dev.claudy@gmail.com](dev.claudy@gmail.com) instead of using the issue tracker.
+If you discover any security-related issues, please contact me directly at [dev.claudy@gmail.com ](mailto:dev.claudy@gmail.com)  instead of using the issue tracker.
