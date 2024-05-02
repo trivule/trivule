@@ -1,2 +1,3 @@
 - messages key add to `ValidationState` interface
 - errors, messages keys to `ITrivuleInputObject`
+- Introduce the possibility for developers to enable or disable the real-time validation, by usin the `data-tr-auto` on the form
