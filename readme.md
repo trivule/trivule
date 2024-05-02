@@ -5,35 +5,73 @@ Trivule is a user-friendly JavaScript real-time library for HTML form validation
 To get started with Trivule, please refer to the comprehensive documentation available [here](http://www.trivule.com/). You can also follow a quick tutorial of less than 5 minutes [here](http://www.trivule.com/docs/tutorial) to familiarize yourself with Trivule.
 
 ## Usage
-No jQuery, no complexe code, javascript, easy to integrate to Angular, React, Vue and others javascript frameworks
-How to validate an input. Trivule make you to save valuable time.
+
+Trivule offers seamless integration with Angular, React, Vue, and other JavaScript frameworks, without relying on jQuery or complex JavaScript code.
+
+### Key Features
+
+- **Concise and Intuitive:** We prioritizes simplicity and intuitiveness, ensuring a smooth development experience.
+
+- **Lightweight and Fast:** With its lightweight nature, Trivule maintains optimal performance without sacrificing speed.
+
+- **Easy Integration:** Seamlessly integrate Trivule into your projects, simplifying the development process across various frameworks.
+
+- **Interactive Real-time Validation:** Experience real-time validation with Trivule, providing instant feedback without manual refreshes. Customize validation rules to suit your specific needs.
+
+- **Ready-to-Use Rules:** Trivule comes equipped with pre-defined validation rules, allowing for quick application of common validation patterns. Easily add or modify rules as needed.
+
+### Validation Made Simple
+
+Effortlessly validate inputs using Trivule, saving valuable development time. Utilize the `data-tr-rules` attribute to define validation rules directly in your HTML:
+
 ```html
-<input type="text" data-tr-rules="required|integer|between:16,50"  name="age" />
+<input type="text" data-tr-rules="required|integer|between:16,50" name="age" />
 ```
-If need to display the error message, just use the `data-tr-feedback` any where you want, wihout your custum design
+
+Display error messages with ease using the `data-tr-feedback` attribute:
+
 ```html
 <div data-tr-feedback="age"></div>
 ```
 
-Sometimes you want to trigger the validation when some events  triggered, you don't need to write `addEventListener` code use `data-tr-events` attribute.
-```html
-<input type="text" data-tr-events="blur|changes"  name="age" />
-```
+##{} Event-Based Validation
 
-To  style your input when validation passes or fails, Trivule provides you the `data-tr-invalid-class` or `data-tr-valid-class` attributes for you. Which accept css class
-```html
-<input type="text" `data-tr-invalid-class="error"` `data-tr-invalid-class="success"` name="age" />
-```
-It's no need to do this for all your form, it  is possible to indicate thees class when initilizing Trivule
-
-By default, Trivule comes with error messages, you can customize them, rewrite them, or translate them into your language. But it's possible to quickly is just use the `data-tr-messages`. The customize the error messages.
+Trigger validation on specific events using the `data-tr-events` attribute, eliminating the need for additional JavaScript code:
 
 ```html
-<input type="text" data-tr-messages="This field is required | Another message"  name="age" />
+<input type="text" data-tr-events="blur|change" name="age" />
 ```
-> Notes: Only the `data-tr-rules` is required, all those attributes are optionals and internally handled by Trivule
 
-[Start use Trivule](https://www.trivule.com/docs)
+### Custom Styling
+
+Style your inputs dynamically based on validation results using `data-tr-invalid-class` or `data-tr-valid-class` attributes:
+
+```html
+<input type="text" data-tr-invalid-class="error" data-tr-valid-class="success" name="age" />
+```
+
+### Custom Error Messages
+
+By default we provide a message for each rul e but you can customize error messages to align with your project's requirements using the `data-tr-messages` attribute:
+```html
+<input type="text" data-tr-messages="This field is required | Another message" name="age" />
+```
+
+**Note:** The `data-tr-rules` attribute is required, while other attributes are optional and handled internally by Trivule.
+
+
+### Add or Edit Rule
+For adding or editing a rule in Trivule, you can play with `TrBag` class
+```javascript
+TrBag.rule("required", (input) => {
+  return {
+    value: input,
+    passes: false,
+  };
+});
+```
+[Get Started with Trivule](https://www.trivule.com/docs)
+
 
 ## Development
 
