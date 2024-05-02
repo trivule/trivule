@@ -145,7 +145,7 @@
     <title>Trivule</title>
   </head>
   <body>
-    <form action="" id="gift-form">
+    <div action="" id="gift-form" data-tr-auto="false">
       <div class="form">
         <label class="label"> Your age</label>
         <input
@@ -157,26 +157,12 @@
       </div>
       <div class="form">
         <label class="label"> Indicate your birth day</label>
-        <input
-          type="date"
-          data-tr-rules="required|dateBetween:1990-01-01 00:00,1999-12-31 23:00"
-          data-tr-messages="The birth day is required|You must be born between 1990 and 1999."
-          name="birthDay"
-        />
-        <div data-tr-feedback="birthDay"></div>
+        <input type="email" data-tr-rules="required|email" name="email" />
+        <div data-tr-feedback="email"></div>
       </div>
 
-      <div class="form">
-        <label>Profession</label>
-        <select name="profession" data-tr-rules="required">
-          <option value="">Select one ...</option>
-          <option value="developer">Web developer</option>
-          <option value="designer">Web designer</option>
-        </select>
-        <div data-tr-feedback="profession"></div>
-      </div>
-      <button>Submit</button>
-    </form>
+      <button data-tr-submit>Submit</button>
+    </div>
 
     <script src="/src/example.ts" type="module"></script>
     <script></script>

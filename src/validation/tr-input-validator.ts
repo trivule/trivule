@@ -202,4 +202,8 @@ export class TrivuleInputralidator extends AbstractInputralidator {
   getRuleExecuted(): RuleExecuted[] {
     return this.validator.getRuleExecuted();
   }
+
+  filledErrors(errors?: string[]) {
+    this.errors = errors ?? this.validator.getMessages();
+  }
 }

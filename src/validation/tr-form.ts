@@ -8,6 +8,7 @@ import {
   ITrivuleInputObject,
 } from "../contracts";
 import { TrLocal } from "../locale/tr-local";
+import { isBoolean } from "../rules";
 import { FormValidator } from "../rules/form/form-validator";
 import { tr_attr_get } from "../utils";
 import { TrBag } from "./tr-bag";
@@ -133,7 +134,9 @@ export class TrivuleForm {
    */
   disableButton() {
     if (this.submitButton) {
-      this.submitButton.setAttribute("disabled", "true");
+      if (this.config.auto) {
+        this.submitButton.setAttribute("disabled", "true");
+      }
       if (this._trDisabledClass) {
         //removeClass enable
         const classArrayEnabled: string[] = this._trEnabledClass.split(" ");
@@ -261,6 +264,8 @@ export class TrivuleForm {
       ruleExecuted: trivuleInput.getRuleExecuted().map((rule) => {
         return { rule: rule.ruleName, passed: rule.passed };
       }),
+      errors: trivuleInput.getErrors(),
+      messages: trivuleInput.getMessages() as string[],
     };
   }
   /**
@@ -292,28 +297,35 @@ export class TrivuleForm {
    * Handle validation before process submtion
    */
   private _onSubmit() {
+    var validateCallback = () => {
+      let results: boolean[] = [];
+      // It will help also to display errors messages
+      for (const qi of this._trivuleInputs) {
+        // Validate each input
+        // The false argument passed, tell that to input to not emit validation event
+        results.push(qi.validate(false));
+      }
+
+      // Test whether each rule passed
+      if (!results.every((passed) => passed)) {
+        //submitEvent.preventDefault();
+        this._emitTrOnFailsEvent();
+      } else {
+        this._emitTrOnPassesEvent();
+      }
+
+      return this._passed;
+    };
     if (this.submitButton) {
       this.submitButton.addEventListener("click", (submitEvent) => {
-        //A validation will be made only if very recently, the form was not valid
-        if (!this._passed) {
-          let results: boolean[] = [];
-          //Don't use every method because, we need to run all validation and get it result
-          // It will help also to display errors messages
-          for (const qi of this._trivuleInputs) {
-            // Validate each input
-            // The false argument passed, tell that to input to not emit validation event
-            results.push(qi.validate(false));
-          }
-          // Test whether each rule passed
-          if (!results.every((passed) => passed)) {
-            submitEvent.preventDefault();
-            this._emitTrOnFailsEvent();
-          } else {
-            this._emitTrOnPassesEvent();
-          }
-        }
+        validateCallback();
       });
     }
+    this.on("submit", (e) => {
+      if (!validateCallback()) {
+        e.preventDefault();
+      }
+    });
   }
 
   /**
@@ -332,6 +344,11 @@ export class TrivuleForm {
       document.querySelector("html")?.getAttribute("lang");
 
     lang = tr_attr_get(this.container, "lang", lang);
+
+    let auto = tr_attr_get(this.container, "auto");
+    if (auto) {
+      this.config.auto = isBoolean(auto).value;
+    }
     if (config && typeof config === "object") {
       this.config = { ...this.config, ...config };
       if (config.local) {
@@ -468,6 +485,7 @@ export class TrivuleForm {
       const qiv = new TrivuleInput(el as HTMLInputElement, {
         validClass: this.config.validClass,
         invalidClass: this.config.invalidClass,
+        autoValidate: this.config.auto,
       });
       qiv.init();
       this._trivuleInputs.push(qiv);

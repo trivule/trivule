@@ -1,4 +1,4 @@
-import { ITrConfig, RuleCallBack } from "../contracts";
+import { RuleCallBack } from "../contracts";
 import { TrivuleInputralidator } from "./tr-input-validator";
 import { TrBag } from "./tr-bag";
 import {
@@ -33,11 +33,13 @@ export class TrivuleInput extends TrivuleInputralidator {
    * ```
    */
   init() {
-    this.param.events?.forEach((e) => {
-      this.inputElement.addEventListener(e, () => {
-        this.validate();
+    if (this.param.autoValidate) {
+      this.param.events?.forEach((e) => {
+        this.inputElement.addEventListener(e, () => {
+          this.validate();
+        });
       });
-    });
+    }
   }
   /**
    * Add new rule to input element

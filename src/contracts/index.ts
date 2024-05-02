@@ -5,6 +5,8 @@ export interface ITrivuleInputObject {
   name: string;
   valid: boolean;
   rules: Rule[];
+  errors: Record<Rule, string>;
+  messages: string[];
   ruleExecuted: {
     rule: string;
     passed: boolean;
@@ -23,6 +25,7 @@ export type ValidationState = {
   value: any;
   alias?: Rule;
   type?: InputType;
+  message?: string[];
 };
 export * from "./rule";
 export * from "./input-change-event";
