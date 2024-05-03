@@ -4,6 +4,10 @@ Trivule is a user-friendly JavaScript real-time library for HTML form validation
  
 To get started with Trivule, please refer to the comprehensive documentation available [here](https://trivule.com). You can also follow a quick tutorial of less than 5 minutes [here](https://trivule.com/docs/tutorial) to familiarize yourself with Trivule.
 
+#### Example
+![Trivule](example.png)
+
+
 ## Usage
 
 Trivule offers seamless integration with Angular, React, Vue, and other JavaScript frameworks, without relying on jQuery or complex JavaScript code.
