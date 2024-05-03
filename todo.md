@@ -1,2 +1,3 @@
 - Write unit test for the form rules  
-- Write the maxlength, minlength to accept array
+- Write equals, accepted rule
+- Open Trivule to accept custom attributes. Instead of data-tr-feedback, you can use feedback, data-my-attribute or even .feedback at the bottom of the page. 

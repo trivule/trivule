@@ -1,5 +1,5 @@
 import { Rule } from "../contracts";
-import { is_string } from "../rules";
+import { is_string, isFile } from "../rules";
 
 /**
  * Parses a rule string and extracts the rule name and parameters.
@@ -110,4 +110,65 @@ export function tr_attr_get<T = any>(
   toJson = false
 ): T {
   return dataset_get<T>(element, `tr-${name}`, defaults, toJson);
+}
+
+export function calculateFileSize(file: any, unit: string): number {
+  let files = fileToArray(file);
+  let count = 0;
+  if (!files.length) {
+    return count;
+  }
+
+  for (const input of files) {
+    if (isFile(input).passes) {
+      const file = input as File;
+      count += file.size;
+    } else {
+      count += 0;
+    }
+  }
+
+  return count;
+}
+
+export function fileToArray(file: any) {
+  if (Array.isArray(file)) {
+    return file;
+  } else if (file instanceof FileList) {
+    return Array.from(file);
+  } else if (file instanceof File || file instanceof Blob) {
+    return [file];
+  }
+
+  return [];
+}
+export function convertFileSize(numericValue: number, unit: string) {
+  unit = unit.toUpperCase();
+  numericValue = Number(numericValue);
+
+  // Convert minSize to bytes based on unit
+  if (unit == "KB") {
+    numericValue = numericValue * 1024;
+  } else if (unit == "MB") {
+    numericValue = numericValue * 1024 * 1024;
+  } else if (unit == "GB") {
+    numericValue = numericValue * 1024 * 1024 * 1024;
+  } else {
+    numericValue = numericValue;
+  }
+  return numericValue;
+}
+
+export function explodeFileParam(value: string) {
+  const match = value.match(/^(\d+(\.\d+)?)\s*(B|KB|MB|GB)$/i);
+
+  if (!match) {
+    throw new Error(
+      "Invalid size format. Please use valid format like '1KB', '1MB', etc."
+    );
+  }
+
+  const numericValue = parseFloat(match[1]);
+  const unit = match[3].toUpperCase();
+  return [numericValue, unit];
 }

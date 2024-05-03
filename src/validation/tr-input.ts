@@ -1,5 +1,5 @@
-import { RuleCallBack } from "../contracts";
-import { TrivuleInputralidator } from "./tr-input-validator";
+import { ITrConfig, RuleCallBack } from "../contracts";
+import { TrivuleInputValidator } from "./tr-input-validator";
 import { TrBag } from "./tr-bag";
 import {
   EventCallback,
@@ -19,7 +19,7 @@ import {
  * trivuleInput.init();
  * ```
  */
-export class TrivuleInput extends TrivuleInputralidator {
+export class TrivuleInput extends TrivuleInputValidator {
   constructor(inputElement: ValidatableInput, param?: TrivuleInputParms) {
     super(inputElement, param);
   }

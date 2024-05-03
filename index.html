@@ -4,6 +4,10 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css"
+    />
     <style>
       [data-tr-feedback] {
         color: rgb(231, 47, 47);
@@ -12,156 +16,113 @@
         font-size: 12px;
         font-weight: 400;
       }
-      input,
-      textarea,
-      select,
-      input[type="file"] {
-        margin: 0;
-        padding: 0;
-        border: none;
-        outline: none;
-        background: none;
-        font-family: inherit;
-        font-size: inherit;
-        color: inherit;
-        display: block;
-        width: 100%;
-        border-radius: 5px;
-      }
-
-      input,
-      textarea,
-      select {
-        border: 1px solid #ccc;
-        padding: 8px;
-        transition: border-color 0.3s ease;
-      }
-
-      input:hover,
-      textarea:hover,
-      select:hover,
-      input[type="file"]:hover {
-        border-color: #999;
-      }
-
-      input:focus,
-      textarea:focus,
-      select:focus,
-      input[type="file"]:focus {
-        border-color: #007bff;
-      }
-      input.is-invalid,
-      textarea.is-invalid,
-      select.is-invalid,
-      input[type="file"].is-invalid {
-        border-left: 4px solid #ff0000;
-        border-color: #ff0000;
-      }
-
-      input.is-valid,
-      textarea.is-valid,
-      select.is-valid,
-      input[type="file"].is-valid {
-        border-left: 4px solid #28a745;
-        border-color: #28a745;
+      body {
+        background-color: #f8f8f8;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
       }
       label {
-        display: block;
-        margin-bottom: 8px;
-        font-weight: bold;
+        font-weight: 600;
       }
-      .help {
-        display: block;
-        margin-top: 4px;
-        font-size: 14px;
-        color: #777;
-      }
-      button,
-      input[type="button"],
-      input[type="submit"],
-      input[type="reset"] {
-        display: inline-block;
-        margin: 0;
-        padding: 12px 24px;
-        font-size: 16px;
-        font-weight: bold;
-        text-align: center;
-        text-decoration: none;
-        white-space: nowrap;
-        cursor: pointer;
-        background-color: #007bff;
-        color: #fff;
-        border: none;
-        border-radius: 4px;
-      }
-
-      button:not(:disabled):hover,
-      input[type="button"]:not(:disabled):hover,
-      input[type="submit"]:not(:disabled):hover,
-      input[type="reset"]:not(:disabled):hover {
-        background-color: #0056b3;
-      }
-
-      button:not(:disabled):focus,
-      input[type="button"]:not(:disabled):focus,
-      input[type="submit"]:not(:disabled):focus,
-      input[type="reset"]:not(:disabled):focus {
-        outline: none;
-        box-shadow: 0 0 0 2px #007bff;
-      }
-      button:disabled,
-      input[type="button"]:disabled,
-      input[type="submit"]:disabled,
-      input[type="reset"]:disabled {
-        cursor: not-allowed;
-        background-color: #e0e0e0;
-        color: #777;
-      }
-
-      form {
-        max-width: 500px;
-        margin: auto;
-      }
-      div,
-      p {
-        margin-bottom: 10px;
-      }
-      .disabled {
-        opacity: 0.5;
-        pointer-events: none;
-      }
-      .enabled {
-        opacity: 1;
-        pointer-events: auto;
-      }
-
       .form {
-        width: 350px;
-        font-family: sans-serif;
-        font-weight: bold;
-        padding: 10px;
+        width: 550px;
+        margin: auto;
+        background-color: #fff;
+        padding: 50px;
+      }
+
+      [data-tr-feedback] {
+        font-family: "Courier New", Courier, monospace;
+        font-size: 14px;
+        color: rgb(252, 55, 55);
+      }
+
+      .is-invalid {
+        border-color: rgb(252, 55, 55);
+        animation: shake 0.5s ease-in-out; /* Animation pour les champs invalides */
+      }
+
+      .is-valid {
+        border-color: #2ca35a;
+        box-shadow: 0 2px 3px #cbffc0;
+        border-bottom: 3px solid #2ca35a;
+        animation: fadeIn 0.5s ease-in-out; /* Animation pour les champs valides */
+      }
+      input[type="submit"] {
+        border-color: #2ca35a;
+        box-shadow: 0 2px 3px #cbffc0;
+        border-bottom: 3px solid #2ca35a;
+        background-color: #2ca35a;
+      }
+
+      @keyframes shake {
+        0% {
+          transform: translateX(0);
+        }
+        20% {
+          transform: translateX(-10px);
+        }
+        40% {
+          transform: translateX(10px);
+        }
+        60% {
+          transform: translateX(-10px);
+        }
+        80% {
+          transform: translateX(10px);
+        }
+        100% {
+          transform: translateX(0);
+        }
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(-20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
       }
     </style>
     <title>Trivule</title>
   </head>
   <body>
-    <div action="" id="gift-form" data-tr-auto="false">
-      <div class="form">
-        <label class="label"> Your age</label>
-        <input
-          type="text"
-          data-tr-rules="required|integer|between:16,50"
-          name="age"
-        />
-        <div data-tr-feedback="age"></div>
-      </div>
-      <div class="form">
-        <label class="label"> Indicate your birth day</label>
-        <input type="email" data-tr-rules="required|email" name="email" />
-        <div data-tr-feedback="email"></div>
-      </div>
+    <div class="form">
+      <p>Validation scenario with Trivule</p>
+      <fieldset>
+        <label>
+          First name
+          <input
+            name="first_name"
+            data-tr-rules="required|file|mimes:image/*|size:5MB"
+            multiple
+            type="file"
+          />
+          <div data-tr-feedback="first_name"></div>
+        </label>
 
-      <button data-tr-submit>Submit</button>
+        <label>
+          Email
+          <input type="email" name="email" data-tr-rules="required|email" />
+          <div data-tr-feedback="email"></div>
+        </label>
+        <label>Your favorite language</label>
+        <select name="favorite_cuisine" data-tr-rules="required">
+          <option selected value="">Select ...</option>
+          <option>JavaScript</option>
+          <option>TypeScript</option>
+          <option>HMTL</option>
+        </select>
+        <div data-tr-feedback="favorite_cuisine"></div>
+      </fieldset>
+
+      <input type="submit" value="Subscribe" data-tr-submit />
     </div>
 
     <script src="/src/example.ts" type="module"></script>

@@ -6,7 +6,7 @@ import {
 } from "../contracts/types";
 import { RuleExecuted } from "./utils/rule-executed";
 
-export class TrivuleInputralidator extends AbstractInputralidator {
+export class TrivuleInputValidator extends AbstractInputralidator {
   /**
    * Check if pass event should be emitted
    */
