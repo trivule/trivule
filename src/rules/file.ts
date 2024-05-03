@@ -1,5 +1,12 @@
 import { RuleCallBack } from "../contracts";
-import { spliteParam, throwEmptyArgsException } from "../utils";
+import {
+  calculateFileSize,
+  convertFileSize,
+  explodeFileParam,
+  fileToArray,
+  spliteParam,
+  throwEmptyArgsException,
+} from "../utils";
 
 /**
  * Checks whether a given value is a `File` or `Blob` object.
@@ -11,8 +18,21 @@ import { spliteParam, throwEmptyArgsException } from "../utils";
  * ```
  */
 export const isFile: RuleCallBack = (value) => {
+  const _isFile = (f: any) => {
+    return f instanceof File || f instanceof Blob || f instanceof FileList;
+  };
+  let passes = false;
+  if (
+    Array.isArray(value) &&
+    !!value.length &&
+    value.every((f) => _isFile(value))
+  ) {
+    passes = true;
+  }
+  passes = _isFile(value) || passes;
+
   return {
-    passes: value instanceof File || value instanceof Blob,
+    passes: passes,
     value: value,
   };
 };
@@ -29,42 +49,32 @@ export const isFile: RuleCallBack = (value) => {
  * @throws If the `maxSize` parameter is not in a valid format, an error is thrown.
  */
 export const maxFileSize: RuleCallBack = (input, maxSize) => {
-  if (isFile(input).passes) {
-    const file = input as File;
-    const sizeInBytes = file.size;
-    let maxSizeInBytes: number;
+  const files = fileToArray(input);
 
-    // Check if maxSize has a valid unit and extract the numeric value and unit
-    const match = maxSize?.match(/^(\d+(\.\d+)?)\s*(B|KB|MB|GB)$/i);
-    if (!match) {
-      throw new Error(
-        "Invalid maxSize format. Please use valid format like '1KB', '1MB', etc."
-      );
-    }
-
-    const numericValue = parseFloat(match[1]);
-    const unit = match[3].toUpperCase();
-
-    // Convert maxSize to bytes based on unit
-    if (unit === "KB") {
-      maxSizeInBytes = numericValue * 1024;
-    } else if (unit === "MB") {
-      maxSizeInBytes = numericValue * 1024 * 1024;
-    } else if (unit === "GB") {
-      maxSizeInBytes = numericValue * 1024 * 1024 * 1024;
-    } else {
-      maxSizeInBytes = numericValue; // If no unit specified, consider it as bytes
-    }
+  if (!files.length) {
     return {
-      passes: sizeInBytes <= maxSizeInBytes,
       value: input,
-    };
-  } else {
-    return {
       passes: false,
-      value: input,
     };
   }
+  let passes = files.every((input) => {
+    if (isFile(input).passes) {
+      let numericValue, unit;
+      try {
+        [numericValue, unit] = explodeFileParam(maxSize) as any[];
+      } catch (error) {
+        throw error;
+      }
+      return input.size <= convertFileSize(numericValue, unit);
+    } else {
+      return true;
+    }
+  });
+
+  return {
+    passes: passes,
+    value: files,
+  };
 };
 /**
  * A validation rule that checks if the size of a file is greater than or equal to the specified minimum size.
@@ -79,41 +89,30 @@ export const maxFileSize: RuleCallBack = (input, maxSize) => {
  * @throws An error if the minSize parameter is not a valid string in the format '<number><unit>'.
  */
 export const minFileSize: RuleCallBack = (input, minSize) => {
-  if (isFile(input)) {
-    const file = input as File;
-    const sizeInBytes = file.size;
-    let minSizeInBytes: number;
-
-    const match = minSize?.match(/^(\d+(\.\d+)?)\s*(B|KB|MB|GB)$/i);
-    if (!match) {
-      throw new Error(
-        "Invalid minSize format. Please use valid format like '1KB', '1MB', etc."
-      );
-    }
-
-    const numericValue = parseFloat(match[1]);
-    const unit = match[3].toUpperCase();
-
-    // Convert minSize to bytes based on unit
-    if (unit === "KB") {
-      minSizeInBytes = numericValue * 1024;
-    } else if (unit === "MB") {
-      minSizeInBytes = numericValue * 1024 * 1024;
-    } else if (unit === "GB") {
-      minSizeInBytes = numericValue * 1024 * 1024 * 1024;
-    } else {
-      minSizeInBytes = numericValue; // If no unit specified, consider it as bytes
-    }
+  let files = fileToArray(input);
+  if (!files.length) {
     return {
-      passes: sizeInBytes >= minSizeInBytes,
       value: input,
-    };
-  } else {
-    return {
       passes: false,
-      value: input,
     };
   }
+  let passses = files.every((input) => {
+    if (isFile(input).passes) {
+      let numericValue, unit;
+      try {
+        [numericValue, unit] = explodeFileParam(minSize) as any[];
+      } catch (error) {
+        throw error;
+      }
+      return input.size >= convertFileSize(numericValue, unit);
+    } else {
+      return false;
+    }
+  });
+  return {
+    passes: passses,
+    value: files,
+  };
 };
 
 /**
@@ -128,8 +127,18 @@ export const minFileSize: RuleCallBack = (input, minSize) => {
  */
 export const fileBetween: RuleCallBack = (input, min_max) => {
   const [min, max] = spliteParam(min_max ?? "");
+  let files = fileToArray(input);
+  if (!files.length) {
+    return {
+      value: input,
+      passes: false,
+    };
+  }
+  let passes = files.every((input) => {
+    return maxFileSize(input, max).passes && minFileSize(input, min).passes;
+  });
   return {
-    passes: maxFileSize(input, max).passes && minFileSize(input, min).passes,
+    passes: passes,
     value: input,
   };
 };
@@ -137,44 +146,59 @@ export const fileBetween: RuleCallBack = (input, min_max) => {
 /**
  * Checks whether the MIME type of a given `File` or `Blob` object matches the specified MIME type.
  *
- * @param input - The `File` or `Blob` object to check.
+ * @param input - The `File` or `Blob`, `FileList` File[] object to check.
  * @param param - The MIME type(s) to match. It can be a wildcard (*), a specific MIME type (.pdf), or a MIME type group (images/*).
  *
  * @example
  * ```html
- * <input type="file" data-tr-rules="mimies:.pdf"
+ * <input type="file" data-tr-rules="mimes:.pdf"
  * ```
  */
 export const isMimes: RuleCallBack = (input, param: string) => {
   if (!param) {
     throwEmptyArgsException("mimes");
   }
-  if (input instanceof File) {
-    const file = input as File;
-    const allowedMimes = param?.split(",").map((m) => m.trim()) ?? [];
 
-    let passes = allowedMimes.some((allowedMime) => {
-      allowedMime = allowedMime.replace(/\s/g, "");
-      if (allowedMime === "*") {
-        return true; // Wildcard (*) matches any MIME type
-      } else if (allowedMime.endsWith("/*")) {
-        const group = allowedMime.slice(0, -2); // Remove the trailing /*
-        return file.type.startsWith(group);
-      } else if (allowedMime.startsWith("*.")) {
-        const ext = allowedMime.substring(2); // get extension without the "*."
-        return file.name.endsWith(ext);
-      } else {
-        return file.type === allowedMime;
-      }
-    });
+  let files = fileToArray(input);
+  if (!files.length) {
     return {
-      passes: passes,
       value: input,
-    };
-  } else {
-    return {
       passes: false,
-      value: input,
     };
   }
+
+  let passes = files.every((input) => {
+    if (isFile(input).passes) {
+      const file = input as File;
+
+      const allowedMimes = param?.split(",").map((m) => m.trim()) ?? [];
+
+      let passes = allowedMimes.some((allowedMime) => {
+        allowedMime = allowedMime.replace(/\s/g, "");
+        if (
+          allowedMime === "*" ||
+          file.name.endsWith(allowedMime) ||
+          allowedMime == "" ||
+          file.type == ""
+        ) {
+          return true; // Wildcard (*) matches any MIME type
+        } else if (allowedMime.endsWith("/*")) {
+          const group = allowedMime.slice(0, -2); // Remove the trailing /*
+          return file.type.startsWith(group);
+        } else if (allowedMime.startsWith("*.")) {
+          const ext = allowedMime.substring(2); // get extension without the "*."
+          return file.name.endsWith(ext);
+        } else {
+          return file.type === allowedMime;
+        }
+      });
+      return passes;
+    } else {
+      return false;
+    }
+  });
+  return {
+    passes: passes,
+    value: input,
+  };
 };

@@ -9,7 +9,13 @@ import {
   stringBetween,
   fileBetween,
 } from ".";
-import { spliteParam, throwEmptyArgsException } from "../utils";
+import {
+  calculateFileSize,
+  convertFileSize,
+  explodeFileParam,
+  spliteParam,
+  throwEmptyArgsException,
+} from "../utils";
 import { ArgumentParser } from "../validation/utils/argument-parser";
 import { RuleCallBack } from "./../contracts/rule-callback";
 import { dateBetween, isDate } from "./date";
@@ -68,10 +74,21 @@ export const inInput: RuleCallBack = (input, params) => {
  */
 export const size: RuleCallBack = (input, maxSize) => {
   if (isFile(input).passes) {
+    let numericValue, unit;
+    try {
+      [numericValue, unit] = explodeFileParam(maxSize) as any[];
+    } catch (error) {
+      throw error;
+    }
+    let fileSize = calculateFileSize(input, unit);
+
+    if (isNaN(fileSize)) {
+      fileSize = 0;
+    }
+    numericValue = convertFileSize(numericValue, unit);
     return {
-      passes: maxFileSize(input, maxSize).passes,
+      passes: fileSize <= numericValue,
       value: input,
-      alias: "maxFileSize",
     };
   } else {
     return {

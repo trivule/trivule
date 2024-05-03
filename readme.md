@@ -2,7 +2,7 @@
 
 Trivule is a user-friendly JavaScript real-time library for HTML form validation. It allows you to quickly add validation rules to your form fields using custom HTML attributes, without the need to write additional JavaScript code. Trivule's custom HTML attributes are easy to understand and use, enabling you to set up a robust validation system without spending a lot of time creating custom validation functions or writing complex JavaScript code.
  
-To get started with Trivule, please refer to the comprehensive documentation available [here](http://www.trivule.com/). You can also follow a quick tutorial of less than 5 minutes [here](http://www.trivule.com/docs/tutorial) to familiarize yourself with Trivule.
+To get started with Trivule, please refer to the comprehensive documentation available [here](https://trivule.com). You can also follow a quick tutorial of less than 5 minutes [here](https://trivule.com/docs/tutorial) to familiarize yourself with Trivule.
 
 ## Usage
 
@@ -123,7 +123,7 @@ The directory structure of the Trivule project is organized as follows:
 
 ## Contribution
 
-The Trivule library is available on [GitHub](https://github.com/trivule/trivule) under an open-source license. We welcome contributions from the community. Please refer to our [contribution guidelines](http://www.trivule.com/docs/contribution) for more information and review our [code of conduct](http://www.trivule.com/docs/contribution#code-de-conduite) before contributing. Thank you to all the contributors who are involved in the development of Trivule.
+The Trivule library is available on [GitHub](https://github.com/trivule/trivule) under an open-source license. We welcome contributions from the community. Please refer to our [contribution guidelines](https://trivule.com/docs/contribution) for more information and review our [code of conduct](https://trivule.com/docs/contribution#code-de-conduite) before contributing. Thank you to all the contributors who are involved in the development of Trivule.
 
 ## Community
 

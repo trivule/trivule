@@ -48,18 +48,18 @@ describe("maxFileSize", () => {
     expect(maxFileSize("not a file", "2KB").passes).toBe(false);
   });
 
-  test("should throw an error for invalid maxSize format", () => {
+  test("should throw an error for invalid size format", () => {
     const file1KB = createFile("file1KB.txt", 1024); // 1KB
 
     expect(() => maxFileSize(file1KB, "2KB123")).toThrow(
-      "Invalid maxSize format. Please use valid format like '1KB', '1MB', etc."
+      "Invalid size format. Please use valid format like '1KB', '1MB', etc."
     );
 
     expect(() => maxFileSize(file1KB, "B")).toThrow(
-      "Invalid maxSize format. Please use valid format like '1KB', '1MB', etc."
+      "Invalid size format. Please use valid format like '1KB', '1MB', etc."
     );
     expect(() => maxFileSize(file1KB, "10TB")).toThrow(
-      "Invalid maxSize format. Please use valid format like '1KB', '1MB', etc."
+      "Invalid size format. Please use valid format like '1KB', '1MB', etc."
     );
   });
 });
