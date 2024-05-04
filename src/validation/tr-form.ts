@@ -6,6 +6,7 @@ import {
   RuleCallBack,
   ValidatableForm,
   ITrivuleInputObject,
+  ITrivuleInputCallback,
 } from "../contracts";
 import { TrLocal } from "../locale/tr-local";
 import { isBoolean } from "../rules";
@@ -15,7 +16,6 @@ import { TrBag } from "./tr-bag";
 import { TrivuleInput } from "./tr-input";
 
 /**
- * @author Claude Fassinou
  * TrivuleForm is responsible for applying live validation to an HTML form.
  * Creates an instance of TrivuleForm.
  * @param formElement The HTML form element to apply live validation to.
@@ -62,7 +62,7 @@ export class TrivuleForm {
   /**
    * The inputs rules
    */
-  private _trivuleInputs: TrivuleInput[] = [];
+  private _trivuleInputs: Record<string, TrivuleInput> = {};
   /**
    * The submition input
    */
@@ -205,7 +205,7 @@ export class TrivuleForm {
       });
     });
     // Validates the entire form whenever a tr.input.passes or tr.input.fails event is listened to
-    this._trivuleInputs.forEach((trivuleInput) => {
+    this.each((trivuleInput) => {
       trivuleInput.onFails(this._handle.bind(this));
       trivuleInput.onPasses(this._handle.bind(this));
     });
@@ -218,9 +218,9 @@ export class TrivuleForm {
 
   inputs(strict = true): ITrivuleInputObject[] | TrivuleInput[] {
     if (strict) {
-      return this._trivuleInputs.map(this.getInputsMap);
+      return this.inputsToArray().map(this.getInputsMap);
     }
-    return this._trivuleInputs;
+    return this.inputsToArray();
   }
   /**
    * Retrieves the list of validated inputs.
@@ -230,11 +230,11 @@ export class TrivuleForm {
 
   validated(strict: boolean = false): ITrivuleInputObject[] | TrivuleInput[] {
     if (strict) {
-      return this._trivuleInputs
+      return this.inputsToArray()
         .filter((t) => t.passes())
         .map(this.getInputsMap);
     }
-    return this._trivuleInputs.filter((t) => t.passes());
+    return this.inputsToArray().filter((t) => t.passes());
   }
   /**
    * Retrieves the list of failed inputs.
@@ -244,11 +244,11 @@ export class TrivuleForm {
 
   failed(strict: boolean = false): ITrivuleInputObject[] | TrivuleInput[] {
     if (strict) {
-      return this._trivuleInputs
+      return this.inputsToArray()
         .filter((t) => t.fails())
         .map(this.getInputsMap);
     }
-    return this._trivuleInputs.filter((t) => t.fails());
+    return this.inputsToArray().filter((t) => t.fails());
   }
   /**
    * Converts a TrivuleInput instance into an ITrivuleInputObject format.
@@ -285,9 +285,11 @@ export class TrivuleForm {
    * @returns
    */
   isValid() {
-    return this._trivuleInputs.every((qiv) => {
-      return qiv.passes();
+    const passes: boolean[] = [];
+    this.each((trInput) => {
+      passes.push(trInput.passes());
     });
+    return passes.every((pass) => pass);
   }
 
   passes() {
@@ -300,11 +302,11 @@ export class TrivuleForm {
     var validateCallback = () => {
       let results: boolean[] = [];
       // It will help also to display errors messages
-      for (const qi of this._trivuleInputs) {
+      this.each((trInput) => {
         // Validate each input
         // The false argument passed, tell that to input to not emit validation event
-        results.push(qi.validate(false));
-      }
+        results.push(trInput.validate(false));
+      });
 
       // Test whether each rule passed
       if (!results.every((passed) => passed)) {
@@ -474,7 +476,7 @@ export class TrivuleForm {
    * Initializes TrivuleInputs for the form.
    */
   private _initTrivuleInputs(trivuleInputs?: HTMLElement[]) {
-    this._trivuleInputs = [];
+    this._trivuleInputs = {};
     trivuleInputs = !!trivuleInputs
       ? trivuleInputs
       : Array.from(
@@ -488,7 +490,7 @@ export class TrivuleForm {
         autoValidate: this.config.auto,
       });
       qiv.init();
-      this._trivuleInputs.push(qiv);
+      this._trivuleInputs[qiv.name] = qiv;
     }
   }
 
@@ -532,7 +534,7 @@ export class TrivuleForm {
     });
 
     this.destroyInputs();
-    this._trivuleInputs = [];
+    this._trivuleInputs = {};
     this.emit("tr.form.destroy");
   }
 
@@ -590,13 +592,10 @@ export class TrivuleForm {
    *
    */
   with(inputName: string, params: TrivuleInputParms) {
-    const trivuleInput = this._trivuleInputs.find((qiv) =>
-      qiv.whereName(inputName)
-    );
+    const trivuleInput = this.get(inputName);
     if (trivuleInput) {
-      const trivuleInputIndex = this._trivuleInputs.indexOf(trivuleInput);
       trivuleInput.with(params);
-      this._trivuleInputs[trivuleInputIndex] = trivuleInput;
+      this._trivuleInputs[inputName] = trivuleInput;
     }
   }
   /**
@@ -631,8 +630,28 @@ export class TrivuleForm {
   }
 
   private destroyInputs() {
-    for (const trivuleInput of this._trivuleInputs) {
-      trivuleInput.destroy();
+    this.each((trInput) => {
+      trInput.destroy();
+    });
+  }
+
+  each(call: ITrivuleInputCallback<TrivuleInput, any>) {
+    for (const name in this._trivuleInputs) {
+      if (Object.prototype.hasOwnProperty.call(this._trivuleInputs, name)) {
+        call(this._trivuleInputs[name]);
+      }
     }
+  }
+  get(name: string): TrivuleInput | null {
+    return this._trivuleInputs[name] ?? null;
+  }
+  inputsToArray() {
+    return Object.keys(this._trivuleInputs).map(
+      (key) => this._trivuleInputs[key]
+    );
+  }
+
+  addInput(trInput: TrivuleInput) {
+    this._trivuleInputs[trInput.getName()] = trInput;
   }
 }

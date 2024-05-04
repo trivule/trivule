@@ -1,4 +1,5 @@
 import { Rule } from "./rule";
+import { CssSelector, TrivuleInputParms, ValidatableInput } from "./types";
 export type ITrivuleInputCallback<P, R> = (param: P) => R;
 
 export interface ITrivuleInputObject {
@@ -187,7 +188,7 @@ export interface ITrivuleInput {
    * const trivuleInput = new TrivuleInput();
    * trivuleInput.setMessageAttributeName("data-feedback"); // Sets the feedback message attribute to "data-feedback"
    */
-  setMessageAttributeName(attrName: string): this;
+  setMessageAttributeName(attrName?: string): this;
 
   /**
    * Sets the type of the input element.
@@ -312,6 +313,14 @@ export interface ITrivuleInput {
     rule: string,
     callback: ITrivuleInputCallback<ITrivuleInput, ITrivuleInput>
   ): this;
+
+  getFeedbackElement(): HTMLElement | null;
+
+  setInputElement(element: ValidatableInput): this;
+  setParams(params?: TrivuleInputParms): this;
+  setRules(rules?: string[]): this;
+
+  pushRule(existingRuleName: string): this;
 }
 
 export * from "./rule";

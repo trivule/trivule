@@ -52,7 +52,7 @@ export class TrivuleInput extends TrivuleInputValidator {
   }
 
   with(param: TrivuleInputParms) {
-    this._setParams(param);
+    this.setParams(param);
     this.validator.setParams(this.param);
   }
 

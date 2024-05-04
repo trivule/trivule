@@ -1,10 +1,20 @@
 import { TrValidation, TrBag } from ".";
 import { Rule, RulesMessages } from "../contracts";
-import { TrivuleInputParms, ValidatableInput } from "../contracts/types";
+import {
+  CssSelector,
+  TrivuleInputParms,
+  ValidatableInput,
+} from "../contracts/types";
 import { TrLocal } from "../locale/tr-local";
 import { ValidationErrorMessage } from "../messages";
-import { dataset_get, getRule, tr_attr_get } from "../utils";
+import {
+  dataset_get,
+  getHTMLElementBySelector,
+  getRule,
+  tr_attr_get,
+} from "../utils";
 import { NativeValidation } from "./native-validation";
+import { TrParameter } from "./utils/parameter";
 
 /**
  * @author Claude Fassinou
@@ -37,11 +47,6 @@ export abstract class AbstractInputralidator {
   protected _errors: string[] = [];
 
   /**
-   * Input name
-   */
-  protected name = "";
-
-  /**
    * How to show the message
    */
   protected showMessage = "first";
@@ -64,14 +69,20 @@ export abstract class AbstractInputralidator {
     type: "text",
   };
 
-  constructor(selector: ValidatableInput, params?: TrivuleInputParms) {
-    this.validator = new TrValidation(this.param);
-    this.setInputElement(selector);
-    this._setParams(params);
+  protected parameter: TrParameter;
 
-    this.setRules(params?.rules);
-    this.setInputName();
-    this.setFeedbackElement();
+  constructor(
+    selector: ValidatableInput,
+    params?: TrivuleInputParms,
+    parameter?: TrParameter
+  ) {
+    this.validator = new TrValidation(this.param);
+    this.parameter = parameter ?? new TrParameter();
+    this.setInputElement(selector)
+      .setParams(params)
+      .setRules(params?.rules)
+      .setMessageAttributeName()
+      .setFeedbackElement();
     this.setShowMessage();
     this._setTrValidationClass();
 
@@ -132,7 +143,7 @@ export abstract class AbstractInputralidator {
    * @param {ValidatableInput} inputElement - The input element or selector string representing the input element.
    * @throws {Error} If the input element is not valid or cannot be found.
    */
-  private setInputElement(inputElement: ValidatableInput) {
+  setInputElement(inputElement: ValidatableInput) {
     if (!(inputElement instanceof Element)) {
       const el = document.querySelector<HTMLElement>(inputElement);
       if (el) {
@@ -151,23 +162,12 @@ export abstract class AbstractInputralidator {
     if (this.inputElement.tagName.toLowerCase() === "textarea") {
       this.param.type = "text";
     }
+
+    return this;
   }
 
-  private setInputName() {
-    let name: string | undefined = this.inputElement.name;
-
-    if (
-      name === undefined ||
-      name === null ||
-      (typeof name === "string" && name.length < 0)
-    ) {
-      throw new Error("The input name could not be empty or null");
-    }
-
-    this.name = name;
-    let attr = tr_attr_get(this.inputElement, "name") ?? this.name;
-
-    this.param.attribute = attr;
+  get name() {
+    return this.inputElement.name ?? this.param.name ?? "";
   }
 
   set errors(value: any) {
@@ -182,20 +182,27 @@ export abstract class AbstractInputralidator {
    * that is associated with the current input element, and stores a reference to it.
    *
    */
-  private setFeedbackElement() {
-    const inputElement = this.inputElement;
-
-    let parentElement = inputElement.parentElement;
+  setFeedbackElement(selector?: CssSelector) {
     let feedbackElement: HTMLElement | null = null;
+    if (!selector) {
+      const inputElement = this.inputElement;
 
-    while (parentElement && !feedbackElement) {
-      feedbackElement = parentElement.querySelector(
-        `[data-tr-feedback='${this.name}']`
-      );
-      parentElement = parentElement.parentElement;
+      let parentElement = inputElement.parentElement;
+
+      while (parentElement && !feedbackElement) {
+        const s = this.parameter.getFeedbackSelector(this.name);
+        feedbackElement = !!s
+          ? getHTMLElementBySelector(s, parentElement)
+          : feedbackElement;
+        parentElement = parentElement.parentElement;
+      }
+      this.feedbackElement = feedbackElement;
+    } else {
+      this.feedbackElement = getHTMLElementBySelector(selector);
     }
-    this.feedbackElement = feedbackElement;
     this.param.feedbackElement = this.param.feedbackElement ?? feedbackElement;
+
+    return this;
   }
 
   /**
@@ -314,7 +321,7 @@ export abstract class AbstractInputralidator {
     }
   }
 
-  protected _setParams(param?: TrivuleInputParms) {
+  setParams(param?: TrivuleInputParms) {
     if (typeof param === "object" && typeof param !== "undefined") {
       this.param = { ...this.param, ...param };
     }
@@ -322,5 +329,11 @@ export abstract class AbstractInputralidator {
     if (json) {
       this.param = Object.assign(this.param, json);
     }
+    return this;
+  }
+
+  setMessageAttributeName(attrName?: string): this {
+    this.param.attribute = attrName ?? this.name;
+    return this;
   }
 }

@@ -5,8 +5,12 @@ import {
   ValidatableInput,
 } from "../contracts/types";
 import { RuleExecuted } from "./utils/rule-executed";
+import { ITrivuleInput, ITrivuleInputCallback } from "../contracts";
 
-export class TrivuleInputValidator extends AbstractInputralidator {
+export class TrivuleInputValidator
+  extends AbstractInputralidator
+  implements ITrivuleInput
+{
   /**
    * Check if pass event should be emitted
    */
@@ -205,5 +209,99 @@ export class TrivuleInputValidator extends AbstractInputralidator {
 
   filledErrors(errors?: string[]) {
     this.errors = errors ?? this.validator.getMessages();
+  }
+  reset(): void {}
+  removeAttribute(attrName: string): this {
+    return this;
+  }
+  removeRule(rule: string): this {
+    return this;
+  }
+
+  removeRules(rules: string[] | string): this {
+    return this;
+  }
+
+  replaceRule(
+    oldRule: string | Record<string, string> | string[],
+    newRule?: string
+  ): this {
+    return this;
+  }
+
+  setAttribute(attrName: string, value: any): this {
+    return this;
+  }
+
+  setMessage(message: string, rule: string): this {
+    return this;
+  }
+  setMessagesByRules(messages: Record<string, string>): this {
+    return this;
+  }
+  setInvalidAttributes(attrs: Record<string, string>): this {
+    return this;
+  }
+  setInvalidClass(className: string): this {
+    return this;
+  }
+  setValidAttributes(attrs: Record<string, string>): this {
+    return this;
+  }
+  setValue(value: any): this {
+    return this;
+  }
+  setValidClass(className: string): this {
+    return this;
+  }
+  setAutoValidate(autoValidate: boolean): this {
+    return this;
+  }
+  setEventTriggers(eventTriggers: string | string[]): this {
+    return this;
+  }
+  setType(type: string): this {
+    return this;
+  }
+  beforeRunRule(
+    rule: string,
+    callback: ITrivuleInputCallback<ITrivuleInput, ITrivuleInput>
+  ): this {
+    return this;
+  }
+  afterRunRule(
+    rule: string,
+    callback: ITrivuleInputCallback<ITrivuleInput, ITrivuleInput>
+  ): this {
+    return this;
+  }
+  beforeInit(callback: ITrivuleInputCallback<ITrivuleInput, any>): void {}
+
+  afterInit(callback: ITrivuleInputCallback<ITrivuleInput, any>): void {}
+
+  onRuleFail(
+    rule: string,
+    callback: ITrivuleInputCallback<ITrivuleInput, ITrivuleInput>
+  ): this {
+    return this;
+  }
+  onRulePass(
+    rule: string,
+    callback: ITrivuleInputCallback<ITrivuleInput, ITrivuleInput>
+  ): this {
+    return this;
+  }
+
+  triggerValidateEvent(boolean: boolean = true): this {
+    return this;
+  }
+  failsOnfirst(boolean: boolean = true): this {
+    return this;
+  }
+  getFeedbackElement(): HTMLElement | null {
+    return this.feedbackElement;
+  }
+  pushRule(existingRuleName: string): this {
+    return this;
   }
 }

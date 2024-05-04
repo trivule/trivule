@@ -1,4 +1,4 @@
-import { Rule } from "../contracts";
+import { CssSelector, Rule } from "../contracts";
 import { is_string, isFile } from "../rules";
 
 /**
@@ -171,4 +171,19 @@ export function explodeFileParam(value: string) {
   const numericValue = parseFloat(match[1]);
   const unit = match[3].toUpperCase();
   return [numericValue, unit];
+}
+
+export function getHTMLElementBySelector<T>(
+  selector: CssSelector,
+  from?: any
+): T | null {
+  const parent = from ?? document;
+  if (typeof selector === "string") {
+    return parent.querySelector(selector) as T;
+  }
+  if (selector instanceof HTMLElement) {
+    return selector as T;
+  }
+
+  return null;
 }

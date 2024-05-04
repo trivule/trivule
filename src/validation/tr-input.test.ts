@@ -206,4 +206,33 @@ describe("TrivuleInput", () => {
       expect(result).toEqual({});
     });
   });
+
+  describe("setFeedbackElement", () => {
+    const body = document.createElement("div");
+    const inputElement = document.createElement("input");
+    const feedbackElement = document.createElement("div");
+    body.appendChild(inputElement);
+    body.appendChild(feedbackElement);
+    const validator = new TrivuleInput(inputElement);
+    test("should return the feedback element supplied througth the set method", () => {
+      validator.setFeedbackElement(feedbackElement);
+      expect(validator.getFeedbackElement() === feedbackElement).toBe(true);
+    });
+
+    test("should return true if no feedback element found", () => {
+      inputElement.name = "my-input";
+      feedbackElement.setAttribute("data-tr-feedback", "my-input");
+      validator.setFeedbackElement("no-select");
+
+      expect(validator.getFeedbackElement() === null).toBe(true);
+    });
+
+    test("should return the feedback element supplied througth the attribute", () => {
+      inputElement.name = "my-input";
+      feedbackElement.setAttribute("data-tr-feedback", "my-input");
+      validator.setFeedbackElement();
+
+      expect(validator.getFeedbackElement() === feedbackElement).toBe(true);
+    });
+  });
 });
