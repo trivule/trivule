@@ -314,12 +314,38 @@ export interface ITrivuleInput {
     callback: ITrivuleInputCallback<ITrivuleInput, ITrivuleInput>
   ): this;
 
+  /**
+   * Gets the feedback element associated with this Trivule input.
+   * @returns The feedback element if set, otherwise null.
+   */
   getFeedbackElement(): HTMLElement | null;
 
+  /**
+   * Sets the input element for this Trivule input instance.
+   * @param element The input element to set.
+   * @returns This Trivule input instance.
+   */
   setInputElement(element: ValidatableInput): this;
+
+  /**
+   * Sets the parameters for this Trivule input instance.
+   * @param params The parameters to set.
+   * @returns This Trivule input instance.
+   */
   setParams(params?: TrivuleInputParms): this;
+
+  /**
+   * Sets the validation rules for this Trivule input instance.
+   * @param rules The validation rules to set.
+   * @returns This Trivule input instance.
+   */
   setRules(rules?: string[]): this;
 
+  /**
+   * Pushes an additional validation rule to the existing rules for this Trivule input instance.
+   * @param existingRuleName The name of the existing rule to add to.
+   * @returns This Trivule input instance.
+   */
   pushRule(existingRuleName: string): this;
 }
 
