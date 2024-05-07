@@ -14,6 +14,7 @@ import {
   tr_attr_get,
 } from "../utils";
 import { NativeValidation } from "./native-validation";
+import { InputRule } from "./utils/input-rule";
 import { TrParameter } from "./utils/parameter";
 
 /**
@@ -36,7 +37,7 @@ export abstract class AbstractInputralidator {
   /**
    * Rules list
    */
-  protected rules: Rule[] = [];
+  protected rules!: InputRule;
 
   /**
    * Input messages
@@ -77,7 +78,9 @@ export abstract class AbstractInputralidator {
     parameter?: TrParameter
   ) {
     this.validator = new TrValidation(this.param);
+
     this.parameter = parameter ?? new TrParameter();
+    this.rules = new InputRule([]);
     this.setInputElement(selector)
       .setParams(params)
       .setRules(params?.rules)
@@ -94,32 +97,18 @@ export abstract class AbstractInputralidator {
    *Set input rules from input
    * @returns
    */
-  setRules(rules?: string[]) {
-    let ruleSrring: string = tr_attr_get(
+  setRules(rules?: Rule[] | string[] | Rule | string) {
+    let ruleSrring: any = tr_attr_get(
       this.inputElement,
       "rules",
       this.param.rules
     );
 
     if (ruleSrring) {
-      const rulesClean = ruleSrring.split("|").filter((r) => r.length > 0);
-      //Register each rule
-      for (const rule of rulesClean as Rule[]) {
-        if (TrBag.hasRule(getRule(rule).ruleName)) {
-          this.rules.push(rule);
-        } else {
-          throw new Error(
-            `The validation rule ${rule} is not supported by Trivule`
-          );
-        }
-      }
+      this.rules.fromString(ruleSrring).merge(rules ?? []);
     }
-    //Merge with natre attributes validation rules
-    const nativeValidation = new NativeValidation(this.inputElement);
-    //Merge rules
-    this.rules = nativeValidation.merge((rules as Rule[]) ?? this.rules);
 
-    this.param.rules = this.rules;
+    this.param.rules = this.rules.get();
     return this;
   }
 
@@ -188,12 +177,14 @@ export abstract class AbstractInputralidator {
       const inputElement = this.inputElement;
 
       let parentElement = inputElement.parentElement;
-
+      let s = this.parameter.getFeedbackSelector(this.name);
       while (parentElement && !feedbackElement) {
-        const s = this.parameter.getFeedbackSelector(this.name);
         feedbackElement = !!s
           ? getHTMLElementBySelector(s, parentElement)
           : feedbackElement;
+        if (!feedbackElement) {
+          s = this.param.feedbackElement as any;
+        }
         parentElement = parentElement.parentElement;
       }
       this.feedbackElement = feedbackElement;
@@ -287,11 +278,11 @@ export abstract class AbstractInputralidator {
       let messages =
         elMessages?.split("|").map((message) => message.trim()) ?? [];
       if (messages) {
-        const vem = new ValidationErrorMessage(this.rules, messages);
+        const vem = new ValidationErrorMessage(this.rules.get(), messages);
         messages = vem.getMessages();
       }
       const customMessage = messages !== undefined ? messages[i] : "";
-      const rule = getRule(this.rules[i]).ruleName;
+      const rule = getRule(this.rules.atIndex(i)).ruleName;
       if (typeof customMessage == "string" && customMessage.length > 0) {
         oms[rule] = customMessage;
       } else {

@@ -242,7 +242,7 @@ export class TrValidation {
     this._attr = param.attribute ?? "";
     this._failOnfirst = param.failsOnfirst !== undefined && param.failsOnfirst;
 
-    this._rules = param.rules ?? [];
+    this._rules = (param.rules ?? []) as any[];
     this._trmessages = param.errors ?? {};
     this._inputType = param.type ?? this._inputType;
   }

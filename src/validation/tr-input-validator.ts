@@ -58,7 +58,7 @@ export class TrivuleInputValidator
    * ```
    */
   getRules() {
-    return this.rules;
+    return this.rules.get();
   }
   /**
    * Checks if the input element has validation rules.

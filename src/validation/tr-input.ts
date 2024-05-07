@@ -79,7 +79,7 @@ export class TrivuleInput extends TrivuleInputValidator {
       });
     });
     this.param.events = [];
-    this.rules = [];
+    this.rules.clear();
     this.param.rules = [];
   }
 

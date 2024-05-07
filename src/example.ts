@@ -1,3 +1,6 @@
-import { TrivuleForm } from "./validation";
-const trForm = new TrivuleForm(".form");
-trForm.init();
+import { TrivuleInput } from "./validation";
+
+new TrivuleInput("input", {
+  rules: "required|mimes:.pdf|size:1B",
+  feedbackElement: "#resume",
+}).init();

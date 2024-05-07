@@ -54,15 +54,15 @@ export type TrivuleInputParms = {
   /**
    * The HTML element that will be used to display error messages for this input element.
    */
-  feedbackElement?: ElementOrNull;
+  feedbackElement?: CssSelector | null;
   /**
    * An array of rules that will be used to validate the input element.
    */
-  rules?: Rule[] | string[];
+  rules?: Rule[] | string[] | Rule | string;
   /**
    * An object that maps rule names to error messages.
    */
-  messages?: string[];
+  messages?: string[] | string;
   /**
    * The name of the input element.
    */

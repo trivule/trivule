@@ -6,7 +6,7 @@ export interface ITrivuleInputObject {
   value: any;
   name: string;
   valid: boolean;
-  rules: Rule[];
+  rules: Rule[] | string[] | Rule | string;
   errors: Record<Rule, string>;
   messages: string[];
   ruleExecuted: {
@@ -339,7 +339,7 @@ export interface ITrivuleInput {
    * @param rules The validation rules to set.
    * @returns This Trivule input instance.
    */
-  setRules(rules?: string[]): this;
+  setRules(rules?: Rule[] | string[] | Rule | string): this;
 
   /**
    * Pushes an additional validation rule to the existing rules for this Trivule input instance.

@@ -93,39 +93,25 @@
     <title>Trivule</title>
   </head>
   <body>
-    <div class="form">
+    <form class="form">
       <p>Validation scenario with Trivule</p>
       <fieldset>
         <label>
-          First name
+          File
           <input
-            name="first_name"
-            data-tr-rules="required|file|mimes:image/*|size:5MB"
-            multiple
+            name="resume"
             type="file"
+            data-tr-rules="required|mimes:.pdf|size:1MB"
           />
-          <div data-tr-feedback="first_name"></div>
+          <div data-tr-feedback="resume"></div>
         </label>
-
-        <label>
-          Email
-          <input type="email" name="email" data-tr-rules="required|email" />
-          <div data-tr-feedback="email"></div>
-        </label>
-        <label>Your favorite language</label>
-        <select name="favorite_cuisine" data-tr-rules="required">
-          <option selected value="">Select ...</option>
-          <option>JavaScript</option>
-          <option>TypeScript</option>
-          <option>HMTL</option>
-        </select>
-        <div data-tr-feedback="favorite_cuisine"></div>
       </fieldset>
 
       <input type="submit" value="Subscribe" data-tr-submit />
-    </div>
+    </form>
 
     <script src="/src/example.ts" type="module"></script>
+
     <script></script>
   </body>
 </html>
