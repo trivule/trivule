@@ -308,4 +308,7 @@ export class TrivuleInputValidator
   pushRule(existingRuleName: string): this {
     return this;
   }
+  hasRule(rule: string): boolean {
+    return this.rules.has(rule);
+  }
 }

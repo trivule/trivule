@@ -26,4 +26,8 @@ export class InputRule extends BaseInputRule {
   getMessages() {
     return this.messages;
   }
+
+  has(rule: string | Rule): boolean {
+    return this.items.some((item) => item.name === rule);
+  }
 }

@@ -356,6 +356,7 @@ export interface ITrivuleInput {
 
   getMessages(): string | string[] | Record<string, string> | undefined;
   getMessageAttributeName(): string;
+  hasRule(rule: Rule | string): boolean;
 }
 
 export * from "./rule";

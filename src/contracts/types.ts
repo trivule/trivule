@@ -14,6 +14,7 @@ export type CssSelector = HTMLElement | string;
 export type ValidatableInput =
   | HTMLInputElement
   | HTMLTextAreaElement
+  | HTMLElement
   | HTMLSelectElement
   | "select"
   | "textarea"

@@ -655,7 +655,7 @@ export class TrivuleForm {
     this._trivuleInputs[trInput.getName()] = trInput;
   }
 
-  make(input: Record<string, TrivuleInputParms>) {
+  make(input: TrivuleInputParms[]) {
     if (typeof input != "object" || input === undefined || input === null) {
       throw new Error("Invalid arguments passed to make method");
     }
