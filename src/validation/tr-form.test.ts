@@ -1,3 +1,4 @@
+import { TrivuleInputParms } from "../contracts";
 import { TrivuleForm } from "./tr-form";
 import { TrivuleInput } from "./tr-input";
 
@@ -70,9 +71,22 @@ describe("TrivuleForm", () => {
     expect(trivuleForm.get("name")).toBeInstanceOf(TrivuleInput);
   });
 
-  test("Test addRule method", () => {
+  test("Test addTrivuleInput method", () => {
     const trInput = new TrivuleInput(formInstance.ageInput);
-    trivuleForm.addInput(trInput);
+    trivuleForm.addTrivuleInput(trInput);
     expect(trivuleForm.get("age")).toBe(trInput);
+  });
+
+  test("Test the make method", () => {
+    const trInput = new TrivuleInput(formInstance.ageInput);
+    trivuleForm.addTrivuleInput(trInput);
+    trivuleForm.make({
+      age: {
+        rules: "required|minlength:2|maxlength:3",
+      } as TrivuleInputParms,
+    });
+
+    const ageInput = trivuleForm.get("age");
+    expect(ageInput).toBeInstanceOf(TrivuleInput);
   });
 });

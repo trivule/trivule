@@ -187,3 +187,26 @@ export function getHTMLElementBySelector<T>(
 
   return null;
 }
+
+type TransformCallback<T, R> = (p: T, key: string | number) => R;
+
+export function transformToArray<T, R = T>(
+  p: T[] | Record<string | number, T>,
+  call: TransformCallback<T, R>
+): R[] {
+  const result: R[] = [];
+  if (Array.isArray(p)) {
+    for (let i = 0; i < p.length; i++) {
+      const it = p[i];
+      result.push(call(it, i));
+    }
+  } else {
+    for (const key in p) {
+      if (Object.prototype.hasOwnProperty.call(p, key)) {
+        const i = p[key];
+        result.push(call(i, key));
+      }
+    }
+  }
+  return result;
+}

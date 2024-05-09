@@ -21,7 +21,10 @@ export class TrivuleInputValidator
    */
   private _emitOnFails = true;
 
-  constructor(inputElement: ValidatableInput, params?: TrivuleInputParms) {
+  constructor(
+    inputElement: ValidatableInput | TrivuleInputParms,
+    params?: TrivuleInputParms
+  ) {
     super(inputElement, params);
   }
   /**

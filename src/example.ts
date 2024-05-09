@@ -1,6 +1,7 @@
 import { TrivuleInput } from "./validation";
 
-new TrivuleInput("input", {
+new TrivuleInput({
+  selector: "input",
   rules: "required|minlength:2|maxlength:3",
   feedbackElement: "#resume",
   messages:

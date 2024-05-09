@@ -11,7 +11,7 @@ import {
 import { TrLocal } from "../locale/tr-local";
 import { isBoolean } from "../rules";
 import { FormValidator } from "../rules/form/form-validator";
-import { tr_attr_get } from "../utils";
+import { tr_attr_get, transformToArray } from "../utils";
 import { TrBag } from "./tr-bag";
 import { TrivuleInput } from "./tr-input";
 
@@ -651,7 +651,18 @@ export class TrivuleForm {
     );
   }
 
-  addInput(trInput: TrivuleInput) {
+  addTrivuleInput(trInput: TrivuleInput) {
     this._trivuleInputs[trInput.getName()] = trInput;
+  }
+
+  make(input: Record<string, TrivuleInputParms>) {
+    if (typeof input != "object" || input === undefined || input === null) {
+      throw new Error("Invalid arguments passed to make method");
+    }
+
+    transformToArray(input, (param) => {
+      this.addTrivuleInput(new TrivuleInput(param));
+      return param;
+    });
   }
 }

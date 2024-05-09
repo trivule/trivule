@@ -20,7 +20,10 @@ import {
  * ```
  */
 export class TrivuleInput extends TrivuleInputValidator {
-  constructor(inputElement: ValidatableInput, param?: TrivuleInputParms) {
+  constructor(
+    inputElement: ValidatableInput | TrivuleInputParms,
+    param?: TrivuleInputParms
+  ) {
     super(inputElement, param);
     this.init();
   }

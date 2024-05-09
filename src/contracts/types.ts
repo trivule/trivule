@@ -51,6 +51,7 @@ export type WayDisplayError = "first" | "last" | "full";
  * Input parameters that can be passed to TrivuleInput instance instead of tr-attributes
  */
 export type TrivuleInputParms = {
+  selector?: ValidatableInput | null;
   /**
    * The HTML element that will be used to display error messages for this input element.
    */

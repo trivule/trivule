@@ -66,7 +66,7 @@ export abstract class AbstractInputralidator {
 
   protected _events = ["change", "blur", "input"];
   constructor(
-    selector: ValidatableInput,
+    selector?: ValidatableInput | TrivuleInputParms,
     params?: TrivuleInputParms,
     parameter?: TrParameter
   ) {
@@ -285,7 +285,23 @@ export abstract class AbstractInputralidator {
     return this;
   }
 
-  private _init(selector: ValidatableInput, params?: TrivuleInputParms) {
+  private _init(
+    selectorOrParams?: ValidatableInput | TrivuleInputParms,
+    params?: TrivuleInputParms
+  ) {
+    let selector: any = selectorOrParams;
+    if (
+      typeof selectorOrParams === "object" &&
+      selectorOrParams !== null &&
+      selectorOrParams !== undefined
+    ) {
+      if (!(selectorOrParams instanceof HTMLElement)) {
+        params = selectorOrParams;
+        params = selectorOrParams;
+        selector = params.selector;
+      }
+    }
+
     this.setInputElement(selector)
       .setParams(params)
       .setMessageAttributeName()
