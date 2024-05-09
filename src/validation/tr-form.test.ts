@@ -84,7 +84,7 @@ describe("TrivuleForm", () => {
       .make([
         {
           rules: "required|between:18,40",
-          selector: formInstance.ageInput,
+          selector: "age", //The input name
         },
         {
           rules: "required|date",

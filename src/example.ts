@@ -17,18 +17,7 @@ trivuleForm.make([
     feedbackElement: ".invalid-feedback",
   },
   {
-    selector: "input[name='email']", //just input Name
+    selector: "email", //just input Name
     rules: ["required", "email"],
   },
 ]);
-
-const trInput = trivuleForm.get("email");
-
-if (trInput) {
-  trInput.onFails((tr) => {
-    console.log(tr);
-  });
-  trInput.onPasses((tr) => {
-    console.log(tr);
-  });
-}

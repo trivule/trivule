@@ -667,13 +667,28 @@ export class TrivuleForm {
       throw new Error("Invalid arguments passed to make method");
     }
 
-    transformToArray(input, (param, index) => {
-      let selector: any = isNumber(index).passes ? undefined : index;
-      if (selector) {
-        selector = this.parameter.getInputSelector(selector);
+    transformToArray(input, (param, indexOrInputName) => {
+      let selector: any =
+        getHTMLElementBySelector(param.selector as any, this.container) ??
+        param.selector;
+      if (typeof selector === "string") {
+        const s = this.parameter.getInputSelector(selector);
+        selector = getHTMLElementBySelector(s as string, this.container);
       }
-      selector =
-        getHTMLElementBySelector(selector, this.container) ?? undefined;
+
+      if (!selector) {
+        selector = isNumber(indexOrInputName).passes
+          ? undefined
+          : indexOrInputName;
+        if (selector) {
+          const s = this.parameter.getInputSelector(selector);
+          selector =
+            getHTMLElementBySelector(s as string, this.container) ?? undefined;
+        }
+      } else {
+        param.selector = undefined;
+      }
+
       this.addTrivuleInput(new TrivuleInput(selector, param));
       return param;
     });

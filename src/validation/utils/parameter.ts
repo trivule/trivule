@@ -8,7 +8,7 @@ export class TrParameter {
       if (name.trim().length < 1) {
         return null;
       }
-      this.feedbackSelector = this.feedbackSelector.replace("{name}", name);
+      return this.feedbackSelector.replace("{name}", name);
     }
     return this.feedbackSelector;
   }
@@ -17,7 +17,7 @@ export class TrParameter {
       if (name.trim().length < 1) {
         return null;
       }
-      this.inputSelector = this.inputSelector.replace("{name}", name);
+      return this.inputSelector.replace("{name}", name);
     }
     return this.inputSelector;
   }
