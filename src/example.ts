@@ -21,3 +21,7 @@ trivuleForm.make([
     rules: ["required", "email"],
   },
 ]);
+
+trivuleForm.onFails((f) => {
+  console.log(f);
+});
