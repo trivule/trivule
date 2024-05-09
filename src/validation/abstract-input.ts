@@ -1,26 +1,17 @@
-import { TrValidation, TrBag } from ".";
-import { Rule, RulesMessages } from "../contracts";
+import { TrValidation } from ".";
+import { InputType, Rule } from "../contracts";
 import {
   CssSelector,
+  InputralueType,
   TrivuleInputParms,
   ValidatableInput,
 } from "../contracts/types";
-import { TrLocal } from "../locale/tr-local";
-import { ValidationErrorMessage } from "../messages";
-import {
-  dataset_get,
-  getHTMLElementBySelector,
-  getRule,
-  tr_attr_get,
-} from "../utils";
-import { NativeValidation } from "./native-validation";
+import { dataset_get, getHTMLElementBySelector, tr_attr_get } from "../utils";
 import { InputRule } from "./utils/input-rule";
 import { TrParameter } from "./utils/parameter";
 
-/**
- * @author Claude Fassinou
- */
 export abstract class AbstractInputralidator {
+  protected __wasInit = false;
   /**
    * This status indicates the current state of the form
    */
@@ -38,11 +29,6 @@ export abstract class AbstractInputralidator {
    * Rules list
    */
   protected rules!: InputRule;
-
-  /**
-   * Input messages
-   */
-  protected messages = {} as RulesMessages;
 
   /** Current input errors */
   protected _errors: string[] = [];
@@ -72,43 +58,28 @@ export abstract class AbstractInputralidator {
 
   protected parameter: TrParameter;
 
+  autoValidate = true;
+  protected _value: InputralueType = undefined;
+  private _emitOnValidate: boolean = true;
+
+  protected _type: InputType = "text";
+
+  protected _events = ["change", "blur", "input"];
   constructor(
     selector: ValidatableInput,
     params?: TrivuleInputParms,
     parameter?: TrParameter
   ) {
-    this.validator = new TrValidation(this.param);
-
-    this.parameter = parameter ?? new TrParameter();
+    this.validator = new TrValidation();
     this.rules = new InputRule([]);
-    this.setInputElement(selector)
-      .setParams(params)
-      .setRules(params?.rules)
-      .setMessageAttributeName()
-      .setFeedbackElement();
-    this.setShowMessage();
-    this._setTrValidationClass();
-
-    this._setErrors();
-    this._setEvent(params?.events);
-    this.validator.setParams(this.param);
+    this.parameter = parameter ?? new TrParameter();
+    this._init(selector, params);
   }
   /**
    *Set input rules from input
    * @returns
    */
   setRules(rules?: Rule[] | string[] | Rule | string) {
-    let ruleSrring: any = tr_attr_get(
-      this.inputElement,
-      "rules",
-      this.param.rules
-    );
-
-    if (ruleSrring) {
-      this.rules.fromString(ruleSrring).merge(rules ?? []);
-    }
-
-    this.param.rules = this.rules.get();
     return this;
   }
 
@@ -123,7 +94,7 @@ export abstract class AbstractInputralidator {
         : this.param.events;
     }
 
-    this.param.events = events ?? this.param.events;
+    this.events = events ?? this.param.events;
   }
 
   /**
@@ -158,9 +129,21 @@ export abstract class AbstractInputralidator {
   get name() {
     return this.inputElement.name ?? this.param.name ?? "";
   }
+  get value() {
+    return this.getValue();
+  }
+  set value(value) {
+    this._value = value;
+    if (this.autoValidate) {
+      this.validate();
+    }
+  }
 
-  set errors(value: any) {
+  set errors(value: string[] | Record<string, string>) {
     if (value) {
+      if (!Array.isArray(value)) {
+        value = Object.keys(value).map((k) => (value as any)[k]);
+      }
       this._errors = value ?? [];
     }
     this.showErrorMessages();
@@ -208,7 +191,6 @@ export abstract class AbstractInputralidator {
     if (this.feedbackElement instanceof HTMLElement) {
       let message = "";
       if (Array.isArray(this._errors)) {
-        //Get error
         message = this._errors[0];
         if (this.showMessage == "full") {
           message = this._errors.join("<br>");
@@ -271,45 +253,19 @@ export abstract class AbstractInputralidator {
     }
   }
 
-  private _setErrors(errors?: RulesMessages) {
-    const elMessages = tr_attr_get<string>(this.inputElement, "messages", "");
-    let oms: RulesMessages = {} as any;
-    for (let i = 0; i < this.rules.length; i++) {
-      let messages =
-        elMessages?.split("|").map((message) => message.trim()) ?? [];
-      if (messages) {
-        const vem = new ValidationErrorMessage(this.rules.get(), messages);
-        messages = vem.getMessages();
-      }
-      const customMessage = messages !== undefined ? messages[i] : "";
-      const rule = getRule(this.rules.atIndex(i)).ruleName;
-      if (typeof customMessage == "string" && customMessage.length > 0) {
-        oms[rule] = customMessage;
-      } else {
-        oms[rule] = TrLocal.getRuleMessage(rule, TrLocal.getLocal());
-      }
-    }
-
-    if (
-      typeof errors !== "undefined" &&
-      typeof errors === "object" &&
-      Object.values(errors).length > 0
-    ) {
-      this.param.errors = errors;
-    } else {
-      this.param.errors = oms;
-    }
-  }
-
   getName() {
     return this.name;
   }
-  getValue() {
+  getInputElemenyValue() {
     if (this.inputElement.type.toLowerCase() == "file") {
       return this.inputElement.files ?? null;
     } else {
       return this.inputElement.value;
     }
+  }
+
+  getValue() {
+    return this.getInputElemenyValue();
   }
 
   setParams(param?: TrivuleInputParms) {
@@ -320,11 +276,75 @@ export abstract class AbstractInputralidator {
     if (json) {
       this.param = Object.assign(this.param, json);
     }
+
     return this;
   }
 
   setMessageAttributeName(attrName?: string): this {
-    this.param.attribute = attrName ?? this.name;
+    this.validator.attribute = attrName ?? this.name;
     return this;
+  }
+
+  private _init(selector: ValidatableInput, params?: TrivuleInputParms) {
+    this.setInputElement(selector)
+      .setParams(params)
+      .setMessageAttributeName()
+      .setFeedbackElement();
+    this.setShowMessage();
+    this._setTrValidationClass();
+
+    this._setEvent(params?.events);
+
+    let rules: any = tr_attr_get(this.inputElement, "rules", params?.rules);
+    if (rules) {
+      let elMessages = tr_attr_get<string>(
+        this.inputElement,
+        "messages",
+        this.param.messages
+      );
+      this.rules.set(rules, elMessages);
+    }
+
+    this.validator.rules = this.rules.all();
+    this.validator.failsOnFirst = params?.failsOnfirst ?? true;
+    this._type = (params?.type ?? "text") as InputType;
+  }
+  getMessageAttributeName() {
+    return this.validator.attribute;
+  }
+
+  get messages() {
+    return this.rules.getMessages();
+  }
+
+  get emitOnValidate() {
+    return this._emitOnValidate;
+  }
+
+  set emitOnValidate(value: boolean) {
+    this._emitOnValidate = value;
+  }
+  set events(value: string | string[] | undefined) {
+    this._events = this.eventToArray(value);
+  }
+
+  get events() {
+    return this.events;
+  }
+
+  commit() {
+    if (this._type !== "file") {
+      this.inputElement.value = this._value as any;
+    }
+  }
+
+  protected eventToArray(value?: any) {
+    if (!value) {
+      return [];
+    }
+    if (typeof value === "string") {
+      value = value.split("|");
+    }
+    return value.map((t: string) => t.trim());
   }
 }

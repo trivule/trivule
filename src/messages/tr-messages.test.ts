@@ -16,12 +16,7 @@ describe("TrMessages", () => {
 
   it("should parse message correctly", () => {
     const message = "The :field field must be less than or equal to :arg0";
-    const parsedMessage = new TrMessages().parseMessage(
-      "age",
-      "max",
-      message,
-      "18"
-    );
+    const parsedMessage = TrMessages.parseMessage("age", "max", message, "18");
     expect(parsedMessage).toEqual(
       "The age field must be less than or equal to 18"
     );
@@ -29,7 +24,7 @@ describe("TrMessages", () => {
 
   it("should parse message correctly", () => {
     const message = "The :field field must be between in :arg0 and :arg1";
-    const parsedMessage = new TrMessages().parseMessage(
+    const parsedMessage = TrMessages.parseMessage(
       "age",
       "between",
       message,
@@ -40,7 +35,7 @@ describe("TrMessages", () => {
 
   it("should parse...args message correctly", () => {
     const message = "The :field field must be one of ...arg";
-    const parsedMessage = new TrMessages().parseMessage(
+    const parsedMessage = TrMessages.parseMessage(
       "age",
       "between",
       message,

@@ -1,19 +1,25 @@
 import { Rule } from "./rule";
-import { CssSelector, TrivuleInputParms, ValidatableInput } from "./types";
+import { RuleCallBack } from "./rule-callback";
+import { TrivuleInputParms, ValidatableInput } from "./types";
 export type ITrivuleInputCallback<P, R> = (param: P) => R;
 
 export interface ITrivuleInputObject {
   value: any;
   name: string;
   valid: boolean;
-  rules: Rule[] | string[] | Rule | string;
+  rules: RuleType[];
   errors: Record<Rule, string>;
-  messages: string[];
   ruleExecuted: {
     rule: string;
     passed: boolean;
   }[];
 }
+export type RuleType = {
+  name: string;
+  message?: string;
+  params?: any;
+  validate?: RuleCallBack;
+};
 
 export type InputType =
   | "text"
@@ -347,6 +353,9 @@ export interface ITrivuleInput {
    * @returns This Trivule input instance.
    */
   pushRule(existingRuleName: string): this;
+
+  getMessages(): string | string[] | Record<string, string> | undefined;
+  getMessageAttributeName(): string;
 }
 
 export * from "./rule";

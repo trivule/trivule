@@ -97,13 +97,9 @@
       <p>Validation scenario with Trivule</p>
       <fieldset>
         <label>
-          File
-          <input
-            name="resume"
-            type="file"
-            data-tr-rules="required|mimes:.pdf|size:1MB"
-          />
-          <div data-tr-feedback="resume"></div>
+          Your name
+          <input name="name" type="text" />
+          <div id="resume" style="color: red"></div>
         </label>
       </fieldset>
 
@@ -111,7 +107,5 @@
     </form>
 
     <script src="/src/example.ts" type="module"></script>
-
-    <script></script>
   </body>
 </html>

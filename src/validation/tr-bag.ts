@@ -184,7 +184,7 @@ export class TrRule extends TrBag {
    * });
    * ```
    */
-  add(rule: string, callback: RuleCallBack): void {
+  static add(rule: string, callback: RuleCallBack): void {
     TrRule.addRule(rule, callback);
   }
 
@@ -197,7 +197,7 @@ export class TrRule extends TrBag {
    * const exists = TrRule.has("required");
    * ```
    */
-  has(rule: string): boolean {
+  static has(rule: string): boolean {
     return TrRule.hasRule(rule);
   }
 
@@ -209,7 +209,7 @@ export class TrRule extends TrBag {
    * const allRules = TrRule.all();
    * ```
    */
-  all(): RulesBag {
+  static all(): RulesBag {
     return TrRule.allRules();
   }
 
@@ -222,7 +222,7 @@ export class TrRule extends TrBag {
    * const ruleFunction = TrRule.get("required");
    * ```
    */
-  get(name: string): RuleCallBack {
+  static get(name: string): RuleCallBack {
     return TrRule.getRule(name);
   }
 }

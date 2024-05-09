@@ -31,7 +31,7 @@ import { dateBetween, isDate } from "./date";
  */
 export const required: RuleCallBack = (input, ...options) => {
   return {
-    passes: !!input && input !== "",
+    passes: !!input && input != "",
     value: input,
   };
 };

@@ -11,6 +11,7 @@ export class TrivuleInputValidator
   extends AbstractInputralidator
   implements ITrivuleInput
 {
+  _validateCount = 0;
   /**
    * Check if pass event should be emitted
    */
@@ -37,11 +38,11 @@ export class TrivuleInputValidator
    * }
    * ```
    */
-  validate(emitEmit = true) {
+  validate() {
     this.valid();
     this.setralidationClass();
-    this.errors = this.validator.getMessages();
-    if (emitEmit) {
+    this.errors = this.validator.getErrors();
+    if (this.emitOnValidate) {
       this.emitChangeEvent();
     }
     return this._passed;
@@ -84,8 +85,8 @@ export class TrivuleInputValidator
    * console.log(messages);
    * ```
    */
-  getMessages(): (string | null)[] {
-    return this.validator.getMessages();
+  getMessages() {
+    return this.messages;
   }
 
   /**
@@ -103,7 +104,8 @@ export class TrivuleInputValidator
    * ```
    */
   valid() {
-    this.validator.value = this.getValue();
+    this.validator.value = this.value;
+    this._validateCount++;
     return (this._passed = this.validator.passes());
   }
 
@@ -133,35 +135,33 @@ export class TrivuleInputValidator
    * Emit event if input change
    */
   private emitChangeEvent() {
-    if (this.param.emitEvent) {
-      if (this._passed) {
-        if (this._emitOnPasses) {
-          this.emit("tr.input.passes", {
-            detail: {
-              rules: this.rules,
-              input: {},
-              element: this.inputElement,
-            },
-          });
-          //Disable on passes emition until, validation failed
-          this._emitOnPasses = false;
-          //Enable on fails emitions
-          this._emitOnFails = true;
-        }
-      } else {
-        if (this._emitOnFails) {
-          this.emit("tr.input.fails", {
-            detail: {
-              rules: this.rules,
-              input: {},
-              element: this.inputElement,
-            },
-          });
-          //Enable on passes emitions
-          this._emitOnPasses = true;
-          // Disable on fails emitions, until validation passes
-          this._emitOnFails = false;
-        }
+    if (this._passed) {
+      if (this._emitOnPasses) {
+        this.emit("tr.input.passes", {
+          detail: {
+            rules: this.rules,
+            input: {},
+            element: this.inputElement,
+          },
+        });
+        //Disable on passes emition until, validation failed
+        this._emitOnPasses = false;
+        //Enable on fails emitions
+        this._emitOnFails = true;
+      }
+    } else {
+      if (this._emitOnFails) {
+        this.emit("tr.input.fails", {
+          detail: {
+            rules: this.rules,
+            input: {},
+            element: this.inputElement,
+          },
+        });
+        //Enable on passes emitions
+        this._emitOnPasses = true;
+        // Disable on fails emitions, until validation passes
+        this._emitOnFails = false;
       }
     }
   }
@@ -208,7 +208,7 @@ export class TrivuleInputValidator
   }
 
   filledErrors(errors?: string[]) {
-    this.errors = errors ?? this.validator.getMessages();
+    this.errors = errors ?? this.validator.getErrors();
   }
   reset(): void {}
   removeAttribute(attrName: string): this {
@@ -296,6 +296,7 @@ export class TrivuleInputValidator
     return this;
   }
   failsOnfirst(boolean: boolean = true): this {
+    this.validator.failsOnFirst = boolean;
     return this;
   }
   getFeedbackElement(): HTMLElement | null {

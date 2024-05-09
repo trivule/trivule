@@ -15,7 +15,8 @@
   },
   "docs": "https://www.trivule.com/",
   "scripts": {
-    "test": "jest",
+    "test": "jest --bail",
+    "test-watch": "jest --watchAll",
     "dev": "vite",
     "build": "tsc && vite build",
     "build:watch": "tsc && vite build --watch",

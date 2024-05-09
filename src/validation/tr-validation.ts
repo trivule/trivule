@@ -1,7 +1,6 @@
-import { InputType, Rule, RulesMessages } from "../contracts";
-import { TrBag } from "./tr-bag";
-import { getRule } from "../utils";
-import { InputralueType, TrivuleInputParms } from "../contracts/types";
+import { InputType, Rule, RulesMessages, RuleType } from "../contracts";
+
+import { InputralueType } from "../contracts/types";
 import { RuleExecuted } from ".";
 import { TrMessages } from "../messages";
 import { TrLocal } from "../locale/tr-local";
@@ -13,7 +12,7 @@ export class TrValidation {
   /**
    * The list of rules that should be executed on the value
    */
-  private _rules: Rule[] | string[] = [];
+  private _rules: RuleType[] = [];
 
   /**
    * The current value to validate
@@ -41,13 +40,7 @@ export class TrValidation {
    * An object containing the original validation rules errors as key-value pairs (record) of rule names and error
    * messages
    */
-  private _trmessages: Record<string, string> = {};
-
-  constructor(param?: TrivuleInputParms) {
-    if (param) {
-      this.setParams(param);
-    }
-  }
+  private _trmessages: Record<string, any> = {};
 
   /**
    * This method performs the validation process. It iterates over the _rules array and executes each rule on the
@@ -67,17 +60,18 @@ export class TrValidation {
 
     let inputType = this._inputType as InputType;
     for (const rule of rules) {
-      //Get rulename and param
-      let { ruleName, params } = getRule(rule);
-      let ruleToRun = ruleName;
+      const ruleName = rule.name;
+      const params = rule.params;
+      const ruleCallback = rule.validate;
+      const message = rule.message;
 
-      const ruleCallback = TrBag.getRule(ruleToRun);
+      let ruleToRun = ruleName;
 
       const ruleExec = this._makeRuleExcutedInstance(ruleToRun, ruleName);
 
       ruleExec.params = params;
 
-      if (!ruleCallback) {
+      if (!ruleCallback || typeof ruleCallback !== "function") {
         throw new Error(`The rule ${ruleName} is not defined`);
       }
 
@@ -97,19 +91,20 @@ export class TrValidation {
       // If rule is setup to stop on first fails
       if (this._failOnfirst) {
         if (!ruleExec.passed) {
-          this._parseRuleMessage(ruleExec, ruleToRun);
+          this._parseRuleMessage(ruleExec, ruleToRun, message);
           this._addRuleExecuted(ruleExec);
           break;
         }
       } else {
         if (!ruleExec.passed) {
-          this._parseRuleMessage(ruleExec, ruleToRun);
+          this._parseRuleMessage(ruleExec, ruleToRun, message);
         } else {
-          ruleExec.message = "";
+          ruleExec.message = null;
         }
         this._addRuleExecuted(ruleExec);
       }
     }
+
     return !this.hasErrors();
   }
   /**
@@ -144,7 +139,7 @@ export class TrValidation {
    * Set rules to run
    * @param rules
    */
-  setRules(rules: Rule[] | string[]): void {
+  setRules(rules: RuleType[]): void {
     this._rules = rules;
   }
 
@@ -173,12 +168,15 @@ export class TrValidation {
       this._ruleExecuted.push(ruleExecuted);
     }
   }
-  private _parseRuleMessage(ruleExec: RuleExecuted, aliasRule: string) {
+  private _parseRuleMessage(
+    ruleExec: RuleExecuted,
+    aliasRule: string,
+    message: any
+  ) {
     const orgMesage = TrLocal.getRuleMessage(ruleExec.orignalName);
-    const supliedMessage = this._trmessages[ruleExec.orignalName];
 
-    if (supliedMessage !== orgMesage) {
-      this._trmessages[ruleExec.ruleName] = supliedMessage;
+    if (message !== orgMesage) {
+      this._trmessages[ruleExec.ruleName] = message;
     } else {
       this._trmessages[ruleExec.ruleName] = TrLocal.getRuleMessage(
         aliasRule ?? ruleExec.ruleName
@@ -189,7 +187,7 @@ export class TrValidation {
       this._trmessages as RulesMessages
     );
 
-    const message = trMessages.parseMessage(
+    message = TrMessages.parseMessage(
       this._attr,
       ruleExec.ruleName as Rule,
       trMessages.getRulesMessages([ruleExec.ruleName as Rule])[0],
@@ -201,53 +199,45 @@ export class TrValidation {
     return ruleExec;
   }
 
-  /***
-   * This method returns an array of error messages from the
-   * _ruleExecuted array for the rules that did not pass.
-   */
-  getMessages() {
-    const mssages = this._ruleExecuted
-      .filter((ruleExec) => !ruleExec.passed)
-      .map((ruleExec) => ruleExec.message);
-
-    return mssages;
-  }
-
   /**
    * Set the value and validate it automatically
    */
   set value(v: InputralueType) {
     this._value = v;
+    this.validate();
+  }
 
-    const isNullable = this._rules.includes("nullable");
-    if (isNullable) {
-      if (this._value || this._value === "0") {
-        this.validate();
-      }
-    } else {
-      this.validate();
-    }
+  set failsOnFirst(fails: boolean) {
+    this._failOnfirst = fails;
   }
 
   get value(): InputralueType {
     return this._value;
   }
 
+  set attribute(attr: string) {
+    this._attr = attr;
+  }
+
+  get attribute() {
+    return this._attr;
+  }
   /**
    * Set validation parameters
    * @param param
    */
 
-  setParams(param: TrivuleInputParms) {
-    this._attr = param.attribute ?? "";
-    this._failOnfirst = param.failsOnfirst !== undefined && param.failsOnfirst;
+  set(rules: RuleType[], failsOnfirst: boolean, type: string) {
+    this._failOnfirst = failsOnfirst;
 
-    this._rules = (param.rules ?? []) as any[];
-    this._trmessages = param.errors ?? {};
-    this._inputType = param.type ?? this._inputType;
+    this._rules = rules;
+    this._inputType = type ?? this._inputType;
   }
 
   getRuleExecuted(): RuleExecuted[] {
     return this._ruleExecuted;
+  }
+  set rules(rules: RuleType[]) {
+    this.setRules(rules);
   }
 }

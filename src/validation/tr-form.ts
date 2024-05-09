@@ -265,7 +265,6 @@ export class TrivuleForm {
         return { rule: rule.ruleName, passed: rule.passed };
       }),
       errors: trivuleInput.getErrors(),
-      messages: trivuleInput.getMessages() as string[],
     };
   }
   /**
@@ -305,7 +304,8 @@ export class TrivuleForm {
       this.each((trInput) => {
         // Validate each input
         // The false argument passed, tell that to input to not emit validation event
-        results.push(trInput.validate(false));
+        trInput.emitOnValidate = false;
+        results.push(trInput.validate());
       });
 
       // Test whether each rule passed

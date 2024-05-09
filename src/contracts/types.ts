@@ -62,7 +62,7 @@ export type TrivuleInputParms = {
   /**
    * An object that maps rule names to error messages.
    */
-  messages?: string[] | string;
+  messages?: string[] | string | Record<string, string>;
   /**
    * The name of the input element.
    */

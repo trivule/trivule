@@ -6,10 +6,21 @@ describe("TrivuleInput", () => {
       // Arrange
       const inputElement = document.createElement("input"); // Create an input element
       inputElement.setAttribute("data-tr-rules", "required|min:30"); // Set rules for the input element
-      const rules = ["required", "min:30"];
+      const rules = [
+        { name: "required", message: "This field is required" },
+        {
+          message: "The :field field must be greater than or equal to ':arg0'",
+          name: "min",
+          params: "30",
+        },
+      ];
       const validator = new TrivuleInput(inputElement);
 
-      expect(validator.getRules()).toEqual(rules); // Assert that the result matches the expected rules array
+      expect(
+        validator.getRules().map((r) => {
+          return { name: r.name, message: r.message, params: r.params };
+        })
+      ).toEqual(rules); // Assert that the result matches the expected rules array
     });
 
     test("should return an empty array if no rules are set for a given input field", () => {
@@ -30,21 +41,18 @@ describe("TrivuleInput", () => {
       const inputElement = document.createElement("input"); // Create an input element
       inputElement.setAttribute("data-tr-rules", "required|min:30");
       const validator = new TrivuleInput(inputElement);
-
-      expect(validator.hasRules()).toBe(true); // Assert that the result matches the expected rules array
+      expect(validator.hasRules()).toBe(true);
     });
 
     test("should return false if rules are empty", () => {
-      // Arrange
       const inputElement = document.createElement("input");
       const validator = new TrivuleInput(inputElement);
-
       expect(validator.hasRules()).toBe(false); // Assert that the result is an empty array
     });
   });
 
   describe("getMessages", () => {
-    test("should return array of messages set via tr-messages", () => {
+    test("should return  messages set via tr-messages", () => {
       const inputElement = document.createElement("input");
       inputElement.setAttribute("data-tr-rules", "required|min:30");
       inputElement.setAttribute(
@@ -55,11 +63,11 @@ describe("TrivuleInput", () => {
         failsOnfirst: false,
       });
       validator.validate();
-
-      expect(validator.getMessages()).toEqual([
-        "Required message",
-        "Min message",
-      ]);
+      const received = validator.getMessages();
+      expect(received).toEqual({
+        required: "Required message",
+        min: "Min message",
+      });
     });
     test("should return array of messages set via tr-messages with compensations messages", () => {
       const inputElement = document.createElement("input");
@@ -76,11 +84,12 @@ describe("TrivuleInput", () => {
       });
 
       validator.validate();
-      expect(validator.getMessages()).toEqual([
-        "Required message",
-        "Invalid email address",
-        "Invalid email address",
-      ]);
+      expect(validator.getMessages()).toEqual({
+        required: "Required message",
+        min: "Invalid email address",
+        max: "Invalid email address",
+        email: "Invalid email address",
+      });
     });
 
     test("should return false if rules are empty", () => {
@@ -177,6 +186,7 @@ describe("TrivuleInput", () => {
 
       validator.validate();
       const result = validator.getErrors();
+      //console.log(result);
 
       expect(result).toEqual({
         required: "This field is required",
@@ -233,6 +243,15 @@ describe("TrivuleInput", () => {
       validator.setFeedbackElement();
 
       expect(validator.getFeedbackElement() === feedbackElement).toBe(true);
+    });
+  });
+
+  describe("Test messages assignment by imperative mode", () => {
+    const body = document.createElement("div");
+    const inputElement = document.createElement("input");
+    body.appendChild(inputElement);
+    const validator = new TrivuleInput(inputElement, {
+      messages: "Please enter a valid data",
     });
   });
 });

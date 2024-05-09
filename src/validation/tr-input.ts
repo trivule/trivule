@@ -1,4 +1,4 @@
-import { ITrConfig, RuleCallBack } from "../contracts";
+import { RuleCallBack } from "../contracts";
 import { TrivuleInputValidator } from "./tr-input-validator";
 import { TrBag } from "./tr-bag";
 import {
@@ -22,6 +22,7 @@ import {
 export class TrivuleInput extends TrivuleInputValidator {
   constructor(inputElement: ValidatableInput, param?: TrivuleInputParms) {
     super(inputElement, param);
+    this.init();
   }
 
   /**
@@ -33,12 +34,15 @@ export class TrivuleInput extends TrivuleInputValidator {
    * ```
    */
   init() {
-    if (this.param.autoValidate) {
-      this.param.events?.forEach((e) => {
-        this.inputElement.addEventListener(e, () => {
-          this.validate();
+    if (!this.__wasInit) {
+      if (this.autoValidate) {
+        this.__wasInit = true;
+        this._events.forEach((e) => {
+          this.inputElement.addEventListener(e, () => {
+            this.value = this.getInputElemenyValue();
+          });
         });
-      });
+      }
     }
   }
   /**
@@ -53,7 +57,6 @@ export class TrivuleInput extends TrivuleInputValidator {
 
   with(param: TrivuleInputParms) {
     this.setParams(param);
-    this.validator.setParams(this.param);
   }
 
   whereName(inputName: string): boolean {

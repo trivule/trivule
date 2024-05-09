@@ -1,9 +1,7 @@
 import { Rule, RulesMessages } from "../contracts";
 import { TrLocal } from "../locale/tr-local";
 import { spliteParam } from "../utils";
-/**
- * @author Claude Fassinou
- */
+
 export class TrMessages {
   protected messages!: RulesMessages;
 
@@ -32,16 +30,16 @@ export class TrMessages {
     return messages;
   }
 
-  parseMessage(
+  static parseMessage(
     attribute: string,
     rule: Rule,
     message: string,
     oParams: string
   ): string {
-    const args = this._createParamObject(spliteParam(oParams ?? ""));
+    const args = TrMessages._createParamObject(spliteParam(oParams ?? ""));
 
     args["field"] = attribute;
-    message = this._replace(message, args);
+    message = TrMessages._replace(message, args);
 
     return message;
   }
@@ -55,7 +53,7 @@ export class TrMessages {
     return this;
   }
 
-  private _replace(message: string, replacements: Record<string, any>) {
+  static _replace(message: string, replacements: Record<string, any>) {
     for (const positionalAgrName in replacements) {
       if (
         Object.prototype.hasOwnProperty.call(replacements, positionalAgrName)
@@ -69,7 +67,7 @@ export class TrMessages {
     return message.replace(/\.\.\.arg/, Object.values(replacements).join(", "));
   }
 
-  private _createParamObject(params: any[]) {
+  static _createParamObject(params: any[]) {
     const args: Record<string, any> = {};
     for (let i = 0; i < params.length; i++) {
       const value = params[i];

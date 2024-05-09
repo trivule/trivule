@@ -1,2 +1,2 @@
 export * from "./tr-messages";
-export * from "./validator-errors";
+export * from "../validation/utils/input-rule";
