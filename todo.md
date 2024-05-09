@@ -2,3 +2,4 @@
 - Write equals, accepted rule
 - Fix multiple events validation
 - Fix TrivuleInput.onPasses and TrivuleInput.onFails
+- config feedback selector globally for a form

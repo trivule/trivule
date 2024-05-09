@@ -336,22 +336,40 @@ export class TrivuleInputValidator
     this.rules.prepend(rule, message, param, validate, local);
     return this;
   }
-  insertAfterRule(
-    rule: string,
-    message?: string | null,
-    param?: any,
-    validate?: RuleCallBack | undefined,
-    local?: string
-  ): this {
+  insertAfterRule(rule: {
+    oldRule: string | Rule;
+    newRule: string | Rule;
+    message?: string | null;
+    param?: any;
+    validate?: RuleCallBack | undefined;
+    local?: string;
+  }): this {
+    this.rules.insertAfter(
+      rule.oldRule,
+      rule.newRule,
+      rule.message,
+      rule.param,
+      rule.validate,
+      rule.local
+    );
     return this;
   }
-  insertBeforeRule(
-    rule: string,
-    message?: string | null,
-    param?: any,
-    validate?: RuleCallBack | undefined,
-    local?: string
-  ): this {
+  insertBeforeRule(rule: {
+    oldRule: string | Rule;
+    newRule: string | Rule;
+    message?: string | null;
+    param?: any;
+    validate?: RuleCallBack | undefined;
+    local?: string;
+  }): this {
+    this.rules.insertBefore(
+      rule.oldRule,
+      rule.newRule,
+      rule.message,
+      rule.param,
+      rule.validate,
+      rule.local
+    );
     return this;
   }
 }
