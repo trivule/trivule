@@ -349,28 +349,34 @@ export interface ITrivuleInput {
 
   /**
    * Pushes an additional validation rule to the existing rules for this Trivule input instance.
-   * @param existingRuleName The name of the existing rule to add to.
+   * @param rule The name of the existing rule to add to.
    * @returns This Trivule input instance.
    */
-  pushRule(existingRuleName: string): this;
+  pushRule(rule: {
+    rule: string;
+    message?: string | null;
+    param?: any;
+    validate?: RuleCallBack;
+    local?: string;
+  }): this;
 
   getMessages(): string | string[] | Record<string, string> | undefined;
   getMessageAttributeName(): string;
   hasRule(rule: Rule | string): boolean;
-  prependRule(
-    rule: string,
-    message?: string | null,
-    param?: any,
-    validate?: RuleCallBack,
-    local?: string
-  ): this;
-  appendRule(
-    rule: string,
-    message?: string | null,
-    param?: any,
-    validate?: RuleCallBack,
-    local?: string
-  ): this;
+  prependRule(ule: {
+    rule: string;
+    message?: string | null;
+    param?: any;
+    validate?: RuleCallBack;
+    local?: string;
+  }): this;
+  appendRule(rule: {
+    rule: string;
+    message?: string | null;
+    param?: any;
+    validate?: RuleCallBack;
+    local?: string;
+  }): this;
   insertBeforeRule(rule: {
     oldRule: string | Rule;
     newRule: string | Rule;
