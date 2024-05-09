@@ -34,7 +34,8 @@
         padding: 50px;
       }
 
-      [data-tr-feedback] {
+      [data-tr-feedback],
+      .invalid-feedback {
         font-family: "Courier New", Courier, monospace;
         font-size: 14px;
         color: rgb(252, 55, 55);
@@ -99,18 +100,18 @@
         <label>
           Your name
           <input name="name" type="text" />
-          <div id="name" style="color: red"></div>
+          <div class="invalid-feedback"></div>
         </label>
 
         <label>
           Your age
           <input name="age" class="age" type="text" />
-          <div class="age" style="color: red"></div>
+          <div class="invalid-feedback"></div>
         </label>
         <label>
           Your email
           <input name="email" type="text" />
-          <div data-tr-feedback="email"></div>
+          <div data-tr-feedback="email" class="invalid-feedback"></div>
         </label>
       </fieldset>
 

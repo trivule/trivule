@@ -154,27 +154,22 @@ export abstract class AbstractInputralidator {
    * that is associated with the current input element, and stores a reference to it.
    *
    */
-  setFeedbackElement(selector?: CssSelector) {
+  setFeedbackElement(selector?: CssSelector | null) {
     let feedbackElement: HTMLElement | null = null;
-    if (!selector) {
-      const inputElement = this.inputElement;
-
-      let parentElement = inputElement.parentElement;
-      let s = this.parameter.getFeedbackSelector(this.name);
-      while (parentElement && !feedbackElement) {
-        feedbackElement = !!s
-          ? getHTMLElementBySelector(s, parentElement)
-          : feedbackElement;
-        if (!feedbackElement) {
-          s = this.param.feedbackElement as any;
-        }
-        parentElement = parentElement.parentElement;
+    let parentElement = this.inputElement.parentElement;
+    selector = selector ?? this.param.feedbackElement;
+    selector = selector ?? this.parameter.getFeedbackSelector(this.name);
+    do {
+      feedbackElement = !!selector
+        ? getHTMLElementBySelector(selector, parentElement)
+        : feedbackElement;
+      if (feedbackElement) {
+        break;
       }
-      this.feedbackElement = feedbackElement;
-    } else {
-      this.feedbackElement = getHTMLElementBySelector(selector);
-    }
-    this.param.feedbackElement = this.param.feedbackElement ?? feedbackElement;
+      parentElement = parentElement?.parentElement || null;
+    } while (!!parentElement && !feedbackElement);
+
+    this.feedbackElement = feedbackElement;
 
     return this;
   }

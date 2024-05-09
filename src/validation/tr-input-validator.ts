@@ -5,7 +5,12 @@ import {
   ValidatableInput,
 } from "../contracts/types";
 import { RuleExecuted } from "./utils/rule-executed";
-import { ITrivuleInput, ITrivuleInputCallback } from "../contracts";
+import {
+  ITrivuleInput,
+  ITrivuleInputCallback,
+  Rule,
+  RuleCallBack,
+} from "../contracts";
 
 export class TrivuleInputValidator
   extends AbstractInputralidator
@@ -302,7 +307,7 @@ export class TrivuleInputValidator
     this.validator.failsOnFirst = boolean;
     return this;
   }
-  getFeedbackElement(): HTMLElement | null {
+  getFeedbackElement() {
     return this.feedbackElement;
   }
   pushRule(existingRuleName: string): this {
@@ -310,5 +315,43 @@ export class TrivuleInputValidator
   }
   hasRule(rule: string): boolean {
     return this.rules.has(rule);
+  }
+  appendRule(
+    rule: string,
+    message?: string | null,
+    param?: any,
+    validate?: RuleCallBack | undefined,
+    local?: string
+  ): this {
+    this.rules.append(rule, message, param, validate, local);
+    return this;
+  }
+  prependRule(
+    rule: string | Rule,
+    message?: string | null,
+    param?: any,
+    validate?: RuleCallBack | undefined,
+    local?: string
+  ): this {
+    this.rules.prepend(rule, message, param, validate, local);
+    return this;
+  }
+  insertAfterRule(
+    rule: string,
+    message?: string | null,
+    param?: any,
+    validate?: RuleCallBack | undefined,
+    local?: string
+  ): this {
+    return this;
+  }
+  insertBeforeRule(
+    rule: string,
+    message?: string | null,
+    param?: any,
+    validate?: RuleCallBack | undefined,
+    local?: string
+  ): this {
+    return this;
   }
 }

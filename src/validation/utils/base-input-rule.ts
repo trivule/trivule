@@ -39,12 +39,24 @@ export abstract class BaseInputRule {
   }
 
   add(
-    originaleRule: string,
+    rule: string | Rule,
     message?: string | null,
     param?: any,
     validate?: RuleCallBack,
     local?: string
   ) {
+    this.items.push(this.createRule(rule, message, param, validate, local));
+
+    return this;
+  }
+
+  createRule(
+    originaleRule: string,
+    message?: string | null,
+    param?: any,
+    validate?: RuleCallBack,
+    local?: string
+  ): RuleType {
     let { ruleName, params } = getRule(originaleRule);
 
     if (!message) {
@@ -57,14 +69,13 @@ export abstract class BaseInputRule {
       throw new Error(`The rule ${ruleName} is not defined`);
     }
     this.messages[ruleName] = message;
-    this.items.push({
+
+    return {
       name: ruleName,
       message,
       params: param ?? params,
       validate,
-    });
-
-    return this;
+    };
   }
 
   protected toArrayOrObject(

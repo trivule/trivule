@@ -84,6 +84,33 @@ describe("InputRule", () => {
       number: "This field must be a number", //original message
     });
   });
+  it("should prepend a new rule at the beginning of the list", () => {
+    inputRule.prepend("email");
+    const received = inputRule.all().map((rule) => {
+      return rule.name;
+    });
+
+    expect(received).toEqual(["email", "required", "minlength"]);
+  });
+
+  it("should insert a new rule before the specified existing rule", () => {
+    inputRule.insertBefore("required", "email");
+    const received = inputRule.all().map((rule) => {
+      return rule.name;
+    });
+
+    expect(received).toEqual(["email", "required", "minlength"]);
+  });
+
+  // Test pour la méthode insertAfter
+  it("should insert a new rule after the specified existing rule", () => {
+    inputRule.insertAfter("required", "email"); //
+    const received = inputRule.all().map((rule) => {
+      return rule.name;
+    });
+
+    expect(received).toEqual(["required", "email", "minlength"]);
+  });
 });
 
 describe("convertAcoladeGroupToArray", () => {

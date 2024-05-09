@@ -8,20 +8,16 @@ trivuleForm.make([
   {
     selector: "input[name='name']",
     rules: ["required", "minlength:5"],
-    feedbackElement: "#name",
+    feedbackElement: ".invalid-feedback",
   },
   {
     selector: document.querySelector(".age") as HTMLInputElement,
-    rules: ["required", "int", "min:18"],
+    rules: ["int", "min:18"],
     // The html element with class .age closest to the input element
-    feedbackElement: ".age",
+    feedbackElement: ".invalid-feedback",
   },
   {
     selector: "input[name='email']", //just input Name
     rules: ["required", "email"],
   },
 ]);
-
-trivuleForm.onFails((f) => {
-  console.log(f);
-});

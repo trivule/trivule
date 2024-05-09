@@ -357,6 +357,34 @@ export interface ITrivuleInput {
   getMessages(): string | string[] | Record<string, string> | undefined;
   getMessageAttributeName(): string;
   hasRule(rule: Rule | string): boolean;
+  prependRule(
+    rule: string,
+    message?: string | null,
+    param?: any,
+    validate?: RuleCallBack,
+    local?: string
+  ): this;
+  appendRule(
+    rule: string,
+    message?: string | null,
+    param?: any,
+    validate?: RuleCallBack,
+    local?: string
+  ): this;
+  insertBeforeRule(
+    rule: string,
+    message?: string | null,
+    param?: any,
+    validate?: RuleCallBack,
+    local?: string
+  ): this;
+  insertAfterRule(
+    rule: string,
+    message?: string | null,
+    param?: any,
+    validate?: RuleCallBack,
+    local?: string
+  ): this;
 }
 
 export * from "./rule";
