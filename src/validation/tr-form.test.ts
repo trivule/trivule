@@ -80,20 +80,28 @@ describe("TrivuleForm", () => {
   test("Test the make method", () => {
     const trInput = new TrivuleInput(formInstance.ageInput);
     trivuleForm.addTrivuleInput(trInput);
-    trivuleForm.make([
-      {
-        rules: "required|between:18,40",
-        selector: formInstance.ageInput,
-      },
-      {
-        rules: "required|date",
-        selector: formInstance.birthDayInput,
-      },
-    ]);
+    trivuleForm
+      .make([
+        {
+          rules: "required|between:18,40",
+          selector: formInstance.ageInput,
+        },
+        {
+          rules: "required|date",
+          selector: formInstance.birthDayInput,
+        },
+      ])
+      .make({
+        message: {
+          rules: "required|only:string",
+        },
+      });
 
     const birthDayInput = trivuleForm.get("birthDay");
     expect(birthDayInput?.is(formInstance.birthDayInput)).toBe(true);
     const ageInput = trivuleForm.get("age");
     expect(ageInput?.hasRule("between")).toBe(true);
+    const messageInput = trivuleForm.get("message");
+    expect(messageInput?.hasRule("only")).toBe(true);
   });
 });

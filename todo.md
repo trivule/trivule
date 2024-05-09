@@ -1,5 +1,4 @@
 - Write unit test for the form rules  
 - Write equals, accepted rule
-- Open Trivule to accept custom attributes. Instead of data-tr-feedback, you can use feedback, data-my-attribute or even .feedback at the bottom of the page. 
 - Fix multiple events validation
 - Fix TrivuleInput.onPasses and TrivuleInput.onFails

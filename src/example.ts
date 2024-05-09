@@ -21,3 +21,14 @@ trivuleForm.make([
     rules: ["required", "email"],
   },
 ]);
+
+const trInput = trivuleForm.get("email");
+
+if (trInput) {
+  trInput.onFails((tr) => {
+    console.log(tr);
+  });
+  trInput.onPasses((tr) => {
+    console.log(tr);
+  });
+}

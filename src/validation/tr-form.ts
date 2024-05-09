@@ -9,11 +9,16 @@ import {
   ITrivuleInputCallback,
 } from "../contracts";
 import { TrLocal } from "../locale/tr-local";
-import { isBoolean } from "../rules";
+import { isBoolean, isNumber } from "../rules";
 import { FormValidator } from "../rules/form/form-validator";
-import { tr_attr_get, transformToArray } from "../utils";
+import {
+  getHTMLElementBySelector,
+  tr_attr_get,
+  transformToArray,
+} from "../utils";
 import { TrBag } from "./tr-bag";
 import { TrivuleInput } from "./tr-input";
+import { TrParameter } from "./utils/parameter";
 
 /**
  * TrivuleForm is responsible for applying live validation to an HTML form.
@@ -75,7 +80,9 @@ export class TrivuleForm {
     auto: true,
   };
 
+  parameter!: TrParameter;
   constructor(container: ValidatableForm, config?: TrivuleFormConfig) {
+    this.parameter = new TrParameter();
     this.setContainer(container);
     this._formValidator = new FormValidator(this.container);
     this.setConfig(config);
@@ -655,14 +662,22 @@ export class TrivuleForm {
     this._trivuleInputs[trInput.getName()] = trInput;
   }
 
-  make(input: TrivuleInputParms[]) {
+  make(input: TrivuleInputParms[] | Record<string, TrivuleInputParms>) {
     if (typeof input != "object" || input === undefined || input === null) {
       throw new Error("Invalid arguments passed to make method");
     }
 
-    transformToArray(input, (param) => {
-      this.addTrivuleInput(new TrivuleInput(param));
+    transformToArray(input, (param, index) => {
+      let selector: any = isNumber(index).passes ? undefined : index;
+      if (selector) {
+        selector = this.parameter.getInputSelector(selector);
+      }
+      selector =
+        getHTMLElementBySelector(selector, this.container) ?? undefined;
+      this.addTrivuleInput(new TrivuleInput(selector, param));
       return param;
     });
+
+    return this;
   }
 }

@@ -113,7 +113,8 @@ export abstract class AbstractInputralidator {
 
     if (!(inputElement instanceof Element)) {
       throw new Error(
-        "The 'inputElement' parameter must be valide 'ValidatableInput' type."
+        "The 'inputElement' parameter must be a valide 'ValidatableInput' type. " +
+          `"${inputElement} provided"`
       );
     }
 
@@ -297,6 +298,9 @@ export abstract class AbstractInputralidator {
       }
     }
 
+    if (!selector) {
+      selector = params?.selector;
+    }
     this.setInputElement(selector)
       .setParams(params)
       .setMessageAttributeName()
