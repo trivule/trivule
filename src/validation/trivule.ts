@@ -1,7 +1,13 @@
-import { ITrConfig, RuleCallBack } from "../contracts";
+import {
+  ITrConfig,
+  RuleCallBack,
+  TrivuleInputParms,
+  ValidatableForm,
+} from "../contracts";
 import { TrConfig } from "../tr.config";
 import { TrBag } from "./tr-bag";
 import { TrivuleForm } from "./tr-form";
+import { TrivuleInput } from "./tr-input";
 /**
  *
  * Initializes Trivule and applies form validation to all forms in the document.
@@ -69,5 +75,14 @@ export class Trivule {
 
   static Rule(ruleName: string, call: RuleCallBack, message?: string) {
     TrBag.rule(ruleName, call, message);
+  }
+  form(selector: ValidatableForm, config: ITrConfig) {
+    const trForm = new TrivuleForm(selector, config);
+    trForm.init();
+    return trForm;
+  }
+
+  input(params: TrivuleInputParms) {
+    return new TrivuleInput(params);
   }
 }
