@@ -147,6 +147,8 @@ export type TrivuleFormConfig = {
    * The css invalid class that will be added to all the input in the form
    */
   invalidClass?: string;
+
+  feedbackSelector?: string;
 };
 
 export type TrivuleFormHandler = (tr: TrivuleForm) => unknown;

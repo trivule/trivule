@@ -495,6 +495,7 @@ export class TrivuleForm {
         validClass: this.config.validClass,
         invalidClass: this.config.invalidClass,
         autoValidate: this.config.auto,
+        feedbackElement: this.config.feedbackSelector,
       });
       qiv.init();
       this._trivuleInputs[qiv.name] = qiv;
