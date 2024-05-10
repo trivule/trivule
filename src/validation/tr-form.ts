@@ -32,6 +32,7 @@ import { TrParameter } from "./utils/parameter";
  * ```
  */
 export class TrivuleForm {
+  private __calledCount = 0;
   /**
    * This status indicates the current state of the form
    */
@@ -52,13 +53,12 @@ export class TrivuleForm {
   /**
    * The class that indicates the submit button is enabled
    */
-  private _trEnabledClass = "enabled-class";
+  private _trEnabledClass = "etr-enabled";
   /**
    * The class that indicates the submit button is disabled
    */
   private _trDisabledClass = "tr-disabled";
 
-  private _triggerValidationEvents = ["change", "tr.form.updated"];
   /**
    * The html form
    */
@@ -81,6 +81,7 @@ export class TrivuleForm {
   };
 
   parameter!: TrParameter;
+
   constructor(container: ValidatableForm, config?: TrivuleFormConfig) {
     this.parameter = new TrParameter();
     this.setContainer(container);
@@ -121,7 +122,6 @@ export class TrivuleForm {
   init() {
     if (this.config.auto) {
       this.disableButton();
-      this.validateOnTrEvent();
     }
 
     this.emit("tr.form.init", this);
@@ -191,33 +191,6 @@ export class TrivuleForm {
   }
 
   /**
-   * Registers an event listener for  this this._triggerValidationEvents event on the container element.
-   * If a callback function is provided, it will be executed before Trivule handle the form validation.
-   * For each TrivuleInput instance attached to this class, the onPass and onFails methods will be executed with this handle method
-   * @param fn - The callback function to execute.
-   *
-   * @example
-   * const trivuleForm = new TrivuleForm(formElement);
-   *
-   * trivuleForm.validateOnTrEvent((trivuleFormInstance) => {
-   *   // Some code
-   * });
-   *
-   */
-  validateOnTrEvent(fn?: CallableFunction) {
-    this.__call(fn, this);
-    this._triggerValidationEvents.forEach((e) => {
-      this.on(e, (e) => {
-        this._handle();
-      });
-    });
-    // Validates the entire form whenever a tr.input.passes or tr.input.fails event is listened to
-    this.each((trivuleInput) => {
-      trivuleInput.onFails(this._handle.bind(this));
-      trivuleInput.onPasses(this._handle.bind(this));
-    });
-  }
-  /**
    * Retrieves all inputs from the form.
    * @param strict - If true, returns objects with only name, value, and validation status of each input; otherwise, returns TrivuleInput instances.
    * @returns An array of all inputs based on the strict flag.
@@ -274,17 +247,6 @@ export class TrivuleForm {
       errors: trivuleInput.getErrors(),
     };
   }
-  /**
-   * Check if inputs are valid, and emit the corresponding event if necessary
-   */
-  private _handle() {
-    this._passed = this.isValid();
-    if (this._passed) {
-      this._emitTrOnPassesEvent();
-    } else {
-      this._emitTrOnFailsEvent();
-    }
-  }
 
   /**
    * Check if the form is valid
@@ -307,10 +269,7 @@ export class TrivuleForm {
   private _onSubmit() {
     var validateCallback = () => {
       let results: boolean[] = [];
-      // It will help also to display errors messages
       this.each((trInput) => {
-        // Validate each input
-        // The false argument passed, tell that to input to not emit validation event
         trInput.emitOnValidate = false;
         results.push(trInput.validate());
       });
@@ -497,8 +456,7 @@ export class TrivuleForm {
         autoValidate: this.config.auto,
         feedbackElement: this.config.feedbackSelector,
       });
-      qiv.init();
-      this._trivuleInputs[qiv.name] = qiv;
+      this.addTrivuleInput(qiv);
     }
   }
 
@@ -534,13 +492,6 @@ export class TrivuleForm {
     // Remove event handlers
     this.container.removeEventListener("submit", this._onSubmit);
 
-    const evs = this._triggerValidationEvents.filter(
-      (event) => event !== "tr.form.updated"
-    );
-    evs.forEach((ev) => {
-      this.container.removeEventListener(ev, this._handle);
-    });
-
     this.destroyInputs();
     this._trivuleInputs = {};
     this.emit("tr.form.destroy");
@@ -558,7 +509,6 @@ export class TrivuleForm {
       //Open _emitOnPasses, for the next tr.form.passes event
       this._emitOnPasses = true;
     }
-    this.emit("tr.form.validate", this);
   }
   /**
    * Emits the "tr.form.passes" event if the form passes validation.
@@ -572,8 +522,6 @@ export class TrivuleForm {
       //Open _emitOnFails, for the next tr.form.fails event
       this._emitOnFails = true;
     }
-
-    this.emit("tr.form.validate", this);
   }
   /**
    * Syncronize form rules with the global rules
@@ -660,7 +608,29 @@ export class TrivuleForm {
   }
 
   addTrivuleInput(trInput: TrivuleInput) {
+    const inputFeedback = trInput.getFeedbackElement();
+    if (!inputFeedback) {
+      trInput.setFeedbackElement(this.config.feedbackSelector);
+    }
+
+    const oldInput = this._trivuleInputs[trInput.getName()];
+    if (oldInput) {
+      oldInput.destroy();
+    }
     this._trivuleInputs[trInput.getName()] = trInput;
+
+    /**
+     * Listen for each input and update form state
+     */
+    trInput.onFails(() => {
+      this.valid = this.isValid();
+    });
+    trInput.onPasses(() => {
+      this.valid = this.isValid();
+    });
+
+    //Update the form when adding new fields
+    this.valid = this.isValid();
   }
 
   make(input: TrivuleInputParms[] | Record<string, TrivuleInputParms>) {
@@ -694,6 +664,45 @@ export class TrivuleForm {
       return param;
     });
 
+    return this;
+  }
+
+  set valid(boolean: boolean) {
+    if (this._passed !== boolean) {
+      this._passed = boolean;
+      this.__calledCount++;
+      if (this._passed) {
+        this._emitTrOnPassesEvent();
+      } else {
+        this._emitTrOnFailsEvent();
+      }
+    }
+    this.emit("tr.form.validate", this);
+  }
+
+  get valid() {
+    //this._passed = this.isValid();
+    return this._passed;
+  }
+
+  all() {
+    return this.inputs();
+  }
+
+  getNativeElement() {
+    return this.container;
+  }
+  setAttrToNativeElement(name: string, value: any) {
+    this.container.setAttribute(name, value);
+    return this;
+  }
+  setClassToNativeElement(name: string) {
+    this.container.classList.add(name);
+    return this;
+  }
+
+  removeClassFromNativeElement(name: string) {
+    this.container.classList.remove(name);
     return this;
   }
 }

@@ -10,55 +10,78 @@
     />
     <style>
       [data-tr-feedback] {
-        color: rgb(231, 47, 47);
+        color: #ff4618;
         font-family: "Courier New", Courier, monospace;
         margin-top: 5px;
         font-size: 12px;
         font-weight: 400;
       }
       body {
-        background-color: #f8f8f8;
+        background-color: #141d1b;
         height: 100vh;
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
+        color: aqua;
+        font-family: "Courier New", Courier, monospace;
       }
       label {
-        font-weight: 600;
+        color: aliceblue;
       }
       .form {
         width: 550px;
         margin: auto;
-        background-color: #fff;
+        background-color: #172124;
         padding: 50px;
+        box-shadow: -3px 3px #ff74181f;
+        border-radius: 10px;
+        transition: all 1s;
+      }
+
+      .form.warning {
+        box-shadow: -3px 3px 30px rgba(255, 238, 0, 0.637);
+      }
+      .form.danger {
+        box-shadow: -3px 3px 30px #ff7418;
+      }
+      .form.success {
+        box-shadow: -3px 3px 30px rgba(0, 255, 255, 0.637);
       }
 
       [data-tr-feedback],
       .invalid-feedback {
         font-family: "Courier New", Courier, monospace;
         font-size: 14px;
-        color: rgb(252, 55, 55);
+        color: #ff7418;
       }
 
       .is-invalid {
-        border-color: rgb(252, 55, 55);
+        border-color: #ff7418;
         animation: shake 0.5s ease-in-out; /* Animation pour les champs invalides */
       }
 
       .is-valid {
-        border-color: #2ca35a;
+        border-color: aqua;
         box-shadow: 0 2px 3px #cbffc0;
-        border-bottom: 3px solid #2ca35a;
+        border-bottom: 3px solid aqua;
         animation: fadeIn 0.5s ease-in-out; /* Animation pour les champs valides */
       }
       input[type="submit"] {
-        border-color: #2ca35a;
+        border-color: aqua;
         box-shadow: 0 2px 3px #cbffc0;
-        border-bottom: 3px solid #2ca35a;
-        background-color: #2ca35a;
+        border-bottom: 3px solid aqua;
+        background-color: aqua;
+        color: #242424;
       }
 
+      input {
+        background-color: rgba(227, 242, 242, 0.04);
+        color: rgb(225, 226, 226);
+      }
+      input:focus {
+        border-color: aqua;
+      }
       @keyframes shake {
         0% {
           transform: translateX(0);
@@ -90,12 +113,38 @@
           transform: translateY(0);
         }
       }
+      .number-card {
+        text-align: center;
+      }
+
+      .circle {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        background-color: aqua;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        box-shadow: 0 4px 8px rgb(68, 68, 68);
+        margin: auto;
+      }
+
+      .number {
+        font-size: 48px;
+        color: white;
+        font-weight: bold;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      }
     </style>
     <title>Trivule</title>
   </head>
   <body>
     <form class="form">
-      <p>Validation scenario with Trivule</p>
+      <div class="number-card">
+        <div class="circle">
+          <span class="number"><span id="number-increment">0</span>/3</span>
+        </div>
+      </div>
       <fieldset>
         <label>
           Your name
