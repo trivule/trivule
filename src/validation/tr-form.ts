@@ -82,6 +82,7 @@ export class TrivuleForm {
 
   parameter!: TrParameter;
 
+  private _onUpdateCallbacks: TrivuleFormHandler[] = [];
   constructor(container: ValidatableForm, config?: TrivuleFormConfig) {
     this.parameter = new TrParameter();
     this.setContainer(container);
@@ -580,9 +581,7 @@ export class TrivuleForm {
   }
 
   onUpdate(fn: TrivuleFormHandler) {
-    this.on("tr.form.updated", (event: any) => {
-      this.__call(fn, event.detail);
-    });
+    this._onUpdateCallbacks.push(fn);
   }
 
   private destroyInputs() {
@@ -629,6 +628,11 @@ export class TrivuleForm {
       this.valid = this.isValid();
     });
 
+    trInput.onUpdate((tr) => {
+      this._onUpdateCallbacks.forEach((fn) => {
+        this.__call(fn, this);
+      });
+    });
     //Update the form when adding new fields
     this.valid = this.isValid();
   }

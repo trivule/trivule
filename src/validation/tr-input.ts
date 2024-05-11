@@ -43,6 +43,13 @@ export class TrivuleInput extends TrivuleInputValidator {
         this._events.forEach((e) => {
           this.inputElement.addEventListener(e, () => {
             this.value = this.getInputElemenyValue();
+            this.emit("tr.input.update", {
+              detail: {
+                rules: this.rules,
+                input: {},
+                element: this.inputElement,
+              },
+            });
           });
         });
       }
@@ -74,6 +81,12 @@ export class TrivuleInput extends TrivuleInputValidator {
 
   onPasses(fn: EventCallback) {
     this.on("tr.input.passes", (e) => {
+      this.__call(fn, this);
+    });
+  }
+
+  onUpdate(fn: EventCallback) {
+    this.on("tr.input.update", (e) => {
       this.__call(fn, this);
     });
   }

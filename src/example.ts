@@ -28,12 +28,12 @@ trivuleForm.make({
   },
 });
 
-trivuleForm.onValidate((form) => {
+trivuleForm.onUpdate((form) => {
   const percent = (form.validated().length / trivuleForm.all().length) * 100;
 
   const nc = document.getElementById("number-increment");
   if (nc) {
-    nc.innerHTML = "" + form.validated().length;
+    nc.innerHTML = form.validated().length.toString();
   }
   if (percent < 34) {
     form
