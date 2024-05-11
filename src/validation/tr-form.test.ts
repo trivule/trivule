@@ -66,7 +66,9 @@ class MyForm {
 const formInstance = new MyForm();
 
 describe("TrivuleForm", () => {
-  const trivuleForm = new TrivuleForm(formInstance.form);
+  const trivuleForm = new TrivuleForm(formInstance.form, {
+    realTime: false,
+  });
   test("Test get method", () => {
     expect(trivuleForm.get("name")).toBeInstanceOf(TrivuleInput);
   });
@@ -103,5 +105,17 @@ describe("TrivuleForm", () => {
     expect(ageInput?.hasRule("between")).toBe(true);
     const messageInput = trivuleForm.get("message");
     expect(messageInput?.hasRule("only")).toBe(true);
+  });
+
+  test("Test realTime feature", () => {
+    trivuleForm.add({
+      rules: "required|between:18,40",
+      selector: "age", //The input name
+    });
+    expect(trivuleForm.isRealTimeEnabled()).toBe(false);
+    const ageInput = trivuleForm.get("age");
+    expect(ageInput?.isRealTimeEnabled()).toBe(false);
+    trivuleForm.enableRealTime();
+    expect(ageInput?.isRealTimeEnabled()).toBe(true);
   });
 });

@@ -40,7 +40,7 @@ export class TrivuleInput extends TrivuleInputValidator {
     if (!this.__wasInit) {
       if (this.autoValidate) {
         this.__wasInit = true;
-        this._events.forEach((e) => {
+        this.events.forEach((e) => {
           this.inputElement.addEventListener(e, () => {
             this.value = this.getInputElemenyValue();
             this.emit("tr.input.update", {

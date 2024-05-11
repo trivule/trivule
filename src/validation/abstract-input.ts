@@ -50,7 +50,7 @@ export abstract class AbstractInputralidator {
     emitEvent: true,
     autoValidate: true,
     failsOnfirst: true,
-    events: ["blur", "input", "change"],
+    events: ["blur", "change"],
     validClass: "",
     invalidClass: "is-invalid",
     type: "text",
@@ -95,7 +95,7 @@ export abstract class AbstractInputralidator {
         : this.param.events;
     }
 
-    this.events = events ?? this.param.events;
+    this.events = this.eventToArray(events ?? this.param.events);
   }
 
   /**
@@ -341,17 +341,20 @@ export abstract class AbstractInputralidator {
   set emitOnValidate(value: boolean) {
     this._emitOnValidate = value;
   }
-  set events(value: string | string[] | undefined) {
-    this._events = this.eventToArray(value);
+  set events(value: string[]) {
+    if (this.realTime) {
+      if (!value.includes("input")) {
+        value.push("input");
+      } else {
+        value = value.filter((v) => v != "input");
+      }
+    }
+
+    this._events = value;
   }
 
   get events() {
-    if (this.realTime) {
-      if (!this._events.includes("input")) {
-        this._events.push("input");
-      }
-    }
-    return this.events;
+    return this._events;
   }
 
   commit() {

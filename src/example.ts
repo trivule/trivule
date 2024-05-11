@@ -2,6 +2,7 @@ import { TrivuleForm } from "./validation";
 
 const trivuleForm = new TrivuleForm("form", {
   feedbackSelector: ".invalid-feedback",
+  realTime: false,
 });
 
 trivuleForm.make([
@@ -25,6 +26,7 @@ trivuleForm.make({
     ],
   },
 });
+trivuleForm.enableRealTime();
 
 trivuleForm.onUpdate((form) => {
   const percent = (form.validated().length / trivuleForm.all().length) * 100;

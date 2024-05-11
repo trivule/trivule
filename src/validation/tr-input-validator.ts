@@ -401,6 +401,10 @@ export class TrivuleInputValidator
   }
   disableRealTime() {
     this.realTime = false;
+    this.events = this._events;
     return this;
+  }
+  isRealTimeEnabled() {
+    return this.realTime;
   }
 }

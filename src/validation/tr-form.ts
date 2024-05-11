@@ -606,6 +606,10 @@ export class TrivuleForm {
   }
 
   addTrivuleInput(trInput: TrivuleInput) {
+    const inputFeedback = trInput.getFeedbackElement();
+    if (!inputFeedback) {
+      trInput.setFeedbackElement(this.config.feedbackSelector);
+    }
     const oldInput = this._trivuleInputs[trInput.getName()];
     if (oldInput) {
       oldInput.destroy();
@@ -659,7 +663,7 @@ export class TrivuleForm {
       }
 
       param.selector = selector;
-      this.add(param);
+      this.addTrivuleInput(new TrivuleInput(selector, param));
       return param;
     });
 
@@ -706,15 +710,10 @@ export class TrivuleForm {
   }
 
   add(params: TrivuleInputParms, input?: ValidatableInput) {
-    const i = new TrivuleInput(params);
-
     if (typeof this.config.realTime === "boolean") {
       params.realTime = this.config.realTime;
     }
-    const inputFeedback = i.getFeedbackElement();
-    if (!inputFeedback) {
-      i.setFeedbackElement(this.config.feedbackSelector);
-    }
+
     params.validClass = params.validClass ?? this.config.validClass;
     params.invalidClass = params.invalidClass ?? this.config.invalidClass;
     params.autoValidate = params.autoValidate ?? this.config.auto;
@@ -724,7 +723,27 @@ export class TrivuleForm {
     if (input) {
       params.selector = input;
     }
-    this.addTrivuleInput(i);
+
+    return this.make([params]);
+  }
+  enableRealTime() {
+    this.config.realTime = true;
+    this.each((tr) => {
+      tr.enableRealTime();
+      return this;
+    });
     return this;
+  }
+  disableRealTime() {
+    this.config.realTime = false;
+    this.each((tr) => {
+      tr.disableRealTime();
+      return this;
+    });
+    return this;
+  }
+
+  isRealTimeEnabled() {
+    return this.config.realTime;
   }
 }
