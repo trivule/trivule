@@ -85,12 +85,15 @@ export class TrivuleForm {
   parameter!: TrParameter;
 
   private _onUpdateCallbacks: TrivuleFormHandler[] = [];
+
+  private _wasInit = false;
   constructor(container: ValidatableForm, config?: TrivuleFormConfig) {
     this.parameter = new TrParameter();
     this.setContainer(container);
     this._formValidator = new FormValidator(this.container);
     this.setConfig(config);
     this._initTrivuleInputs();
+    this.init();
   }
 
   private setContainer(container: ValidatableForm) {
@@ -123,21 +126,24 @@ export class TrivuleForm {
    * ```
    */
   init() {
-    if (this.config.auto) {
-      this.disableButton();
+    if (!this._wasInit) {
+      this._wasInit = true;
+      if (this.config.auto) {
+        this.disableButton();
+      }
+
+      this.emit("tr.form.init", this);
+
+      this._onSubmit();
+
+      this.onFails((e) => {
+        this.disableButton();
+      });
+
+      this.onPasses((e) => {
+        this.enableButton();
+      });
     }
-
-    this.emit("tr.form.init", this);
-
-    this._onSubmit();
-
-    this.onFails((e) => {
-      this.disableButton();
-    });
-
-    this.onPasses((e) => {
-      this.enableButton();
-    });
   }
   /**
    * Disable submission  button on failed
