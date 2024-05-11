@@ -394,4 +394,13 @@ export class TrivuleInputValidator
     );
     return this;
   }
+
+  enableRealTime() {
+    this.realTime = true;
+    return this;
+  }
+  disableRealTime() {
+    this.realTime = false;
+    return this;
+  }
 }

@@ -4,8 +4,6 @@ const trivuleForm = new TrivuleForm("form", {
   feedbackSelector: ".invalid-feedback",
 });
 
-trivuleForm.init();
-
 trivuleForm.make([
   {
     selector: "name",
