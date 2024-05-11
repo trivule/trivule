@@ -114,6 +114,8 @@ export type TrivuleInputParms = {
    * Indicates input type
    */
   type?: string;
+
+  realTime?: boolean;
 };
 
 /**
@@ -149,6 +151,7 @@ export type TrivuleFormConfig = {
   invalidClass?: string;
 
   feedbackSelector?: string;
+  realTime?: boolean;
 };
 
 export type TrivuleFormHandler = (tr: TrivuleForm) => unknown;

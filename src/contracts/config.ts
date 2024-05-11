@@ -7,4 +7,5 @@ export interface ITrConfig {
   local?: {
     lang: string;
   };
+  realTime?: boolean;
 }

@@ -7,6 +7,7 @@ import {
   ValidatableForm,
   ITrivuleInputObject,
   ITrivuleInputCallback,
+  ValidatableInput,
 } from "../contracts";
 import { TrLocal } from "../locale/tr-local";
 import { isBoolean, isNumber } from "../rules";
@@ -78,6 +79,7 @@ export class TrivuleForm {
    */
   protected config: TrivuleFormConfig = {
     auto: true,
+    realTime: true,
   };
 
   parameter!: TrParameter;
@@ -449,16 +451,7 @@ export class TrivuleForm {
       : Array.from(
           this.container.querySelectorAll<HTMLElement>("[data-tr-rules]")
         );
-
-    for (const el of trivuleInputs) {
-      const qiv = new TrivuleInput(el as HTMLInputElement, {
-        validClass: this.config.validClass,
-        invalidClass: this.config.invalidClass,
-        autoValidate: this.config.auto,
-        feedbackElement: this.config.feedbackSelector,
-      });
-      this.addTrivuleInput(qiv);
-    }
+    trivuleInputs.forEach((el) => this.add({ selector: el }));
   }
 
   /**
@@ -607,11 +600,6 @@ export class TrivuleForm {
   }
 
   addTrivuleInput(trInput: TrivuleInput) {
-    const inputFeedback = trInput.getFeedbackElement();
-    if (!inputFeedback) {
-      trInput.setFeedbackElement(this.config.feedbackSelector);
-    }
-
     const oldInput = this._trivuleInputs[trInput.getName()];
     if (oldInput) {
       oldInput.destroy();
@@ -664,7 +652,8 @@ export class TrivuleForm {
         param.selector = undefined;
       }
 
-      this.addTrivuleInput(new TrivuleInput(selector, param));
+      param.selector = selector;
+      this.add(param);
       return param;
     });
 
@@ -707,6 +696,29 @@ export class TrivuleForm {
 
   removeClassFromNativeElement(name: string) {
     this.container.classList.remove(name);
+    return this;
+  }
+
+  add(params: TrivuleInputParms, input?: ValidatableInput) {
+    const i = new TrivuleInput(params);
+
+    if (typeof this.config.realTime === "boolean") {
+      params.realTime = this.config.realTime;
+    }
+    const inputFeedback = i.getFeedbackElement();
+    if (!inputFeedback) {
+      i.setFeedbackElement(this.config.feedbackSelector);
+    }
+    params.validClass = params.validClass ?? this.config.validClass;
+    params.invalidClass = params.invalidClass ?? this.config.invalidClass;
+    params.autoValidate = params.autoValidate ?? this.config.auto;
+    params.feedbackElement =
+      params.feedbackElement ?? this.config.feedbackSelector;
+
+    if (input) {
+      params.selector = input;
+    }
+    this.addTrivuleInput(i);
     return this;
   }
 }

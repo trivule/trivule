@@ -310,6 +310,9 @@ export class TrivuleInputValidator
   getFeedbackElement() {
     return this.feedbackElement;
   }
+  getRealTimeState() {
+    return this.realTime;
+  }
   pushRule(rule: {
     rule: string;
     message?: string | null;

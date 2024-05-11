@@ -54,6 +54,7 @@ export abstract class AbstractInputralidator {
     validClass: "",
     invalidClass: "is-invalid",
     type: "text",
+    realTime: true,
   };
 
   protected parameter: TrParameter;
@@ -63,7 +64,7 @@ export abstract class AbstractInputralidator {
   private _emitOnValidate: boolean = true;
 
   protected _type: InputType = "text";
-
+  protected realTime: boolean = false;
   protected _events = ["change", "blur", "input"];
   constructor(
     selector?: ValidatableInput | TrivuleInputParms,
@@ -323,6 +324,7 @@ export abstract class AbstractInputralidator {
     this.validator.rules = this.rules.all();
     this.validator.failsOnFirst = params?.failsOnfirst ?? true;
     this._type = (params?.type ?? "text") as InputType;
+    this.realTime = params?.realTime ?? this.realTime;
   }
   getMessageAttributeName() {
     return this.validator.attribute;
@@ -344,6 +346,11 @@ export abstract class AbstractInputralidator {
   }
 
   get events() {
+    if (this.realTime) {
+      if (!this._events.includes("input")) {
+        this._events.push("input");
+      }
+    }
     return this.events;
   }
 

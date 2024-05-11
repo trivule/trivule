@@ -148,23 +148,27 @@
       <fieldset>
         <label>
           Your name
-          <input name="name" type="text" />
+          <input name="name" type="text" autocomplete="off" />
           <div class="invalid-feedback"></div>
         </label>
 
         <label>
           Your age
-          <input name="age" class="age" type="text" />
+          <input name="age" class="age" type="text" autocomplete="off" />
           <div class="invalid-feedback"></div>
         </label>
         <label>
           Your email
           <input name="email" type="text" />
-          <div data-tr-feedback="email" class="invalid-feedback"></div>
+          <div
+            data-tr-feedback="email"
+            autocomplete="off"
+            class="invalid-feedback"
+          ></div>
         </label>
       </fieldset>
 
-      <input type="submit" value="Subscribe" data-tr-snubmit />
+      <input type="submit" value="Subscribe" data-tr-submit />
     </form>
 
     <script src="/src/example.ts" type="module"></script>

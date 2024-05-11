@@ -9,4 +9,5 @@ export const TrConfig: ITrConfig = {
   local: {
     lang: TrLocal.DEFAULT_LANG,
   },
+  realTime: true,
 };
