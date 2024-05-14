@@ -8,11 +8,15 @@ To get started with Trivule, please refer to the comprehensive documentation ava
 
 **Imperative Validation Approach**
 ```js
+const trivuleForm = new TrivuleForm("form", {
+  feedbackSelector: ".invalid-feedback",
+  realTime: false,
+});
+
 trivuleForm.make({
   email: {
     rules: ["required", "email", "maxlength:60"],
-    feedbackElement: ".invalid-feedback",
-    realTime: false,
+    feedbackElement: ".invalid-feedback", 
   },
 });
 
