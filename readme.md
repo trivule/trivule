@@ -122,7 +122,7 @@ or in javascript
 trivuleForm.make({
   age:{
     rules: "required|integer|between:16,50",
-    events:["blur","change"]//or [data-tr-feedback]
+    events:["blur","change"]
   }
 })
 ```
