@@ -56,3 +56,19 @@ trivuleForm.onUpdate((form) => {
       .setClassToNativeElement("success");
   }
 });
+
+trivuleForm.make({
+  email: {
+    rules: ["required", "email", "maxlength:60"],
+    feedbackElement: ".invalid-feedback",
+    realTime: false,
+  },
+});
+
+trivuleForm.onUpdate((form) => {
+  const emailInput = form.get("email");
+
+  emailInput?.onRulePass("maxlength", (emailInput) => {
+    emailInput.appendRule({ rule: "endWith:@gmail.com" });
+  });
+});

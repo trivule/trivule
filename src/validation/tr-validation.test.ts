@@ -49,4 +49,12 @@ describe("TrValidation", () => {
       },
     ]);
   });
+  test("getRuleExecuted", () => {
+    trvalidation.failsOnFirst = false;
+    trvalidation.value = "";
+    const received = trvalidation
+      .getRuleExecuted()
+      .map((rule) => rule.ruleName);
+    expect(received).toEqual(["required", "email"]);
+  });
 });

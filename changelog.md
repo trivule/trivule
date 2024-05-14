@@ -1,6 +1,17 @@
-v.1.1.0
-- messages key add to `ValidationState` interface
-- errors, messages keys to `ITrivuleInputObject`
-- Introduce the possibility for developers to enable or disable the real-time validation
-- Performance
-- Introduce the imperative validation for more interaction with the form
+
+### Change Log
+
+#### v1.1.0
+
+- Added `messages` key to the `ValidationState` interface.
+- Added `errors` and `messages` keys to `ITrivuleInputObject`.
+- Added `realTime` key to the configuration, allowing developers to enable or disable real-time validation.
+- Improved performance.
+- Made the `init` method on TrivuleInput and TrivuleForm optional.
+- Updated methods `onFails`, `onPasses`, `onUpdate` for TrivuleInput and TrivuleForm.
+
+##### Features
+
+- Introduced imperative validation for more interaction with the form:
+  - Addition, removal, and modification of rules during program execution.
+  - Updated methods `onFails`, `onPasses`, `onUpdate` for TrivuleInput and TrivuleForm.

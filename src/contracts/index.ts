@@ -270,7 +270,7 @@ export interface ITrivuleInput {
    * trivuleInput.onRulePass("required", (input) => { console.log("Rule passed:", input); }); // Sets a callback for when the "required" rule passes
    */
   onRulePass(
-    rule: string,
+    rule: string | Rule,
     callback: ITrivuleInputCallback<ITrivuleInput, ITrivuleInput>
   ): this;
 

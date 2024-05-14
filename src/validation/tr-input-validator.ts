@@ -288,15 +288,19 @@ export class TrivuleInputValidator
   afterInit(callback: ITrivuleInputCallback<ITrivuleInput, any>): void {}
 
   onRuleFail(
-    rule: string,
-    callback: ITrivuleInputCallback<ITrivuleInput, ITrivuleInput>
+    rule: string | Rule,
+    callback: ITrivuleInputCallback<ITrivuleInput, void>
   ): this {
     return this;
   }
   onRulePass(
-    rule: string,
-    callback: ITrivuleInputCallback<ITrivuleInput, ITrivuleInput>
+    rule: string | Rule,
+    callback: ITrivuleInputCallback<ITrivuleInput, void>
   ): this {
+    const r = this.getRuleExecuted().find((r) => r.isNamed(rule));
+    if (!!r && r.passed) {
+      this.__call(callback, this);
+    }
     return this;
   }
 
