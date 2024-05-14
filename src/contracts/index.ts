@@ -393,6 +393,7 @@ export interface ITrivuleInput {
     validate?: RuleCallBack | undefined;
     local?: string;
   }): this;
+  getRules(): RuleType[];
 }
 
 export * from "./rule";

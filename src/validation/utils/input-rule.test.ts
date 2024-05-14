@@ -50,7 +50,7 @@ describe("InputRule", () => {
   });
 
   it("should remove a rule", () => {
-    inputRule.remove("email");
+    inputRule.remove("email").remove("minlength");
     const received = inputRule.all().map((rule) => {
       return {
         name: rule.name,
@@ -62,10 +62,6 @@ describe("InputRule", () => {
       {
         name: "required",
         params: undefined,
-      },
-      {
-        name: "minlength",
-        params: "8",
       },
     ]);
   });
@@ -110,6 +106,33 @@ describe("InputRule", () => {
     });
 
     expect(received).toEqual(["required", "email", "minlength"]);
+  });
+
+  it("should append a new rule", () => {
+    inputRule.append("email");
+    inputRule.append("minlength:9");
+    const received = inputRule.all().map((rule) => {
+      return {
+        name: rule.name,
+        params: rule.params,
+      };
+    });
+
+    expect(received).toEqual([
+      {
+        name: "required",
+        params: undefined,
+      },
+      {
+        name: "email",
+        params: undefined,
+      },
+
+      {
+        name: "minlength",
+        params: "9",
+      },
+    ]);
   });
 });
 

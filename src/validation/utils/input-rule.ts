@@ -27,10 +27,6 @@ export class InputRule extends BaseInputRule {
     return this.messages;
   }
 
-  has(rule: string | Rule): boolean {
-    return this.items.some((item) => item.name === rule);
-  }
-
   append(
     rule: string,
     message?: string | null,

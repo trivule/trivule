@@ -14,7 +14,8 @@ export abstract class BaseInputRule {
   }
 
   remove(rule: string): this {
-    this.items = this.items.filter((item) => item.name !== rule);
+    let { ruleName } = getRule(rule);
+    this.items = this.items.filter((item) => item.name !== ruleName);
     return this;
   }
 
@@ -45,9 +46,15 @@ export abstract class BaseInputRule {
     validate?: RuleCallBack,
     local?: string
   ) {
+    if (this.has(rule)) {
+      this.remove(rule);
+    }
     this.items.push(this.createRule(rule, message, param, validate, local));
-
     return this;
+  }
+  has(rule: string | Rule): boolean {
+    let { ruleName } = getRule(rule);
+    return this.items.some((item) => item.name === ruleName);
   }
 
   createRule(

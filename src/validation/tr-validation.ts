@@ -88,11 +88,11 @@ export class TrValidation {
       //
       ruleExec.valueTested = this._value;
       ruleExec.run = true;
+      this._addRuleExecuted(ruleExec);
       // If rule is setup to stop on first fails
       if (this._failOnfirst) {
         if (!ruleExec.passed) {
           this._parseRuleMessage(ruleExec, ruleToRun, message);
-          this._addRuleExecuted(ruleExec);
           break;
         }
       } else {
@@ -101,7 +101,6 @@ export class TrValidation {
         } else {
           ruleExec.message = null;
         }
-        this._addRuleExecuted(ruleExec);
       }
     }
 
