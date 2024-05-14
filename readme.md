@@ -4,11 +4,7 @@ Trivule is a powerful, user-friendly JavaScript library designed to simplify for
  
 To get started with Trivule, please refer to the comprehensive documentation available [here](https://www.trivule.com). You can also follow a quick tutorial of less than 5 minutes [here](https://trivule.com/docs/tutorial) to familiarize yourself with Trivule.
 
-#### Example
-![Trivule](https://www.trivule.com/img/example.png)
-
-
-## Key Features
+ ## Key Features
 
 **Imperative Validation Approach**
 ```js
