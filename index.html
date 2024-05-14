@@ -159,12 +159,12 @@
         </label>
         <label>
           Your email
-          <input name="email" type="text" />
-          <div
-            data-tr-feedback="email"
-            autocomplete="off"
-            class="invalid-feedback"
-          ></div>
+          <input
+            name="email"
+            type="text"
+            data-tr-rules="required|email|maxlength:60"
+          />
+          <div data-tr-feedback="email" class="invalid-feedback"></div>
         </label>
       </fieldset>
 

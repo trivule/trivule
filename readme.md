@@ -1,28 +1,88 @@
 # Trivule
 
-Trivule is a user-friendly JavaScript real-time library for HTML form validation. It allows you to quickly add validation rules to your form fields using custom HTML attributes, without the need to write additional JavaScript code. Trivule's custom HTML attributes are easy to understand and use, enabling you to set up a robust validation system without spending a lot of time creating custom validation functions or writing complex JavaScript code.
+Trivule is a powerful, user-friendly JavaScript library designed to simplify form validation for developers. It is a ready-to-integrate solution for modern framworks.
  
-To get started with Trivule, please refer to the comprehensive documentation available [here](https://trivule.com). You can also follow a quick tutorial of less than 5 minutes [here](https://trivule.com/docs/tutorial) to familiarize yourself with Trivule.
+To get started with Trivule, please refer to the comprehensive documentation available [here](https://www.trivule.com). You can also follow a quick tutorial of less than 5 minutes [here](https://trivule.com/docs/tutorial) to familiarize yourself with Trivule.
 
 #### Example
 ![Trivule](https://www.trivule.com/img/example.png)
 
 
-## Usage
+## Key Features
 
-Trivule offers seamless integration with Angular, React, Vue, and other JavaScript frameworks, without relying on jQuery or complex JavaScript code.
+**Imperative Validation Approach**
+```js
+trivuleForm.make({
+  email: {
+    rules: ["required", "email", "maxlength:60"],
+    feedbackElement: ".invalid-feedback",
+    realTime: false,
+  },
+});
 
-### Key Features
+trivuleForm.onUpdate((form) => {*
+  const emailInput = form.get("email");
+  
+  emailInput?.onRulePass("maxlength", (emailInput) => {
+    //Do something when the maxlength passed
+    emailInput.appendRule({ rule: "endWith:@gmail.com" });
+  });
+});
+```
+- **Streamlined Validation**: Implement complex validation rules without the hassle. Trivule simplifies your workflow, allowing you to focus on building better user experiences.
+- **Time-Saving**: With Trivule, save valuable time that you can invest in other critical aspects of your project.
+- **Dynamic Conditional Validation**: Adapt to user inputs in real-time, providing dynamic responses and validations as conditions change.
+- **Framework Compatibility**: Seamlessly integrate with modern frameworks using a consistent interface
 
-- **Concise and Intuitive:** We prioritizes simplicity and intuitiveness, ensuring a smooth development experience.
+**Declarative Validation Approach**
+```html
+<input name="email" type="text" data-tr-rules="required|email|maxlength:60"/>
+<div data-tr-feedback="email" class="invalid-feedback"></div>
+```
+- **HTML/CSS-Based Validation**: Perfect for quickly setting up validations using just HTML and CSS. Ideal for projects where simplicity and speed are key.
+- **Time Efficiency**: Minimize the time spent on scripting validations. Set up once, and let Trivule handle the rest.
+- **Intuitive Syntax**: User-friendly attributes make implementing validation rules straightforward, even for those with minimal coding experience.
+- **Conditional Validation Ready**: Easily set up conditions for your validations to handle complex scenarios with ease.
 
-- **Lightweight and Fast:** With its lightweight nature, Trivule maintains optimal performance without sacrificing speed.
+**Error Messaging & Localization**
+```js
+trivuleForm.make({
+  email: {
+    rules: ["required", "email", "maxlength:60"],
+    messages:["The field is required", "The email is invalid", "The email is too long"]
+  },
+});
 
-- **Easy Integration:** Seamlessly integrate Trivule into your projects, simplifying the development process across various frameworks.
+//Global Translation 
+TrLocal.translate('es', {
+  required: "El campo es obligatorio",
+});
 
-- **Interactive Real-time Validation:** Experience real-time validation with Trivule, providing instant feedback without manual refreshes. Customize validation rules to suit your specific needs.
+//Global modification of an existing message
+TrLocal.rewrite('en', 'required', 'The :field cannot be empty');
+```
 
-- **Ready-to-Use Rules:** Trivule comes equipped with pre-defined validation rules, allowing for quick application of common validation patterns. Easily add or modify rules as needed.
+```html
+<input
+    name="email" type="text"
+    data-tr-rules="required|email|maxlength:60"
+    data-tr-messages="The field is required|The email is invalid|The email is too long"
+/>
+```
+- **Customizable Error Messages**: Tailor error messages to fit the context of your application, enhancing user guidance and experience.
+- **Localization Support**: Extend your application’s reach with built-in support for multiple languages, making your forms globally accessible.
+- **Smart Feedback Management**: Intelligent error feedback ensures users are clearly informed about validation issues, improving form completion rates.
+
+**Robust Validation Rules**
+```js
+const rules = ["email","size:1GB","before:now"]
+```
+- **Intuitive and Understandable Rules**: Each rule is designed to be self-explanatory, providing clear guidance and reducing the learning curve.
+- **Extensive Rule Set**: Cover a wide array of scenarios with Trivule’s comprehensive library of predefined validation rules.
+- **Easily Extendable**: Add or customize rules as your application requirements grow or change.
+- **Rewrite Existing Rules**: Adapt the library to meet specific needs by rewriting existing rules, offering unparalleled flexibility.
+
+**Trivule** is your go-to solution for making form validation not just possible but also a pleasant part of user interactions. Whether you are a developer looking to streamline your workflow or a business aiming to improve user experience, Trivule provides the tools you need to succeed. Start simplifying your forms with Trivule today!
 
 ### Validation Made Simple
 
@@ -38,7 +98,7 @@ Display error messages with ease using the `data-tr-feedback` attribute:
 <div data-tr-feedback="age"></div>
 ```
 
-##{} Event-Based Validation
+## Event-Based Validation
 
 Trigger validation on specific events using the `data-tr-events` attribute, eliminating the need for additional JavaScript code:
 
@@ -67,9 +127,9 @@ By default we provide a message for each rul e but you can customize error messa
 ### Add or Edit Rule
 For adding or editing a rule in Trivule, you can play with `TrBag` class
 ```javascript
-TrBag.rule("required", (input) => {
+TrRule.add("notSudo", (input) => {
   return {
-    value: input,
+    value: input !="sudo",
     passes: false,
   };
 });
