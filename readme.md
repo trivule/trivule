@@ -167,8 +167,8 @@ For adding or editing a rule in Trivule, you can play with `TrRule` class
 ```javascript
 TrRule.add("notSudo", (input) => {
   return {
-    value: input !="sudo",
-    passes: false,
+    value: input,
+    passes: input !="sudo",
   };
 });
 ```
