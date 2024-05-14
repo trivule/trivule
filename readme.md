@@ -87,11 +87,27 @@ Effortlessly validate inputs using Trivule, saving valuable development time. Ut
 ```html
 <input type="text" data-tr-rules="required|integer|between:16,50" name="age" />
 ```
-
+or in javascript
+```js
+trivuleForm.make({
+  age:{
+    rules: "required|integer|between:16,50"
+  }
+})
+```
 Display error messages with ease using the `data-tr-feedback` attribute:
 
 ```html
 <div data-tr-feedback="age"></div>
+```
+or in javascript
+```js
+trivuleForm.make({
+  age:{
+    rules: "required|integer|between:16,50",
+    feedbackElement:'[data-tr-feedback="age"]' //or [data-tr-feedback]
+  }
+})
 ```
 
 ## Event-Based Validation
@@ -101,6 +117,15 @@ Trigger validation on specific events using the `data-tr-events` attribute, elim
 ```html
 <input type="text" data-tr-events="blur|change" name="age" />
 ```
+or in javascript
+```js
+trivuleForm.make({
+  age:{
+    rules: "required|integer|between:16,50",
+    events:["blur","change"]//or [data-tr-feedback]
+  }
+})
+```
 
 ### Custom Styling
 
@@ -109,6 +134,16 @@ Style your inputs dynamically based on validation results using `data-tr-invalid
 ```html
 <input type="text" data-tr-invalid-class="error" data-tr-valid-class="success" name="age" />
 ```
+or in javascript
+```js
+trivuleForm.make({
+  age:{
+    rules: "required|integer|between:16,50",
+    invalidClass:"error",
+    validClass:"success"
+  }
+})
+```
 
 ### Custom Error Messages
 
@@ -116,12 +151,19 @@ By default we provide a message for each rul e but you can customize error messa
 ```html
 <input type="text" data-tr-messages="This field is required | Another message" name="age" />
 ```
+or in javascript
+```js
+trivuleForm.make({
+  age:{
+    rules: "required|integer|between:16,50",
+    messages:"This field is required |This field must be an integer"
+  }
+})
+```
 
-**Note:** The `data-tr-rules` attribute is required, while other attributes are optional and handled internally by Trivule.
-
-
+ 
 ### Add or Edit Rule
-For adding or editing a rule in Trivule, you can play with `TrBag` class
+For adding or editing a rule in Trivule, you can play with `TrRule` class
 ```javascript
 TrRule.add("notSudo", (input) => {
   return {
