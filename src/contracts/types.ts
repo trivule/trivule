@@ -49,7 +49,7 @@ export type ElementOrNull = HTMLElement | null;
 export type WayDisplayError = "first" | "last" | "full";
 
 /**
- * Input parameters that can be passed to TrivuleInput instance instead of tr-attributes
+ * Input parameters that can be passed to TrivuleInput instance
  */
 export type TrivuleInputParms = {
   selector?: ValidatableInput | null;
@@ -97,10 +97,6 @@ export type TrivuleInputParms = {
    */
   emitEvent?: boolean;
 
-  /**
-   * This field is useful for customizing error messages. By to rewrite the default messages
-   */
-  errors?: RulesMessages;
   /**
    * The css class that will be added to the input each time the form is valid
    */

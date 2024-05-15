@@ -6,6 +6,7 @@ import {
 } from "../contracts/types";
 import { RuleExecuted } from "./utils/rule-executed";
 import {
+  InputType,
   ITrivuleInput,
   ITrivuleInputCallback,
   Rule,
@@ -251,24 +252,29 @@ export class TrivuleInputValidator
     return this;
   }
   setInvalidClass(className: string): this {
+    this.invalidClass = className;
     return this;
   }
   setValidAttributes(attrs: Record<string, string>): this {
     return this;
   }
   setValue(value: any): this {
+    this.value = value;
     return this;
   }
   setValidClass(className: string): this {
+    this.validClass = className;
     return this;
   }
   setAutoValidate(autoValidate: boolean): this {
+    this.autoValidate = autoValidate;
     return this;
   }
   setEventTriggers(eventTriggers: string | string[]): this {
     return this;
   }
   setType(type: string): this {
+    this._type = type as InputType;
     return this;
   }
   beforeRunRule(

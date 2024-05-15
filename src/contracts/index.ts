@@ -342,7 +342,7 @@ export interface ITrivuleInput {
 
   /**
    * Pushes an additional validation rule to the existing rules for this Trivule input instance.
-   * @param rule The name of the existing rule to add to.
+   * @param rule The rule to add to.
    * @returns This Trivule input instance.
    */
   pushRule(rule: {

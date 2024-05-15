@@ -63,7 +63,6 @@ export class TrivuleInput extends TrivuleInputValidator {
                 },
               });
             }
-            console.log(this.events, this.realTime);
           });
         });
       }
