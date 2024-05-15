@@ -6,13 +6,6 @@ export type ITrivuleInputCallback<P, R> = (param: P) => R;
 export interface ITrivuleInputObject {
   value: any;
   name: string;
-  valid: boolean;
-  rules: RuleType[];
-  errors: Record<Rule, string>;
-  ruleExecuted: {
-    rule: string;
-    passed: boolean;
-  }[];
 }
 export type RuleType = {
   name: string;

@@ -50,7 +50,7 @@ export abstract class AbstractInputralidator {
     emitEvent: true,
     autoValidate: true,
     failsOnfirst: true,
-    events: ["blur", "change"],
+    events: ["blur", "change", "input"],
     validClass: "",
     invalidClass: "is-invalid",
     type: "text",
@@ -342,14 +342,6 @@ export abstract class AbstractInputralidator {
     this._emitOnValidate = value;
   }
   set events(value: string[]) {
-    if (this.realTime) {
-      if (!value.includes("input")) {
-        value.push("input");
-      } else {
-        value = value.filter((v) => v != "input");
-      }
-    }
-
     this._events = value;
   }
 

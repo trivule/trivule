@@ -217,7 +217,7 @@ export class TrivuleForm {
    * @returns An array of validated inputs based on the strict flag.
    */
 
-  validated(strict: boolean = false): ITrivuleInputObject[] | TrivuleInput[] {
+  validated(strict: boolean = true): ITrivuleInputObject[] | TrivuleInput[] {
     if (strict) {
       return this.inputsToArray()
         .filter((t) => t.passes())
@@ -231,7 +231,7 @@ export class TrivuleForm {
    * @returns An array of failed inputs based on the strict flag.
    */
 
-  failed(strict: boolean = false): ITrivuleInputObject[] | TrivuleInput[] {
+  failed(strict: boolean = true): ITrivuleInputObject[] | TrivuleInput[] {
     if (strict) {
       return this.inputsToArray()
         .filter((t) => t.fails())
@@ -248,12 +248,6 @@ export class TrivuleForm {
     return {
       name: trivuleInput.getName(),
       value: trivuleInput.getValue(),
-      valid: trivuleInput.passes(),
-      rules: trivuleInput.getRules(),
-      ruleExecuted: trivuleInput.getRuleExecuted().map((rule) => {
-        return { rule: rule.ruleName, passed: rule.passed };
-      }),
-      errors: trivuleInput.getErrors(),
     };
   }
 
@@ -579,6 +573,10 @@ export class TrivuleForm {
     });
   }
 
+  /**
+   * When any input value is updated
+   * @param fn
+   */
   onUpdate(fn: TrivuleFormHandler) {
     this._onUpdateCallbacks.push(fn);
   }
@@ -662,6 +660,15 @@ export class TrivuleForm {
         param.selector = undefined;
       }
 
+      if (typeof param.realTime !== "boolean") {
+        param.realTime = this.config.realTime;
+      }
+
+      param.validClass = param.validClass ?? this.config.validClass;
+      param.invalidClass = param.invalidClass ?? this.config.invalidClass;
+      param.autoValidate = param.autoValidate ?? this.config.auto;
+      param.feedbackElement =
+        param.feedbackElement ?? this.config.feedbackSelector;
       param.selector = selector;
       this.addTrivuleInput(new TrivuleInput(selector, param));
       return param;
@@ -710,16 +717,6 @@ export class TrivuleForm {
   }
 
   add(params: TrivuleInputParms, input?: ValidatableInput) {
-    if (typeof this.config.realTime === "boolean") {
-      params.realTime = this.config.realTime;
-    }
-
-    params.validClass = params.validClass ?? this.config.validClass;
-    params.invalidClass = params.invalidClass ?? this.config.invalidClass;
-    params.autoValidate = params.autoValidate ?? this.config.auto;
-    params.feedbackElement =
-      params.feedbackElement ?? this.config.feedbackSelector;
-
     if (input) {
       params.selector = input;
     }

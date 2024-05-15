@@ -42,14 +42,28 @@ export class TrivuleInput extends TrivuleInputValidator {
         this.__wasInit = true;
         this.events.forEach((e) => {
           this.inputElement.addEventListener(e, () => {
-            this.value = this.getInputElemenyValue();
-            this.emit("tr.input.update", {
-              detail: {
-                rules: this.rules,
-                input: {},
-                element: this.inputElement,
-              },
-            });
+            if (!this.realTime) {
+              if (e != "input" && e != "keyup" && e != "keydown") {
+                this.value = this.getInputElemenyValue();
+                this.emit("tr.input.update", {
+                  detail: {
+                    rules: this.rules,
+                    input: {},
+                    element: this.inputElement,
+                  },
+                });
+              }
+            } else {
+              this.value = this.getInputElemenyValue();
+              this.emit("tr.input.update", {
+                detail: {
+                  rules: this.rules,
+                  input: {},
+                  element: this.inputElement,
+                },
+              });
+            }
+            console.log(this.events, this.realTime);
           });
         });
       }
