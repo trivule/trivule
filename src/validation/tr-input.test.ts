@@ -186,7 +186,6 @@ describe("TrivuleInput", () => {
 
       validator.validate();
       const result = validator.getErrors();
-      //console.log(result);
 
       expect(result).toEqual({
         required: "This field is required",

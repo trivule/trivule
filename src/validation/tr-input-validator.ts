@@ -12,6 +12,7 @@ import {
   Rule,
   RuleCallBack,
 } from "../contracts";
+import { TrParameter } from "./utils/parameter";
 
 export class TrivuleInputValidator
   extends AbstractInputralidator
@@ -29,9 +30,10 @@ export class TrivuleInputValidator
 
   constructor(
     inputElement: ValidatableInput | TrivuleInputParms,
-    params?: TrivuleInputParms
+    params?: TrivuleInputParms,
+    parameter?: TrParameter
   ) {
-    super(inputElement, params);
+    super(inputElement, params, parameter);
   }
   /**
    * Performs validation on the input element. And emits tr.input.validated event if necessary.
@@ -224,6 +226,7 @@ export class TrivuleInputValidator
     return this;
   }
   removeRule(rule: string): this {
+    this.rules.remove(rule);
     return this;
   }
 

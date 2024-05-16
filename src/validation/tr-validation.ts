@@ -1,3 +1,4 @@
+import { InputRule } from "./utils/input-rule";
 import { InputType, Rule, RulesMessages, RuleType } from "../contracts";
 
 import { InputralueType } from "../contracts/types";
@@ -12,7 +13,7 @@ export class TrValidation {
   /**
    * The list of rules that should be executed on the value
    */
-  private _rules: RuleType[] = [];
+  private _rules!: InputRule;
 
   /**
    * The current value to validate
@@ -52,7 +53,7 @@ export class TrValidation {
    * tralidation.validate()
    */
   validate() {
-    const rules = this._rules;
+    const rules = this._rules.all();
 
     if (!Array.isArray(rules)) {
       throw new Error("The rule provided must be an array of Rule");
@@ -138,7 +139,7 @@ export class TrValidation {
    * Set rules to run
    * @param rules
    */
-  setRules(rules: RuleType[]): void {
+  setRules(rules: InputRule): void {
     this._rules = rules;
   }
 
@@ -226,7 +227,7 @@ export class TrValidation {
    * @param param
    */
 
-  set(rules: RuleType[], failsOnfirst: boolean, type: string) {
+  set(rules: InputRule, failsOnfirst: boolean, type: string) {
     this._failOnfirst = failsOnfirst;
 
     this._rules = rules;
@@ -236,7 +237,7 @@ export class TrValidation {
   getRuleExecuted(): RuleExecuted[] {
     return this._ruleExecuted;
   }
-  set rules(rules: RuleType[]) {
+  set rules(rules: InputRule) {
     this.setRules(rules);
   }
 }

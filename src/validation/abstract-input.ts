@@ -158,18 +158,23 @@ export abstract class AbstractInputralidator {
    */
   setFeedbackElement(selector?: CssSelector | null) {
     let feedbackElement: HTMLElement | null = null;
-    let parentElement = this.inputElement.parentElement;
-    selector = selector ?? this.param.feedbackElement;
-    selector = selector ?? this.parameter.getFeedbackSelector(this.name);
-    do {
-      feedbackElement = !!selector
-        ? getHTMLElementBySelector(selector, parentElement)
-        : feedbackElement;
-      if (feedbackElement) {
-        break;
-      }
-      parentElement = parentElement?.parentElement || null;
-    } while (!!parentElement && !feedbackElement);
+    if (selector instanceof HTMLElement) {
+      feedbackElement = selector;
+    } else {
+      let parentElement = this.inputElement.parentElement;
+      selector = selector ?? this.param.feedbackElement;
+      selector = selector ?? this.parameter.getFeedbackSelector(this.name);
+
+      do {
+        feedbackElement = !!selector
+          ? getHTMLElementBySelector(selector, parentElement)
+          : feedbackElement;
+        if (feedbackElement) {
+          break;
+        }
+        parentElement = parentElement?.parentElement || null;
+      } while (!!parentElement && !feedbackElement);
+    }
 
     this.feedbackElement = feedbackElement;
 
@@ -321,7 +326,7 @@ export abstract class AbstractInputralidator {
       this.rules.set(rules, elMessages);
     }
 
-    this.validator.rules = this.rules.all();
+    this.validator.rules = this.rules;
     this.validator.failsOnFirst = params?.failsOnfirst ?? true;
     this._type = (params?.type ?? "text") as InputType;
     this.realTime = params?.realTime ?? this.realTime;

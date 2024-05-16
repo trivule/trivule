@@ -10,7 +10,7 @@ describe("TrValidation", () => {
       email: "Invalid email format",
     });
     trvalidation = new TrValidation();
-    trvalidation.setRules(inputRule.all());
+    trvalidation.setRules(inputRule);
   });
 
   test("validate() should return false for an invalid value", () => {
@@ -33,7 +33,7 @@ describe("TrValidation", () => {
     trvalidation.setRules(
       new InputRule(["minlength:8"], {
         minlength: "The input must be at least 8 characters long",
-      }).all()
+      })
     );
     const rules = trvalidation.getRules().map((rule) => {
       return {

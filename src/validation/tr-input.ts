@@ -6,6 +6,7 @@ import {
   TrivuleInputParms,
   ValidatableInput,
 } from "../contracts/types";
+import { TrParameter } from "./utils/parameter";
 
 /**
  * TrivuleInput is responsible for applying live validation to an HTML input element.
@@ -22,9 +23,10 @@ import {
 export class TrivuleInput extends TrivuleInputValidator {
   constructor(
     inputElement: ValidatableInput | TrivuleInputParms,
-    param?: TrivuleInputParms
+    param?: TrivuleInputParms,
+    parameter?: TrParameter
   ) {
-    super(inputElement, param);
+    super(inputElement, param, parameter);
     this.init();
   }
 

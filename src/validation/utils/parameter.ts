@@ -12,6 +12,14 @@ export class TrParameter {
     }
     return this.feedbackSelector;
   }
+
+  setFeedbackSelector(selector?: CssSelector | null) {
+    if (!selector) {
+      return this;
+    }
+    this.feedbackSelector = selector;
+    return this;
+  }
   getInputSelector(name: string) {
     if (typeof this.inputSelector === "string") {
       if (name.trim().length < 1) {

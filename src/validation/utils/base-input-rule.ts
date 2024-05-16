@@ -145,4 +145,8 @@ export abstract class BaseInputRule {
     }
     return this;
   }
+
+  map(call: (r: RuleType, i: number) => any) {
+    return this.items.map(call);
+  }
 }

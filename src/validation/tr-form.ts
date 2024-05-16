@@ -332,6 +332,7 @@ export class TrivuleForm {
 
     TrLocal.LANG = lang ?? TrLocal.DEFAULT_LANG;
 
+    this.parameter.setFeedbackSelector(this.config.feedbackSelector);
     this._syncRules();
   }
 
@@ -606,7 +607,12 @@ export class TrivuleForm {
   addTrivuleInput(trInput: TrivuleInput) {
     const inputFeedback = trInput.getFeedbackElement();
     if (!inputFeedback) {
-      trInput.setFeedbackElement(this.config.feedbackSelector);
+      const fds = this.parameter.getFeedbackSelector(trInput.getName());
+      if (fds) {
+        trInput.setFeedbackElement(
+          getHTMLElementBySelector(fds, this.container)
+        );
+      }
     }
     const oldInput = this._trivuleInputs[trInput.getName()];
     if (oldInput) {
@@ -670,7 +676,7 @@ export class TrivuleForm {
       param.feedbackElement =
         param.feedbackElement ?? this.config.feedbackSelector;
       param.selector = selector;
-      this.addTrivuleInput(new TrivuleInput(selector, param));
+      this.addTrivuleInput(new TrivuleInput(selector, param, this.parameter));
       return param;
     });
 

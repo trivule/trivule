@@ -179,7 +179,11 @@ export function getHTMLElementBySelector<T>(
 ): T | null {
   const parent = from ?? document;
   if (typeof selector === "string") {
-    return parent.querySelector(selector) as T;
+    try {
+      return parent.querySelector(selector) as T;
+    } catch (error) {
+      return selector as T;
+    }
   }
   if (selector instanceof HTMLElement) {
     return selector as T;

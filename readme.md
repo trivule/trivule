@@ -20,14 +20,8 @@ trivuleForm.make({
   },
 });
 
-trivuleForm.onUpdate((form) => {*
-  const emailInput = form.get("email");
-  
-  emailInput?.onRulePass("maxlength", (emailInput) => {
-    //Do something when the maxlength passed
-    emailInput.appendRule({ rule: "endWith:@gmail.com" });
-  });
-});
+const emailInput = trivuleForm.get("email");
+emailInput?.appendRule({ rule: "endWith:@gmail.com" });
 ```
 - **Streamlined Validation**: Implement complex validation rules without the hassle. Trivule simplifies your workflow, allowing you to focus on building better user experiences.
 - **Time-Saving**: With Trivule, save valuable time that you can invest in other critical aspects of your project.
