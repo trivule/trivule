@@ -749,4 +749,18 @@ export class TrivuleForm {
   isRealTimeEnabled() {
     return this.config.realTime;
   }
+
+  setInputValidClass(cls: string) {
+    this.config.validClass = cls;
+    this.each((i) => {
+      i.setValidClass(cls);
+    });
+  }
+
+  setInputInvalidClass(cls: string) {
+    this.config.invalidClass = cls;
+    this.each((i) => {
+      i.setInvalidClass(cls);
+    });
+  }
 }
