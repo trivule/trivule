@@ -2,7 +2,7 @@
 
 Trivule is a powerful, user-friendly JavaScript library designed to simplify form validation for developers. It is a ready-to-integrate solution for modern framworks.
  
-To get started with Trivule, please refer to the comprehensive documentation available [here](https://www.trivule.com). You can also follow a quick tutorial of less than 5 minutes [here](https://trivule.com/docs/tutorial) to familiarize yourself with Trivule.
+To get started with Trivule, please refer to the comprehensive documentation available [here](https://www.trivule.com). You can also follow a quick tutorial of less than 5 minutes [here](https://trivule.com/docs/tuto) to familiarize yourself with Trivule.
 
  ## Key Features
 
