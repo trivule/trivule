@@ -178,6 +178,7 @@ TrRule.add("notSudo", (input) => {
 
 ## Quick start
 - [Single Input Validation](/docs/input-validation.md)
+- [Form Validation](/docs/form-validation.md)
 
 ## Development
 
