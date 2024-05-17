@@ -1,4 +1,4 @@
-### File Validation: jQuery Validate vs Trivule
+# File Validation: jQuery Validate vs Trivule
 
 File validation in web forms is an essential step to ensure users upload appropriate file types and adhere to size limits. Let's quickly compare how to achieve this validation with jQuery Validate and Trivule.
 
