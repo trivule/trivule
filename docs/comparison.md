@@ -33,7 +33,7 @@ $("form").validate({
 new TrivuleInput("input", {
     rules: "required|mimes:.pdf|size:5242880B",
     feedbackElement: "#resume",
-}).init();
+})
 ```
 
 #### Declarative Validation with Trivule

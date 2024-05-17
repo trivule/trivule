@@ -2,9 +2,6 @@
 ### Change Log
 
 #### v1.1.0
-
-- Added `messages` key to the `ValidationState` interface.
-- Added `errors` and `messages` keys to `ITrivuleInputObject`.
 - Added `realTime` key to the configuration, allowing developers to enable or disable real-time validation.
 - Improved performance.
 - Made the `init` method on TrivuleInput and TrivuleForm optional.
