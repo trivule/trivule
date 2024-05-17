@@ -177,7 +177,7 @@ TrRule.add("notSudo", (input) => {
 [Get Started with Trivule](https://www.trivule.com/docs)
 
 ## Quick start
-- [Single Input Validation]()
+- [Single Input Validation](/docs/input-validation.md)
 
 ## Development
 
