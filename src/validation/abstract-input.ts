@@ -1,11 +1,12 @@
 import { TrValidation } from ".";
-import { InputType, Rule } from "../contracts";
 import {
   CssSelector,
   InputralueType,
+  InputType,
+  Rule,
   TrivuleInputParms,
   ValidatableInput,
-} from "../contracts/types";
+} from "../contracts";
 import { dataset_get, getHTMLElementBySelector, tr_attr_get } from "../utils";
 import { InputRule } from "./utils/input-rule";
 import { TrParameter } from "./utils/parameter";

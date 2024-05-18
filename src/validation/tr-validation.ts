@@ -1,7 +1,6 @@
 import { InputRule } from "./utils/input-rule";
-import { InputType, Rule, RulesMessages, RuleType } from "../contracts";
+import { InputralueType, InputType, Rule, RulesMessages } from "../contracts";
 
-import { InputralueType } from "../contracts/types";
 import { RuleExecuted } from ".";
 import { TrMessages } from "../messages";
 import { TrLocal } from "../locale/tr-local";
