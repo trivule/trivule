@@ -1,7 +1,7 @@
 import { maxlength, minlength } from "./string";
-import { RuleCallBack } from "../contracts/rule-callback";
 import { isFile, maxFileSize, minFileSize } from "./file";
 import { spliteParam } from "../utils";
+import { RuleCallBack } from "../contracts";
 /**
  * When the value is a number, it checks whether the input value is greater than or equal to min
  * When the value is a character string, it checks whether the number of characters is greater than or equal to min

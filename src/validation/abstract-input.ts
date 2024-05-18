@@ -1,11 +1,12 @@
 import { TrValidation } from ".";
-import { InputType, Rule } from "../contracts";
 import {
   CssSelector,
-  InputralueType,
+  InputValueType,
+  InputType,
+  Rule,
   TrivuleInputParms,
   ValidatableInput,
-} from "../contracts/types";
+} from "../contracts";
 import { dataset_get, getHTMLElementBySelector, tr_attr_get } from "../utils";
 import { InputRule } from "./utils/input-rule";
 import { TrParameter } from "./utils/parameter";
@@ -60,7 +61,7 @@ export abstract class AbstractInputralidator {
   protected parameter: TrParameter;
 
   autoValidate = true;
-  protected _value: InputralueType = undefined;
+  protected _value: InputValueType = undefined;
   private _emitOnValidate: boolean = true;
 
   protected _type: InputType = "text";

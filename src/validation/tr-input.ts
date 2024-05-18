@@ -1,11 +1,11 @@
-import { RuleCallBack } from "../contracts";
-import { TrivuleInputValidator } from "./tr-input-validator";
-import { TrBag } from "./tr-bag";
 import {
   EventCallback,
+  RuleCallBack,
   TrivuleInputParms,
   ValidatableInput,
-} from "../contracts/types";
+} from "../contracts";
+import { TrivuleInputValidator } from "./tr-input-validator";
+import { TrBag } from "./tr-bag";
 import { TrParameter } from "./utils/parameter";
 
 /**

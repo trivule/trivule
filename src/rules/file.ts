@@ -1,6 +1,5 @@
 import { RuleCallBack } from "../contracts";
 import {
-  calculateFileSize,
   convertFileSize,
   explodeFileParam,
   fileToArray,

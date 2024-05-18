@@ -9,6 +9,7 @@ import {
   stringBetween,
   fileBetween,
 } from ".";
+import { RuleCallBack } from "../contracts";
 import {
   calculateFileSize,
   convertFileSize,
@@ -17,7 +18,6 @@ import {
   throwEmptyArgsException,
 } from "../utils";
 import { ArgumentParser } from "../validation/utils/argument-parser";
-import { RuleCallBack } from "./../contracts/rule-callback";
 import { dateBetween, isDate } from "./date";
 /**
  * Checks if the input is required.

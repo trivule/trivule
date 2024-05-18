@@ -1,16 +1,14 @@
 import { AbstractInputralidator } from "./abstract-input";
-import {
-  EventCallback,
-  TrivuleInputParms,
-  ValidatableInput,
-} from "../contracts/types";
 import { RuleExecuted } from "./utils/rule-executed";
 import {
+  EventCallback,
   InputType,
   ITrivuleInput,
   ITrivuleInputCallback,
   Rule,
   RuleCallBack,
+  TrivuleInputParms,
+  ValidatableInput,
 } from "../contracts";
 import { TrParameter } from "./utils/parameter";
 
