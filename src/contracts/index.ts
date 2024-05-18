@@ -1,7 +1,18 @@
 import { Rule } from "./rule";
-import { RuleCallBack } from "./rule-callback";
 import { TrivuleInputParms, ValidatableInput } from "./types";
 export type ITrivuleInputCallback<P, R> = (param: P) => R;
+
+/**
+ * Configuration interface
+ */
+export interface ITrConfig {
+  invalidClass?: string;
+  validClass?: string;
+  local?: {
+    lang: string;
+  };
+  realTime?: boolean;
+}
 
 export interface ITrivuleInputObject {
   value: any;
@@ -389,9 +400,36 @@ export interface ITrivuleInput {
   getRules(): RuleType[];
 }
 
+/**
+ * tr.input.validated event details
+ */
+export type InputEventDetails = {
+  rules: Rule[];
+  element: HTMLInputElement | HTMLTextAreaElement;
+  input: Record<string, string>;
+};
+
+/**
+ * Input change event
+ */
+export interface InputChangeEvent {
+  details: InputEventDetails;
+}
+
+/**
+ * Rule callback
+ */
+export interface RuleCallBack {
+  (input: any, param?: any, type?: InputType): ValidationState;
+}
+
+export type RulesBag = {
+  [ruleName in Rule]: RuleCallBack;
+};
+
+export type RulesMessages = {
+  [key: string]: string;
+};
+
 export * from "./rule";
-export * from "./input-change-event";
-export * from "./rule-callback";
-export * from "./rules-bag.interface";
-export * from "./config";
 export * from "./types";
