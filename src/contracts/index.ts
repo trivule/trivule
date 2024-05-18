@@ -457,7 +457,7 @@ export type ValidatableForm = HTMLElement | string | "form";
 /**
  * The possible input types expected to be gotten
  */
-export type InputralueType =
+export type InputValueType =
   | string
   | Blob
   | File

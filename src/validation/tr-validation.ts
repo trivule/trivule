@@ -1,12 +1,10 @@
 import { InputRule } from "./utils/input-rule";
-import { InputralueType, InputType, Rule, RulesMessages } from "../contracts";
+import { InputValueType, InputType, Rule, RulesMessages } from "../contracts";
 
 import { RuleExecuted } from ".";
 import { TrMessages } from "../messages";
 import { TrLocal } from "../locale/tr-local";
-/**
- * @author Claude Fassinou
- */
+
 export class TrValidation {
   private _inputType = "text";
   /**
@@ -17,7 +15,7 @@ export class TrValidation {
   /**
    * The current value to validate
    */
-  private _value: InputralueType = undefined;
+  private _value: InputValueType = undefined;
 
   /**
    * A list of rules run
@@ -201,7 +199,7 @@ export class TrValidation {
   /**
    * Set the value and validate it automatically
    */
-  set value(v: InputralueType) {
+  set value(v: InputValueType) {
     this._value = v;
     this.validate();
   }
@@ -210,7 +208,7 @@ export class TrValidation {
     this._failOnfirst = fails;
   }
 
-  get value(): InputralueType {
+  get value(): InputValueType {
     return this._value;
   }
 

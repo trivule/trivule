@@ -1,7 +1,7 @@
 import { TrValidation } from ".";
 import {
   CssSelector,
-  InputralueType,
+  InputValueType,
   InputType,
   Rule,
   TrivuleInputParms,
@@ -61,7 +61,7 @@ export abstract class AbstractInputralidator {
   protected parameter: TrParameter;
 
   autoValidate = true;
-  protected _value: InputralueType = undefined;
+  protected _value: InputValueType = undefined;
   private _emitOnValidate: boolean = true;
 
   protected _type: InputType = "text";
