@@ -2,7 +2,6 @@ import { TrivuleForm } from "./validation";
 
 const trivuleForm = new TrivuleForm("form", {
   feedbackSelector: ".invalid-feedback",
-  realTime: true,
 });
 
 trivuleForm.make([
@@ -15,6 +14,10 @@ trivuleForm.make([
     rules: ["int", "min:18"],
   },
 ]);
+
+trivuleForm.validated(); // Get only validated inputs
+trivuleForm.failed(); // Get only failed inputs
+trivuleForm.inputs(); //get all inputs
 
 trivuleForm.make({
   email: {
