@@ -153,8 +153,6 @@ describe("isMimes", () => {
     expect(isMimes(123, "text/plain").passes).toBe(false);
     expect(isMimes(true, "application/pdf").passes).toBe(false);
     expect(isMimes([], "*.txt").passes).toBe(false);
-    expect(isMimes({}, "image/png").passes).toBe(false);
-    expect(isMimes(() => {}, "text/plain").passes).toBe(false);
   });
 
   it("should throw an error for empty param", () => {

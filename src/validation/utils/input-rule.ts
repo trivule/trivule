@@ -1,4 +1,4 @@
-import { Rule, RuleCallBack } from "../../contracts";
+import { Rule, RuleCallBack, RuleParam } from "../../contracts";
 import { BaseInputRule } from "./base-input-rule";
 
 export class InputRule extends BaseInputRule {
@@ -16,7 +16,7 @@ export class InputRule extends BaseInputRule {
   push(
     rule: string,
     message?: string | null,
-    param?: any,
+    param?: RuleParam,
     validate?: RuleCallBack,
     local?: string
   ): this {
@@ -30,7 +30,7 @@ export class InputRule extends BaseInputRule {
   append(
     rule: string,
     message?: string | null,
-    param?: any,
+    param?: RuleParam,
     validate?: RuleCallBack,
     local?: string
   ) {
@@ -40,11 +40,11 @@ export class InputRule extends BaseInputRule {
   prepend(
     rule: string,
     message?: string | null,
-    param?: any,
+    param?: RuleParam,
     validate?: RuleCallBack,
     local?: string
   ) {
-    this.items.unshift(this.createRule(rule, message, validate, param, local));
+    this.items.unshift(this.createRule(rule, message, param, validate, local));
     return this;
   }
 
@@ -52,7 +52,7 @@ export class InputRule extends BaseInputRule {
     existingRule: string,
     newRule: string,
     message?: string | null,
-    param?: any,
+    param?: RuleParam,
     validate?: RuleCallBack,
     local?: string
   ): this {
@@ -63,7 +63,7 @@ export class InputRule extends BaseInputRule {
       this.items.splice(
         existingIndex,
         0,
-        this.createRule(newRule, message, validate, param, local)
+        this.createRule(newRule, message, param, validate, local)
       );
     }
     return this;
@@ -73,7 +73,7 @@ export class InputRule extends BaseInputRule {
     existingRule: string,
     newRule: string,
     message?: string | null,
-    param?: any,
+    param?: RuleParam,
     validate?: RuleCallBack,
     local?: string
   ): this {
@@ -84,7 +84,7 @@ export class InputRule extends BaseInputRule {
       this.items.splice(
         existingIndex + 1,
         0,
-        this.createRule(newRule, message, validate, param, local)
+        this.createRule(newRule, message, param, validate, local)
       );
     }
     return this;

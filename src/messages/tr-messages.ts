@@ -1,4 +1,4 @@
-import { Rule, RulesMessages } from "../contracts";
+import { Rule, RuleParam, RulesMessages } from "../contracts";
 import { TrLocal } from "../locale/tr-local";
 import { spliteParam } from "../utils";
 
@@ -34,9 +34,11 @@ export class TrMessages {
     attribute: string,
     rule: Rule,
     message: string,
-    oParams: string
+    oParams: RuleParam
   ): string {
-    const args = TrMessages._createParamObject(spliteParam(oParams ?? ""));
+    const args = TrMessages._createParamObject(
+      spliteParam(oParams?.toString() ?? "")
+    );
 
     args["field"] = attribute;
     message = TrMessages._replace(message, args);
@@ -53,13 +55,18 @@ export class TrMessages {
     return this;
   }
 
-  static _replace(message: string, replacements: Record<string, any>) {
+  static _replace(message: string, replacements: Record<string, RuleParam>) {
     for (const positionalAgrName in replacements) {
       if (
         Object.prototype.hasOwnProperty.call(replacements, positionalAgrName)
       ) {
         const argValue = replacements[positionalAgrName];
-        message = message.replace(`:${positionalAgrName}`, argValue);
+        if (argValue) {
+          message = message.replace(
+            `:${positionalAgrName}`,
+            argValue.toString()
+          );
+        }
       }
     }
     // Remove the field from the replacements before inject them
@@ -67,8 +74,8 @@ export class TrMessages {
     return message.replace(/\.\.\.arg/, Object.values(replacements).join(", "));
   }
 
-  static _createParamObject(params: any[]) {
-    const args: Record<string, any> = {};
+  static _createParamObject(params: RuleParam[]) {
+    const args: Record<string, RuleParam> = {};
     for (let i = 0; i < params.length; i++) {
       const value = params[i];
       const argName = `arg${i}`;

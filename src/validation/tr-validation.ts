@@ -38,7 +38,7 @@ export class TrValidation {
    * An object containing the original validation rules errors as key-value pairs (record) of rule names and error
    * messages
    */
-  private _trmessages: Record<string, any> = {};
+  private _trmessages: Record<string, string> = {};
 
   /**
    * This method performs the validation process. It iterates over the _rules array and executes each rule on the
@@ -79,7 +79,7 @@ export class TrValidation {
       ruleExec.passed = state.passes;
       //Get the value after validation
       //The value may be converted by the validation callback
-      this._value = state.value;
+      this._value = state.value as InputValueType;
 
       inputType = state.type ?? inputType;
       ruleToRun = state.alias ?? ruleName;
@@ -154,7 +154,7 @@ export class TrValidation {
    * @returns
    */
   private _makeRuleExcutedInstance(r: string | Rule, originalRuleName: string) {
-    let re = this._ruleExecuted.find((rx) => {
+    const re = this._ruleExecuted.find((rx) => {
       return rx.isNamed(r);
     });
     return re ?? new RuleExecuted(r, originalRuleName);
@@ -168,11 +168,11 @@ export class TrValidation {
   private _parseRuleMessage(
     ruleExec: RuleExecuted,
     aliasRule: string,
-    message: any
+    message: string | undefined | null
   ) {
     const orgMesage = TrLocal.getRuleMessage(ruleExec.orignalName);
 
-    if (message !== orgMesage) {
+    if (message && message !== orgMesage) {
       this._trmessages[ruleExec.ruleName] = message;
     } else {
       this._trmessages[ruleExec.ruleName] = TrLocal.getRuleMessage(

@@ -45,10 +45,8 @@ import {
 import { dateAfter, dateBefore, isDate, isTime } from "../rules/date";
 import { TrLocal } from "../locale/tr-local";
 import { phone } from "../rules/phone";
-interface ITrBag {
-  [key: string | Rule]: any;
-}
-export class TrBag implements ITrBag {
+
+export class TrBag {
   private static rules: RulesBag = {
     required: required,
     email: email,

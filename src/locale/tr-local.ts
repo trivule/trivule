@@ -94,7 +94,7 @@ export class TrLocal {
         "The first argument must be a string with one or more characters"
       );
 
-    if (typeof messages !== "object" || typeof messages === undefined)
+    if (typeof messages !== "object" || messages === undefined)
       throw new Error(
         "The second argument must be a valid key/value pair object"
       );

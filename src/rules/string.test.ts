@@ -307,6 +307,8 @@ describe("excludes", () => {
 });
 describe("length", () => {
   it("should return true if specified length matches", () => {
+    expect(length(null, "0").passes).toBe(false);
+    expect(length(undefined, "0").passes).toBe(false);
     expect(length(12345, "5").passes).toBe(true);
   });
 
@@ -316,9 +318,7 @@ describe("length", () => {
     );
   });
 
-  it("should return false for non-array input", () => {
-    expect(length(null, "0").passes).toBe(false);
-    expect(length(undefined, "0").passes).toBe(false);
+  it("should return false for invalid input", () => {
     expect(length(true, "0").passes).toBe(false);
   });
 });

@@ -1,11 +1,9 @@
 import {
   isFile,
-  maxFileSize,
   length,
   isNumber,
   maxRule,
   minRule,
-  is_string,
   stringBetween,
   fileBetween,
 } from ".";
@@ -18,7 +16,7 @@ import {
   throwEmptyArgsException,
 } from "../utils";
 import { ArgumentParser } from "../validation/utils/argument-parser";
-import { dateBetween, isDate } from "./date";
+import { dateBetween } from "./date";
 /**
  * Checks if the input is required.
  *
@@ -29,7 +27,7 @@ import { dateBetween, isDate } from "./date";
  * ```
  * @param options - Optional parameters.
  */
-export const required: RuleCallBack = (input, ...options) => {
+export const required: RuleCallBack = (input) => {
   return {
     passes: !!input && input != "",
     value: input,
@@ -53,13 +51,16 @@ export const nullable: RuleCallBack = (input) => {
  * ```
  */
 export const inInput: RuleCallBack = (input, params) => {
-  if (!params) {
+  if (typeof params !== "string") {
     throwEmptyArgsException("in");
+  }
+  if (params === "") {
+    throwEmptyArgsException("in"), "The in rule parameter must be a string";
   }
   const list = spliteParam(params as string);
   return {
-    passes: list.includes(input),
-    value: list,
+    passes: list.includes(input as string | number),
+    value: input,
   };
 };
 /**
@@ -73,19 +74,23 @@ export const inInput: RuleCallBack = (input, params) => {
  * ```
  */
 export const size: RuleCallBack = (input, maxSize) => {
+  if (typeof maxSize !== "number" && typeof maxSize !== "string") {
+    throwEmptyArgsException("size");
+  }
   if (isFile(input).passes) {
     let numericValue, unit;
+    // eslint-disable-next-line no-useless-catch
     try {
-      [numericValue, unit] = explodeFileParam(maxSize) as any[];
+      [numericValue, unit] = explodeFileParam(maxSize as string);
     } catch (error) {
       throw error;
     }
-    let fileSize = calculateFileSize(input, unit);
+    let fileSize = calculateFileSize(input);
 
     if (isNaN(fileSize)) {
       fileSize = 0;
     }
-    numericValue = convertFileSize(numericValue, unit);
+    numericValue = convertFileSize(numericValue as number, unit as string);
     return {
       passes: fileSize <= numericValue,
       value: input,
@@ -150,7 +155,10 @@ export const isBoolean: RuleCallBack = (value) => {
  * ```
  */
 export const between: RuleCallBack = (input, min_max, type) => {
-  var [min, max] = spliteParam(min_max ?? "");
+  if (typeof min_max !== "number" && typeof min_max !== "string") {
+    throwEmptyArgsException("between");
+  }
+  let [min, max] = spliteParam(min_max as string);
   //for file
   if (type === "file") {
     return {
@@ -171,7 +179,7 @@ export const between: RuleCallBack = (input, min_max, type) => {
   if (type == "number") {
     min = Number(min);
     max = Number(max);
-    if (input !== undefined && input !== Number && input !== "") {
+    if (input !== undefined && input !== "") {
       if (isNumber(min).passes && isNumber(max).passes) {
         if (!isNumber(input).passes) {
           return {
@@ -204,14 +212,14 @@ export const between: RuleCallBack = (input, min_max, type) => {
  *  <input data-tr-rules="regex:^[A-Z]+$"/>
  * ```
  */
-export const regex: RuleCallBack = (input: string, pattern?: string) => {
-  if (!pattern) {
+export const regex: RuleCallBack = (input, pattern) => {
+  if (!pattern || typeof pattern !== "string") {
     throw new Error("The regex rule argument must not be empty");
   }
   const parser = new ArgumentParser(pattern);
   const regex = new RegExp(parser.replacePipes());
   return {
-    passes: regex.test(input),
+    passes: regex.test(input as string),
     value: input,
   };
 };
@@ -228,7 +236,7 @@ export const regex: RuleCallBack = (input: string, pattern?: string) => {
 export const only: RuleCallBack = (input, param) => {
   let passes = false;
   if (param === "string") {
-    if (!is_string(input).passes || input.length === 0) {
+    if (typeof input !== "string" || input.length === 0) {
       passes = false;
     } else {
       passes = !/\d/.test(input);
@@ -310,7 +318,7 @@ export const maxDigitRule: RuleCallBack = (input, maxDigitCount) => {
  * <input data-tr-rules="min_digit:5"/>
  * ```
  */
-export const minDigitRule: RuleCallBack = (input, minDigitCount, type) => {
+export const minDigitRule: RuleCallBack = (input, minDigitCount) => {
   if (!isNumber(minDigitCount).passes) {
     throw new Error("Min_digit rule parameter must be a number");
   }

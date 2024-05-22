@@ -89,19 +89,19 @@ export class TrivuleInput extends TrivuleInputValidator {
   }
 
   onFails(fn: EventCallback) {
-    this.on("tr.input.fails", (e) => {
+    this.on("tr.input.fails", () => {
       this.__call(fn, this);
     });
   }
 
   onPasses(fn: EventCallback) {
-    this.on("tr.input.passes", (e) => {
+    this.on("tr.input.passes", () => {
       this.__call(fn, this);
     });
   }
 
   onUpdate(fn: EventCallback) {
-    this.on("tr.input.update", (e) => {
+    this.on("tr.input.update", () => {
       this.__call(fn, this);
     });
   }

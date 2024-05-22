@@ -136,11 +136,11 @@ export class TrivuleForm {
 
       this._onSubmit();
 
-      this.onFails((e) => {
+      this.onFails(() => {
         this.disableButton();
       });
 
-      this.onPasses((e) => {
+      this.onPasses(() => {
         this.enableButton();
       });
     }
@@ -270,8 +270,8 @@ export class TrivuleForm {
    * Handle validation before process submtion
    */
   private _onSubmit() {
-    var validateCallback = () => {
-      let results: boolean[] = [];
+    const validateCallback = () => {
+      const results: boolean[] = [];
       this.each((trInput) => {
         trInput.emitOnValidate = false;
         results.push(trInput.validate());
@@ -288,11 +288,11 @@ export class TrivuleForm {
       return this._passed;
     };
     if (this.submitButton) {
-      this.submitButton.addEventListener("click", (submitEvent) => {
+      this.submitButton.addEventListener("click", () => {
         validateCallback();
       });
     }
-    this.on("submit", (e) => {
+    this.on("submit", (e: Event) => {
       if (!validateCallback()) {
         e.preventDefault();
       }
@@ -311,14 +311,14 @@ export class TrivuleForm {
 
   protected setConfig(config?: TrivuleFormConfig) {
     let lang =
-      tr_attr_get(document.querySelector("html"), "lang") ||
+      tr_attr_get<string | undefined>(document.querySelector("html"), "lang") ||
       document.querySelector("html")?.getAttribute("lang");
 
     lang = tr_attr_get(this.container, "lang", lang);
 
-    let auto = tr_attr_get(this.container, "auto");
+    const auto = tr_attr_get<string>(this.container, "auto");
     if (auto) {
-      this.config.auto = isBoolean(auto).value;
+      this.config.auto = isBoolean(auto).passes;
     }
     if (config && typeof config === "object") {
       this.config = { ...this.config, ...config };
@@ -354,7 +354,7 @@ export class TrivuleForm {
    * @param e - The name of the custom event to emit.
    * @param data - The additional data to pass with the event.
    */
-  emit(e: string, data?: any): void {
+  emit(e: string, data?: unknown): void {
     const event = new CustomEvent(e, { detail: data });
     this.container.dispatchEvent(event);
   }
@@ -424,7 +424,7 @@ export class TrivuleForm {
    * ```
    */
   observeChanges(fn?: EventCallback): void {
-    this.on("tr.form.updated", (e) => {
+    this.on("tr.form.updated", () => {
       this.destroyInputs();
       this._initTrivuleInputs();
       this.__call(fn, this);
@@ -447,7 +447,7 @@ export class TrivuleForm {
    */
   private _initTrivuleInputs(trivuleInputs?: HTMLElement[]) {
     this._trivuleInputs = {};
-    trivuleInputs = !!trivuleInputs
+    trivuleInputs = trivuleInputs
       ? trivuleInputs
       : Array.from(
           this.container.querySelectorAll<HTMLElement>("[data-tr-rules]")
@@ -460,7 +460,7 @@ export class TrivuleForm {
    * @param fn - The function to be called.
    * @param params - The parameters to be passed to the function.
    */
-  private __call(fn?: CallableFunction, ...params: any) {
+  private __call(fn?: CallableFunction, ...params: unknown[]) {
     if (typeof fn == "function") {
       fn(...params);
     }
@@ -569,8 +569,10 @@ export class TrivuleForm {
   }
 
   onInit(fn: TrivuleFormHandler) {
-    this.on("tr.form.init", (event: any) => {
-      this.__call(fn, event.detail);
+    this.on("tr.form.init", (event: Event) => {
+      if (event instanceof CustomEvent) {
+        this.__call(fn, event.detail);
+      }
     });
   }
 
@@ -588,7 +590,7 @@ export class TrivuleForm {
     });
   }
 
-  each(call: ITrivuleInputCallback<TrivuleInput, any>) {
+  each(call: ITrivuleInputCallback<TrivuleInput, unknown>) {
     for (const name in this._trivuleInputs) {
       if (Object.prototype.hasOwnProperty.call(this._trivuleInputs, name)) {
         call(this._trivuleInputs[name]);
@@ -630,7 +632,7 @@ export class TrivuleForm {
       this.valid = this.isValid();
     });
 
-    trInput.onUpdate((tr) => {
+    trInput.onUpdate(() => {
       this._onUpdateCallbacks.forEach((fn) => {
         this.__call(fn, this);
       });
@@ -645,20 +647,23 @@ export class TrivuleForm {
     }
 
     transformToArray(input, (param, indexOrInputName) => {
-      let selector: any =
-        getHTMLElementBySelector(param.selector as any, this.container) ??
-        param.selector;
+      let selector = param.selector;
+      if (param.selector) {
+        selector =
+          getHTMLElementBySelector(param.selector, this.container) ?? selector;
+      }
       if (typeof selector === "string") {
         const s = this.parameter.getInputSelector(selector);
+
         selector = getHTMLElementBySelector(s as string, this.container);
       }
 
       if (!selector) {
-        selector = isNumber(indexOrInputName).passes
+        const name = isNumber(indexOrInputName).passes
           ? undefined
           : indexOrInputName;
-        if (selector) {
-          const s = this.parameter.getInputSelector(selector);
+        if (name) {
+          const s = this.parameter.getInputSelector(name);
           selector =
             getHTMLElementBySelector(s as string, this.container) ?? undefined;
         }
@@ -675,8 +680,11 @@ export class TrivuleForm {
       param.autoValidate = param.autoValidate ?? this.config.auto;
       param.feedbackElement =
         param.feedbackElement ?? this.config.feedbackSelector;
-      param.selector = selector;
-      this.addTrivuleInput(new TrivuleInput(selector, param, this.parameter));
+      param.selector = selector as ValidatableInput;
+
+      this.addTrivuleInput(
+        new TrivuleInput(selector as ValidatableInput, param, this.parameter)
+      );
       return param;
     });
 
@@ -708,8 +716,8 @@ export class TrivuleForm {
   getNativeElement() {
     return this.container;
   }
-  setAttrToNativeElement(name: string, value: any) {
-    this.container.setAttribute(name, value);
+  setAttrToNativeElement(name: string, value: string | number) {
+    this.container.setAttribute(name, value.toString());
     return this;
   }
   setClassToNativeElement(name: string) {
@@ -722,11 +730,7 @@ export class TrivuleForm {
     return this;
   }
 
-  add(params: TrivuleInputParms, input?: ValidatableInput) {
-    if (input) {
-      params.selector = input;
-    }
-
+  add(params: TrivuleInputParms) {
     return this.make([params]);
   }
   enableRealTime() {

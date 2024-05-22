@@ -1,4 +1,4 @@
-import { InputValueType, Rule } from "../../contracts";
+import { InputValueType, Rule, RuleParam } from "../../contracts";
 
 export class RuleExecuted {
   /**
@@ -8,7 +8,7 @@ export class RuleExecuted {
   valueTested: InputValueType;
   ruleName!: Rule | string;
   message: string | null = null;
-  params: any;
+  params: RuleParam;
   orignalName!: Rule | string;
   run = false;
 
