@@ -377,4 +377,8 @@ export abstract class AbstractInputralidator {
     }
     return values.map((t: string) => t.trim());
   }
+
+  get $rules() {
+    return this.rules;
+  }
 }

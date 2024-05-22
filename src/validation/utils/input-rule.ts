@@ -19,7 +19,11 @@ export class InputRule {
     return this;
   }
 
-  get() {
+  get(rule?: string | Rule) {
+    if (rule) {
+      const { ruleName } = getRule(rule);
+      return this.items.find((item) => item.name === ruleName) ?? null;
+    }
     return this.items;
   }
   get length() {
@@ -160,7 +164,7 @@ export class InputRule {
   }
 
   all() {
-    return this.get();
+    return this.items;
   }
 
   push(
@@ -238,5 +242,29 @@ export class InputRule {
       );
     }
     return this;
+  }
+
+  /**
+   * Assigns or updates the message for a specific rule.
+   * @param rule - The rule name to update the message for.
+   * @param message - The new message to assign to the rule.
+   */
+  assignMessage(rule: string, message: string) {
+    const { ruleName } = getRule(rule);
+    if (ruleName) {
+      const r = this.get(ruleName) as RuleType;
+
+      if (r) {
+        this.messages[ruleName] = message;
+        r.message = message;
+      }
+    }
+
+    return this;
+  }
+
+  getMessage(rule: string | Rule): string | null {
+    const { ruleName } = getRule(rule);
+    return this.messages[ruleName] || null;
   }
 }

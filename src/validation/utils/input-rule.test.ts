@@ -181,6 +181,26 @@ describe('replace', () => {
       'This field must be at least 8 characters',
     ]);
   });
+
+  describe('assignMessage', () => {
+    test('Should add a message to an existing rule', () => {
+      const inputRule = new InputRule(['required', 'email'], {
+        required: 'This field is required',
+        email: 'Please enter a valid email address',
+      });
+
+      inputRule.assignMessage('required', 'This cannot be empty');
+
+      const messages = inputRule.all().map((rule) => {
+        return rule.message;
+      });
+
+      expect(messages).toEqual([
+        'This cannot be empty',
+        'Please enter a valid email address',
+      ]);
+    });
+  });
 });
 
 describe('convertAcoladeGroupToArray', () => {

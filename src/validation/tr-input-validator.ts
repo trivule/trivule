@@ -69,7 +69,7 @@ export class TrivuleInputValidator
    * ```
    */
   getRules() {
-    return this.rules.get();
+    return this.rules.all();
   }
   /**
    * Checks if the input element has validation rules.
@@ -273,7 +273,18 @@ export class TrivuleInputValidator
     return this;
   }
 
-  removeRules(rules: string[] | string): this {
+  /**
+   * Removes multiple validation rules from the Trivule input.
+   * @param rules An array of rule names.
+   * @returns This Trivule input instance.
+   * @example
+   * const trivuleInput = new TrivuleInput();
+   * trivuleInput.removeRules(["required", "minlength"]); // Removes the "required" and "minlength" validation rules from the Trivule input
+   */
+  removeRules(rules: string[]): this {
+    if (Array.isArray(rules)) {
+      rules.forEach((rule) => this.removeRule(rule));
+    }
     return this;
   }
 
@@ -287,20 +298,10 @@ export class TrivuleInputValidator
    * trivuleInput.replaceRule("required", "minlength"); // Replaces the "required" rule with the "minlength" rule
    */
   replaceRule(oldRule: string, newRule: string): this {
-    this.rules.replace(oldRule, newRule);
+    this.$rules.replace(oldRule, newRule);
     return this;
   }
 
-  setAttribute(attrName: string, value: any): this {
-    return this;
-  }
-
-  setMessage(message: string, rule: string): this {
-    return this;
-  }
-  setMessagesByRules(messages: Record<string, string>): this {
-    return this;
-  }
   setInvalidAttributes(attrs: Record<string, string>): this {
     return this;
   }

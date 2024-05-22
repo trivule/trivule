@@ -245,12 +245,14 @@ describe('TrivuleInput', () => {
     });
   });
 
-  describe('Test messages assignment by imperative mode', () => {
-    const body = document.createElement('div');
+  describe('$rules', () => {
     const inputElement = document.createElement('input');
-    body.appendChild(inputElement);
-    const validator = new TrivuleInput(inputElement, {
-      messages: 'Please enter a valid data',
+    const trivuleInput = new TrivuleInput(inputElement, {
+      rules: 'required',
+    });
+    test('should set the message', () => {
+      trivuleInput.$rules.assignMessage('required', 'test');
+      expect(trivuleInput.$rules.getMessage('required')).toBe('test');
     });
   });
 
