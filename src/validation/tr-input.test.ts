@@ -255,6 +255,18 @@ describe('TrivuleInput', () => {
       expect(trivuleInput.$rules.getMessage('required')).toBe('test');
     });
   });
+  describe('setRules', () => {
+    test('should set rules to the inputs', () => {
+      const input = document.createElement('input');
+      const trivuleInput = new TrivuleInput(input, {
+        rules: 'required',
+      });
+
+      trivuleInput.setRules('min:2').setRules(['email', 'digit:3']);
+      const received = trivuleInput.getRules().map((r) => r.name);
+      expect(received).toEqual(['required', 'min', 'email', 'digit']);
+    });
+  });
 
   describe('Test remove, set, has, get nativeAttribute', () => {
     const input = document.createElement('input');

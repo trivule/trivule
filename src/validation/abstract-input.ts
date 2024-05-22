@@ -81,7 +81,8 @@ export abstract class AbstractInputralidator {
    *Set input rules from input
    * @returns
    */
-  setRules(rules?: Rule[] | string[] | Rule | string) {
+  setRules(rules: Rule[] | string[] | Rule | string) {
+    this.$rules.set(rules);
     return this;
   }
 
