@@ -1,6 +1,6 @@
-import { Rule, RulesMessages } from "../contracts";
-import { is_string } from "../rules";
-import { en_messages } from "./lang/en";
+import { Rule, RulesMessages } from '../contracts';
+import { is_string } from '../rules';
+import { en_messages } from './lang/en';
 
 export class TrLocal {
   private static _useLang: string | null = null;
@@ -8,7 +8,7 @@ export class TrLocal {
   /**
    * Default local language
    */
-  static DEFAULT_LANG = "en";
+  static DEFAULT_LANG = 'en';
 
   static LANG = TrLocal.DEFAULT_LANG;
 
@@ -42,7 +42,7 @@ export class TrLocal {
    */
   static getRuleMessage(rule: string | Rule, local?: string) {
     const messages: Record<string | Rule, string> = TrLocal.getMessages(local);
-    return messages[rule] ?? messages["default"];
+    return messages[rule] ?? messages['default'];
   }
 
   /**
@@ -89,14 +89,14 @@ export class TrLocal {
    * @param messages The translated messages object
    */
   static translate(lang: string, messages: RulesMessages) {
-    if (typeof lang !== "string" || !lang.length)
+    if (typeof lang !== 'string' || !lang.length)
       throw new Error(
-        "The first argument must be a string with one or more characters"
+        'The first argument must be a string with one or more characters',
       );
 
-    if (typeof messages !== "object" || messages === undefined)
+    if (typeof messages !== 'object' || messages === undefined)
       throw new Error(
-        "The second argument must be a valid key/value pair object"
+        'The second argument must be a valid key/value pair object',
       );
 
     TrLocal._message[lang] = { ...TrLocal.getMessages(lang), ...messages };
@@ -124,11 +124,11 @@ export class TrLocal {
   static rewriteMany(
     lang: string,
     rules: string[] | Rule[],
-    messages: string[]
+    messages: string[],
   ) {
-    if (typeof lang !== "string" || !lang.length)
+    if (typeof lang !== 'string' || !lang.length)
       throw new Error(
-        "The 'lang' argument must be a string with one or more characters"
+        "The 'lang' argument must be a string with one or more characters",
       );
 
     if (!Array.isArray(rules) || !Array.isArray(messages))
@@ -136,7 +136,7 @@ export class TrLocal {
 
     if (rules.length !== messages.length)
       throw new Error(
-        "The 'rules' and 'messages' arrays must have the same length"
+        "The 'rules' and 'messages' arrays must have the same length",
       );
 
     for (let i = 0; i < rules.length; i++) {
@@ -154,7 +154,7 @@ export class TrLocal {
    */
   static local(lang: string) {
     if (!is_string(lang) || !lang.length) {
-      throw new Error("The language must be a valid string");
+      throw new Error('The language must be a valid string');
     }
     TrLocal._useLang = lang;
   }

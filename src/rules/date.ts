@@ -1,6 +1,6 @@
-import dayjs from "dayjs";
-import { RuleCallBack } from "../contracts";
-import { now, spliteParam, throwEmptyArgsException } from "../utils";
+import dayjs from 'dayjs';
+import { RuleCallBack } from '../contracts';
+import { now, spliteParam, throwEmptyArgsException } from '../utils';
 /**
  * This is a callback function that checks if the input is a valid date.
  *
@@ -23,7 +23,7 @@ export const isDate: RuleCallBack = (input) => {
     return {
       passes: true,
       value: djs.toISOString(),
-      type: "date",
+      type: 'date',
     };
   }
   return {
@@ -43,7 +43,7 @@ export const isDate: RuleCallBack = (input) => {
  * ```
  */
 export const dateBefore: RuleCallBack = (input, date) => {
-  if (date === "now") {
+  if (date === 'now') {
     date = now();
   }
   if (!isDate(input).passes) {
@@ -54,7 +54,7 @@ export const dateBefore: RuleCallBack = (input, date) => {
   }
 
   if (!isDate(date).passes) {
-    throw new Error("Pease provide a valid argument for dateBefore rule");
+    throw new Error('Pease provide a valid argument for dateBefore rule');
   }
   return {
     passes: dayjs(input as string).isBefore(date),
@@ -78,7 +78,7 @@ export const dateBefore: RuleCallBack = (input, date) => {
  * ```
  */
 export const dateAfter: RuleCallBack = (input, date) => {
-  if (date === "now") {
+  if (date === 'now') {
     date = now();
   }
 
@@ -90,7 +90,7 @@ export const dateAfter: RuleCallBack = (input, date) => {
   }
 
   if (!isDate(date).passes) {
-    throw new Error("Pease provide a valid argument for dateAfter rule");
+    throw new Error('Pease provide a valid argument for dateAfter rule');
   }
   return {
     passes: dayjs(input as string).isAfter(date),
@@ -110,7 +110,7 @@ export const dateAfter: RuleCallBack = (input, date) => {
  */
 export const dateBetween: RuleCallBack = (input, date) => {
   if (!date) {
-    throwEmptyArgsException("dateBetween");
+    throwEmptyArgsException('dateBetween');
   }
   const [startDate, endDate] = spliteParam(date as string);
   return {
@@ -136,17 +136,17 @@ export const dateBetween: RuleCallBack = (input, date) => {
  *
  */
 export const isTime: RuleCallBack = (input) => {
-  if (typeof input !== "string") {
+  if (typeof input !== 'string') {
     return {
       passes: false,
       value: input,
     };
   }
   // If the input does not have three parts separated by colons (H:m:i)
-  if (input.toString().split(":").length < 3) {
+  if (input.toString().split(':').length < 3) {
     // Complete the input with ":00" until it has the format H:m:i
-    while (input.split(":").length < 3) {
-      input += ":00";
+    while (input.split(':').length < 3) {
+      input += ':00';
     }
   }
   return {

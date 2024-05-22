@@ -1,4 +1,4 @@
-import { Rule } from "./rule";
+import { Rule } from './rule';
 export type ITrivuleInputCallback<P, R> = (param: P) => R;
 
 /**
@@ -27,12 +27,12 @@ export type RuleType = {
 };
 
 export type InputType =
-  | "text"
-  | "date"
-  | "boolean"
-  | "number"
-  | "file"
-  | "date-local";
+  | 'text'
+  | 'date'
+  | 'boolean'
+  | 'number'
+  | 'file'
+  | 'date-local';
 export type ValidationState = {
   passes: boolean;
   value: unknown;
@@ -246,7 +246,7 @@ export interface ITrivuleInput {
 
   onRuleFail(
     rule: string,
-    callback: ITrivuleInputCallback<ITrivuleInput, ITrivuleInput>
+    callback: ITrivuleInputCallback<ITrivuleInput, ITrivuleInput>,
   ): this;
   /**
    * Sets a callback function to execute when a rule passes for this input.
@@ -259,7 +259,7 @@ export interface ITrivuleInput {
    */
   onRulePass(
     rule: string | Rule,
-    callback: ITrivuleInputCallback<ITrivuleInput, ITrivuleInput>
+    callback: ITrivuleInputCallback<ITrivuleInput, ITrivuleInput>,
   ): this;
 
   /**
@@ -291,7 +291,7 @@ export interface ITrivuleInput {
    */
   beforeRunRule(
     rule: string,
-    callback: ITrivuleInputCallback<ITrivuleInput, ITrivuleInput>
+    callback: ITrivuleInputCallback<ITrivuleInput, ITrivuleInput>,
   ): this;
 
   /**
@@ -305,7 +305,7 @@ export interface ITrivuleInput {
    */
   afterRunRule(
     rule: string,
-    callback: ITrivuleInputCallback<ITrivuleInput, ITrivuleInput>
+    callback: ITrivuleInputCallback<ITrivuleInput, ITrivuleInput>,
   ): this;
 
   /**
@@ -414,7 +414,7 @@ export type RulesBag = {
 export type RulesMessages = {
   [key: string]: string;
 };
-import { TrivuleForm } from "../validation";
+import { TrivuleForm } from '../validation';
 
 /**
  * Represents a CSS selector that can be either an HTMLElement or a string.
@@ -430,15 +430,15 @@ export type ValidatableInput =
   | HTMLTextAreaElement
   | HTMLElement
   | HTMLSelectElement
-  | "select"
-  | "textarea"
-  | "input"
+  | 'select'
+  | 'textarea'
+  | 'input'
   | string;
 
 /**
  * Represents a validatable HTML form element.
  */
-export type ValidatableForm = HTMLElement | string | "form";
+export type ValidatableForm = HTMLElement | string | 'form';
 /**
  * The possible input types expected to be gotten
  */
@@ -463,7 +463,7 @@ export type ElementOrNull = HTMLElement | null;
 /**
  * Indicates whether the message should be displayed
  */
-export type WayDisplayError = "first" | "last" | "full";
+export type WayDisplayError = 'first' | 'last' | 'full';
 
 /**
  * Input parameters that can be passed to TrivuleInput instance
@@ -569,4 +569,4 @@ export type TrivuleFormConfig = {
 
 export type TrivuleFormHandler = (tr: TrivuleForm) => unknown;
 
-export * from "./rule";
+export * from './rule';

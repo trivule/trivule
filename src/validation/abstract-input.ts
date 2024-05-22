@@ -1,4 +1,4 @@
-import { TrValidation } from ".";
+import { TrValidation } from '.';
 import {
   CssSelector,
   InputValueType,
@@ -6,10 +6,10 @@ import {
   Rule,
   TrivuleInputParms,
   ValidatableInput,
-} from "../contracts";
-import { dataset_get, getHTMLElementBySelector, tr_attr_get } from "../utils";
-import { InputRule } from "./utils/input-rule";
-import { TrParameter } from "./utils/parameter";
+} from '../contracts';
+import { dataset_get, getHTMLElementBySelector, tr_attr_get } from '../utils';
+import { InputRule } from './utils/input-rule';
+import { TrParameter } from './utils/parameter';
 
 export abstract class AbstractInputralidator {
   protected __wasInit = false;
@@ -37,24 +37,24 @@ export abstract class AbstractInputralidator {
   /**
    * How to show the message
    */
-  protected showMessage = "first";
+  protected showMessage = 'first';
 
-  protected showMessages = ["first", "full", "last"];
+  protected showMessages = ['first', 'full', 'last'];
 
   /** Wich class assign to input if validation pass */
-  protected validClass = "";
+  protected validClass = '';
 
   /** Wich class assign to input if validation failed */
-  protected invalidClass = "is-invalid";
+  protected invalidClass = 'is-invalid';
 
   protected param: TrivuleInputParms = {
     emitEvent: true,
     autoValidate: true,
     failsOnfirst: true,
-    events: ["blur", "change", "input"],
-    validClass: "",
-    invalidClass: "is-invalid",
-    type: "text",
+    events: ['blur', 'change', 'input'],
+    validClass: '',
+    invalidClass: 'is-invalid',
+    type: 'text',
     realTime: true,
   };
 
@@ -64,13 +64,13 @@ export abstract class AbstractInputralidator {
   protected _value: InputValueType = undefined;
   private _emitOnValidate: boolean = true;
 
-  protected _type: InputType = "text";
+  protected _type: InputType = 'text';
   protected realTime: boolean = false;
-  protected _events = ["change", "blur", "input"];
+  protected _events = ['change', 'blur', 'input'];
   constructor(
     selector?: ValidatableInput | TrivuleInputParms,
     params?: TrivuleInputParms,
-    parameter?: TrParameter
+    parameter?: TrParameter,
   ) {
     this.validator = new TrValidation();
     this.rules = new InputRule([]);
@@ -88,11 +88,11 @@ export abstract class AbstractInputralidator {
   abstract validate(): boolean;
 
   protected _setEvent(events?: string[]) {
-    const ev = tr_attr_get<string | undefined>(this.inputElement, "events", "");
+    const ev = tr_attr_get<string | undefined>(this.inputElement, 'events', '');
 
     if (ev) {
-      this.param.events = ev.split("|").length
-        ? ev.split("|")
+      this.param.events = ev.split('|').length
+        ? ev.split('|')
         : this.param.events;
     }
 
@@ -116,21 +116,21 @@ export abstract class AbstractInputralidator {
     if (!(inputElement instanceof Element)) {
       throw new Error(
         "The 'inputElement' parameter must be a valide 'ValidatableInput' type. " +
-          `"${inputElement} provided"`
+          `"${inputElement} provided"`,
       );
     }
 
     this.inputElement = inputElement as HTMLInputElement;
     this.param.type = this.inputElement.type;
-    if (this.inputElement.tagName.toLowerCase() === "textarea") {
-      this.param.type = "text";
+    if (this.inputElement.tagName.toLowerCase() === 'textarea') {
+      this.param.type = 'text';
     }
 
     return this;
   }
 
   get name() {
-    return this.inputElement.name ?? this.param.name ?? "";
+    return this.inputElement.name ?? this.param.name ?? '';
   }
   get value() {
     return this.getValue();
@@ -146,7 +146,7 @@ export abstract class AbstractInputralidator {
     if (value) {
       if (!Array.isArray(value)) {
         value = Object.keys(value).map(
-          (k) => (value as Record<string, string>)[k]
+          (k) => (value as Record<string, string>)[k],
         );
       }
       this._errors = value ?? [];
@@ -194,28 +194,28 @@ export abstract class AbstractInputralidator {
 
     //If feedback element existe
     if (this.feedbackElement instanceof HTMLElement) {
-      let message = "";
+      let message = '';
       if (Array.isArray(this._errors)) {
         message = this._errors[0];
-        if (this.showMessage == "full") {
-          message = this._errors.join("<br>");
-        } else if (this.showMessage == "last") {
+        if (this.showMessage == 'full') {
+          message = this._errors.join('<br>');
+        } else if (this.showMessage == 'last') {
           if (this._errors.length > 0) {
             message = this._errors[this._errors.length - 1];
           }
         }
       }
-      this.feedbackElement.innerHTML = message ?? "";
+      this.feedbackElement.innerHTML = message ?? '';
     }
   }
   /**
    * Get and set the ways error message will be displayed
    */
   private setShowMessage() {
-    this.showMessage = tr_attr_get(this.inputElement, "show", "first");
+    this.showMessage = tr_attr_get(this.inputElement, 'show', 'first');
     this.showMessage = this.showMessages.includes(this.showMessage)
       ? this.showMessage
-      : "first";
+      : 'first';
   }
 
   private _setTrValidationClass() {
@@ -224,13 +224,13 @@ export abstract class AbstractInputralidator {
 
     this.invalidClass = tr_attr_get(
       this.inputElement,
-      "invalid-class",
-      this.invalidClass
+      'invalid-class',
+      this.invalidClass,
     );
     this.validClass = tr_attr_get(
       this.inputElement,
-      "valid-class",
-      this.validClass
+      'valid-class',
+      this.validClass,
     );
   }
 
@@ -248,13 +248,13 @@ export abstract class AbstractInputralidator {
     };
 
     if (isValid) {
-      this.invalidClass.split(" ").forEach(removeClass);
-      this.validClass.split(" ").forEach(addClass);
-      this.inputElement.setAttribute("data-tr-valid", "1");
+      this.invalidClass.split(' ').forEach(removeClass);
+      this.validClass.split(' ').forEach(addClass);
+      this.inputElement.setAttribute('data-tr-valid', '1');
     } else {
-      this.validClass.split(" ").forEach(removeClass);
-      this.invalidClass.split(" ").forEach(addClass);
-      this.inputElement.setAttribute("data-tr-valid", "0");
+      this.validClass.split(' ').forEach(removeClass);
+      this.invalidClass.split(' ').forEach(addClass);
+      this.inputElement.setAttribute('data-tr-valid', '0');
     }
   }
 
@@ -262,7 +262,7 @@ export abstract class AbstractInputralidator {
     return this.name;
   }
   getInputElemenyValue() {
-    if (this.inputElement.type.toLowerCase() == "file") {
+    if (this.inputElement.type.toLowerCase() == 'file') {
       return this.inputElement.files ?? null;
     } else {
       return this.inputElement.value;
@@ -274,10 +274,10 @@ export abstract class AbstractInputralidator {
   }
 
   setParams(param?: TrivuleInputParms) {
-    if (typeof param === "object" && typeof param !== "undefined") {
+    if (typeof param === 'object' && typeof param !== 'undefined') {
       this.param = { ...this.param, ...param };
     }
-    const json = dataset_get(this.inputElement, "tr", null, true);
+    const json = dataset_get(this.inputElement, 'tr', null, true);
     if (json) {
       this.param = Object.assign(this.param, json);
     }
@@ -292,11 +292,11 @@ export abstract class AbstractInputralidator {
 
   private _init(
     selectorOrParams?: ValidatableInput | TrivuleInputParms,
-    params?: TrivuleInputParms
+    params?: TrivuleInputParms,
   ) {
     let selector: unknown = selectorOrParams;
     if (
-      typeof selectorOrParams === "object" &&
+      typeof selectorOrParams === 'object' &&
       selectorOrParams !== null &&
       selectorOrParams !== undefined
     ) {
@@ -321,21 +321,21 @@ export abstract class AbstractInputralidator {
 
     const rules: string | string[] | Rule[] | undefined = tr_attr_get(
       this.inputElement,
-      "rules",
-      params?.rules
+      'rules',
+      params?.rules,
     );
     if (rules) {
       const elMessages = tr_attr_get<string>(
         this.inputElement,
-        "messages",
-        this.param.messages
+        'messages',
+        this.param.messages,
       );
       this.rules.set(rules, elMessages);
     }
 
     this.validator.rules = this.rules;
     this.validator.failsOnFirst = params?.failsOnfirst ?? true;
-    this._type = (params?.type ?? "text") as InputType;
+    this._type = (params?.type ?? 'text') as InputType;
     this.realTime = params?.realTime ?? this.realTime;
   }
   getMessageAttributeName() {
@@ -362,18 +362,18 @@ export abstract class AbstractInputralidator {
   }
 
   commit() {
-    if (this._type !== "file") {
+    if (this._type !== 'file') {
       this.inputElement.value = this._value as string;
     }
   }
 
   protected eventToArray(value?: string | string[]) {
     let values: string[] = [];
-    if (typeof value !== "string") {
+    if (typeof value !== 'string') {
       return [];
     }
-    if (typeof value === "string") {
-      values = value.split("|");
+    if (typeof value === 'string') {
+      values = value.split('|');
     }
     return values.map((t: string) => t.trim());
   }

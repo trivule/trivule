@@ -1,4 +1,4 @@
-import { RuleCallBack } from "../../contracts";
+import { RuleCallBack } from '../../contracts';
 
 export abstract class AbstractFormValidator {
   protected formRules: {

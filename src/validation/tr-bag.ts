@@ -1,7 +1,7 @@
-import { dateBetween } from "./../rules/date";
-import { endWithString, stringBetween } from "../rules/string";
-import { fileBetween, isMimes, minFileSize } from "../rules/file";
-import { Rule, RuleCallBack, RulesBag, RulesMessages } from "../contracts";
+import { dateBetween } from './../rules/date';
+import { endWithString, stringBetween } from '../rules/string';
+import { fileBetween, isMimes, minFileSize } from '../rules/file';
+import { Rule, RuleCallBack, RulesBag, RulesMessages } from '../contracts';
 import {
   between,
   contains,
@@ -41,10 +41,10 @@ import {
   maxDigitRule,
   greaterthan,
   numberBetween,
-} from "../rules";
-import { dateAfter, dateBefore, isDate, isTime } from "../rules/date";
-import { TrLocal } from "../locale/tr-local";
-import { phone } from "../rules/phone";
+} from '../rules';
+import { dateAfter, dateBefore, isDate, isTime } from '../rules/date';
+import { TrLocal } from '../locale/tr-local';
+import { phone } from '../rules/phone';
 
 export class TrBag {
   private static rules: RulesBag = {
@@ -115,7 +115,7 @@ export class TrBag {
     rule: string,
     callback: RuleCallBack,
     message?: string,
-    local?: string
+    local?: string,
   ) {
     TrBag.addRule(rule, callback);
     TrBag.addMessage(rule, message, local);

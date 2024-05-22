@@ -1,5 +1,5 @@
-import { AbstractInputralidator } from "./abstract-input";
-import { RuleExecuted } from "./utils/rule-executed";
+import { AbstractInputralidator } from './abstract-input';
+import { RuleExecuted } from './utils/rule-executed';
 import {
   EventCallback,
   InputType,
@@ -10,8 +10,8 @@ import {
   RuleParam,
   TrivuleInputParms,
   ValidatableInput,
-} from "../contracts";
-import { TrParameter } from "./utils/parameter";
+} from '../contracts';
+import { TrParameter } from './utils/parameter';
 
 export class TrivuleInputValidator
   extends AbstractInputralidator
@@ -30,7 +30,7 @@ export class TrivuleInputValidator
   constructor(
     inputElement: ValidatableInput | TrivuleInputParms,
     params?: TrivuleInputParms,
-    parameter?: TrParameter
+    parameter?: TrParameter,
   ) {
     super(inputElement, params, parameter);
   }
@@ -147,7 +147,7 @@ export class TrivuleInputValidator
   private emitChangeEvent() {
     if (this._passed) {
       if (this._emitOnPasses) {
-        this.emit("tr.input.passes", {
+        this.emit('tr.input.passes', {
           detail: {
             rules: this.rules,
             input: {},
@@ -161,7 +161,7 @@ export class TrivuleInputValidator
       }
     } else {
       if (this._emitOnFails) {
-        this.emit("tr.input.fails", {
+        this.emit('tr.input.fails', {
           detail: {
             rules: this.rules,
             input: {},
@@ -208,7 +208,7 @@ export class TrivuleInputValidator
    * @param params - The parameters to be passed to the function.
    */
   protected __call(fn?: CallableFunction, ...params: unknown[]) {
-    if (typeof fn == "function") {
+    if (typeof fn == 'function') {
       fn(...params);
     }
   }
@@ -288,13 +288,13 @@ export class TrivuleInputValidator
   }
   beforeRunRule(
     rule: string,
-    callback: ITrivuleInputCallback<ITrivuleInput, ITrivuleInput>
+    callback: ITrivuleInputCallback<ITrivuleInput, ITrivuleInput>,
   ): this {
     return this;
   }
   afterRunRule(
     rule: string,
-    callback: ITrivuleInputCallback<ITrivuleInput, ITrivuleInput>
+    callback: ITrivuleInputCallback<ITrivuleInput, ITrivuleInput>,
   ): this {
     return this;
   }
@@ -304,13 +304,13 @@ export class TrivuleInputValidator
 
   onRuleFail(
     rule: string | Rule,
-    callback: ITrivuleInputCallback<ITrivuleInput, void>
+    callback: ITrivuleInputCallback<ITrivuleInput, void>,
   ): this {
     return this;
   }
   onRulePass(
     rule: string | Rule,
-    callback: ITrivuleInputCallback<ITrivuleInput, void>
+    callback: ITrivuleInputCallback<ITrivuleInput, void>,
   ): this {
     const r = this.getRuleExecuted().find((r) => r.isNamed(rule));
     if (!!r && r.passed) {
@@ -357,7 +357,7 @@ export class TrivuleInputValidator
       rule.message,
       rule.param,
       rule.validate,
-      rule.local
+      rule.local,
     );
     return this;
   }
@@ -373,7 +373,7 @@ export class TrivuleInputValidator
       rule.message,
       rule.param,
       rule.validate,
-      rule.local
+      rule.local,
     );
     return this;
   }
@@ -391,7 +391,7 @@ export class TrivuleInputValidator
       rule.message,
       rule.param,
       rule.validate,
-      rule.local
+      rule.local,
     );
     return this;
   }
@@ -409,7 +409,7 @@ export class TrivuleInputValidator
       rule.message,
       rule.param,
       rule.validate,
-      rule.local
+      rule.local,
     );
     return this;
   }

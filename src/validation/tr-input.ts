@@ -3,10 +3,10 @@ import {
   RuleCallBack,
   TrivuleInputParms,
   ValidatableInput,
-} from "../contracts";
-import { TrivuleInputValidator } from "./tr-input-validator";
-import { TrBag } from "./tr-bag";
-import { TrParameter } from "./utils/parameter";
+} from '../contracts';
+import { TrivuleInputValidator } from './tr-input-validator';
+import { TrBag } from './tr-bag';
+import { TrParameter } from './utils/parameter';
 
 /**
  * TrivuleInput is responsible for applying live validation to an HTML input element.
@@ -24,7 +24,7 @@ export class TrivuleInput extends TrivuleInputValidator {
   constructor(
     inputElement: ValidatableInput | TrivuleInputParms,
     param?: TrivuleInputParms,
-    parameter?: TrParameter
+    parameter?: TrParameter,
   ) {
     super(inputElement, param, parameter);
     this.init();
@@ -45,9 +45,9 @@ export class TrivuleInput extends TrivuleInputValidator {
         this.events.forEach((e) => {
           this.inputElement.addEventListener(e, () => {
             if (!this.realTime) {
-              if (e != "input" && e != "keyup" && e != "keydown") {
+              if (e != 'input' && e != 'keyup' && e != 'keydown') {
                 this.value = this.getInputElemenyValue();
-                this.emit("tr.input.update", {
+                this.emit('tr.input.update', {
                   detail: {
                     rules: this.rules,
                     input: {},
@@ -57,7 +57,7 @@ export class TrivuleInput extends TrivuleInputValidator {
               }
             } else {
               this.value = this.getInputElemenyValue();
-              this.emit("tr.input.update", {
+              this.emit('tr.input.update', {
                 detail: {
                   rules: this.rules,
                   input: {},
@@ -89,19 +89,19 @@ export class TrivuleInput extends TrivuleInputValidator {
   }
 
   onFails(fn: EventCallback) {
-    this.on("tr.input.fails", () => {
+    this.on('tr.input.fails', () => {
       this.__call(fn, this);
     });
   }
 
   onPasses(fn: EventCallback) {
-    this.on("tr.input.passes", () => {
+    this.on('tr.input.passes', () => {
       this.__call(fn, this);
     });
   }
 
   onUpdate(fn: EventCallback) {
-    this.on("tr.input.update", () => {
+    this.on('tr.input.update', () => {
       this.__call(fn, this);
     });
   }

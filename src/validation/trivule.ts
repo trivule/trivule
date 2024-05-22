@@ -3,11 +3,11 @@ import {
   RuleCallBack,
   TrivuleInputParms,
   ValidatableForm,
-} from "../contracts";
-import { TrConfig } from "../tr.config";
-import { TrBag } from "./tr-bag";
-import { TrivuleForm } from "./tr-form";
-import { TrivuleInput } from "./tr-input";
+} from '../contracts';
+import { TrConfig } from '../tr.config';
+import { TrBag } from './tr-bag';
+import { TrivuleForm } from './tr-form';
+import { TrivuleInput } from './tr-input';
 /**
  *
  * Initializes Trivule and applies form validation to all forms in the document.
@@ -36,7 +36,7 @@ export class Trivule {
   init(config?: ITrConfig) {
     this.setConfig(config);
     document
-      .querySelectorAll<HTMLFormElement>("form")
+      .querySelectorAll<HTMLFormElement>('form')
       .forEach((formElement) => {
         const trForm = new TrivuleForm(formElement, this.config);
         trForm.init();
@@ -68,7 +68,7 @@ export class Trivule {
   protected setConfig(config?: ITrConfig) {
     this.config = TrConfig;
 
-    if (config && typeof config === "object") {
+    if (config && typeof config === 'object') {
       this.config = { ...this.config, ...config };
     }
   }

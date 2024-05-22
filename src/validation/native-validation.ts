@@ -1,4 +1,4 @@
-import { Rule } from "../contracts";
+import { Rule } from '../contracts';
 
 /**
  * Provides validation based on the set of native HTML validation rules assigned to the input field concerned
@@ -13,11 +13,11 @@ export class NativeValidation {
    * List of all native HTML validation rules available for HTMLInputElement and supported by Trivule
    */
   private _nativeRules: Rule[] = [
-    "required",
-    "min",
-    "max",
-    "minlength",
-    "maxlength",
+    'required',
+    'min',
+    'max',
+    'minlength',
+    'maxlength',
   ];
 
   /**
@@ -57,7 +57,7 @@ export class NativeValidation {
 
     rules.forEach((newRule) => {
       const index = mergedRules.findIndex((rule) =>
-        rule.startsWith(newRule.split(":")[0])
+        rule.startsWith(newRule.split(':')[0]),
       );
       if (index !== -1) {
         mergedRules[index] = newRule;

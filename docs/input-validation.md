@@ -1,4 +1,3 @@
-
 # Single Input Validation
 
 Trivule offers the capability to validate a single form field.
@@ -6,54 +5,51 @@ Trivule offers the capability to validate a single form field.
 ### Validation in Declarative Mode
 
 ```html
-<input
-    name="email"
-    type="text"
-    data-tr-rules="required|email"
-/>
+<input name="email" type="text" data-tr-rules="required|email" />
 <div data-tr-feedback="email"></div>
 ```
 
 ```js
 const trEmail = new TrivuleInput({
-    selector: "email", // input name or a valid CSS selector
-})
+  selector: 'email', // input name or a valid CSS selector
+});
 ```
 
 ### Validation in Imperative Mode
 
 ```html
-<input name="email" type="text"/>
+<input name="email" type="text" />
 ```
+
 ```js
 const trEmail = new TrivuleInput({
-    selector: "email", // input name or a valid CSS selector
-    feedbackElement: "#email-feedback", // any valid CSS selector
-})
+  selector: 'email', // input name or a valid CSS selector
+  feedbackElement: '#email-feedback', // any valid CSS selector
+});
 ```
 
 Regardless of the chosen validation mode, the instance `trEmail` is available for advanced interactions.
 
 ```javascript
 trEmail.appendRule({
-    rule: "endWith:@gmail.com",
+  rule: 'endWith:@gmail.com',
 });
 
 trEmail.appendRule({
-    rule: 'startWithContact',
-    validate: function(input) {
-        return {
-            passes: input.startsWith("contact"),
-            value: input
-        }
-    },
-    message: "Please enter a valid email address",
-    local: 'en'
+  rule: 'startWithContact',
+  validate: function (input) {
+    return {
+      passes: input.startsWith('contact'),
+      value: input,
+    };
+  },
+  message: 'Please enter a valid email address',
+  local: 'en',
 });
 
 trEmail.onPassRule('startWithContact', (trEmail) => {
-    // Perform actions on passing the rule
-})
+  // Perform actions on passing the rule
+});
 ```
 
 ## Validation
@@ -67,9 +63,9 @@ const isValid = trEmail.validate();
 
 // Process the validation outcome
 if (isValid) {
-    console.log("Input is valid!"); 
+  console.log('Input is valid!');
 } else {
-    console.log("Input failed validation.");  
+  console.log('Input failed validation.');
 }
 ```
 
@@ -80,9 +76,9 @@ Validation without emitting events
 const isValid = trEmail.valid();
 
 if (isValid) {
-    console.log("Input is valid!"); 
+  console.log('Input is valid!');
 } else {
-    console.log("Input failed validation."); 
+  console.log('Input failed validation.');
 }
 ```
 
@@ -97,7 +93,7 @@ if (isValid) {
 
 ```typescript
 trEmail.onFails((trEmail) => {
-    // Handle failed validation
+  // Handle failed validation
 });
 ```
 
@@ -108,8 +104,8 @@ trEmail.onFails((trEmail) => {
 
 **Example:**
 
-```typescript 
+```typescript
 trEmail.onPasses((trEmail) => {
-    console.log("Input passed validation!");
+  console.log('Input passed validation!');
 });
 ```

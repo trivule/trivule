@@ -1,5 +1,5 @@
-import { CssSelector, Rule, RuleParam } from "../contracts";
-import { is_string, isFile } from "../rules";
+import { CssSelector, Rule, RuleParam } from '../contracts';
+import { is_string, isFile } from '../rules';
 
 /**
  * Parses a rule string and extracts the rule name and parameters.
@@ -7,7 +7,7 @@ import { is_string, isFile } from "../rules";
  * @returns An object containing the rule name and parameters.
  */
 export const getRule = (
-  rule: string
+  rule: string,
 ): { ruleName: Rule; params: RuleParam } => {
   const regex = /^(\w+):(.+)$/;
   const match = rule.match(regex);
@@ -17,7 +17,7 @@ export const getRule = (
     const params = match[2];
     return { ruleName, params };
   } else {
-    const [ruleName, params] = rule.split(":") as [Rule, string | undefined];
+    const [ruleName, params] = rule.split(':') as [Rule, string | undefined];
     return { ruleName, params };
   }
 };
@@ -29,9 +29,9 @@ export const getRule = (
  */
 export const spliteParam = (
   value: string,
-  carac: string = ","
+  carac: string = ',',
 ): RuleParam[] => {
-  if (typeof value !== "string") {
+  if (typeof value !== 'string') {
     return [];
   }
 
@@ -45,7 +45,7 @@ export const spliteParam = (
  */
 export const throwEmptyArgsException = (fnc: string, message?: string) => {
   throw new Error(
-    message ?? `Please provide a valid <<${fnc}>> rule arguments`
+    message ?? `Please provide a valid <<${fnc}>> rule arguments`,
   );
 };
 
@@ -68,13 +68,13 @@ export function now(): string {
  */
 export function isSubObject(
   sub: Record<string, unknown>,
-  obj: Record<string, unknown>
+  obj: Record<string, unknown>,
 ): boolean {
-  if (typeof sub !== "object" || sub === null || Array.isArray(sub)) {
+  if (typeof sub !== 'object' || sub === null || Array.isArray(sub)) {
     return false;
   }
 
-  if (typeof obj !== "object" || obj === null || Array.isArray(obj)) {
+  if (typeof obj !== 'object' || obj === null || Array.isArray(obj)) {
     return false;
   }
 
@@ -91,7 +91,7 @@ export function dataset_get<T = unknown>(
   element: HTMLElement | null | undefined,
   name: string,
   defaults: unknown = null,
-  toJson = false
+  toJson = false,
 ): T {
   if (!element) {
     return defaults as T;
@@ -114,7 +114,7 @@ export function tr_attr_get<T = unknown>(
   element: HTMLElement | null | undefined,
   name: string,
   defaults: unknown = null,
-  toJson = false
+  toJson = false,
 ): T {
   return dataset_get<T>(element, `tr-${name}`, defaults, toJson);
 }
@@ -154,11 +154,11 @@ export function convertFileSize(numericValue: number, unit: string) {
   numericValue = Number(numericValue);
 
   // Convert minSize to bytes based on unit
-  if (unit == "KB") {
+  if (unit == 'KB') {
     numericValue = numericValue * 1024;
-  } else if (unit == "MB") {
+  } else if (unit == 'MB') {
     numericValue = numericValue * 1024 * 1024;
-  } else if (unit == "GB") {
+  } else if (unit == 'GB') {
     numericValue = numericValue * 1024 * 1024 * 1024;
   }
   return numericValue;
@@ -169,7 +169,7 @@ export function explodeFileParam(value: string) {
 
   if (!match) {
     throw new Error(
-      "Invalid size format. Please use valid format like '1KB', '1MB', etc."
+      "Invalid size format. Please use valid format like '1KB', '1MB', etc.",
     );
   }
 
@@ -180,10 +180,10 @@ export function explodeFileParam(value: string) {
 
 export function getHTMLElementBySelector<T>(
   selector: CssSelector,
-  from?: HTMLElement | null
+  from?: HTMLElement | null,
 ): T | null {
   const parent = from ?? document;
-  if (typeof selector === "string") {
+  if (typeof selector === 'string') {
     try {
       return parent.querySelector<HTMLElement>(selector) as T;
     } catch (error) {
@@ -201,7 +201,7 @@ type TransformCallback<T, R> = (p: T, key: string | number) => R;
 
 export function transformToArray<T, R = T>(
   p: T[] | Record<string | number, T>,
-  call: TransformCallback<T, R>
+  call: TransformCallback<T, R>,
 ): R[] {
   const result: R[] = [];
   if (Array.isArray(p)) {

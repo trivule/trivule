@@ -8,18 +8,18 @@ import {
   ITrivuleInputObject,
   ITrivuleInputCallback,
   ValidatableInput,
-} from "../contracts";
-import { TrLocal } from "../locale/tr-local";
-import { isBoolean, isNumber } from "../rules";
-import { FormValidator } from "../rules/form/form-validator";
+} from '../contracts';
+import { TrLocal } from '../locale/tr-local';
+import { isBoolean, isNumber } from '../rules';
+import { FormValidator } from '../rules/form/form-validator';
 import {
   getHTMLElementBySelector,
   tr_attr_get,
   transformToArray,
-} from "../utils";
-import { TrBag } from "./tr-bag";
-import { TrivuleInput } from "./tr-input";
-import { TrParameter } from "./utils/parameter";
+} from '../utils';
+import { TrBag } from './tr-bag';
+import { TrivuleInput } from './tr-input';
+import { TrParameter } from './utils/parameter';
 
 /**
  * TrivuleForm is responsible for applying live validation to an HTML form.
@@ -54,11 +54,11 @@ export class TrivuleForm {
   /**
    * The class that indicates the submit button is enabled
    */
-  private _trEnabledClass = "etr-enabled";
+  private _trEnabledClass = 'etr-enabled';
   /**
    * The class that indicates the submit button is disabled
    */
-  private _trDisabledClass = "tr-disabled";
+  private _trDisabledClass = 'tr-disabled';
 
   /**
    * The html form
@@ -111,7 +111,7 @@ export class TrivuleForm {
     this.container = container;
 
     const submitButton =
-      this.container.querySelector<HTMLElement>("[data-tr-submit]");
+      this.container.querySelector<HTMLElement>('[data-tr-submit]');
 
     if (submitButton) {
       this.submitButton = submitButton;
@@ -132,7 +132,7 @@ export class TrivuleForm {
         this.disableButton();
       }
 
-      this.emit("tr.form.init", this);
+      this.emit('tr.form.init', this);
 
       this._onSubmit();
 
@@ -151,21 +151,21 @@ export class TrivuleForm {
   disableButton() {
     if (this.submitButton) {
       if (this.config.auto) {
-        this.submitButton.setAttribute("disabled", "true");
+        this.submitButton.setAttribute('disabled', 'true');
       }
       if (this._trDisabledClass) {
         //removeClass enable
-        const classArrayEnabled: string[] = this._trEnabledClass.split(" ");
+        const classArrayEnabled: string[] = this._trEnabledClass.split(' ');
         for (const value of classArrayEnabled) {
           this.submitButton.classList.remove(value);
         }
         //add class en disabled dataset
         this._trDisabledClass = tr_attr_get(
           this.submitButton,
-          "disabled-class",
-          this._trDisabledClass
+          'disabled-class',
+          this._trDisabledClass,
         );
-        const classArray: string[] = this._trDisabledClass.split(" ");
+        const classArray: string[] = this._trDisabledClass.split(' ');
         for (const value of classArray) {
           this.submitButton.classList.add(value);
         }
@@ -178,20 +178,20 @@ export class TrivuleForm {
    */
   enableButton() {
     if (this.submitButton) {
-      this.submitButton.removeAttribute("disabled");
+      this.submitButton.removeAttribute('disabled');
       if (this._trEnabledClass) {
         //removeClass disabled
-        const classArrayDisabled: string[] = this._trDisabledClass.split(" ");
+        const classArrayDisabled: string[] = this._trDisabledClass.split(' ');
         for (const value of classArrayDisabled) {
           this.submitButton.classList.remove(value);
         }
         //add class en enabled dataset
         this._trEnabledClass = tr_attr_get(
           this.submitButton,
-          "enabled-class",
-          this._trEnabledClass
+          'enabled-class',
+          this._trEnabledClass,
         );
-        const classArray: string[] = this._trEnabledClass.split(" ");
+        const classArray: string[] = this._trEnabledClass.split(' ');
         for (const value of classArray) {
           this.submitButton.classList.add(value);
         }
@@ -288,11 +288,11 @@ export class TrivuleForm {
       return this._passed;
     };
     if (this.submitButton) {
-      this.submitButton.addEventListener("click", () => {
+      this.submitButton.addEventListener('click', () => {
         validateCallback();
       });
     }
-    this.on("submit", (e: Event) => {
+    this.on('submit', (e: Event) => {
       if (!validateCallback()) {
         e.preventDefault();
       }
@@ -311,16 +311,16 @@ export class TrivuleForm {
 
   protected setConfig(config?: TrivuleFormConfig) {
     let lang =
-      tr_attr_get<string | undefined>(document.querySelector("html"), "lang") ||
-      document.querySelector("html")?.getAttribute("lang");
+      tr_attr_get<string | undefined>(document.querySelector('html'), 'lang') ||
+      document.querySelector('html')?.getAttribute('lang');
 
-    lang = tr_attr_get(this.container, "lang", lang);
+    lang = tr_attr_get(this.container, 'lang', lang);
 
-    const auto = tr_attr_get<string>(this.container, "auto");
+    const auto = tr_attr_get<string>(this.container, 'auto');
     if (auto) {
       this.config.auto = isBoolean(auto).passes;
     }
-    if (config && typeof config === "object") {
+    if (config && typeof config === 'object') {
       this.config = { ...this.config, ...config };
       if (config.local) {
         const local = config.local;
@@ -371,7 +371,7 @@ export class TrivuleForm {
    * ```
    */
   onFails(fn: TrivuleFormHandler): void {
-    this.on("tr.form.fails", (e) => {
+    this.on('tr.form.fails', (e) => {
       this.__call(fn, (e as CustomEvent).detail);
     });
   }
@@ -388,7 +388,7 @@ export class TrivuleForm {
    * ```
    */
   onPasses(fn: TrivuleFormHandler): void {
-    this.on("tr.form.passes", (e) => {
+    this.on('tr.form.passes', (e) => {
       this.__call(fn, (e as CustomEvent).detail);
     });
   }
@@ -405,7 +405,7 @@ export class TrivuleForm {
    * ```
    */
   onValidate(fn: TrivuleFormHandler): void {
-    this.on("tr.form.validate", (e) => {
+    this.on('tr.form.validate', (e) => {
       this.__call(fn, (e as CustomEvent).detail);
     });
   }
@@ -424,7 +424,7 @@ export class TrivuleForm {
    * ```
    */
   observeChanges(fn?: EventCallback): void {
-    this.on("tr.form.updated", () => {
+    this.on('tr.form.updated', () => {
       this.destroyInputs();
       this._initTrivuleInputs();
       this.__call(fn, this);
@@ -439,7 +439,7 @@ export class TrivuleForm {
    * ```
    */
   update() {
-    this.emit("tr.form.updated", this);
+    this.emit('tr.form.updated', this);
   }
 
   /**
@@ -450,7 +450,7 @@ export class TrivuleForm {
     trivuleInputs = trivuleInputs
       ? trivuleInputs
       : Array.from(
-          this.container.querySelectorAll<HTMLElement>("[data-tr-rules]")
+          this.container.querySelectorAll<HTMLElement>('[data-tr-rules]'),
         );
     trivuleInputs.forEach((el) => this.add({ selector: el }));
   }
@@ -461,7 +461,7 @@ export class TrivuleForm {
    * @param params - The parameters to be passed to the function.
    */
   private __call(fn?: CallableFunction, ...params: unknown[]) {
-    if (typeof fn == "function") {
+    if (typeof fn == 'function') {
       fn(...params);
     }
   }
@@ -485,11 +485,11 @@ export class TrivuleForm {
    */
   destroy(): void {
     // Remove event handlers
-    this.container.removeEventListener("submit", this._onSubmit);
+    this.container.removeEventListener('submit', this._onSubmit);
 
     this.destroyInputs();
     this._trivuleInputs = {};
-    this.emit("tr.form.destroy");
+    this.emit('tr.form.destroy');
   }
 
   /**
@@ -499,7 +499,7 @@ export class TrivuleForm {
   private _emitTrOnFailsEvent() {
     //If tr.form.fails
     if (this._emitOnFails) {
-      this.emit("tr.form.fails", this);
+      this.emit('tr.form.fails', this);
       this._emitOnFails = false;
       //Open _emitOnPasses, for the next tr.form.passes event
       this._emitOnPasses = true;
@@ -512,7 +512,7 @@ export class TrivuleForm {
   private _emitTrOnPassesEvent() {
     //If tr.form.passes
     if (this._emitOnPasses) {
-      this.emit("tr.form.passes", this);
+      this.emit('tr.form.passes', this);
       this._emitOnPasses = false;
       //Open _emitOnFails, for the next tr.form.fails event
       this._emitOnFails = true;
@@ -569,7 +569,7 @@ export class TrivuleForm {
   }
 
   onInit(fn: TrivuleFormHandler) {
-    this.on("tr.form.init", (event: Event) => {
+    this.on('tr.form.init', (event: Event) => {
       if (event instanceof CustomEvent) {
         this.__call(fn, event.detail);
       }
@@ -602,7 +602,7 @@ export class TrivuleForm {
   }
   inputsToArray() {
     return Object.keys(this._trivuleInputs).map(
-      (key) => this._trivuleInputs[key]
+      (key) => this._trivuleInputs[key],
     );
   }
 
@@ -612,7 +612,7 @@ export class TrivuleForm {
       const fds = this.parameter.getFeedbackSelector(trInput.getName());
       if (fds) {
         trInput.setFeedbackElement(
-          getHTMLElementBySelector(fds, this.container)
+          getHTMLElementBySelector(fds, this.container),
         );
       }
     }
@@ -642,8 +642,8 @@ export class TrivuleForm {
   }
 
   make(input: TrivuleInputParms[] | Record<string, TrivuleInputParms>) {
-    if (typeof input != "object" || input === undefined || input === null) {
-      throw new Error("Invalid arguments passed to make method");
+    if (typeof input != 'object' || input === undefined || input === null) {
+      throw new Error('Invalid arguments passed to make method');
     }
 
     transformToArray(input, (param, indexOrInputName) => {
@@ -652,7 +652,7 @@ export class TrivuleForm {
         selector =
           getHTMLElementBySelector(param.selector, this.container) ?? selector;
       }
-      if (typeof selector === "string") {
+      if (typeof selector === 'string') {
         const s = this.parameter.getInputSelector(selector);
 
         selector = getHTMLElementBySelector(s as string, this.container);
@@ -671,7 +671,7 @@ export class TrivuleForm {
         param.selector = undefined;
       }
 
-      if (typeof param.realTime !== "boolean") {
+      if (typeof param.realTime !== 'boolean') {
         param.realTime = this.config.realTime;
       }
 
@@ -683,7 +683,7 @@ export class TrivuleForm {
       param.selector = selector as ValidatableInput;
 
       this.addTrivuleInput(
-        new TrivuleInput(selector as ValidatableInput, param, this.parameter)
+        new TrivuleInput(selector as ValidatableInput, param, this.parameter),
       );
       return param;
     });
@@ -701,7 +701,7 @@ export class TrivuleForm {
         this._emitTrOnFailsEvent();
       }
     }
-    this.emit("tr.form.validate", this);
+    this.emit('tr.form.validate', this);
   }
 
   get valid() {

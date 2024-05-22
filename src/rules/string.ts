@@ -1,7 +1,7 @@
-import { isNumber } from ".";
-import { RuleCallBack } from "../contracts";
-import { spliteParam, throwEmptyArgsException } from "../utils";
-import { ArgumentParser } from "../validation/utils/argument-parser";
+import { isNumber } from '.';
+import { RuleCallBack } from '../contracts';
+import { spliteParam, throwEmptyArgsException } from '../utils';
+import { ArgumentParser } from '../validation/utils/argument-parser';
 /**
  * Validates an email address.
  *
@@ -16,7 +16,7 @@ import { ArgumentParser } from "../validation/utils/argument-parser";
 export const email: RuleCallBack = (input) => {
   const emailRegex =
     /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  if (typeof input !== "string") {
+  if (typeof input !== 'string') {
     return {
       passes: false,
       value: input,
@@ -40,7 +40,7 @@ export const email: RuleCallBack = (input) => {
  */
 export const minlength: RuleCallBack = (input, length) => {
   return {
-    passes: typeof input == "string" ? input.length >= Number(length) : false,
+    passes: typeof input == 'string' ? input.length >= Number(length) : false,
     value: input,
   };
 };
@@ -57,7 +57,7 @@ export const minlength: RuleCallBack = (input, length) => {
  */
 export const maxlength: RuleCallBack = (input, length) => {
   return {
-    passes: typeof input == "string" ? input.length <= Number(length) : true,
+    passes: typeof input == 'string' ? input.length <= Number(length) : true,
     value: input,
   };
 };
@@ -68,7 +68,7 @@ export const maxlength: RuleCallBack = (input, length) => {
  */
 export const is_string: RuleCallBack = (val) => {
   return {
-    passes: typeof val === "string",
+    passes: typeof val === 'string',
     value: val,
   };
 };
@@ -84,7 +84,7 @@ export const is_string: RuleCallBack = (val) => {
  */
 export const url: RuleCallBack = (input) => {
   const urlRegex = /^(ftp|http|https):\/\/[^ "]+$/;
-  if (typeof input !== "string") {
+  if (typeof input !== 'string') {
     return {
       passes: false,
       value: input,
@@ -106,7 +106,7 @@ export const url: RuleCallBack = (input) => {
  * ```
  */
 export const startWithUpper: RuleCallBack = (input) => {
-  if (typeof input !== "string" || input.length === 0) {
+  if (typeof input !== 'string' || input.length === 0) {
     return {
       passes: false,
       value: input,
@@ -131,9 +131,9 @@ export const startWithUpper: RuleCallBack = (input) => {
 
 export const startWithLower: RuleCallBack = (input) => {
   if (
-    typeof input !== "string" ||
+    typeof input !== 'string' ||
     input.length === 0 ||
-    input.charAt(0) === " "
+    input.charAt(0) === ' '
   ) {
     return {
       passes: false,
@@ -159,10 +159,10 @@ export const startWithLower: RuleCallBack = (input) => {
  */
 export const startWith: RuleCallBack = (input, prefix) => {
   if (!prefix) {
-    throwEmptyArgsException("startWith");
+    throwEmptyArgsException('startWith');
   }
   const prefixes = spliteParam(prefix as string);
-  if (typeof input !== "string") {
+  if (typeof input !== 'string') {
     return {
       passes: false,
       value: input,
@@ -187,10 +187,10 @@ export const startWith: RuleCallBack = (input, prefix) => {
  */
 export const endWith: RuleCallBack = (input, suffix) => {
   if (!suffix) {
-    throwEmptyArgsException("endWith");
+    throwEmptyArgsException('endWith');
   }
   const suffixes = spliteParam(suffix as string);
-  if (typeof input !== "string") {
+  if (typeof input !== 'string') {
     return {
       passes: false,
       value: input,
@@ -215,10 +215,10 @@ export const endWith: RuleCallBack = (input, suffix) => {
  */
 export const contains: RuleCallBack = (input, substring) => {
   if (!substring) {
-    throwEmptyArgsException("contains");
+    throwEmptyArgsException('contains');
   }
   const substrs = spliteParam(substring as string);
-  if (typeof input !== "string") {
+  if (typeof input !== 'string') {
     return {
       passes: false,
       value: input,
@@ -248,11 +248,11 @@ export const contains: RuleCallBack = (input, substring) => {
 export const length: RuleCallBack = (input, size) => {
   let inputs: string[] = [];
   if (!isNumber(size).passes) {
-    throw new Error("The length rule argument must be an integer");
+    throw new Error('The length rule argument must be an integer');
   }
   size = parseInt(size as string);
-  if (typeof input == "string" || typeof input == "number") {
-    inputs = input.toString().split("");
+  if (typeof input == 'string' || typeof input == 'number') {
+    inputs = input.toString().split('');
   } else {
     return {
       passes: false,
@@ -277,7 +277,7 @@ export const length: RuleCallBack = (input, size) => {
  * ```
  */
 export const passwordRule: RuleCallBack = (input) => {
-  if (typeof input !== "string") {
+  if (typeof input !== 'string') {
     return {
       passes: false,
       value: input,
@@ -319,9 +319,9 @@ export const passwordRule: RuleCallBack = (input) => {
  */
 export const startWithString: RuleCallBack = (input) => {
   if (
-    typeof input !== "string" ||
+    typeof input !== 'string' ||
     input.length === 0 ||
-    input.charAt(0) === " "
+    input.charAt(0) === ' '
   ) {
     return {
       passes: false,
@@ -345,7 +345,7 @@ export const startWithString: RuleCallBack = (input) => {
  * ```
  */
 export const endWithString: RuleCallBack = (input) => {
-  if (typeof input !== "string" || input.length === 0) {
+  if (typeof input !== 'string' || input.length === 0) {
     return {
       passes: false,
       value: input,
@@ -368,7 +368,7 @@ export const endWithString: RuleCallBack = (input) => {
  * ```
  */
 export const containsLetter: RuleCallBack = (input) => {
-  if (typeof input !== "string") {
+  if (typeof input !== 'string') {
     return {
       passes: false,
       value: input,
@@ -392,14 +392,14 @@ export const containsLetter: RuleCallBack = (input) => {
  * ```
  */
 export const excludes: RuleCallBack = (input, excludedChars) => {
-  if (typeof excludedChars !== "string" && typeof excludedChars !== "number") {
-    throwEmptyArgsException("excludes");
+  if (typeof excludedChars !== 'string' && typeof excludedChars !== 'number') {
+    throwEmptyArgsException('excludes');
   }
   const chars = spliteParam(excludedChars as string);
   if (!chars.length) {
-    throwEmptyArgsException("excludes");
+    throwEmptyArgsException('excludes');
   }
-  if (typeof input !== "string") {
+  if (typeof input !== 'string') {
     return {
       passes: true,
       value: input,
@@ -425,7 +425,7 @@ export const excludes: RuleCallBack = (input, excludedChars) => {
  * ```
  */
 export const upper: RuleCallBack = (input) => {
-  if (typeof input !== "string") {
+  if (typeof input !== 'string') {
     return {
       passes: false,
       value: input,
@@ -448,7 +448,7 @@ export const upper: RuleCallBack = (input) => {
  * ```
  */
 export const lower: RuleCallBack = (input) => {
-  if (typeof input !== "string") {
+  if (typeof input !== 'string') {
     return {
       passes: false,
       value: input,
@@ -471,8 +471,8 @@ export const lower: RuleCallBack = (input) => {
  * ```
  */
 export const stringBetween: RuleCallBack = (input, min_max) => {
-  if (typeof min_max !== "string") {
-    throwEmptyArgsException("between");
+  if (typeof min_max !== 'string') {
+    throwEmptyArgsException('between');
   }
   const [min, max] = spliteParam(min_max as string);
   return {

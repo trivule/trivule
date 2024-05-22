@@ -1,7 +1,7 @@
-import { maxlength, minlength } from "./string";
-import { isFile, maxFileSize, minFileSize } from "./file";
-import { spliteParam } from "../utils";
-import { RuleCallBack } from "../contracts";
+import { maxlength, minlength } from './string';
+import { isFile, maxFileSize, minFileSize } from './file';
+import { spliteParam } from '../utils';
+import { RuleCallBack } from '../contracts';
 /**
  * When the value is a number, it checks whether the input value is greater than or equal to min
  * When the value is a character string, it checks whether the number of characters is greater than or equal to min
@@ -14,9 +14,9 @@ import { RuleCallBack } from "../contracts";
  */
 export const minRule: RuleCallBack = (input, min, type) => {
   if (!isNumber(min).passes) {
-    throw new Error("Min rule parameter must be an integer");
+    throw new Error('Min rule parameter must be an integer');
   }
-  if (isFile(input).passes || type == "file") {
+  if (isFile(input).passes || type == 'file') {
     return {
       passes: minFileSize(input, min, type).passes,
       value: input,
@@ -35,7 +35,7 @@ export const minRule: RuleCallBack = (input, min, type) => {
     return {
       passes: minlength(input, min).passes,
       value: input,
-      alias: "minlength",
+      alias: 'minlength',
     };
   }
 };
@@ -52,13 +52,13 @@ export const minRule: RuleCallBack = (input, min, type) => {
  */
 export const maxRule: RuleCallBack = (input, max, type) => {
   if (!isNumber(max).passes) {
-    throw new Error("Min rule parameter must be an integer");
+    throw new Error('Min rule parameter must be an integer');
   }
-  if (isFile(input).passes || type == "file") {
+  if (isFile(input).passes || type == 'file') {
     return {
       passes: maxFileSize(input, max).passes,
       value: input,
-      alias: "maxFileSize",
+      alias: 'maxFileSize',
     };
   }
 
@@ -74,7 +74,7 @@ export const maxRule: RuleCallBack = (input, max, type) => {
     return {
       passes: maxlength(input, max).passes,
       value: input,
-      alias: "maxlength",
+      alias: 'maxlength',
     };
   }
 };
@@ -113,35 +113,35 @@ export const integer: RuleCallBack = (input) => {
  * ```
  */
 export const isNumber: RuleCallBack = (input) => {
-  if (input === "" || input === null || input === undefined) {
+  if (input === '' || input === null || input === undefined) {
     return {
       passes: false,
       value: input,
     };
   }
 
-  if (input === "0" || input === 0) {
+  if (input === '0' || input === 0) {
     return {
       passes: true,
       value: 0,
-      type: "number",
+      type: 'number',
     };
   }
 
-  if (input === "1" || input === 1) {
+  if (input === '1' || input === 1) {
     return {
       passes: true,
       value: 1,
-      type: "number",
+      type: 'number',
     };
   }
   return {
     passes:
       !isNaN(Number(input)) &&
-      typeof input !== "boolean" &&
-      typeof input !== "object",
+      typeof input !== 'boolean' &&
+      typeof input !== 'object',
     value: Number(input),
-    type: "number",
+    type: 'number',
   };
 };
 
@@ -155,7 +155,7 @@ export const isNumber: RuleCallBack = (input) => {
  */
 export const modulo: RuleCallBack = (input, mod) => {
   if (!isNumber(mod).passes) {
-    throw new Error("Modulo rule parameter must be an integer");
+    throw new Error('Modulo rule parameter must be an integer');
   }
 
   if (isNumber(input).passes) {
@@ -183,7 +183,7 @@ export const modulo: RuleCallBack = (input, mod) => {
  */
 export const lessthan: RuleCallBack = (input, threshold) => {
   if (!isNumber(threshold).passes) {
-    throw new Error("Lessthan rule parameter must be a number");
+    throw new Error('Lessthan rule parameter must be a number');
   }
 
   if (isNumber(input).passes) {
@@ -211,7 +211,7 @@ export const lessthan: RuleCallBack = (input, threshold) => {
  */
 export const greaterthan: RuleCallBack = (input, threshold) => {
   if (!isNumber(threshold).passes) {
-    throw new Error("Greaterthan rule parameter must be a number");
+    throw new Error('Greaterthan rule parameter must be a number');
   }
 
   if (isNumber(input).passes) {

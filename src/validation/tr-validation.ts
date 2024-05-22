@@ -1,12 +1,12 @@
-import { InputRule } from "./utils/input-rule";
-import { InputValueType, InputType, Rule, RulesMessages } from "../contracts";
+import { InputRule } from './utils/input-rule';
+import { InputValueType, InputType, Rule, RulesMessages } from '../contracts';
 
-import { RuleExecuted } from ".";
-import { TrMessages } from "../messages";
-import { TrLocal } from "../locale/tr-local";
+import { RuleExecuted } from '.';
+import { TrMessages } from '../messages';
+import { TrLocal } from '../locale/tr-local';
 
 export class TrValidation {
-  private _inputType = "text";
+  private _inputType = 'text';
   /**
    * The list of rules that should be executed on the value
    */
@@ -32,7 +32,7 @@ export class TrValidation {
   /**
    * The attrabute name that should be used to display the validation errors
    */
-  private _attr = "";
+  private _attr = '';
 
   /**
    * An object containing the original validation rules errors as key-value pairs (record) of rule names and error
@@ -53,7 +53,7 @@ export class TrValidation {
     const rules = this._rules.all();
 
     if (!Array.isArray(rules)) {
-      throw new Error("The rule provided must be an array of Rule");
+      throw new Error('The rule provided must be an array of Rule');
     }
 
     let inputType = this._inputType as InputType;
@@ -69,7 +69,7 @@ export class TrValidation {
 
       ruleExec.params = params;
 
-      if (!ruleCallback || typeof ruleCallback !== "function") {
+      if (!ruleCallback || typeof ruleCallback !== 'function') {
         throw new Error(`The rule ${ruleName} is not defined`);
       }
 
@@ -112,7 +112,7 @@ export class TrValidation {
     const r: Record<string, string> = {};
     for (const rx of this._ruleExecuted) {
       if (!rx.passed) {
-        r[rx.orignalName] = rx.message ?? "";
+        r[rx.orignalName] = rx.message ?? '';
       }
     }
     return r;
@@ -168,7 +168,7 @@ export class TrValidation {
   private _parseRuleMessage(
     ruleExec: RuleExecuted,
     aliasRule: string,
-    message: string | undefined | null
+    message: string | undefined | null,
   ) {
     const orgMesage = TrLocal.getRuleMessage(ruleExec.orignalName);
 
@@ -176,19 +176,19 @@ export class TrValidation {
       this._trmessages[ruleExec.ruleName] = message;
     } else {
       this._trmessages[ruleExec.ruleName] = TrLocal.getRuleMessage(
-        aliasRule ?? ruleExec.ruleName
+        aliasRule ?? ruleExec.ruleName,
       );
     }
 
     const trMessages = new TrMessages().setMessages(
-      this._trmessages as RulesMessages
+      this._trmessages as RulesMessages,
     );
 
     message = TrMessages.parseMessage(
       this._attr,
       ruleExec.ruleName as Rule,
       trMessages.getRulesMessages([ruleExec.ruleName as Rule])[0],
-      ruleExec.params
+      ruleExec.params,
     );
 
     ruleExec.message = message;

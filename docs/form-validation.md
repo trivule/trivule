@@ -14,12 +14,19 @@ Specify validation rules in the attributes of HTML fields for basic form validat
 <form>
   <div>
     <label>Email</label>
-    <input type="text" data-tr-rules="required|email|maxlength:32" name="email" />
+    <input
+      type="text"
+      data-tr-rules="required|email|maxlength:32"
+      name="email"
+    />
     <div data-tr-feedback="email"></div>
   </div>
   <div>
     <label>Message</label>
-    <textarea data-tr-rules="required|between:2,250|endWith:." name="message"></textarea>
+    <textarea
+      data-tr-rules="required|between:2,250|endWith:."
+      name="message"
+    ></textarea>
     <div data-tr-feedback="message"></div>
   </div>
   <p>
@@ -31,7 +38,7 @@ Specify validation rules in the attributes of HTML fields for basic form validat
 **Initialization:**
 
 ```js
-const trForm = new TrivuleForm("form");
+const trForm = new TrivuleForm('form');
 ```
 
 ### Imperative Validation
@@ -41,20 +48,20 @@ Define and apply validation rules dynamically using JavaScript.
 **Example:**
 
 ```js
-const trivuleForm = new TrivuleForm("form", {
+const trivuleForm = new TrivuleForm('form', {
   realTime: false,
-  feedbackSelector: ".invalid-feedback"
+  feedbackSelector: '.invalid-feedback',
 });
 
 // Define validation rules
 trivuleForm.make([
   {
-    selector: "email",
-    rules: ["required", "email", "maxlength:32"],
+    selector: 'email',
+    rules: ['required', 'email', 'maxlength:32'],
   },
   {
-    selector: "message",
-    rules: ["required", "between:2,250", "endWith:."],
+    selector: 'message',
+    rules: ['required', 'between:2,250', 'endWith:.'],
   },
 ]);
 ```
@@ -67,8 +74,8 @@ Define and apply validation rules using the `make` method.
 
 ```typescript
 trivuleForm.make([
-  { selector: "age", rules: "required|between:18,40" },
-  { selector: "#birthDayInput", rules: "required|date" },
+  { selector: 'age', rules: 'required|between:18,40' },
+  { selector: '#birthDayInput', rules: 'required|date' },
 ]);
 ```
 
@@ -76,9 +83,9 @@ trivuleForm.make([
 
 ```typescript
 const inputs = {
-  age: { rules: "required|between:18,40" },
-  birthDay: { rules: "required|date", selector: "#birthDayInput" },
-  message: { rules: "required|only:string" },
+  age: { rules: 'required|between:18,40' },
+  birthDay: { rules: 'required|date', selector: '#birthDayInput' },
+  message: { rules: 'required|only:string' },
 };
 
 trivuleForm.make(inputs);
@@ -88,8 +95,8 @@ trivuleForm.make(inputs);
 
 ```typescript
 trivuleForm
-  .make([{ selector: "age", rules: "required|between:18,40" }])
-  .make({ message: { rules: "required|only:string" } });
+  .make([{ selector: 'age', rules: 'required|between:18,40' }])
+  .make({ message: { rules: 'required|only:string' } });
 ```
 
 ### Handling Validation
@@ -102,15 +109,15 @@ Use the `onFails` method or listen directly for the `"tr.form.fails"` event.
 
 ```typescript
 trivuleForm.onFails((trivuleForm) => {
-  console.log("Form validation failed!", trivuleForm);
+  console.log('Form validation failed!', trivuleForm);
 });
 ```
 
 **Direct Event Listener:**
 
 ```typescript
-formElement.addEventListener("tr.form.fails", (event) => {
-  console.log("Form validation failed!", event.target);
+formElement.addEventListener('tr.form.fails', (event) => {
+  console.log('Form validation failed!', event.target);
 });
 ```
 
@@ -122,15 +129,15 @@ Use the `onPasses` method or listen directly for the `"tr.form.passes"` event.
 
 ```typescript
 trivuleForm.onPasses((trivuleForm) => {
-  console.log("Form validation passed!", trivuleForm);
+  console.log('Form validation passed!', trivuleForm);
 });
 ```
 
 **Direct Event Listener:**
 
 ```typescript
-formElement.addEventListener("tr.form.passes", (event) => {
-  console.log("Form validation passed!", event.target);
+formElement.addEventListener('tr.form.passes', (event) => {
+  console.log('Form validation passed!', event.target);
 });
 ```
 
@@ -143,8 +150,8 @@ formElement.addEventListener("tr.form.passes", (event) => {
 Attach event listeners to the form container.
 
 ```typescript
-trivuleForm.on("tr.form.init", (event) => {
-  console.log("Form initialized", event.detail);
+trivuleForm.on('tr.form.init', (event) => {
+  console.log('Form initialized', event.detail);
 });
 ```
 
@@ -155,9 +162,9 @@ trivuleForm.on("tr.form.init", (event) => {
 Emit custom events from the form container.
 
 ```typescript
-trivuleForm.emit("tr.form.validate", {
+trivuleForm.emit('tr.form.validate', {
   valid: true,
-  message: "Form validation completed successfully",
+  message: 'Form validation completed successfully',
 });
 ```
 
@@ -169,7 +176,7 @@ Execute a callback when any input value is updated.
 
 ```typescript
 trivuleForm.onUpdate((form) => {
-  console.log("Form updated", form);
+  console.log('Form updated', form);
 });
 ```
 
@@ -179,7 +186,7 @@ Execute a callback when the form is validated.
 
 ```typescript
 trivuleForm.onValidate((form) => {
-  console.log("Form validated", form);
+  console.log('Form validated', form);
 });
 ```
 
@@ -191,9 +198,9 @@ Perform actions on each input.
 
 ```typescript
 trivuleForm.each((input) => {
-  console.log("Input name:", input.getName());
-  console.log("Input value:", input.getValue());
-  console.log("Input validation status:", input.passes());
+  console.log('Input name:', input.getName());
+  console.log('Input value:', input.getValue());
+  console.log('Input validation status:', input.passes());
 });
 ```
 
@@ -235,8 +242,8 @@ Check if the entire form is valid.
 ```typescript
 const isFormValid = trivuleForm.isValid();
 if (isFormValid) {
-  console.log("The form is valid.");
+  console.log('The form is valid.');
 } else {
-  console.log("The form contains invalid inputs.");
+  console.log('The form contains invalid inputs.');
 }
 ```

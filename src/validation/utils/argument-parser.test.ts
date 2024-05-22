@@ -1,25 +1,25 @@
-import { ArgumentParser } from "./argument-parser";
+import { ArgumentParser } from './argument-parser';
 
-describe("ArgumentParser", () => {
+describe('ArgumentParser', () => {
   let argumentParser: ArgumentParser;
 
   beforeEach(() => {
     argumentParser = new ArgumentParser(
-      "Hello&esp;world&pip;This&pip;is&esp;a&esp;test"
+      'Hello&esp;world&pip;This&pip;is&esp;a&esp;test',
     );
   });
 
-  describe("replacePipes", () => {
-    it("should replace pipes in the argument string", () => {
+  describe('replacePipes', () => {
+    it('should replace pipes in the argument string', () => {
       const result = argumentParser.replacePipes();
-      expect(result).toEqual("Hello&esp;world|This|is&esp;a&esp;test");
+      expect(result).toEqual('Hello&esp;world|This|is&esp;a&esp;test');
     });
   });
 
-  describe("replaceSpaces", () => {
-    it("should replace spaces in the argument string", () => {
+  describe('replaceSpaces', () => {
+    it('should replace spaces in the argument string', () => {
       const result = argumentParser.replaceSpaces();
-      expect(result).toEqual("Hello world&pip;This&pip;is a test");
+      expect(result).toEqual('Hello world&pip;This&pip;is a test');
     });
   });
 });

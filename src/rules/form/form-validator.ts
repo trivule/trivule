@@ -1,7 +1,7 @@
-import { RuleParam, ValidationState } from "../../contracts";
-import { spliteParam } from "../../utils";
-import { required } from "../global";
-import { AbstractFormValidator } from "./abstract-form-validator";
+import { RuleParam, ValidationState } from '../../contracts';
+import { spliteParam } from '../../utils';
+import { required } from '../global';
+import { AbstractFormValidator } from './abstract-form-validator';
 
 export class FormValidator extends AbstractFormValidator {
   constructor(form: HTMLElement) {
@@ -13,15 +13,15 @@ export class FormValidator extends AbstractFormValidator {
     //Register  form rules
     this.formRules = [
       {
-        ruleName: "same",
+        ruleName: 'same',
         call: this.same,
       },
       {
-        ruleName: "requiredIf",
+        ruleName: 'requiredIf',
         call: this.requiredIf,
       },
       {
-        ruleName: "requiredWhen",
+        ruleName: 'requiredWhen',
         call: this.requiredWhen,
       },
     ];
@@ -53,7 +53,7 @@ export class FormValidator extends AbstractFormValidator {
    * @returns
    */
   requiredIf(input: unknown, parameter?: string): ValidationState {
-    const [inputName, ...params] = spliteParam(parameter ?? "");
+    const [inputName, ...params] = spliteParam(parameter ?? '');
 
     if (inputName && params.length > 0) {
       const otherInputralue = this.getInpuTrValueByName(inputName.toString());
@@ -73,7 +73,7 @@ export class FormValidator extends AbstractFormValidator {
   }
 
   requiredWhen(input: unknown, parameter?: string) {
-    const [inputName, ...params] = spliteParam(parameter ?? "");
+    const [inputName, ...params] = spliteParam(parameter ?? '');
     if (inputName && params.length > 0) {
       const isNotEmpty = params.some((name) => {
         return required(this.getInpuTrValueByName(name as string)).passes;
