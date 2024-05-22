@@ -232,10 +232,17 @@ export class TrivuleInputValidator
     return this;
   }
 
-  replaceRule(
-    oldRule: string | Record<string, string> | string[],
-    newRule?: string
-  ): this {
+  /**
+   * Replaces an existing validation rule with a new one.
+   * @param oldRule The rule to be replaced.
+   * @param newRule The new rule to replace the old one
+   * @returns This Trivule input instance.
+   * @example
+   * const trivuleInput = new TrivuleInput();
+   * trivuleInput.replaceRule("required", "minlength"); // Replaces the "required" rule with the "minlength" rule
+   */
+  replaceRule(oldRule: string, newRule: string): this {
+    this.rules.replace(oldRule, newRule);
     return this;
   }
 

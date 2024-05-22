@@ -71,23 +71,6 @@ export interface ITrivuleInput {
   removeRules(rules: string[] | string): this;
 
   /**
-   * Replaces an existing validation rule with a new one.
-   * @param oldRule The rule to be replaced, either as a string, a rule object, or an array of rule names.
-   * @param newRule The new rule to replace the old one, optional if oldRule is an object.
-   * @returns This Trivule input instance.
-   * @example
-   * const trivuleInput = new TrivuleInput();
-   * trivuleInput.replaceRule("required", "minlength"); // Replaces the "required" rule with the "minlength" rule
-   * @example
-   * const trivuleInput = new TrivuleInput();
-   * trivuleInput.replaceRule({required: "This field is required", minlength: "Field length must be at least 5 characters"}); // Replaces the existing rules with the new rules provided
-   */
-  replaceRule(
-    oldRule: string | Record<string, string> | string[],
-    newRule?: string
-  ): this;
-
-  /**
    * Assigns a specific error message to a validation rule for this Trivule input.
    * @param message The error message to assign.
    * @param rule The name of the rule for which the error message will be assigned.

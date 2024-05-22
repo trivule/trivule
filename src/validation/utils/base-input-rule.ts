@@ -149,4 +149,13 @@ export abstract class BaseInputRule {
   map(call: (r: RuleType, i: number) => any) {
     return this.items.map(call);
   }
+
+  replace(outgoing: string, incoming: string) {
+    let { ruleName } = getRule(outgoing);
+    const index = this.items.findIndex((r) => r.name === ruleName);
+    if (index !== -1) {
+      this.items[index] = this.createRule(incoming);
+    }
+    return this;
+  }
 }

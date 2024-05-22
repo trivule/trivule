@@ -135,6 +135,53 @@ describe("InputRule", () => {
     ]);
   });
 });
+describe("replace", () => {
+  it("should replace outgoing rule name with incoming rule name in the items array", () => {
+    const inputRule = new InputRule(["required", "minlength:8"], {
+      required: "This field is required",
+      minlength: "This field must be at least 8 characters",
+    });
+
+    inputRule.replace("required", "email");
+    const received = inputRule.all().map((rule) => {
+      return {
+        name: rule.name,
+        params: rule.params,
+      };
+    });
+
+    expect(received).toEqual([
+      {
+        name: "email",
+        params: undefined,
+      },
+      {
+        name: "minlength",
+        params: "8",
+      },
+    ]);
+  });
+
+  it("should update message if it contains the outgoing rule name", () => {
+    const inputRule = new InputRule(["required", "minlength:8"], {
+      required: "This field is required",
+      minlength: "This field must be at least 8 characters",
+    });
+
+    // Call the replace method to replace 'required' with 'email'
+    inputRule.replace("required", "email");
+
+    // Get the messages of all rules in the items array
+    const messages = inputRule.all().map((rule) => {
+      return rule.message;
+    });
+
+    expect(messages).toEqual([
+      "Please enter a valid email address",
+      "This field must be at least 8 characters",
+    ]);
+  });
+});
 
 describe("convertAcoladeGroupToArray", () => {
   it("should return an array of numbers contained in the acolade group", () => {
