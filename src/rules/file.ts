@@ -1,4 +1,4 @@
-import { InputValueType, RuleCallBack } from '../contracts';
+import { RuleCallBack } from '../contracts';
 import {
   convertFileSize,
   explodeFileParam,
