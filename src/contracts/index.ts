@@ -1,5 +1,5 @@
 import { Rule } from './rule';
-export type ITrivuleInputCallback<P, R> = (param: P) => R;
+export type ITrivuleInputCallback<P> = (param: P) => void;
 
 /**
  * Configuration interface
@@ -171,7 +171,7 @@ export interface ITrivuleInput {
 
   onRuleFail(
     rule: string,
-    callback: ITrivuleInputCallback<ITrivuleInput, ITrivuleInput>,
+    callback: ITrivuleInputCallback<ITrivuleInput>,
   ): this;
   /**
    * Sets a callback function to execute when a rule passes for this input.
@@ -184,39 +184,7 @@ export interface ITrivuleInput {
    */
   onRulePass(
     rule: string | Rule,
-    callback: ITrivuleInputCallback<ITrivuleInput, ITrivuleInput>,
-  ): this;
-
-  /**
-   * Sets a callback function to execute before initializing the Trivule input.
-   * @param callback The callback function to execute.
-   * @example
-   * const trivuleInput = new TrivuleInput();
-   * trivuleInput.beforeInit((input) => { console.log("Before init:", input); }); // Sets a callback to execute before initializing the Trivule input
-   */
-  beforeInit(callback: ITrivuleInputCallback<ITrivuleInput, unknown>): void;
-
-  /**
-   * Sets a callback function to execute after initializing the Trivule input.
-   * @param callback The callback function to execute.
-   * @example
-   * const trivuleInput = new TrivuleInput();
-   * trivuleInput.afterInit((input) => { console.log("After init:", input); }); // Sets a callback to execute after initializing the Trivule input
-   */
-  afterInit(callback: ITrivuleInputCallback<ITrivuleInput, unknown>): void;
-
-  /**
-   * Sets a callback function to execute before running a rule on the Trivule input.
-   * @param rule The rule name for which the callback is set.
-   * @param callback The callback function to execute.
-   * @returns This Trivule input instance.
-   * @example
-   * const trivuleInput = new TrivuleInput();
-   * trivuleInput.beforeRunRule("required", (input) => { console.log("Before rule:", input); }); // Sets a callback to execute before running the "required" rule
-   */
-  beforeRunRule(
-    rule: string,
-    callback: ITrivuleInputCallback<ITrivuleInput, ITrivuleInput>,
+    callback: ITrivuleInputCallback<ITrivuleInput>,
   ): this;
 
   /**
@@ -492,7 +460,7 @@ export type TrivuleFormConfig = {
   realTime?: boolean;
 };
 
-export type TrivuleHooks = 'init' | 'destroy';
+export type TrivuleHooks = 'before.init' | 'after.init' | 'destroy' | string;
 
 export type TrivuleFormHandler = (tr: TrivuleForm) => unknown;
 

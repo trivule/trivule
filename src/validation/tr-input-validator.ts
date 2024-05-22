@@ -18,10 +18,12 @@ export class TrivuleInputValidator
   extends AbstractInputralidator
   implements ITrivuleInput
 {
-  private hooks: Record<
-    TrivuleHooks,
-    ITrivuleInputCallback<ITrivuleInput, unknown>
-  > | null = null;
+  private hooks: Record<TrivuleHooks, ITrivuleInputCallback<ITrivuleInput>[]> =
+    {
+      'before.init': [],
+      'after.init': [],
+      destroy: [],
+    };
   _validateCount = 0;
   /**
    * Check if pass event should be emitted
@@ -332,36 +334,66 @@ export class TrivuleInputValidator
     this._type = type as InputType;
     return this;
   }
+  /**
+   * Sets a callback function to execute before running a rule on the Trivule input.
+   * @param rule The rule name for which the callback is set.
+   * @param callback The callback function to execute.
+   * @returns This Trivule input instance.
+   * @example
+   * const trivuleInput = new TrivuleInput();
+   * trivuleInput.beforeRunRule("required", (input) => { console.log("Before rule:", input); }); // Sets a callback to execute before running the "required" rule
+   */
   beforeRunRule(
     rule: string,
-    callback: ITrivuleInputCallback<ITrivuleInput, ITrivuleInput>,
+    callback: ITrivuleInputCallback<ITrivuleInput>,
   ): this {
+    this.addHook(`before.run.${rule}`, callback);
     return this;
   }
+
   afterRunRule(
     rule: string,
-    callback: ITrivuleInputCallback<ITrivuleInput, ITrivuleInput>,
+    callback: ITrivuleInputCallback<ITrivuleInput>,
   ): this {
+    this.addHook(`after.run.${rule}`, callback);
     return this;
   }
-  beforeInit(callback: ITrivuleInputCallback<ITrivuleInput, unknown>): void {}
+  /**
+   * Sets a callback function to execute before initializing the Trivule input.
+   * @param callback The callback function to execute.
+   * @example
+   * const trivuleInput = new TrivuleInput();
+   * trivuleInput.beforeInit((input) => { console.log("Before init:", input); }); // Sets a callback to execute before initializing the Trivule input
+   */
+  beforeInit(callback: ITrivuleInputCallback<ITrivuleInput>): this {
+    this.addHook('before.init', callback);
+    return this;
+  }
 
-  afterInit(callback: ITrivuleInputCallback<ITrivuleInput, unknown>): void {}
+  /**
+   * Sets a callback function to execute after initializing the Trivule input.
+   * @param callback The callback function to execute.
+   * @example
+   * const trivuleInput = new TrivuleInput();
+   * trivuleInput.afterInit((input) => { console.log("After init:", input); }); // Sets a callback to execute after initializing the Trivule input
+   */
+  afterInit(callback: ITrivuleInputCallback<ITrivuleInput>): this {
+    this.addHook('after.init', callback);
+    return this;
+  }
 
   onRuleFail(
     rule: string | Rule,
-    callback: ITrivuleInputCallback<ITrivuleInput, void>,
+    callback: ITrivuleInputCallback<ITrivuleInput>,
   ): this {
+    this.addHook(`after.fails.${rule}`, callback);
     return this;
   }
   onRulePass(
     rule: string | Rule,
-    callback: ITrivuleInputCallback<ITrivuleInput, void>,
+    callback: ITrivuleInputCallback<ITrivuleInput>,
   ): this {
-    const r = this.getRuleExecuted().find((r) => r.isNamed(rule));
-    if (!!r && r.passed) {
-      this.__call(callback, this);
-    }
+    this.addHook(`after.passes.${rule}`, callback);
     return this;
   }
 
@@ -472,5 +504,30 @@ export class TrivuleInputValidator
   }
   isRealTimeEnabled() {
     return this.realTime;
+  }
+  /**
+   * Adds a callback to be executed for a specific hook.
+   * @param hook The name of the hook.
+   * @param callback The callback function to be executed when the hook is triggered.
+   */
+  private addHook(
+    hook: TrivuleHooks,
+    callback: ITrivuleInputCallback<ITrivuleInput>,
+  ): void {
+    if (!this.hooks[hook]) {
+      this.hooks[hook] = [];
+    }
+    this.hooks[hook].push(callback);
+  }
+
+  /**
+   * Execute all callbacks for a specific hook.
+   * @param hook The name of the hook.
+   */
+  private executeHooks(hook: TrivuleHooks): void {
+    const callbacks = this.hooks[hook];
+    if (callbacks) {
+      callbacks.forEach((callback) => callback(this));
+    }
   }
 }
