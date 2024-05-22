@@ -1,4 +1,4 @@
-name: Unit tests
+name: Unit Tests and Linting
 
 on:
   push:
@@ -26,3 +26,7 @@ jobs:
 
       - name: Run tests
         run: npm test
+
+      - name: Find and fix problems
+        run: npm run lint
+
