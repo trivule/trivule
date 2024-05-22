@@ -1,4 +1,4 @@
-import { Rule, RuleCallBack, RuleType } from "../../contracts";
+import { Rule, RuleCallBack, RuleParam, RuleType } from "../../contracts";
 import { getRule } from "../../utils";
 import { TrMessage, TrRule } from "../tr-bag";
 
@@ -14,7 +14,7 @@ export abstract class BaseInputRule {
   }
 
   remove(rule: string): this {
-    let { ruleName } = getRule(rule);
+    const { ruleName } = getRule(rule);
     this.items = this.items.filter((item) => item.name !== ruleName);
     return this;
   }
@@ -42,7 +42,7 @@ export abstract class BaseInputRule {
   add(
     rule: string | Rule,
     message?: string | null,
-    param?: any,
+    param?: RuleParam,
     validate?: RuleCallBack,
     local?: string
   ) {
@@ -53,18 +53,18 @@ export abstract class BaseInputRule {
     return this;
   }
   has(rule: string | Rule): boolean {
-    let { ruleName } = getRule(rule);
+    const { ruleName } = getRule(rule);
     return this.items.some((item) => item.name === ruleName);
   }
 
   createRule(
     originaleRule: string,
     message?: string | null,
-    param?: any,
+    param?: RuleParam,
     validate?: RuleCallBack,
     local?: string
   ): RuleType {
-    let { ruleName, params } = getRule(originaleRule);
+    const { ruleName, params } = getRule(originaleRule);
 
     if (!message) {
       message = TrMessage.get(ruleName, local);
@@ -130,7 +130,7 @@ export abstract class BaseInputRule {
     for (let i = 0; i < rules.length; i++) {
       const originaleRule = rules[i];
       let message: string | null = null;
-      let { ruleName, params } = getRule(originaleRule);
+      const { ruleName, params } = getRule(originaleRule);
       if (Array.isArray(messages)) {
         const indexes = this.convertAcoladeGroupToArray(messages[i] ?? "");
         for (const ii of indexes) {
@@ -146,12 +146,12 @@ export abstract class BaseInputRule {
     return this;
   }
 
-  map(call: (r: RuleType, i: number) => any) {
+  map<T = unknown>(call: (r: RuleType, i: number) => T) {
     return this.items.map(call);
   }
 
   replace(outgoing: string, incoming: string) {
-    let { ruleName } = getRule(outgoing);
+    const { ruleName } = getRule(outgoing);
     const index = this.items.findIndex((r) => r.name === ruleName);
     if (index !== -1) {
       this.items[index] = this.createRule(incoming);

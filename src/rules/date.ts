@@ -11,13 +11,14 @@ import { now, spliteParam, throwEmptyArgsException } from "../utils";
  * ```
  */
 export const isDate: RuleCallBack = (input) => {
-  const djs = dayjs(new Date(input), undefined, true);
   if (!input) {
     return {
       passes: false,
       value: input,
     };
   }
+  const djs = dayjs(new Date(input.toString()), undefined, true);
+
   if (djs.isValid()) {
     return {
       passes: true,
@@ -56,7 +57,7 @@ export const dateBefore: RuleCallBack = (input, date) => {
     throw new Error("Pease provide a valid argument for dateBefore rule");
   }
   return {
-    passes: dayjs(input).isBefore(date),
+    passes: dayjs(input as string).isBefore(date),
     value: input,
   };
 };
@@ -92,7 +93,7 @@ export const dateAfter: RuleCallBack = (input, date) => {
     throw new Error("Pease provide a valid argument for dateAfter rule");
   }
   return {
-    passes: dayjs(input).isAfter(date),
+    passes: dayjs(input as string).isAfter(date),
     value: isDate(input).value,
   };
 };
@@ -111,7 +112,7 @@ export const dateBetween: RuleCallBack = (input, date) => {
   if (!date) {
     throwEmptyArgsException("dateBetween");
   }
-  const [startDate, endDate] = spliteParam(date ?? "");
+  const [startDate, endDate] = spliteParam(date as string);
   return {
     passes:
       dateAfter(input, startDate).passes && dateBefore(input, endDate).passes,
@@ -134,9 +135,15 @@ export const dateBetween: RuleCallBack = (input, date) => {
  * ```
  *
  */
-export const isTime: RuleCallBack = (input: string) => {
+export const isTime: RuleCallBack = (input) => {
+  if (typeof input !== "string") {
+    return {
+      passes: false,
+      value: input,
+    };
+  }
   // If the input does not have three parts separated by colons (H:m:i)
-  if (input.split(":").length < 3) {
+  if (input.toString().split(":").length < 3) {
     // Complete the input with ":00" until it has the format H:m:i
     while (input.split(":").length < 3) {
       input += ":00";

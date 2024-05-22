@@ -88,7 +88,7 @@ export abstract class AbstractInputralidator {
   abstract validate(): boolean;
 
   protected _setEvent(events?: string[]) {
-    const ev = tr_attr_get(this.inputElement, "events", "");
+    const ev = tr_attr_get<string | undefined>(this.inputElement, "events", "");
 
     if (ev) {
       this.param.events = ev.split("|").length
@@ -145,7 +145,9 @@ export abstract class AbstractInputralidator {
   set errors(value: string[] | Record<string, string>) {
     if (value) {
       if (!Array.isArray(value)) {
-        value = Object.keys(value).map((k) => (value as any)[k]);
+        value = Object.keys(value).map(
+          (k) => (value as Record<string, string>)[k]
+        );
       }
       this._errors = value ?? [];
     }
@@ -167,7 +169,7 @@ export abstract class AbstractInputralidator {
       selector = selector ?? this.parameter.getFeedbackSelector(this.name);
 
       do {
-        feedbackElement = !!selector
+        feedbackElement = selector
           ? getHTMLElementBySelector(selector, parentElement)
           : feedbackElement;
         if (feedbackElement) {
@@ -292,7 +294,7 @@ export abstract class AbstractInputralidator {
     selectorOrParams?: ValidatableInput | TrivuleInputParms,
     params?: TrivuleInputParms
   ) {
-    let selector: any = selectorOrParams;
+    let selector: unknown = selectorOrParams;
     if (
       typeof selectorOrParams === "object" &&
       selectorOrParams !== null &&
@@ -308,7 +310,7 @@ export abstract class AbstractInputralidator {
     if (!selector) {
       selector = params?.selector;
     }
-    this.setInputElement(selector)
+    this.setInputElement(selector as ValidatableInput)
       .setParams(params)
       .setMessageAttributeName()
       .setFeedbackElement();
@@ -317,9 +319,13 @@ export abstract class AbstractInputralidator {
 
     this._setEvent(params?.events);
 
-    let rules: any = tr_attr_get(this.inputElement, "rules", params?.rules);
+    const rules: string | string[] | Rule[] | undefined = tr_attr_get(
+      this.inputElement,
+      "rules",
+      params?.rules
+    );
     if (rules) {
-      let elMessages = tr_attr_get<string>(
+      const elMessages = tr_attr_get<string>(
         this.inputElement,
         "messages",
         this.param.messages
@@ -357,17 +363,18 @@ export abstract class AbstractInputralidator {
 
   commit() {
     if (this._type !== "file") {
-      this.inputElement.value = this._value as any;
+      this.inputElement.value = this._value as string;
     }
   }
 
-  protected eventToArray(value?: any) {
-    if (!value) {
+  protected eventToArray(value?: string | string[]) {
+    let values: string[] = [];
+    if (typeof value !== "string") {
       return [];
     }
     if (typeof value === "string") {
-      value = value.split("|");
+      values = value.split("|");
     }
-    return value.map((t: string) => t.trim());
+    return values.map((t: string) => t.trim());
   }
 }

@@ -13,14 +13,16 @@ export interface ITrConfig {
   realTime?: boolean;
 }
 
+export type RuleParam = string | number | undefined;
+
 export interface ITrivuleInputObject {
-  value: any;
+  value: InputValueType;
   name: string;
 }
 export type RuleType = {
   name: string;
   message?: string;
-  params?: any;
+  params?: RuleParam;
   validate?: RuleCallBack;
 };
 
@@ -33,7 +35,7 @@ export type InputType =
   | "date-local";
 export type ValidationState = {
   passes: boolean;
-  value: any;
+  value: unknown;
   alias?: Rule;
   type?: InputType;
   message?: string[];
@@ -120,7 +122,7 @@ export interface ITrivuleInput {
    * const trivuleInput = new TrivuleInput();
    * trivuleInput.setAttribute("data-custom", "value"); // Sets the custom attribute "data-custom" with the value "value"
    */
-  setAttribute(attrName: string, value: any): this;
+  setAttribute(attrName: string, value: string | Record<string, string>): this;
 
   /**
    * Removes an attribute from the Trivule input element.
@@ -150,7 +152,7 @@ export interface ITrivuleInput {
    * const trivuleInput = new TrivuleInput();
    * trivuleInput.setValue("example"); // Sets the value of the input element to "example"
    */
-  setValue(value: any): this;
+  setValue(value: InputValueType): this;
 
   /**
    * Sets the element used to display feedback messages for this input.
@@ -160,7 +162,7 @@ export interface ITrivuleInput {
    * const trivuleInput = new TrivuleInput();
    * trivuleInput.setFeedbackElement(".feedback"); // Sets the feedback element using CSS selector ".feedback"
    */
-  setFeedbackElement(selector: any): this;
+  setFeedbackElement(selector: CssSelector): this;
 
   /**
    * Sets the events that trigger validation of the input.
@@ -267,7 +269,7 @@ export interface ITrivuleInput {
    * const trivuleInput = new TrivuleInput();
    * trivuleInput.beforeInit((input) => { console.log("Before init:", input); }); // Sets a callback to execute before initializing the Trivule input
    */
-  beforeInit(callback: ITrivuleInputCallback<ITrivuleInput, any>): void;
+  beforeInit(callback: ITrivuleInputCallback<ITrivuleInput, unknown>): void;
 
   /**
    * Sets a callback function to execute after initializing the Trivule input.
@@ -276,7 +278,7 @@ export interface ITrivuleInput {
    * const trivuleInput = new TrivuleInput();
    * trivuleInput.afterInit((input) => { console.log("After init:", input); }); // Sets a callback to execute after initializing the Trivule input
    */
-  afterInit(callback: ITrivuleInputCallback<ITrivuleInput, any>): void;
+  afterInit(callback: ITrivuleInputCallback<ITrivuleInput, unknown>): void;
 
   /**
    * Sets a callback function to execute before running a rule on the Trivule input.
@@ -341,7 +343,7 @@ export interface ITrivuleInput {
   pushRule(rule: {
     rule: string;
     message?: string | null;
-    param?: any;
+    param?: RuleParam;
     validate?: RuleCallBack;
     local?: string;
   }): this;
@@ -352,14 +354,14 @@ export interface ITrivuleInput {
   prependRule(ule: {
     rule: string;
     message?: string | null;
-    param?: any;
+    param?: RuleParam;
     validate?: RuleCallBack;
     local?: string;
   }): this;
   appendRule(rule: {
     rule: string;
     message?: string | null;
-    param?: any;
+    param?: RuleParam;
     validate?: RuleCallBack;
     local?: string;
   }): this;
@@ -367,7 +369,7 @@ export interface ITrivuleInput {
     oldRule: string | Rule;
     newRule: string | Rule;
     message?: string | null;
-    param?: any;
+    param?: RuleParam;
     validate?: RuleCallBack | undefined;
     local?: string;
   }): this;
@@ -375,7 +377,7 @@ export interface ITrivuleInput {
     oldRule: string | Rule;
     newRule: string | Rule;
     message?: string | null;
-    param?: any;
+    param?: RuleParam;
     validate?: RuleCallBack | undefined;
     local?: string;
   }): this;
@@ -402,7 +404,7 @@ export interface InputChangeEvent {
  * Rule callback
  */
 export interface RuleCallBack {
-  (input: any, param?: any, type?: InputType): ValidationState;
+  (input: unknown, param?: RuleParam, type?: InputType): ValidationState;
 }
 
 export type RulesBag = {
@@ -448,7 +450,10 @@ export type InputValueType =
   | null
   | boolean
   | undefined
-  | FileList;
+  | FileList
+  | File[]
+  | Blob[]
+  | Record<string, unknown>;
 
 /**
  * An Element or null type
@@ -531,7 +536,7 @@ export type TrivuleInputParms = {
  *
  * @param event - The event object.
  */
-export type EventCallback = (event: Event) => void;
+export type EventCallback = (event: Event) => unknown;
 
 /**
  * Callback function for handling events.

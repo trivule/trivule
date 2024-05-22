@@ -6,11 +6,11 @@ import { CountryPhoneValidatorInterface } from "./country-phone-validator.interf
  * @author Claude Fassinou
  */
 export class CountryPhoneValidator implements CountryPhoneValidatorInterface {
-  protected _value: any;
+  protected _value: string;
   protected code?: string;
   protected attribute: string | null;
 
-  constructor(value: any, code?: string, attribute: string | null = null) {
+  constructor(value: string, code?: string, attribute: string | null = null) {
     this._value = this._trim(value);
     this.code = code;
     this.attribute = attribute;
@@ -75,7 +75,7 @@ export class CountryPhoneValidator implements CountryPhoneValidatorInterface {
       //For each code, call the corresponding function
       for (const code of codes) {
         const methodName = `validate${code}`;
-        const method = this[methodName as keyof this] as Function;
+        const method = this[methodName as keyof this];
         //Ensure that the method exists
         if (typeof method === "function") {
           results.push(method.call(this));
@@ -102,7 +102,7 @@ export class CountryPhoneValidator implements CountryPhoneValidatorInterface {
     return /^(\+|00|0)[0-9]{1,3}[0-9]{1,4}[0-9]{6,13}$/.test(this._value);
   }
 
-  private _trim(value: any): string {
+  private _trim(value: string): string {
     value = typeof value !== "string" ? value : String(value);
     return value.replace(/\s/g, "").replace(/-/g, "").replace(/\./g, "");
   }

@@ -91,9 +91,10 @@ export const maxRule: RuleCallBack = (input, max, type) => {
 export const integer: RuleCallBack = (input) => {
   const numberRule = isNumber(input);
   if (numberRule.passes) {
+    const passes = Number.isInteger(numberRule.value);
     return {
-      passes: Number.isInteger(numberRule.value),
-      value: parseInt(numberRule.value),
+      passes: passes,
+      value: passes ? parseInt(numberRule.value as string) : input,
       type: numberRule.type,
     };
   }
@@ -244,7 +245,7 @@ export const numberBetween: RuleCallBack = (input, params) => {
     };
   }
 
-  const [min, max] = spliteParam(params);
+  const [min, max] = spliteParam(params as string);
   const inputValue = Number(input);
 
   const passes = minRule(input, min).passes && maxRule(input, max).passes;

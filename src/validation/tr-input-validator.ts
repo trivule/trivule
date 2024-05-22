@@ -7,6 +7,7 @@ import {
   ITrivuleInputCallback,
   Rule,
   RuleCallBack,
+  RuleParam,
   TrivuleInputParms,
   ValidatableInput,
 } from "../contracts";
@@ -124,7 +125,7 @@ export class TrivuleInputValidator
    * @param e - The name of the custom event to emit.
    * @param data - The additional data to pass with the event.
    */
-  emit(e: string, data?: any): void {
+  emit(e: string, data?: unknown): void {
     const event = new CustomEvent(e, { detail: data });
     this.inputElement.dispatchEvent(event);
   }
@@ -206,7 +207,7 @@ export class TrivuleInputValidator
    * @param fn - The function to be called.
    * @param params - The parameters to be passed to the function.
    */
-  protected __call(fn?: CallableFunction, ...params: any) {
+  protected __call(fn?: CallableFunction, ...params: unknown[]) {
     if (typeof fn == "function") {
       fn(...params);
     }
@@ -334,7 +335,7 @@ export class TrivuleInputValidator
   pushRule(rule: {
     rule: string;
     message?: string | null;
-    param?: any;
+    param?: RuleParam;
     validate?: RuleCallBack;
     local?: string;
   }): this {
@@ -347,7 +348,7 @@ export class TrivuleInputValidator
   appendRule(rule: {
     rule: string;
     message?: string | null;
-    param?: any;
+    param?: RuleParam;
     validate?: RuleCallBack;
     local?: string;
   }): this {
@@ -363,7 +364,7 @@ export class TrivuleInputValidator
   prependRule(rule: {
     rule: string;
     message?: string | null;
-    param?: any;
+    param?: RuleParam;
     validate?: RuleCallBack;
     local?: string;
   }): this {
@@ -380,7 +381,7 @@ export class TrivuleInputValidator
     oldRule: string | Rule;
     newRule: string | Rule;
     message?: string | null;
-    param?: any;
+    param?: RuleParam;
     validate?: RuleCallBack | undefined;
     local?: string;
   }): this {
@@ -398,7 +399,7 @@ export class TrivuleInputValidator
     oldRule: string | Rule;
     newRule: string | Rule;
     message?: string | null;
-    param?: any;
+    param?: RuleParam;
     validate?: RuleCallBack | undefined;
     local?: string;
   }): this {

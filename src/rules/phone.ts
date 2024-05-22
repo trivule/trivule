@@ -14,8 +14,17 @@ import { CountryPhoneValidator } from "./phone/country-phone-validator";
  * ```
  */
 export const phone: RuleCallBack = (input, params) => {
+  if (typeof input !== "string") {
+    return {
+      passes: false,
+      value: input,
+    };
+  }
   return {
-    passes: new CountryPhoneValidator(input, params).validPhoneNumber(),
+    passes: new CountryPhoneValidator(
+      input,
+      params?.toString()
+    ).validPhoneNumber(),
     value: input,
   };
 };

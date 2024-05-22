@@ -1,4 +1,4 @@
-import { RuleCallBack } from "../contracts";
+import { InputValueType, RuleCallBack } from "../contracts";
 import {
   convertFileSize,
   explodeFileParam,
@@ -17,14 +17,14 @@ import {
  * ```
  */
 export const isFile: RuleCallBack = (value) => {
-  const _isFile = (f: any) => {
+  const _isFile = (f: unknown) => {
     return f instanceof File || f instanceof Blob || f instanceof FileList;
   };
   let passes = false;
   if (
     Array.isArray(value) &&
     !!value.length &&
-    value.every((f) => _isFile(value))
+    value.every((f) => _isFile(f))
   ) {
     passes = true;
   }
@@ -56,15 +56,18 @@ export const maxFileSize: RuleCallBack = (input, maxSize) => {
       passes: false,
     };
   }
-  let passes = files.every((input) => {
+  const passes = files.every((input) => {
     if (isFile(input).passes) {
       let numericValue, unit;
+      // eslint-disable-next-line no-useless-catch
       try {
-        [numericValue, unit] = explodeFileParam(maxSize) as any[];
+        [numericValue, unit] = explodeFileParam(maxSize as string);
       } catch (error) {
         throw error;
       }
-      return input.size <= convertFileSize(numericValue, unit);
+      return (
+        input.size <= convertFileSize(numericValue as number, unit as string)
+      );
     } else {
       return true;
     }
@@ -88,22 +91,31 @@ export const maxFileSize: RuleCallBack = (input, maxSize) => {
  * @throws An error if the minSize parameter is not a valid string in the format '<number><unit>'.
  */
 export const minFileSize: RuleCallBack = (input, minSize) => {
-  let files = fileToArray(input);
+  const files = fileToArray(input);
   if (!files.length) {
     return {
       value: input,
       passes: false,
     };
   }
-  let passses = files.every((input) => {
+  if (typeof minSize !== "number" && typeof minSize !== "string") {
+    throwEmptyArgsException(
+      "minFileSize",
+      "The minimum size rule argument is required"
+    );
+  }
+  const passses = files.every((input) => {
     if (isFile(input).passes) {
       let numericValue, unit;
+      // eslint-disable-next-line no-useless-catch
       try {
-        [numericValue, unit] = explodeFileParam(minSize) as any[];
+        [numericValue, unit] = explodeFileParam(minSize as string);
       } catch (error) {
         throw error;
       }
-      return input.size >= convertFileSize(numericValue, unit);
+      return (
+        input.size >= convertFileSize(numericValue as number, unit as string)
+      );
     } else {
       return false;
     }
@@ -125,15 +137,18 @@ export const minFileSize: RuleCallBack = (input, minSize) => {
  * ```
  */
 export const fileBetween: RuleCallBack = (input, min_max) => {
-  const [min, max] = spliteParam(min_max ?? "");
-  let files = fileToArray(input);
+  if (typeof min_max !== "string") {
+    throwEmptyArgsException("between");
+  }
+  const [min, max] = spliteParam(min_max as string);
+  const files = fileToArray(input);
   if (!files.length) {
     return {
       value: input,
       passes: false,
     };
   }
-  let passes = files.every((input) => {
+  const passes = files.every((input) => {
     return maxFileSize(input, max).passes && minFileSize(input, min).passes;
   });
   return {
@@ -153,12 +168,15 @@ export const fileBetween: RuleCallBack = (input, min_max) => {
  * <input type="file" data-tr-rules="mimes:.pdf"
  * ```
  */
-export const isMimes: RuleCallBack = (input, param: string) => {
-  if (!param) {
+export const isMimes: RuleCallBack = (input, param) => {
+  if (typeof param !== "string") {
+    throwEmptyArgsException("mimes");
+  }
+  if (param === "") {
     throwEmptyArgsException("mimes");
   }
 
-  let files = fileToArray(input);
+  const files = fileToArray(input);
   if (!files.length) {
     return {
       value: input,
@@ -166,13 +184,14 @@ export const isMimes: RuleCallBack = (input, param: string) => {
     };
   }
 
-  let passes = files.every((input) => {
+  const passes = files.every((input) => {
     if (isFile(input).passes) {
       const file = input as File;
 
-      const allowedMimes = param?.split(",").map((m) => m.trim()) ?? [];
+      const allowedMimes =
+        (param as string).split(",").map((m: string) => m.trim()) ?? [];
 
-      let passes = allowedMimes.some((allowedMime) => {
+      const passes = allowedMimes.some((allowedMime) => {
         allowedMime = allowedMime.replace(/\s/g, "");
         if (
           allowedMime === "*" ||

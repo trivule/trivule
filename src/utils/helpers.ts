@@ -1,4 +1,4 @@
-import { CssSelector, Rule } from "../contracts";
+import { CssSelector, Rule, RuleParam } from "../contracts";
 import { is_string, isFile } from "../rules";
 
 /**
@@ -8,13 +8,13 @@ import { is_string, isFile } from "../rules";
  */
 export const getRule = (
   rule: string
-): { ruleName: Rule; params: string | undefined } => {
+): { ruleName: Rule; params: RuleParam } => {
   const regex = /^(\w+):(.+)$/;
   const match = rule.match(regex);
 
   if (match) {
     const ruleName = match[1] as Rule;
-    let params = match[2];
+    const params = match[2];
     return { ruleName, params };
   } else {
     const [ruleName, params] = rule.split(":") as [Rule, string | undefined];
@@ -27,7 +27,10 @@ export const getRule = (
  * @param carac - The delimiter used to split the string. Defaults to ",".
  * @returns An array containing the split values.
  */
-export const spliteParam = (value?: string, carac: string = ","): any[] => {
+export const spliteParam = (
+  value: string,
+  carac: string = ","
+): RuleParam[] => {
   if (typeof value !== "string") {
     return [];
   }
@@ -40,8 +43,10 @@ export const spliteParam = (value?: string, carac: string = ","): any[] => {
  * @param fnc - The name of the function or rule.
  * @throws An error with a message indicating that arguments are empty.
  */
-export const throwEmptyArgsException = (fnc: string) => {
-  throw new Error(`Please provide <<${fnc}>> rule arguments`);
+export const throwEmptyArgsException = (fnc: string, message?: string) => {
+  throw new Error(
+    message ?? `Please provide a valid <<${fnc}>> rule arguments`
+  );
 };
 
 /**
@@ -62,8 +67,8 @@ export function now(): string {
  * @returns true if sub is a sub-object of obj, false otherwise.
  */
 export function isSubObject(
-  sub: Record<string, any>,
-  obj: Record<string, any>
+  sub: Record<string, unknown>,
+  obj: Record<string, unknown>
 ): boolean {
   if (typeof sub !== "object" || sub === null || Array.isArray(sub)) {
     return false;
@@ -82,38 +87,40 @@ export function isSubObject(
   return true;
 }
 
-export function dataset_get<T = any>(
+export function dataset_get<T = unknown>(
   element: HTMLElement | null | undefined,
   name: string,
-  defaults: any = null,
+  defaults: unknown = null,
   toJson = false
 ): T {
   if (!element) {
-    return defaults;
+    return defaults as T;
   }
   let value = element.getAttribute(`data-${name}`);
   if (!!value && toJson) {
     try {
       value = JSON.parse(value);
     } catch (error) {
-      return defaults;
+      return defaults as T;
     }
   }
 
-  return !!value || (is_string(value) && !!value?.length) ? value : defaults;
+  return (
+    !!value || (is_string(value) && !!value?.length) ? value : defaults
+  ) as T;
 }
 
-export function tr_attr_get<T = any>(
+export function tr_attr_get<T = unknown>(
   element: HTMLElement | null | undefined,
   name: string,
-  defaults: any = null,
+  defaults: unknown = null,
   toJson = false
 ): T {
   return dataset_get<T>(element, `tr-${name}`, defaults, toJson);
 }
 
-export function calculateFileSize(file: any, unit: string): number {
-  let files = fileToArray(file);
+export function calculateFileSize(file: unknown): number {
+  const files = fileToArray(file);
   let count = 0;
   if (!files.length) {
     return count;
@@ -131,7 +138,7 @@ export function calculateFileSize(file: any, unit: string): number {
   return count;
 }
 
-export function fileToArray(file: any) {
+export function fileToArray(file: unknown) {
   if (Array.isArray(file)) {
     return file;
   } else if (file instanceof FileList) {
@@ -153,8 +160,6 @@ export function convertFileSize(numericValue: number, unit: string) {
     numericValue = numericValue * 1024 * 1024;
   } else if (unit == "GB") {
     numericValue = numericValue * 1024 * 1024 * 1024;
-  } else {
-    numericValue = numericValue;
   }
   return numericValue;
 }
@@ -175,12 +180,12 @@ export function explodeFileParam(value: string) {
 
 export function getHTMLElementBySelector<T>(
   selector: CssSelector,
-  from?: any
+  from?: HTMLElement | null
 ): T | null {
   const parent = from ?? document;
   if (typeof selector === "string") {
     try {
-      return parent.querySelector(selector) as T;
+      return parent.querySelector<HTMLElement>(selector) as T;
     } catch (error) {
       return selector as T;
     }

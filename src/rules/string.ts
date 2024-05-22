@@ -13,9 +13,15 @@ import { ArgumentParser } from "../validation/utils/argument-parser";
  *  <input data-tr-rules="email"/>
  * ```
  */
-export const email: RuleCallBack = (input, ...options) => {
+export const email: RuleCallBack = (input) => {
   const emailRegex =
     /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  if (typeof input !== "string") {
+    return {
+      passes: false,
+      value: input,
+    };
+  }
   return {
     passes: emailRegex.test(input),
     value: input,
@@ -34,7 +40,7 @@ export const email: RuleCallBack = (input, ...options) => {
  */
 export const minlength: RuleCallBack = (input, length) => {
   return {
-    passes: is_string(input).passes ? input.length >= Number(length) : false,
+    passes: typeof input == "string" ? input.length >= Number(length) : false,
     value: input,
   };
 };
@@ -51,7 +57,7 @@ export const minlength: RuleCallBack = (input, length) => {
  */
 export const maxlength: RuleCallBack = (input, length) => {
   return {
-    passes: is_string(input).passes ? input.length <= Number(length) : true,
+    passes: typeof input == "string" ? input.length <= Number(length) : true,
     value: input,
   };
 };
@@ -60,7 +66,7 @@ export const maxlength: RuleCallBack = (input, length) => {
  *
  * @param val The input to check.
  */
-export const is_string: RuleCallBack = (val: any) => {
+export const is_string: RuleCallBack = (val) => {
   return {
     passes: typeof val === "string",
     value: val,
@@ -78,6 +84,12 @@ export const is_string: RuleCallBack = (val: any) => {
  */
 export const url: RuleCallBack = (input) => {
   const urlRegex = /^(ftp|http|https):\/\/[^ "]+$/;
+  if (typeof input !== "string") {
+    return {
+      passes: false,
+      value: input,
+    };
+  }
   return {
     passes: urlRegex.test(input),
     value: input,
@@ -93,7 +105,7 @@ export const url: RuleCallBack = (input) => {
  *  <input data-tr-rules="startWithUpper"/>
  * ```
  */
-export const startWithUpper: RuleCallBack = (input, local = "EN") => {
+export const startWithUpper: RuleCallBack = (input) => {
   if (typeof input !== "string" || input.length === 0) {
     return {
       passes: false,
@@ -149,15 +161,15 @@ export const startWith: RuleCallBack = (input, prefix) => {
   if (!prefix) {
     throwEmptyArgsException("startWith");
   }
-  const prefixes = spliteParam(prefix ?? "");
-  if (!is_string(input).passes) {
+  const prefixes = spliteParam(prefix as string);
+  if (typeof input !== "string") {
     return {
       passes: false,
       value: input,
     };
   }
   return {
-    passes: prefixes.some((p) => input.startsWith(p)),
+    passes: prefixes.some((p) => input.startsWith(p as string)),
     value: input,
   };
 };
@@ -177,15 +189,15 @@ export const endWith: RuleCallBack = (input, suffix) => {
   if (!suffix) {
     throwEmptyArgsException("endWith");
   }
-  const suffixes = spliteParam(suffix ?? "");
-  if (!is_string(input).passes) {
+  const suffixes = spliteParam(suffix as string);
+  if (typeof input !== "string") {
     return {
       passes: false,
       value: input,
     };
   }
   return {
-    passes: suffixes.some((s) => input.endsWith(s)),
+    passes: suffixes.some((s) => input.endsWith(s as string)),
     value: input,
   };
 };
@@ -205,15 +217,15 @@ export const contains: RuleCallBack = (input, substring) => {
   if (!substring) {
     throwEmptyArgsException("contains");
   }
-  const substrs = spliteParam(substring ?? "");
-  if (!is_string(input).passes) {
+  const substrs = spliteParam(substring as string);
+  if (typeof input !== "string") {
     return {
       passes: false,
       value: input,
     };
   }
-  let passes = substrs.every((substr) => {
-    return input.includes(new ArgumentParser(substr).replaceSpaces());
+  const passes = substrs.every((substr) => {
+    return input.includes(new ArgumentParser(substr as string).replaceSpaces());
   });
   return {
     passes: passes,
@@ -233,26 +245,23 @@ export const contains: RuleCallBack = (input, substring) => {
  * ```
  * @throws An exception with the message "The length rule argument must be an integer" if the `size` parameter is not an integer.
  */
-export const length: RuleCallBack = (input: any, size: any) => {
+export const length: RuleCallBack = (input, size) => {
+  let inputs: string[] = [];
   if (!isNumber(size).passes) {
     throw new Error("The length rule argument must be an integer");
   }
-  size = parseInt(size);
+  size = parseInt(size as string);
   if (typeof input == "string" || typeof input == "number") {
-    input = input.toString().split("");
-  } else if (
-    typeof input === "object" &&
-    input !== null &&
-    input !== undefined
-  ) {
-    input = [];
+    inputs = input.toString().split("");
+  } else {
+    return {
+      passes: false,
+      value: input,
+    };
   }
-  let passes = false;
-  if (Array.isArray(input)) {
-    passes = input.length === size;
-  }
+
   return {
-    passes: passes,
+    passes: inputs.length === size,
     value: input,
   };
 };
@@ -268,6 +277,12 @@ export const length: RuleCallBack = (input: any, size: any) => {
  * ```
  */
 export const passwordRule: RuleCallBack = (input) => {
+  if (typeof input !== "string") {
+    return {
+      passes: false,
+      value: input,
+    };
+  }
   const minLength = 8;
   const hasUppercase = /[A-Z]/.test(input);
   const hasLowercase = /[a-z]/.test(input);
@@ -304,7 +319,7 @@ export const passwordRule: RuleCallBack = (input) => {
  */
 export const startWithString: RuleCallBack = (input) => {
   if (
-    !is_string(input).passes ||
+    typeof input !== "string" ||
     input.length === 0 ||
     input.charAt(0) === " "
   ) {
@@ -330,7 +345,7 @@ export const startWithString: RuleCallBack = (input) => {
  * ```
  */
 export const endWithString: RuleCallBack = (input) => {
-  if (!is_string(input).passes || input.length === 0) {
+  if (typeof input !== "string" || input.length === 0) {
     return {
       passes: false,
       value: input,
@@ -377,11 +392,14 @@ export const containsLetter: RuleCallBack = (input) => {
  * ```
  */
 export const excludes: RuleCallBack = (input, excludedChars) => {
-  const chars = spliteParam(excludedChars);
+  if (typeof excludedChars !== "string" && typeof excludedChars !== "number") {
+    throwEmptyArgsException("excludes");
+  }
+  const chars = spliteParam(excludedChars as string);
   if (!chars.length) {
     throwEmptyArgsException("excludes");
   }
-  if (!is_string(input).passes) {
+  if (typeof input !== "string") {
     return {
       passes: true,
       value: input,
@@ -390,7 +408,7 @@ export const excludes: RuleCallBack = (input, excludedChars) => {
 
   return {
     passes: !chars.some((char) => {
-      return input.includes(new ArgumentParser(char).replaceSpaces());
+      return input.includes(new ArgumentParser(char as string).replaceSpaces());
     }),
     value: input,
   };
@@ -406,7 +424,13 @@ export const excludes: RuleCallBack = (input, excludedChars) => {
  *  <input data-tr-rules="upper"/>
  * ```
  */
-export const upper: RuleCallBack = (input, param?: string) => {
+export const upper: RuleCallBack = (input) => {
+  if (typeof input !== "string") {
+    return {
+      passes: false,
+      value: input,
+    };
+  }
   return {
     passes: input === input.toLocaleUpperCase(),
     value: input,
@@ -423,7 +447,13 @@ export const upper: RuleCallBack = (input, param?: string) => {
  *  <input data-tr-rules="lower"/>
  * ```
  */
-export const lower: RuleCallBack = (input: string, param?: string) => {
+export const lower: RuleCallBack = (input) => {
+  if (typeof input !== "string") {
+    return {
+      passes: false,
+      value: input,
+    };
+  }
   return {
     passes: input === input.toLocaleLowerCase(),
     value: input,
@@ -440,8 +470,11 @@ export const lower: RuleCallBack = (input: string, param?: string) => {
  * <input data-tr-rules="stringBetween:2,5" />
  * ```
  */
-export const stringBetween: RuleCallBack = (input: string, min_max) => {
-  const [min, max] = spliteParam(min_max ?? "");
+export const stringBetween: RuleCallBack = (input, min_max) => {
+  if (typeof min_max !== "string") {
+    throwEmptyArgsException("between");
+  }
+  const [min, max] = spliteParam(min_max as string);
   return {
     passes: minlength(input, min).passes && maxlength(input, max).passes,
     value: input,

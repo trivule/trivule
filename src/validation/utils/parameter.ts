@@ -20,8 +20,8 @@ export class TrParameter {
     this.feedbackSelector = selector;
     return this;
   }
-  getInputSelector(name: string) {
-    if (typeof this.inputSelector === "string") {
+  getInputSelector(name: unknown) {
+    if (typeof this.inputSelector === "string" && typeof name === "string") {
       if (name.trim().length < 1) {
         return null;
       }
