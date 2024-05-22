@@ -146,7 +146,21 @@ export class TrivuleForm {
     }
   }
   /**
-   * Disable submission  button on failed
+   * Disables the submit button and updates its CSS classes based on the configuration.
+   *
+   * This method checks if the submit button exists and, if the auto configuration is enabled,
+   * it disables the button by setting the 'disabled' attribute to 'true'. It also manages
+   * the CSS classes by removing the enabled classes and adding the disabled classes.
+   *
+   * @remarks
+   * - If the `auto` configuration is enabled, the submit button will be disabled.
+   * - The enabled and disabled CSS classes are managed by removing the enabled classes
+   *   and adding the disabled classes based on the configuration.
+   *
+   * @example
+   * ```typescript
+   * this.disableButton();
+   * ```
    */
   disableButton() {
     if (this.submitButton) {
@@ -174,7 +188,21 @@ export class TrivuleForm {
   }
 
   /**
-   * Enable submission button on success
+   * Enables the submit button and updates its CSS classes based on the configuration.
+   *
+   * This method checks if the submit button exists and removes the 'disabled' attribute,
+   * making the button clickable. It also manages the CSS classes by removing the disabled
+   * classes and adding the enabled classes.
+   *
+   * @remarks
+   * - The method will remove the 'disabled' attribute from the submit button, thus enabling it.
+   * - It manages the CSS classes by removing the disabled classes and adding the enabled classes
+   *   based on the configuration.
+   *
+   * @example
+   * ```typescript
+   * this.enableButton();
+   * ```
    */
   enableButton() {
     if (this.submitButton) {
@@ -201,7 +229,8 @@ export class TrivuleForm {
 
   /**
    * Retrieves all inputs from the form.
-   * @param strict - If true, returns objects with only name, value, and validation status of each input; otherwise, returns TrivuleInput instances.
+   *
+   * @param strict If true, returns objects with only the name, value, and validation status of each input; otherwise, returns `TrivuleInput` instances.
    * @returns An array of all inputs based on the strict flag.
    */
 
