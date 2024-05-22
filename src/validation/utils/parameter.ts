@@ -1,14 +1,14 @@
-import { CssSelector } from "../../contracts";
+import { CssSelector } from '../../contracts';
 
 export class TrParameter {
-  feedbackSelector: CssSelector | null = "[data-tr-feedback={name}]";
-  inputSelector: CssSelector | null = "[name={name}]";
+  feedbackSelector: CssSelector | null = '[data-tr-feedback={name}]';
+  inputSelector: CssSelector | null = '[name={name}]';
   getFeedbackSelector(name: string): CssSelector | null {
-    if (typeof this.feedbackSelector === "string") {
+    if (typeof this.feedbackSelector === 'string') {
       if (name.trim().length < 1) {
         return null;
       }
-      return this.feedbackSelector.replace("{name}", name);
+      return this.feedbackSelector.replace('{name}', name);
     }
     return this.feedbackSelector;
   }
@@ -21,11 +21,11 @@ export class TrParameter {
     return this;
   }
   getInputSelector(name: unknown) {
-    if (typeof this.inputSelector === "string" && typeof name === "string") {
+    if (typeof this.inputSelector === 'string' && typeof name === 'string') {
       if (name.trim().length < 1) {
         return null;
       }
-      return this.inputSelector.replace("{name}", name);
+      return this.inputSelector.replace('{name}', name);
     }
     return this.inputSelector;
   }

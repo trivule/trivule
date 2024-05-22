@@ -1,17 +1,17 @@
-import { TrivuleForm } from "./validation";
+import { TrivuleForm } from './validation';
 
-const trivuleForm = new TrivuleForm("form", {
-  feedbackSelector: ".invalid-feedback",
+const trivuleForm = new TrivuleForm('form', {
+  feedbackSelector: '.invalid-feedback',
 });
 
 trivuleForm.make([
   {
-    selector: "name",
-    rules: ["required", "minlength:5", "upper"],
+    selector: 'name',
+    rules: ['required', 'minlength:5', 'upper'],
   },
   {
-    selector: "age",
-    rules: ["int", "min:18"],
+    selector: 'age',
+    rules: ['int', 'min:18'],
   },
 ]);
 
@@ -21,11 +21,11 @@ trivuleForm.inputs(); //get all inputs
 
 trivuleForm.make({
   email: {
-    rules: ["required", "email", "maxlength:60"],
+    rules: ['required', 'email', 'maxlength:60'],
     messages: [
-      "The email cannot be empty",
-      "Please enter a valid email address",
-      "The email must be at least 60 characters",
+      'The email cannot be empty',
+      'Please enter a valid email address',
+      'The email must be at least 60 characters',
     ],
   },
 });
@@ -33,39 +33,39 @@ trivuleForm.make({
 trivuleForm.onUpdate((form) => {
   const percent = (form.validated().length / trivuleForm.all().length) * 100;
 
-  const nc = document.getElementById("number-increment");
+  const nc = document.getElementById('number-increment');
   if (nc) {
     nc.innerHTML = form.validated().length.toString();
   }
   if (percent < 34) {
     form
-      .removeClassFromNativeElement("warning")
-      .removeClassFromNativeElement("success")
-      .setClassToNativeElement("danger");
+      .removeClassFromNativeElement('warning')
+      .removeClassFromNativeElement('success')
+      .setClassToNativeElement('danger');
     return;
   }
   if (percent < 67) {
     form
-      .removeClassFromNativeElement("success")
-      .removeClassFromNativeElement("danger");
-    form.setClassToNativeElement("warning");
+      .removeClassFromNativeElement('success')
+      .removeClassFromNativeElement('danger');
+    form.setClassToNativeElement('warning');
     return;
   }
   if (percent == 100) {
     form
-      .removeClassFromNativeElement("warning")
-      .removeClassFromNativeElement("danger")
-      .setClassToNativeElement("success");
+      .removeClassFromNativeElement('warning')
+      .removeClassFromNativeElement('danger')
+      .setClassToNativeElement('success');
   }
 });
 
 trivuleForm.make({
   email: {
-    rules: ["required", "email", "maxlength:60"],
-    feedbackElement: ".invalid-feedback",
+    rules: ['required', 'email', 'maxlength:60'],
+    feedbackElement: '.invalid-feedback',
     realTime: false,
   },
 });
 
-const emailInput = trivuleForm.get("email");
-emailInput?.appendRule({ rule: "endWith:@gmail.com" });
+const emailInput = trivuleForm.get('email');
+emailInput?.appendRule({ rule: 'endWith:@gmail.com' });

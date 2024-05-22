@@ -1,11 +1,11 @@
-import { InputValueType, RuleCallBack } from "../contracts";
+import { InputValueType, RuleCallBack } from '../contracts';
 import {
   convertFileSize,
   explodeFileParam,
   fileToArray,
   spliteParam,
   throwEmptyArgsException,
-} from "../utils";
+} from '../utils';
 
 /**
  * Checks whether a given value is a `File` or `Blob` object.
@@ -98,10 +98,10 @@ export const minFileSize: RuleCallBack = (input, minSize) => {
       passes: false,
     };
   }
-  if (typeof minSize !== "number" && typeof minSize !== "string") {
+  if (typeof minSize !== 'number' && typeof minSize !== 'string') {
     throwEmptyArgsException(
-      "minFileSize",
-      "The minimum size rule argument is required"
+      'minFileSize',
+      'The minimum size rule argument is required',
     );
   }
   const passses = files.every((input) => {
@@ -137,8 +137,8 @@ export const minFileSize: RuleCallBack = (input, minSize) => {
  * ```
  */
 export const fileBetween: RuleCallBack = (input, min_max) => {
-  if (typeof min_max !== "string") {
-    throwEmptyArgsException("between");
+  if (typeof min_max !== 'string') {
+    throwEmptyArgsException('between');
   }
   const [min, max] = spliteParam(min_max as string);
   const files = fileToArray(input);
@@ -169,11 +169,11 @@ export const fileBetween: RuleCallBack = (input, min_max) => {
  * ```
  */
 export const isMimes: RuleCallBack = (input, param) => {
-  if (typeof param !== "string") {
-    throwEmptyArgsException("mimes");
+  if (typeof param !== 'string') {
+    throwEmptyArgsException('mimes');
   }
-  if (param === "") {
-    throwEmptyArgsException("mimes");
+  if (param === '') {
+    throwEmptyArgsException('mimes');
   }
 
   const files = fileToArray(input);
@@ -189,21 +189,21 @@ export const isMimes: RuleCallBack = (input, param) => {
       const file = input as File;
 
       const allowedMimes =
-        (param as string).split(",").map((m: string) => m.trim()) ?? [];
+        (param as string).split(',').map((m: string) => m.trim()) ?? [];
 
       const passes = allowedMimes.some((allowedMime) => {
-        allowedMime = allowedMime.replace(/\s/g, "");
+        allowedMime = allowedMime.replace(/\s/g, '');
         if (
-          allowedMime === "*" ||
+          allowedMime === '*' ||
           file.name.endsWith(allowedMime) ||
-          allowedMime == "" ||
-          file.type == ""
+          allowedMime == '' ||
+          file.type == ''
         ) {
           return true; // Wildcard (*) matches any MIME type
-        } else if (allowedMime.endsWith("/*")) {
+        } else if (allowedMime.endsWith('/*')) {
           const group = allowedMime.slice(0, -2); // Remove the trailing /*
           return file.type.startsWith(group);
-        } else if (allowedMime.startsWith("*.")) {
+        } else if (allowedMime.startsWith('*.')) {
           const ext = allowedMime.substring(2); // get extension without the "*."
           return file.name.endsWith(ext);
         } else {

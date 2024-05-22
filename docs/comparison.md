@@ -5,45 +5,41 @@ File validation in web forms is an essential step to ensure users upload appropr
 #### With jQuery Validate
 
 ```javascript
-$("form").validate({
-    rules: {
-        resume: {
-            required: true,
-            extension: "pdf",
-            filesize: 5242880, // 5MB
-        },
+$('form').validate({
+  rules: {
+    resume: {
+      required: true,
+      extension: 'pdf',
+      filesize: 5242880, // 5MB
     },
-    messages: {
-        resume: {
-            required: "Please select a PDF file.",
-            extension: "Please upload a PDF file only.",
-            filesize: "File size must be less than 5MB.",
-        },
+  },
+  messages: {
+    resume: {
+      required: 'Please select a PDF file.',
+      extension: 'Please upload a PDF file only.',
+      filesize: 'File size must be less than 5MB.',
     },
-    errorPlacement: function (error, element) {
-        var resumeError = $('[data-tr-feedback="resume"]');
-        resumeError.text(error.text());
-    },
+  },
+  errorPlacement: function (error, element) {
+    var resumeError = $('[data-tr-feedback="resume"]');
+    resumeError.text(error.text());
+  },
 });
 ```
 
 #### With Trivule
 
 ```javascript
-new TrivuleInput("input", {
-    rules: "required|mimes:.pdf|size:5242880B",
-    feedbackElement: "#resume",
-})
+new TrivuleInput('input', {
+  rules: 'required|mimes:.pdf|size:5242880B',
+  feedbackElement: '#resume',
+});
 ```
 
 #### Declarative Validation with Trivule
 
 ```html
-<input
-    name="resume"
-    type="file"
-    data-tr-rules="required|mimes:.pdf|size:5MB"
-/>
+<input name="resume" type="file" data-tr-rules="required|mimes:.pdf|size:5MB" />
 <div data-tr-feedback="resume"></div>
 ```
 

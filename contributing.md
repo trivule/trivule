@@ -35,6 +35,7 @@ We follow the [conventional commits specification](https://www.conventionalcommi
 - `docs`: changes into documentation, e.g. add usage example for the module..
 - `test`: adding or updating tests, e.g. add integration tests using detox.
 - `chore`: tooling changes, e.g. change CI config.
+
 ### Participate in discussions
 
 We also have ongoing discussions on various topics related to the project. We invite you to participate in these discussions and share your ideas, suggestions or comments. Your perspective and knowledge can help steer the project in the right direction.
@@ -48,4 +49,3 @@ We look forward to working with you and moving this project forward together. Th
 The development team
 
 ---
-

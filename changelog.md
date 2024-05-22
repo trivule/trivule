@@ -1,8 +1,10 @@
-
 ### Change Log
+
 #### v1.0.1
-  - Fix #19 (mimes rule)
-  - Fix file input rule and make them accept multiple files
+
+- Fix #19 (mimes rule)
+- Fix file input rule and make them accept multiple files
+
 #### v1.1.0 (2024-05-17)
 
 ##### Enhancements

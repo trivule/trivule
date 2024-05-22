@@ -1,7 +1,7 @@
-import { TrRule, TrMessage } from "./validation/tr-bag";
-import { TrLocal } from "./locale/tr-local";
-import { TrConfig } from "./tr.config";
-import { Trivule, TrBag, TrivuleForm, TrivuleInput } from "./validation";
+import { TrRule, TrMessage } from './validation/tr-bag';
+import { TrLocal } from './locale/tr-local';
+import { TrConfig } from './tr.config';
+import { Trivule, TrBag, TrivuleForm, TrivuleInput } from './validation';
 
 declare global {
   interface Window {
@@ -15,7 +15,7 @@ declare global {
   }
 }
 
-if (typeof window !== "undefined") {
+if (typeof window !== 'undefined') {
   window.TrivuleInput = window.TrivuleInput ?? TrivuleInput;
   window.TrivuleForm = window.TrivuleForm ?? TrivuleForm;
   window.Trivule = window.Trivule ?? Trivule;

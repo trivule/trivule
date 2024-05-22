@@ -1,6 +1,6 @@
-import { TrivuleInputParms } from "../contracts";
-import { TrivuleForm } from "./tr-form";
-import { TrivuleInput } from "./tr-input";
+import { TrivuleInputParms } from '../contracts';
+import { TrivuleForm } from './tr-form';
+import { TrivuleInput } from './tr-input';
 
 // Création d'une classe pour le formulaire
 class MyForm {
@@ -12,42 +12,42 @@ class MyForm {
   messageTextarea: HTMLTextAreaElement;
 
   constructor() {
-    this.form = document.createElement("form");
+    this.form = document.createElement('form');
 
-    this.nameInput = this.createInput("text", "name");
-    this.nameInput.setAttribute("data-tr-rules", "required");
-    this.ageInput = this.createInput("number", "age");
-    this.birthDayInput = this.createInput("date", "birthDay");
-    this.languageSelect = this.createSelect("language", [
-      "English",
-      "French",
-      "Spanish",
+    this.nameInput = this.createInput('text', 'name');
+    this.nameInput.setAttribute('data-tr-rules', 'required');
+    this.ageInput = this.createInput('number', 'age');
+    this.birthDayInput = this.createInput('date', 'birthDay');
+    this.languageSelect = this.createSelect('language', [
+      'English',
+      'French',
+      'Spanish',
     ]);
-    this.messageTextarea = this.createTextarea("message");
+    this.messageTextarea = this.createTextarea('message');
 
     this.form.append(
       this.nameInput,
       this.ageInput,
       this.birthDayInput,
       this.languageSelect,
-      this.messageTextarea
+      this.messageTextarea,
     );
 
     document.body.appendChild(this.form);
   }
 
   private createInput(type: string, name: string): HTMLInputElement {
-    const input = document.createElement("input");
+    const input = document.createElement('input');
     input.type = type;
     input.name = name;
     return input;
   }
 
   private createSelect(name: string, options: string[]): HTMLSelectElement {
-    const select = document.createElement("select");
+    const select = document.createElement('select');
     select.name = name;
     options.forEach((option) => {
-      const optionElement = document.createElement("option");
+      const optionElement = document.createElement('option');
       optionElement.value = option.toLowerCase();
       optionElement.textContent = option;
       select.appendChild(optionElement);
@@ -56,7 +56,7 @@ class MyForm {
   }
 
   private createTextarea(name: string): HTMLTextAreaElement {
-    const textarea = document.createElement("textarea");
+    const textarea = document.createElement('textarea');
     textarea.name = name;
     return textarea;
   }
@@ -65,55 +65,55 @@ class MyForm {
 // Instanciation du formulaire
 const formInstance = new MyForm();
 
-describe("TrivuleForm", () => {
+describe('TrivuleForm', () => {
   const trivuleForm = new TrivuleForm(formInstance.form, {
     realTime: false,
   });
-  test("Test get method", () => {
-    expect(trivuleForm.get("name")).toBeInstanceOf(TrivuleInput);
+  test('Test get method', () => {
+    expect(trivuleForm.get('name')).toBeInstanceOf(TrivuleInput);
   });
 
-  test("Test addTrivuleInput method", () => {
+  test('Test addTrivuleInput method', () => {
     const trInput = new TrivuleInput(formInstance.ageInput);
     trivuleForm.addTrivuleInput(trInput);
-    expect(trivuleForm.get("age")).toBe(trInput);
+    expect(trivuleForm.get('age')).toBe(trInput);
   });
 
-  test("Test the make method", () => {
+  test('Test the make method', () => {
     const trInput = new TrivuleInput(formInstance.ageInput);
     trivuleForm.addTrivuleInput(trInput);
     trivuleForm
       .make([
         {
-          rules: "required|between:18,40",
-          selector: "age", //The input name
+          rules: 'required|between:18,40',
+          selector: 'age', //The input name
         },
         {
-          rules: "required|date",
+          rules: 'required|date',
           selector: formInstance.birthDayInput,
         },
       ])
       .make({
         message: {
-          rules: "required|only:string",
+          rules: 'required|only:string',
         },
       });
 
-    const birthDayInput = trivuleForm.get("birthDay");
+    const birthDayInput = trivuleForm.get('birthDay');
     expect(birthDayInput?.is(formInstance.birthDayInput)).toBe(true);
-    const ageInput = trivuleForm.get("age");
-    expect(ageInput?.hasRule("between")).toBe(true);
-    const messageInput = trivuleForm.get("message");
-    expect(messageInput?.hasRule("only")).toBe(true);
+    const ageInput = trivuleForm.get('age');
+    expect(ageInput?.hasRule('between')).toBe(true);
+    const messageInput = trivuleForm.get('message');
+    expect(messageInput?.hasRule('only')).toBe(true);
   });
 
-  test("Test realTime feature", () => {
+  test('Test realTime feature', () => {
     trivuleForm.add({
-      rules: "required|between:18,40",
-      selector: "age", //The input name
+      rules: 'required|between:18,40',
+      selector: 'age', //The input name
     });
     expect(trivuleForm.isRealTimeEnabled()).toBe(false);
-    const ageInput = trivuleForm.get("age");
+    const ageInput = trivuleForm.get('age');
     expect(ageInput?.isRealTimeEnabled()).toBe(false);
     trivuleForm.enableRealTime();
     expect(ageInput?.isRealTimeEnabled()).toBe(true);

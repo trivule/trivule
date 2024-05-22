@@ -1,5 +1,5 @@
-import { RuleCallBack } from "../contracts";
-import { CountryPhoneValidator } from "./phone/country-phone-validator";
+import { RuleCallBack } from '../contracts';
+import { CountryPhoneValidator } from './phone/country-phone-validator';
 /**
  * This callback validates the format of the phone number.
  * Note that this may contain errors given the diversity of existing telephone numbers.
@@ -14,7 +14,7 @@ import { CountryPhoneValidator } from "./phone/country-phone-validator";
  * ```
  */
 export const phone: RuleCallBack = (input, params) => {
-  if (typeof input !== "string") {
+  if (typeof input !== 'string') {
     return {
       passes: false,
       value: input,
@@ -23,7 +23,7 @@ export const phone: RuleCallBack = (input, params) => {
   return {
     passes: new CountryPhoneValidator(
       input,
-      params?.toString()
+      params?.toString(),
     ).validPhoneNumber(),
     value: input,
   };

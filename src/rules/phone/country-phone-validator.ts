@@ -1,6 +1,6 @@
-import { isNumber } from "../number";
-import { is_string } from "../string";
-import { CountryPhoneValidatorInterface } from "./country-phone-validator.interface";
+import { isNumber } from '../number';
+import { is_string } from '../string';
+import { CountryPhoneValidatorInterface } from './country-phone-validator.interface';
 /**
  * This takes care of validating telephone numbers using a convention  validateCountryCode
  * @author Claude Fassinou
@@ -66,18 +66,18 @@ export class CountryPhoneValidator implements CountryPhoneValidatorInterface {
     if (!(is_string(this._value) || isNumber(this._value))) {
       return false;
     }
-    if (typeof this.code === "string") {
+    if (typeof this.code === 'string') {
       const results: boolean[] = [];
       //Parse code
       const codes = this.code
-        .split(",")
+        .split(',')
         .map((code) => code.trim().toUpperCase());
       //For each code, call the corresponding function
       for (const code of codes) {
         const methodName = `validate${code}`;
         const method = this[methodName as keyof this];
         //Ensure that the method exists
-        if (typeof method === "function") {
+        if (typeof method === 'function') {
           results.push(method.call(this));
         } else {
           throw new Error(`Validator method '${methodName}' does not exist.`);
@@ -103,7 +103,7 @@ export class CountryPhoneValidator implements CountryPhoneValidatorInterface {
   }
 
   private _trim(value: string): string {
-    value = typeof value !== "string" ? value : String(value);
-    return value.replace(/\s/g, "").replace(/-/g, "").replace(/\./g, "");
+    value = typeof value !== 'string' ? value : String(value);
+    return value.replace(/\s/g, '').replace(/-/g, '').replace(/\./g, '');
   }
 }

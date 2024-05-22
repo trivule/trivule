@@ -1,6 +1,6 @@
-import { Rule, RuleParam, RulesMessages } from "../contracts";
-import { TrLocal } from "../locale/tr-local";
-import { spliteParam } from "../utils";
+import { Rule, RuleParam, RulesMessages } from '../contracts';
+import { TrLocal } from '../locale/tr-local';
+import { spliteParam } from '../utils';
 
 export class TrMessages {
   protected messages!: RulesMessages;
@@ -23,7 +23,7 @@ export class TrMessages {
       if (this.messages[rule]) {
         messages.push(this.messages[rule]);
       } else {
-        messages.push("The input value is not valid");
+        messages.push('The input value is not valid');
       }
     }
 
@@ -34,13 +34,13 @@ export class TrMessages {
     attribute: string,
     rule: Rule,
     message: string,
-    oParams: RuleParam
+    oParams: RuleParam,
   ): string {
     const args = TrMessages._createParamObject(
-      spliteParam(oParams?.toString() ?? "")
+      spliteParam(oParams?.toString() ?? ''),
     );
 
-    args["field"] = attribute;
+    args['field'] = attribute;
     message = TrMessages._replace(message, args);
 
     return message;
@@ -64,14 +64,14 @@ export class TrMessages {
         if (argValue) {
           message = message.replace(
             `:${positionalAgrName}`,
-            argValue.toString()
+            argValue.toString(),
           );
         }
       }
     }
     // Remove the field from the replacements before inject them
-    delete replacements["field"];
-    return message.replace(/\.\.\.arg/, Object.values(replacements).join(", "));
+    delete replacements['field'];
+    return message.replace(/\.\.\.arg/, Object.values(replacements).join(', '));
   }
 
   static _createParamObject(params: RuleParam[]) {

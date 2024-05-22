@@ -1,6 +1,6 @@
-import { Rule, RuleCallBack, RuleParam, RuleType } from "../../contracts";
-import { getRule } from "../../utils";
-import { TrMessage, TrRule } from "../tr-bag";
+import { Rule, RuleCallBack, RuleParam, RuleType } from '../../contracts';
+import { getRule } from '../../utils';
+import { TrMessage, TrRule } from '../tr-bag';
 
 export abstract class BaseInputRule {
   items: RuleType[] = [];
@@ -8,7 +8,7 @@ export abstract class BaseInputRule {
   constructor(
     rules: Rule[] | string[] | Rule | string,
     messages?: string | string[] | Record<string, string> | null,
-    private local?: string
+    private local?: string,
   ) {
     this.set(rules, messages, local);
   }
@@ -44,7 +44,7 @@ export abstract class BaseInputRule {
     message?: string | null,
     param?: RuleParam,
     validate?: RuleCallBack,
-    local?: string
+    local?: string,
   ) {
     if (this.has(rule)) {
       this.remove(rule);
@@ -62,7 +62,7 @@ export abstract class BaseInputRule {
     message?: string | null,
     param?: RuleParam,
     validate?: RuleCallBack,
-    local?: string
+    local?: string,
   ): RuleType {
     const { ruleName, params } = getRule(originaleRule);
 
@@ -86,13 +86,13 @@ export abstract class BaseInputRule {
   }
 
   protected toArrayOrObject(
-    messages?: string | string[] | Record<string, string> | null
+    messages?: string | string[] | Record<string, string> | null,
   ) {
     return ((Array.isArray(messages)
       ? messages
-      : typeof messages === "string"
-      ? messages.split("|").map((r) => r.trim())
-      : messages) ?? []) as string[] | Record<string, string>;
+      : typeof messages === 'string'
+        ? messages.split('|').map((r) => r.trim())
+        : messages) ?? []) as string[] | Record<string, string>;
   }
 
   protected _sanitizeMessage(message?: string | null) {
@@ -101,7 +101,7 @@ export abstract class BaseInputRule {
     }
     const regex = /{(\d+(?:,\s*\d+)*)}/g;
     // Iterate through each message and replace the regex pattern with an empty string
-    return message.replace(regex, "");
+    return message.replace(regex, '');
   }
 
   /**
@@ -113,18 +113,18 @@ export abstract class BaseInputRule {
   convertAcoladeGroupToArray(str: string) {
     const regex = /{(\d+(?:,\s*\d+)*)}/g;
     const matches = [...str.matchAll(regex)].map((match) =>
-      match[1].split(",").map((num) => parseInt(num.trim()))
+      match[1].split(',').map((num) => parseInt(num.trim())),
     );
     return matches[0] ?? [];
   }
   set(
     rules: Rule[] | string[] | Rule | string,
     messages?: string | string[] | Record<string, string> | null,
-    local?: string
+    local?: string,
   ) {
     rules = Array.isArray(rules)
       ? rules.map((r) => r.trim())
-      : rules.split("|").map((r) => r.trim());
+      : rules.split('|').map((r) => r.trim());
     //Convert to object or array
     messages = this.toArrayOrObject(messages);
     for (let i = 0; i < rules.length; i++) {
@@ -132,12 +132,12 @@ export abstract class BaseInputRule {
       let message: string | null = null;
       const { ruleName, params } = getRule(originaleRule);
       if (Array.isArray(messages)) {
-        const indexes = this.convertAcoladeGroupToArray(messages[i] ?? "");
+        const indexes = this.convertAcoladeGroupToArray(messages[i] ?? '');
         for (const ii of indexes) {
           messages[ii] = this._sanitizeMessage(messages[i]) as string;
         }
         message = messages[i];
-      } else if (typeof messages === "object") {
+      } else if (typeof messages === 'object') {
         message = this._sanitizeMessage(messages[ruleName]) ?? null;
       }
 
