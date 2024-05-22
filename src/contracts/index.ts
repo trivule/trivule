@@ -125,16 +125,6 @@ export interface ITrivuleInput {
   setAttribute(attrName: string, value: string | Record<string, string>): this;
 
   /**
-   * Removes an attribute from the Trivule input element.
-   * @param attrName The name of the attribute to remove.
-   * @returns This Trivule input instance.
-   * @example
-   * const trivuleInput = new TrivuleInput();
-   * trivuleInput.removeAttribute("data-custom"); // Removes the custom attribute "data-custom"
-   */
-  removeAttribute(attrName: string): this;
-
-  /**
    * Sets whether the input should be automatically validated as the user interacts with it.
    * @param autoValidate A boolean value indicating whether auto-validation should be enabled.
    * @returns This Trivule input instance.

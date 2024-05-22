@@ -221,7 +221,51 @@ export class TrivuleInputValidator
     this.errors = errors ?? this.validator.getErrors();
   }
   reset(): void {}
-  removeAttribute(attrName: string): this {
+  /**
+   * Removes an attribute from the Trivule input element.
+   * @param attrName The name of the attribute to remove.
+   * @returns This Trivule input instance.
+   * @example
+   * const trivuleInput = new TrivuleInput();
+   * trivuleInput.removeNativeAttribute("data-custom"); // Removes the custom attribute "data-custom"
+   */
+  removeNativeAttribute(attrName: string): this {
+    this.inputElement?.removeAttribute(attrName);
+    return this;
+  }
+  /**
+   * Retrieves the value of a native attribute from the Trivule input element.
+   *
+   * This method attempts to get the attribute value using the `getAttribute` method
+   * of the underlying `inputElement`. If the element doesn't have the attribute,
+   * it returns `undefined`.
+   *
+   * @param attrName The name of the attribute to retrieve.
+   * @returns The value of the attribute if it exists, otherwise `undefined`.
+   */
+  getNativeAttribute(attrName: string) {
+    return this.inputElement?.getAttribute(attrName);
+  }
+  /**
+   * Checks if the Trivule input element has a specific native attribute.
+   * @param attrName The name of the attribute to check.
+   * @returns `true` if the attribute exists, `false` otherwise.
+   */
+  hasNativeAttribute(attrName: string): boolean {
+    return this.inputElement?.hasAttribute(attrName) ?? false;
+  }
+  /**
+   * Sets the value of a native attribute on the Trivule input element.
+   *
+   * This method uses the `setAttribute` method of the underlying `inputElement`
+   * to set the value of the specified attribute.
+   *
+   * @param attrName The name of the attribute to set.
+   * @param value The value to assign to the attribute.
+   * @returns This Trivule input instance for method chaining.
+   */
+  setNativeAttribute(attrName: string, value: string): this {
+    this.inputElement?.setAttribute(attrName, value);
     return this;
   }
   removeRule(rule: string): this {

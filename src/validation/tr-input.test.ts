@@ -253,4 +253,25 @@ describe('TrivuleInput', () => {
       messages: 'Please enter a valid data',
     });
   });
+
+  describe('Test remove, set, has, get nativeAttribute', () => {
+    const input = document.createElement('input');
+    input.setAttribute('data-tr-rules', 'required');
+    const trivuleInput = new TrivuleInput(input);
+
+    test('should remove the attribute', () => {
+      trivuleInput.removeNativeAttribute('data-tr-rules');
+      expect(input.hasAttribute('data-tr-rules')).toBe(false);
+      expect(trivuleInput.hasNativeAttribute('data-tr-rules')).toBe(false);
+    });
+    test('should set the attribute', () => {
+      trivuleInput.setNativeAttribute('data-tr-rules', 'test');
+      expect(input.hasAttribute('data-tr-rules')).toBe(true);
+      expect(trivuleInput.hasNativeAttribute('data-tr-rules')).toBe(true);
+    });
+    test('should get the attribute', () => {
+      trivuleInput.setNativeAttribute('data-tr-rules', 'test');
+      expect(trivuleInput.getNativeAttribute('data-tr-rules')).toBe('test');
+    });
+  });
 });
