@@ -150,26 +150,6 @@ export interface ITrivuleInput {
   failsOnfirst(boolean: boolean): this;
 
   /**
-   * Sets the valid attributes for the input element.
-   * @param attrs The valid attributes to be set.
-   * @returns This Trivule input instance.
-   * @example
-   * const trivuleInput = new TrivuleInput();
-   * trivuleInput.setValidAttributes({ required: "true", minlength: "5" }); // Sets valid attributes
-   */
-  setValidAttributes(attrs: Record<string, string>): this;
-
-  /**
-   * Sets the invalid attributes for the input element.
-   * @param attrs The invalid attributes to be set.
-   * @returns This Trivule input instance.
-   * @example
-   * const trivuleInput = new TrivuleInput();
-   * trivuleInput.setInvalidAttributes({ invalid: "true", minlength: "5" }); // Sets invalid attributes
-   */
-  setInvalidAttributes(attrs: Record<string, string>): this;
-
-  /**
    * Triggers the validation event manually.
    * @param boolean A boolean value indicating whether to trigger the validation event.
    * @returns This Trivule input instance.
@@ -511,6 +491,8 @@ export type TrivuleFormConfig = {
   feedbackSelector?: string;
   realTime?: boolean;
 };
+
+export type TrivuleHooks = 'init' | 'destroy';
 
 export type TrivuleFormHandler = (tr: TrivuleForm) => unknown;
 

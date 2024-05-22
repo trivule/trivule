@@ -8,6 +8,7 @@ import {
   Rule,
   RuleCallBack,
   RuleParam,
+  TrivuleHooks,
   TrivuleInputParms,
   ValidatableInput,
 } from '../contracts';
@@ -17,6 +18,10 @@ export class TrivuleInputValidator
   extends AbstractInputralidator
   implements ITrivuleInput
 {
+  private hooks: Record<
+    TrivuleHooks,
+    ITrivuleInputCallback<ITrivuleInput, unknown>
+  > | null = null;
   _validateCount = 0;
   /**
    * Check if pass event should be emitted
@@ -302,17 +307,12 @@ export class TrivuleInputValidator
     return this;
   }
 
-  setInvalidAttributes(attrs: Record<string, string>): this {
-    return this;
-  }
   setInvalidClass(className: string): this {
     this.invalidClass = className;
     return this;
   }
-  setValidAttributes(attrs: Record<string, string>): this {
-    return this;
-  }
-  setValue(value: any): this {
+
+  setValue(value: string): this {
     this.value = value;
     return this;
   }
@@ -325,6 +325,7 @@ export class TrivuleInputValidator
     return this;
   }
   setEventTriggers(eventTriggers: string | string[]): this {
+    this.events = this.eventToArray(eventTriggers);
     return this;
   }
   setType(type: string): this {
@@ -343,9 +344,9 @@ export class TrivuleInputValidator
   ): this {
     return this;
   }
-  beforeInit(callback: ITrivuleInputCallback<ITrivuleInput, any>): void {}
+  beforeInit(callback: ITrivuleInputCallback<ITrivuleInput, unknown>): void {}
 
-  afterInit(callback: ITrivuleInputCallback<ITrivuleInput, any>): void {}
+  afterInit(callback: ITrivuleInputCallback<ITrivuleInput, unknown>): void {}
 
   onRuleFail(
     rule: string | Rule,
@@ -365,6 +366,7 @@ export class TrivuleInputValidator
   }
 
   triggerValidateEvent(boolean: boolean = true): this {
+    this.emitOnValidate = boolean;
     return this;
   }
   failsOnfirst(boolean: boolean = true): this {
