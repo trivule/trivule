@@ -619,7 +619,7 @@ export class TrivuleForm {
     });
   }
 
-  each(call: ITrivuleInputCallback<TrivuleInput, unknown>) {
+  each(call: ITrivuleInputCallback<TrivuleInput>) {
     for (const name in this._trivuleInputs) {
       if (Object.prototype.hasOwnProperty.call(this._trivuleInputs, name)) {
         call(this._trivuleInputs[name]);
