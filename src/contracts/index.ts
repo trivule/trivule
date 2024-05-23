@@ -1,5 +1,5 @@
 import { Rule } from './rule';
-export type ITrivuleInputCallback<P, R> = (param: P) => R;
+export type ITrivuleInputCallback<P> = (param: P) => void;
 
 /**
  * Configuration interface
@@ -60,40 +60,6 @@ export interface ITrivuleInput {
   removeRule(rule: string): this;
 
   /**
-   * Removes multiple validation rules from the Trivule input.
-   * @param rules An array of rule names or a single rule name to be removed.
-   * @returns This Trivule input instance.
-   * @example
-   * const trivuleInput = new TrivuleInput();
-   * trivuleInput.removeRules(["required", "minlength"]); // Removes the "required" and "minlength" validation rules from the Trivule input
-   * @example
-   * const trivuleInput = new TrivuleInput();
-   * trivuleInput.removeRules("required"); // Removes the "required" validation rule from the Trivule input
-   */
-  removeRules(rules: string[] | string): this;
-
-  /**
-   * Assigns a specific error message to a validation rule for this Trivule input.
-   * @param message The error message to assign.
-   * @param rule The name of the rule for which the error message will be assigned.
-   * @returns This Trivule input instance.
-   * @example
-   * const trivuleInput = new TrivuleInput();
-   * trivuleInput.assignMessage("This field is required", "required"); // Assigns the error message to the "required" rule
-   */
-  setMessage(message: string, rule: string): this;
-
-  /**
-   * Assigns multiple error messages to validation rules for this Trivule input.
-   * @param messages An object containing rule names as keys and error messages as values.
-   * @returns This Trivule input instance.
-   * @example
-   * const trivuleInput = new TrivuleInput();
-   * trivuleInput.assignMessagesByRules({required: "This field is required", minlength: "Field length must be at least 5 characters"}); // Assigns error messages to the specified rules
-   */
-  setMessagesByRules(messages: Record<string, string>): this;
-
-  /**
    * Sets the CSS class to be applied when the input is considered invalid.
    * @param className The CSS class name to set.
    * @returns This Trivule input instance.
@@ -112,27 +78,6 @@ export interface ITrivuleInput {
    * trivuleInput.setValidClass("success"); // Sets the CSS class "success" to be applied when the input is valid
    */
   setValidClass(className: string): this;
-
-  /**
-   * Sets an attribute on the Trivule input element.
-   * @param attrName The name of the attribute to set.
-   * @param value The value to assign to the attribute.
-   * @returns This Trivule input instance.
-   * @example
-   * const trivuleInput = new TrivuleInput();
-   * trivuleInput.setAttribute("data-custom", "value"); // Sets the custom attribute "data-custom" with the value "value"
-   */
-  setAttribute(attrName: string, value: string | Record<string, string>): this;
-
-  /**
-   * Removes an attribute from the Trivule input element.
-   * @param attrName The name of the attribute to remove.
-   * @returns This Trivule input instance.
-   * @example
-   * const trivuleInput = new TrivuleInput();
-   * trivuleInput.removeAttribute("data-custom"); // Removes the custom attribute "data-custom"
-   */
-  removeAttribute(attrName: string): this;
 
   /**
    * Sets whether the input should be automatically validated as the user interacts with it.
@@ -205,26 +150,6 @@ export interface ITrivuleInput {
   failsOnfirst(boolean: boolean): this;
 
   /**
-   * Sets the valid attributes for the input element.
-   * @param attrs The valid attributes to be set.
-   * @returns This Trivule input instance.
-   * @example
-   * const trivuleInput = new TrivuleInput();
-   * trivuleInput.setValidAttributes({ required: "true", minlength: "5" }); // Sets valid attributes
-   */
-  setValidAttributes(attrs: Record<string, string>): this;
-
-  /**
-   * Sets the invalid attributes for the input element.
-   * @param attrs The invalid attributes to be set.
-   * @returns This Trivule input instance.
-   * @example
-   * const trivuleInput = new TrivuleInput();
-   * trivuleInput.setInvalidAttributes({ invalid: "true", minlength: "5" }); // Sets invalid attributes
-   */
-  setInvalidAttributes(attrs: Record<string, string>): this;
-
-  /**
    * Triggers the validation event manually.
    * @param boolean A boolean value indicating whether to trigger the validation event.
    * @returns This Trivule input instance.
@@ -246,7 +171,7 @@ export interface ITrivuleInput {
 
   onRuleFail(
     rule: string,
-    callback: ITrivuleInputCallback<ITrivuleInput, ITrivuleInput>,
+    callback: ITrivuleInputCallback<ITrivuleInput>,
   ): this;
   /**
    * Sets a callback function to execute when a rule passes for this input.
@@ -259,39 +184,7 @@ export interface ITrivuleInput {
    */
   onRulePass(
     rule: string | Rule,
-    callback: ITrivuleInputCallback<ITrivuleInput, ITrivuleInput>,
-  ): this;
-
-  /**
-   * Sets a callback function to execute before initializing the Trivule input.
-   * @param callback The callback function to execute.
-   * @example
-   * const trivuleInput = new TrivuleInput();
-   * trivuleInput.beforeInit((input) => { console.log("Before init:", input); }); // Sets a callback to execute before initializing the Trivule input
-   */
-  beforeInit(callback: ITrivuleInputCallback<ITrivuleInput, unknown>): void;
-
-  /**
-   * Sets a callback function to execute after initializing the Trivule input.
-   * @param callback The callback function to execute.
-   * @example
-   * const trivuleInput = new TrivuleInput();
-   * trivuleInput.afterInit((input) => { console.log("After init:", input); }); // Sets a callback to execute after initializing the Trivule input
-   */
-  afterInit(callback: ITrivuleInputCallback<ITrivuleInput, unknown>): void;
-
-  /**
-   * Sets a callback function to execute before running a rule on the Trivule input.
-   * @param rule The rule name for which the callback is set.
-   * @param callback The callback function to execute.
-   * @returns This Trivule input instance.
-   * @example
-   * const trivuleInput = new TrivuleInput();
-   * trivuleInput.beforeRunRule("required", (input) => { console.log("Before rule:", input); }); // Sets a callback to execute before running the "required" rule
-   */
-  beforeRunRule(
-    rule: string,
-    callback: ITrivuleInputCallback<ITrivuleInput, ITrivuleInput>,
+    callback: ITrivuleInputCallback<ITrivuleInput>,
   ): this;
 
   /**
@@ -566,6 +459,8 @@ export type TrivuleFormConfig = {
   feedbackSelector?: string;
   realTime?: boolean;
 };
+
+export type TrivuleHooks = 'before.init' | 'after.init' | 'destroy' | string;
 
 export type TrivuleFormHandler = (tr: TrivuleForm) => unknown;
 

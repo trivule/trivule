@@ -245,12 +245,47 @@ describe('TrivuleInput', () => {
     });
   });
 
-  describe('Test messages assignment by imperative mode', () => {
-    const body = document.createElement('div');
+  describe('$rules', () => {
     const inputElement = document.createElement('input');
-    body.appendChild(inputElement);
-    const validator = new TrivuleInput(inputElement, {
-      messages: 'Please enter a valid data',
+    const trivuleInput = new TrivuleInput(inputElement, {
+      rules: 'required',
+    });
+    test('should set the message', () => {
+      trivuleInput.$rules.assignMessage('required', 'test');
+      expect(trivuleInput.$rules.getMessage('required')).toBe('test');
+    });
+  });
+  describe('setRules', () => {
+    test('should set rules to the inputs', () => {
+      const input = document.createElement('input');
+      const trivuleInput = new TrivuleInput(input, {
+        rules: 'required',
+      });
+
+      trivuleInput.setRules('min:2').setRules(['email', 'digit:3']);
+      const received = trivuleInput.getRules().map((r) => r.name);
+      expect(received).toEqual(['required', 'min', 'email', 'digit']);
+    });
+  });
+
+  describe('Test remove, set, has, get nativeAttribute', () => {
+    const input = document.createElement('input');
+    input.setAttribute('data-tr-rules', 'required');
+    const trivuleInput = new TrivuleInput(input);
+
+    test('should remove the attribute', () => {
+      trivuleInput.removeNativeAttribute('data-tr-rules');
+      expect(input.hasAttribute('data-tr-rules')).toBe(false);
+      expect(trivuleInput.hasNativeAttribute('data-tr-rules')).toBe(false);
+    });
+    test('should set the attribute', () => {
+      trivuleInput.setNativeAttribute('data-tr-rules', 'test');
+      expect(input.hasAttribute('data-tr-rules')).toBe(true);
+      expect(trivuleInput.hasNativeAttribute('data-tr-rules')).toBe(true);
+    });
+    test('should get the attribute', () => {
+      trivuleInput.setNativeAttribute('data-tr-rules', 'test');
+      expect(trivuleInput.getNativeAttribute('data-tr-rules')).toBe('test');
     });
   });
 });
