@@ -233,7 +233,6 @@ export class TrivuleForm {
    * @param strict If true, returns objects with only the name, value, and validation status of each input; otherwise, returns `TrivuleInput` instances.
    * @returns An array of all inputs based on the strict flag.
    */
-
   inputs(strict = true): ITrivuleInputObject[] | TrivuleInput[] {
     if (strict) {
       return this.inputsToArray().map(this.getInputsMap);
@@ -245,7 +244,6 @@ export class TrivuleForm {
    * @param strict - If true, returns objects with only name, value, and validation status of each input; otherwise, returns TrivuleInput instances.
    * @returns An array of validated inputs based on the strict flag.
    */
-
   validated(strict: boolean = true): ITrivuleInputObject[] | TrivuleInput[] {
     if (strict) {
       return this.inputsToArray()
@@ -281,8 +279,8 @@ export class TrivuleForm {
   }
 
   /**
-   * Check if the form is valid
-   * @returns
+   * Validate each input and check if the form is valid.
+   * @returns A boolean indicating whether the form is valid after validating each input.
    */
   isValid() {
     const passes: boolean[] = [];
@@ -292,6 +290,10 @@ export class TrivuleForm {
     return passes.every((pass) => pass);
   }
 
+  /**
+   * Validate each input and check if the form is valid.
+   * @returns A boolean indicating whether the form is valid after validating each input.
+   */
   passes() {
     return this.isValid();
   }
@@ -597,6 +599,11 @@ export class TrivuleForm {
     }
   }
 
+  /**
+   *  The onInit(fn: TrivuleFormHandler) method registers a callback function to be executed
+   *  when the Trivule form is initialized. It listens for the 'tr.form.init'
+   * @param fn
+   */
   onInit(fn: TrivuleFormHandler) {
     this.on('tr.form.init', (event: Event) => {
       if (event instanceof CustomEvent) {
@@ -618,7 +625,10 @@ export class TrivuleForm {
       trInput.destroy();
     });
   }
-
+  /**
+   * Iterate over each TrivuleInput in the form and execute a callback function.
+   * @param call The callback function to be executed for each TrivuleInput.
+   */
   each(call: ITrivuleInputCallback<TrivuleInput>) {
     for (const name in this._trivuleInputs) {
       if (Object.prototype.hasOwnProperty.call(this._trivuleInputs, name)) {
@@ -626,15 +636,28 @@ export class TrivuleForm {
       }
     }
   }
+  /**
+   * Retrieve a TrivuleInput by name from the form.
+   * @param name The name of the TrivuleInput to retrieve.
+   * @returns The TrivuleInput corresponding to the name, or null if not found.
+   */
   get(name: string): TrivuleInput | null {
     return this._trivuleInputs[name] ?? null;
   }
+  /**
+   * Convert the TrivuleInput objects stored in _trivuleInputs to an array.
+   * @returns An array containing all TrivuleInput objects.
+   */
   inputsToArray() {
     return Object.keys(this._trivuleInputs).map(
       (key) => this._trivuleInputs[key],
     );
   }
-
+  /**
+   * Adds a TrivuleInput to the form and performs necessary updates.
+   * @param trInput The TrivuleInput instance to add to the form.
+   * @remarks This method handles the addition of a TrivuleInput to the form, including setting feedback elements, updating form state based on input validation, and triggering callbacks.
+   */
   addTrivuleInput(trInput: TrivuleInput) {
     const inputFeedback = trInput.getFeedbackElement();
     if (!inputFeedback) {
@@ -669,7 +692,33 @@ export class TrivuleForm {
     //Update the form when adding new fields
     this.valid = this.isValid();
   }
-
+  /**
+   * Validate an input with validation configurations.
+   * @example
+   * ```javascript
+   *      const trInput = new TrivuleInput(formInstance.ageInput);
+   *      trivuleForm.addTrivuleInput(trInput);
+   *      trivuleForm
+   *        .make([
+   *          {
+   *            rules: 'required|between:18,40',
+   *            selector: 'age', // The input name
+   *          },
+   *          {
+   *            rules: 'required|date',
+   *            selector: formInstance.birthDayInput,
+   *          },
+   *        ])
+   *        .make({
+   *          message: {
+   *            rules: 'required|only:string',
+   *          },
+   *        });
+   * ```
+   * @param input An object containing TrivuleInputParms or an array of TrivuleInputParms.
+   * @throws Error - If the provided input argument is not a valid object.
+   * @returns This TrivuleForm instance to allow chaining method calls.
+   */
   make(input: TrivuleInputParms[] | Record<string, TrivuleInputParms>) {
     if (typeof input != 'object' || input === undefined || input === null) {
       throw new Error('Invalid arguments passed to make method');
@@ -719,7 +768,15 @@ export class TrivuleForm {
 
     return this;
   }
-
+  /**
+   * Set the validity state of the TrivuleForm.
+   * @param boolean The boolean value indicating the validity state to set.
+   * @remarks This method updates the internal validity state of the TrivuleForm based on the provided boolean value.
+   * It increments the internal counter for the number of times this method is called.
+   * If the validity state changes to true (passed), it triggers the '_emitTrOnPassesEvent' event.
+   * If the validity state changes to false (failed), it triggers the '_emitTrOnFailsEvent' event.
+   * Finally, it emits a 'tr.form.validate' event with the updated TrivuleForm instance.
+   */
   set valid(boolean: boolean) {
     if (this._passed !== boolean) {
       this._passed = boolean;
@@ -732,36 +789,71 @@ export class TrivuleForm {
     }
     this.emit('tr.form.validate', this);
   }
-
+  /**
+   * Get the current validity state of the TrivuleForm.
+   * @returns The boolean value representing the current validity state of the TrivuleForm.
+   * @remarks This method retrieves and returns the current validity state of the TrivuleForm.
+   */
   get valid() {
     //this._passed = this.isValid();
     return this._passed;
   }
-
+  /**
+   * Retrieve all inputs from the form.
+   * @returns An array of all inputs in the form.
+   */
   all() {
     return this.inputs();
   }
-
+  /**
+   * Retrieve the native element associated with the form.
+   * @returns The container element of the form.
+   */
   getNativeElement() {
     return this.container;
   }
+  /**
+   * Set an attribute to the native element of the form.
+   * @param name The name of the attribute to set.
+   * @param value The value of the attribute to set (string or number).
+   * @returns The form instance for method chaining.
+   */
   setAttrToNativeElement(name: string, value: string | number) {
     this.container.setAttribute(name, value.toString());
     return this;
   }
+  /**
+   * Add a CSS class to the native element of the form.
+   * @param name The name of the CSS class to add.
+   * @returns The form instance for method chaining.
+   */
   setClassToNativeElement(name: string) {
     this.container.classList.add(name);
     return this;
   }
-
+  /**
+   * Remove a CSS class from the native element of the form.
+   * @param name The name of the CSS class to remove.
+   * @returns The form instance for method chaining.
+   */
   removeClassFromNativeElement(name: string) {
     this.container.classList.remove(name);
     return this;
   }
-
+  /**
+   * Add a TrivuleInput based on the provided parameters.
+   * @param params The parameters for creating the TrivuleInput.
+   * @returns The result of creating the TrivuleInput.
+   */
   add(params: TrivuleInputParms) {
     return this.make([params]);
   }
+  /**
+   * Enable real-time functionality for the form.
+   * Sets the configuration to enable real-time updates.
+   * Enables real-time functionality for each TrivuleInput in the form.
+   * @returns The form instance with real-time functionality enabled.
+   */
   enableRealTime() {
     this.config.realTime = true;
     this.each((tr) => {
@@ -770,6 +862,12 @@ export class TrivuleForm {
     });
     return this;
   }
+  /**
+   * Disable real-time functionality for the form.
+   * Sets the configuration to disable real-time updates.
+   * Disables real-time functionality for each TrivuleInput in the form.
+   * @returns The form instance with real-time functionality disabled.
+   */
   disableRealTime() {
     this.config.realTime = false;
     this.each((tr) => {
@@ -778,18 +876,27 @@ export class TrivuleForm {
     });
     return this;
   }
-
+  /**
+   * Check if real-time functionality is currently enabled for the form.
+   * @returns A boolean indicating whether real-time functionality is enabled.
+   */
   isRealTimeEnabled() {
     return this.config.realTime;
   }
-
+  /**
+   * Set the CSS class for valid inputs in the form.
+   * @param cls The CSS class to apply to valid inputs.
+   */
   setInputValidClass(cls: string) {
     this.config.validClass = cls;
     this.each((i) => {
       i.setValidClass(cls);
     });
   }
-
+  /**
+   * Set the CSS class for invalid inputs in the form.
+   * @param cls The CSS class to apply to invalid inputs.
+   */
   setInputInvalidClass(cls: string) {
     this.config.invalidClass = cls;
     this.each((i) => {
