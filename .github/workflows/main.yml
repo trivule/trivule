@@ -29,4 +29,3 @@ jobs:
 
       - name: Find and fix problems
         run: npm run lint
-
