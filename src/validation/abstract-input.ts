@@ -78,8 +78,9 @@ export abstract class AbstractInputralidator {
     this._init(selector, params);
   }
   /**
-   *Set input rules from input
-   * @returns
+   * Sets the validation rules for this Trivule input instance.
+   * @param rules The validation rules to set.
+   * @returns This Trivule input instance.
    */
   setRules(rules: Rule[] | string[] | Rule | string) {
     this.$rules.set(rules);
@@ -87,6 +88,23 @@ export abstract class AbstractInputralidator {
   }
 
   abstract validate(): boolean;
+
+  /**
+   * Sets the event listeners for the input element.
+   * This method determines which events will trigger the validation based on
+   * the parameters provided or the attributes defined on the input element.
+   *
+   * @param events - An optional array of event names to be used for validation. If not provided, it will use the default or attribute-defined events.
+   *
+   * @example
+   * // Setting custom events for validation
+   * trivuleInput._setEvent(['focus', 'blur']);
+   *
+   * // Using attribute-defined events
+   * const inputElement = document.querySelector('input[name="email"]');
+   * inputElement.setAttribute('data-tr-events', 'input|change');
+   * trivuleInput._setEvent();
+   */
 
   protected _setEvent(events?: string[]) {
     const ev = tr_attr_get<string | undefined>(this.inputElement, 'events', '');
@@ -156,9 +174,12 @@ export abstract class AbstractInputralidator {
   }
 
   /**
-   * Searches for the closest HTML element with a custom data attribute "data-tr-feedback"
-   * that is associated with the current input element, and stores a reference to it.
-   *
+   * Sets the element used to display feedback messages for this input.
+   * @param selector The CSS selector or element representing the feedback element.
+   * @returns This Trivule input instance.
+   * @example
+   * const trivuleInput = new TrivuleInput();
+   * trivuleInput.setFeedbackElement(".feedback"); // Sets the feedback element using CSS selector ".feedback"
    */
   setFeedbackElement(selector?: CssSelector | null) {
     let feedbackElement: HTMLElement | null = null;
@@ -259,9 +280,26 @@ export abstract class AbstractInputralidator {
     }
   }
 
+  /**
+   * Retrieves the current name of the input element.
+   * @returns
+   */
   getName() {
     return this.name;
   }
+  /**
+   * Retrieves the current value of the input element.
+   * This method handles different input types, such as 'file', and returns the appropriate value.
+   *
+   * @returns The value of the input element. For file inputs, it returns the selected files; for other inputs, it returns the element's value.
+   *
+   * @example
+   * // Getting the value of a text input
+   * const value = trivuleInput.getInputElemenyValue();
+   *
+   * // Getting the files of a file input
+   * const files = fileInput.getInputElemenyValue();
+   */
   getInputElemenyValue() {
     if (this.inputElement.type.toLowerCase() == 'file') {
       return this.inputElement.files ?? null;
@@ -270,10 +308,18 @@ export abstract class AbstractInputralidator {
     }
   }
 
+  /**
+   * Retrieves the current value of the input element.
+   * @returns
+   */
   getValue() {
     return this.getInputElemenyValue();
   }
-
+  /**
+   * Sets the parameters for this Trivule input instance.
+   * @param params The parameters to set.
+   * @returns This Trivule input instance.
+   */
   setParams(param?: TrivuleInputParms) {
     if (typeof param === 'object' && typeof param !== 'undefined') {
       this.param = { ...this.param, ...param };
@@ -285,12 +331,44 @@ export abstract class AbstractInputralidator {
 
     return this;
   }
-
+  /**
+   * Sets the attribute name used to identify feedback messages for this input.
+   * @param attrName The name of the attribute used for feedback messages.
+   * @returns This Trivule input instance.
+   * @example
+   * const trivuleInput = new TrivuleInput();
+   * trivuleInput.setMessageAttributeName("data-feedback"); // Sets the feedback message attribute to "data-feedback"
+   */
   setMessageAttributeName(attrName?: string): this {
     this.validator.attribute = attrName ?? this.name;
     return this;
   }
 
+  /**
+   * Initializes the Trivule input instance.
+   * This method sets up the input element, parameters, feedback element,
+   * validation rules, and event listeners for the input validation.
+   *
+   * @param selectorOrParams - Either a validatable input (e.g., a CSS selector or HTMLInputElement) or Trivule input parameters.
+   * @param params - Additional Trivule input parameters.
+   *
+   * @example
+   * // Initializing with a CSS selector and parameters
+   * const trivuleInput = new TrivuleInput();
+   * trivuleInput._init('#myInput', {
+   *   realTime: false,
+   *   feedbackSelector: '.invalid-feedback'
+   * });
+   *
+   * // Initializing with an HTMLInputElement
+   * const inputElement = document.querySelector('input[name="email"]');
+   * trivuleInput._init(inputElement, {
+   *   rules: ['required', 'email'],
+   *   messages: { required: 'Email is required', email: 'Invalid email address' }
+   * });
+   *
+   * @throws {Error} If the input element is not valid or cannot be found.
+   */
   private _init(
     selectorOrParams?: ValidatableInput | TrivuleInputParms,
     params?: TrivuleInputParms,
@@ -320,6 +398,7 @@ export abstract class AbstractInputralidator {
 
     this._setEvent(params?.events);
 
+    //Set the validation rules
     const rules: string | string[] | Rule[] | undefined = tr_attr_get(
       this.inputElement,
       'rules',
@@ -339,10 +418,18 @@ export abstract class AbstractInputralidator {
     this._type = (params?.type ?? 'text') as InputType;
     this.realTime = params?.realTime ?? this.realTime;
   }
+  /**
+   * Get the name of the attribute that
+   * will be displayed in the message instead of :field
+   * @returns
+   */
   getMessageAttributeName() {
     return this.validator.attribute;
   }
-
+  /**
+   * Retrieves the current rules messages.
+   * @returns
+   */
   get messages() {
     return this.rules.getMessages();
   }

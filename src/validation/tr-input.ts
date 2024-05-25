@@ -332,7 +332,6 @@ export class TrivuleInput extends AbstractInputralidator {
   filledErrors(errors?: string[]) {
     this.errors = errors ?? this.validator.getErrors();
   }
-  reset(): void {}
   /**
    * Removes an attribute from the Trivule input element.
    * @param attrName The name of the attribute to remove.
@@ -380,6 +379,14 @@ export class TrivuleInput extends AbstractInputralidator {
     this.inputElement?.setAttribute(attrName, value);
     return this;
   }
+  /**
+   * Removes a specific validation rule from the Trivule input.
+   * @param rule The name of the rule to be removed.
+   * @returns This Trivule input instance.
+   * @example
+   * const trivuleInput = new TrivuleInput();
+   * trivuleInput.removeRule("required"); // Removes the "required" validation rule from the Trivule input
+   */
   removeRule(rule: string): this {
     this.rules.remove(rule);
     return this;
@@ -413,28 +420,75 @@ export class TrivuleInput extends AbstractInputralidator {
     this.$rules.replace(oldRule, newRule);
     return this;
   }
-
+  /**
+   * Sets the CSS class to be applied when the input is considered invalid.
+   * @param className The CSS class name to set.
+   * @returns This Trivule input instance.
+   * @example
+   * const trivuleInput = new TrivuleInput();
+   * trivuleInput.setInvalidClass("error"); // Sets the CSS class "error" to be applied when the input is invalid
+   */
   setInvalidClass(className: string): this {
     this.invalidClass = className;
     return this;
   }
-
+  /**
+   * Sets the value of the input element.
+   * @param value The value to set for the input element.
+   * @returns This Trivule input instance.
+   * @example
+   * const trivuleInput = new TrivuleInput();
+   * trivuleInput.setValue("example"); // Sets the value of the input element to "example"
+   */
   setValue(value: string): this {
     this.value = value;
     return this;
   }
+  /**
+   * Sets the CSS class to be applied when the input is considered valid.
+   * @param className The CSS class name to set.
+   * @returns This Trivule input instance.
+   * @example
+   * const trivuleInput = new TrivuleInput();
+   * trivuleInput.setValidClass("success"); // Sets the CSS class "success" to be applied when the input is valid
+   */
   setValidClass(className: string): this {
     this.validClass = className;
     return this;
   }
+  /**
+   * Sets whether the input should be automatically validated as the user interacts with it.
+   * @param autoValidate A boolean value indicating whether auto-validation should be enabled.
+   * @returns This Trivule input instance.
+   * @example
+   * const trivuleInput = new TrivuleInput();
+   * trivuleInput.setAutoValidate(true); // Enables auto-validation for the input
+   */
   setAutoValidate(autoValidate: boolean): this {
     this.autoValidate = autoValidate;
     return this;
   }
+  /**
+   * Sets the events that trigger validation of the input.
+   * @param eventTriggers The event or events that trigger validation.
+   * @returns This Trivule input instance.
+   * @example
+   * const trivuleInput = new TrivuleInput();
+   * trivuleInput.setEventTriggers(["input", "change"]); // Sets events "input" and "change" to trigger validation
+   */
   setEventTriggers(eventTriggers: string | string[]): this {
     this.events = this.eventToArray(eventTriggers);
     return this;
   }
+
+  /**
+   * Sets the type of the input element.
+   * @param type The type of the input element.
+   * @returns This Trivule input instance.
+   * @example
+   * const trivuleInput = new TrivuleInput();
+   * trivuleInput.setType("email"); // Sets the type of the input element to "email"
+   */
   setType(type: string): this {
     this._type = type as InputType;
     return this;
@@ -455,7 +509,15 @@ export class TrivuleInput extends AbstractInputralidator {
     this.addHook(`before.run.${rule}`, callback);
     return this;
   }
-
+  /**
+   * Sets a callback function to execute after running a rule on the Trivule input.
+   * @param rule The rule name for which the callback is set.
+   * @param callback The callback function to execute.
+   * @returns This Trivule input instance.
+   * @example
+   * const trivuleInput = new TrivuleInput();
+   * trivuleInput.afterRunRule("required", (input) => { console.log("After rule:", input); }); // Sets a callback to execute after running the "required" rule
+   */
   afterRunRule(
     rule: string,
     callback: ITrivuleInputCallback<ITrivuleInput>,
@@ -486,7 +548,15 @@ export class TrivuleInput extends AbstractInputralidator {
     this.addHook('after.init', callback);
     return this;
   }
-
+  /**
+   * Sets a callback function to execute when a rule fails for this input.
+   * @param rule The rule name for which the callback is set.
+   * @param callback The callback function to execute.
+   * @returns This Trivule input instance.
+   * @example
+   * const trivuleInput = new TrivuleInput();
+   * trivuleInput.onRuleFail("required", (input) => { console.log("Rule failed:", input); }); // Sets a callback for when the "required" rule fails
+   */
   onRuleFail(
     rule: string | Rule,
     callback: ITrivuleInputCallback<ITrivuleInput>,
@@ -494,6 +564,15 @@ export class TrivuleInput extends AbstractInputralidator {
     this.addHook(`after.fails.${rule}`, callback);
     return this;
   }
+  /**
+   * Sets a callback function to execute when a rule passes for this input.
+   * @param rule The rule name for which the callback is set.
+   * @param callback The callback function to execute.
+   * @returns This Trivule input instance.
+   * @example
+   * const trivuleInput = new TrivuleInput();
+   * trivuleInput.onRulePass("required", (input) => { console.log("Rule passed:", input); }); // Sets a callback for when the "required" rule passes
+   */
   onRulePass(
     rule: string | Rule,
     callback: ITrivuleInputCallback<ITrivuleInput>,
@@ -501,21 +580,45 @@ export class TrivuleInput extends AbstractInputralidator {
     this.addHook(`after.passes.${rule}`, callback);
     return this;
   }
-
+  /**
+   * Triggers the validation event manually.
+   * @param boolean A boolean value indicating whether to trigger the validation event.
+   * @returns This Trivule input instance.
+   * @example
+   * const trivuleInput = new TrivuleInput();
+   * trivuleInput.triggerValidateEvent(true); // Manually triggers the validation event
+   */
   triggerValidateEvent(boolean: boolean = true): this {
     this.emitOnValidate = boolean;
     return this;
   }
+  /**
+   * Sets whether validation should stop after the first error is encountered.
+   * @param boolean A boolean value indicating whether validation should stop on the first error.
+   * @returns This Trivule input instance.
+   * @example
+   * const trivuleInput = new TrivuleInput();
+   * trivuleInput.failsOnfirst(true); // Stops validation on the first error encountered
+   */
   failsOnfirst(boolean: boolean = true): this {
     this.validator.failsOnFirst = boolean;
     return this;
   }
+  /**
+   * Gets the feedback element associated with this Trivule input.
+   * @returns The feedback element if set, otherwise null.
+   */
   getFeedbackElement() {
     return this.feedbackElement;
   }
   getRealTimeState() {
     return this.realTime;
   }
+  /**
+   * Pushes an additional validation rule to the existing rules for this Trivule input instance.
+   * @param rule The rule to add to.
+   * @returns This Trivule input instance.
+   */
   pushRule(rule: {
     rule: string;
     message?: string | null;
