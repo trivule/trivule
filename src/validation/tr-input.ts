@@ -717,16 +717,30 @@ export class TrivuleInput extends AbstractInputralidator {
     );
     return this;
   }
-
+  /**
+   * Enables real-time validation for the Trivule input. This means that validation will be performed on any event specified in the `events` property (e.g., 'change', 'blur', 'input') as the user interacts with the input.
+   *
+   * @returns This Trivule input instance.
+   */
   enableRealTime() {
     this.realTime = true;
     return this;
   }
+  /**
+   * Disables real-time validation for the Trivule input. Validation will only be triggered manually or on form submission.
+   *
+   * @returns This Trivule input instance.
+   */
   disableRealTime() {
     this.realTime = false;
     this.events = this._events;
     return this;
   }
+  /**
+   * Checks if real-time validation is enabled for the Trivule input.
+   *
+   * @returns True if real-time validation is enabled, false otherwise.
+   */
   isRealTimeEnabled() {
     return this.realTime;
   }

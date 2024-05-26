@@ -204,20 +204,35 @@ export class InputRule {
 
   insertBefore(
     existingRule: string,
-    newRule: string,
-    message?: string | null,
-    param?: RuleParam,
-    validate?: RuleCallBack,
-    local?: string,
+    incomming:
+      | {
+          rule: string;
+          message?: string | null;
+          param?: RuleParam;
+          validate?: RuleCallBack;
+          local?: string;
+        }
+      | string
+      | Rule,
   ): this {
     const existingIndex = this.items.findIndex(
       (item) => item.name === existingRule,
     );
     if (existingIndex !== -1) {
+      if (typeof incomming === 'string') {
+        this.items.splice(existingIndex, 0, this.createRule(incomming));
+        return this;
+      }
       this.items.splice(
         existingIndex,
         0,
-        this.createRule(newRule, message, param, validate, local),
+        this.createRule(
+          incomming.rule,
+          incomming.message,
+          incomming.param,
+          incomming.validate,
+          incomming.local,
+        ),
       );
     }
     return this;
@@ -225,18 +240,25 @@ export class InputRule {
 
   insertAfter(
     existingRule: string,
-    incomming: {
-      rule: string;
-      message?: string | null;
-      param?: RuleParam;
-      validate?: RuleCallBack;
-      local?: string;
-    },
+    incomming:
+      | {
+          rule: string;
+          message?: string | null;
+          param?: RuleParam;
+          validate?: RuleCallBack;
+          local?: string;
+        }
+      | string
+      | Rule,
   ): this {
     const existingIndex = this.items.findIndex(
       (item) => item.name === existingRule,
     );
     if (existingIndex !== -1) {
+      if (typeof incomming === 'string') {
+        this.items.splice(existingIndex + 1, 0, this.createRule(incomming));
+        return this;
+      }
       this.items.splice(
         existingIndex + 1,
         0,
