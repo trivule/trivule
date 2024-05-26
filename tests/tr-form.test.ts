@@ -132,8 +132,28 @@ describe('TrivuleForm', () => {
     test('Should return the native element with config', () => {
       trForm = new TrivuleForm({
         element: formInstance.form,
+        realTime: false,
       });
       expect(trForm.getNativeElement()).toBe(formInstance.form);
+      expect(trForm.isRealTimeEnabled()).toBe(false);
+    });
+    test('Should resole inputs validations', () => {
+      trForm = new TrivuleForm({
+        realTime: false,
+      });
+      trForm.make([
+        {
+          rules: 'required|between:18,40',
+          selector: 'age', //The input name
+        },
+        {
+          rules: 'required|date',
+          selector: formInstance.birthDayInput,
+        },
+      ]);
+      trForm.bind(formInstance.form);
+      expect(trForm.getNativeElement()).toBe(formInstance.form);
+      expect(trForm.isRealTimeEnabled()).toBe(false);
     });
     test('Should return the native element', () => {
       trForm = new TrivuleForm(formInstance.form);
