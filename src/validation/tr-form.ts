@@ -34,6 +34,8 @@ import { TrParameter } from './utils/parameter';
  * ```
  */
 export class TrivuleForm {
+  private _eventCallbacks: Record<string, EventCallback[]> = {};
+  private _registerInputs: Record<string | number, TrivuleInputParms> = {};
   private __calledCount = 0;
   /**
    * This status indicates the current state of the form
@@ -64,7 +66,7 @@ export class TrivuleForm {
   /**
    * The html form
    */
-  private container!: HTMLElement;
+  private container: HTMLElement | null = null;
 
   /**
    * The inputs rules
@@ -116,9 +118,9 @@ export class TrivuleForm {
     if (selector) {
       submitButton = getHTMLElementBySelector<HTMLButtonElement>(selector);
     }
-    if (!submitButton) {
+    if (!submitButton && this.container) {
       submitButton =
-        this.container.querySelector<HTMLButtonElement>('[data-tr-submit]');
+        this.container?.querySelector<HTMLButtonElement>('[data-tr-submit]');
     }
 
     if (submitButton) {
@@ -384,7 +386,11 @@ export class TrivuleForm {
    * Example: `(event) => { ... }`
    */
   on(e: string, fn: EventCallback): void {
-    this.container.addEventListener(e, fn);
+    if (this.container) {
+      this.container.addEventListener(e, fn);
+    } else {
+      this._addEvents(e, fn);
+    }
   }
 
   /**
@@ -395,7 +401,7 @@ export class TrivuleForm {
    */
   emit(e: string, data?: unknown): void {
     const event = new CustomEvent(e, { detail: data });
-    this.container.dispatchEvent(event);
+    this.container?.dispatchEvent(event);
   }
 
   /**
@@ -484,14 +490,15 @@ export class TrivuleForm {
   /**
    * Initializes TrivuleInputs for the form.
    */
-  private _initTrivuleInputs(trivuleInputs?: HTMLElement[]) {
-    this._trivuleInputs = {};
-    trivuleInputs = trivuleInputs
-      ? trivuleInputs
-      : Array.from(
-          this.container.querySelectorAll<HTMLElement>('[data-tr-rules]'),
-        );
-    trivuleInputs.forEach((el) => this.add({ selector: el }));
+  private _initTrivuleInputs(inputs?: HTMLElement[]) {
+    if (this.container) {
+      inputs = inputs
+        ? inputs
+        : Array.from(
+            this.container.querySelectorAll<HTMLElement>('[data-tr-rules]'),
+          );
+      inputs.forEach((el) => this.add({ selector: el }));
+    }
   }
 
   /**
@@ -524,11 +531,12 @@ export class TrivuleForm {
    */
   destroy(): void {
     // Remove event handlers
-    this.container.removeEventListener('submit', this._onSubmit);
-
-    this.destroyInputs();
-    this._trivuleInputs = {};
-    this.emit('tr.form.destroy');
+    if (this.container) {
+      this.container.removeEventListener('submit', this._onSubmit);
+      this.destroyInputs();
+      this._trivuleInputs = {};
+      this.emit('tr.form.destroy');
+    }
   }
 
   /**
@@ -731,49 +739,7 @@ export class TrivuleForm {
     if (typeof input != 'object' || input === undefined || input === null) {
       throw new Error('Invalid arguments passed to make method');
     }
-
-    transformToArray(input, (param, indexOrInputName) => {
-      let selector = param.selector;
-      if (param.selector) {
-        selector =
-          getHTMLElementBySelector(param.selector, this.container) ?? selector;
-      }
-      if (typeof selector === 'string') {
-        const s = this.parameter.getInputSelector(selector);
-
-        selector = getHTMLElementBySelector(s as string, this.container);
-      }
-
-      if (!selector) {
-        const name = isNumber(indexOrInputName).passes
-          ? undefined
-          : indexOrInputName;
-        if (name) {
-          const s = this.parameter.getInputSelector(name);
-          selector =
-            getHTMLElementBySelector(s as string, this.container) ?? undefined;
-        }
-      } else {
-        param.selector = undefined;
-      }
-
-      if (typeof param.realTime !== 'boolean') {
-        param.realTime = this.config.realTime;
-      }
-
-      param.validClass = param.validClass ?? this.config.validClass;
-      param.invalidClass = param.invalidClass ?? this.config.invalidClass;
-      param.autoValidate = param.autoValidate ?? this.config.auto;
-      param.feedbackElement =
-        param.feedbackElement ?? this.config.feedbackSelector;
-      param.selector = selector as ValidatableInput;
-
-      this.addTrivuleInput(
-        new TrivuleInput(selector as ValidatableInput, param, this.parameter),
-      );
-      return param;
-    });
-
+    transformToArray(input, this._bootInputs.bind(this));
     return this;
   }
   /**
@@ -827,7 +793,7 @@ export class TrivuleForm {
    * @returns The form instance for method chaining.
    */
   setAttrToNativeElement(name: string, value: string | number) {
-    this.container.setAttribute(name, value.toString());
+    this.container?.setAttribute(name, value.toString());
     return this;
   }
   /**
@@ -836,7 +802,7 @@ export class TrivuleForm {
    * @returns The form instance for method chaining.
    */
   setClassToNativeElement(name: string) {
-    this.container.classList.add(name);
+    this.container?.classList.add(name);
     return this;
   }
   /**
@@ -845,7 +811,7 @@ export class TrivuleForm {
    * @returns The form instance for method chaining.
    */
   removeClassFromNativeElement(name: string) {
-    this.container.classList.remove(name);
+    this.container?.classList.remove(name);
     return this;
   }
   /**
@@ -911,6 +877,23 @@ export class TrivuleForm {
       i.setInvalidClass(cls);
     });
   }
+  /**
+   * Binds the form element or selector to the TrivuleForm instance once it is an HTMLElement.
+   *
+   * @param form - The HTML form element or a CSS selector string for the form to bind.
+   * If an HTML element is provided, it directly binds the element. If a selector string is provided,
+   * it attempts to resolve the element using `getHTMLElementBySelector`.
+   *
+   * @example
+   * // Bind using an HTML element
+   * const formElement = document.getElementById("myForm") as HTMLFormElement;
+   * const trivuleForm = new TrivuleForm();
+   * trivuleForm.bind(formElement);
+   *
+   * // Bind using a CSS selector
+   * const trivuleForm = new TrivuleForm();
+   * trivuleForm.bind("#myForm");
+   */
 
   bind(form?: ValidatableForm) {
     if (this._wasBound) {
@@ -935,6 +918,84 @@ export class TrivuleForm {
       this._initTrivuleInputs();
       this.init();
       this._wasBound = true;
+      this._resolveInputValidation();
+      this._resolveEventListeners();
     }
+  }
+  private _addEvents(string: string, call: EventCallback): void {
+    if (!this._eventCallbacks[string]) {
+      this._eventCallbacks[string] = [call];
+    } else {
+      this._eventCallbacks[string].push(call);
+    }
+  }
+  /**
+   * Attaches event listeners to the container element.
+   *
+   * This method iterates over the `_eventCallbacks` object,
+   * where keys represent event names and *values are arrays of callback functions.
+   *
+   */
+  private _resolveEventListeners() {
+    if (this.container instanceof HTMLElement) {
+      transformToArray(this._eventCallbacks, (callbacks, event) => {
+        callbacks.forEach((fn) => {
+          this.container?.addEventListener(event as string, fn);
+        });
+      });
+    }
+  }
+
+  private _resolveInputValidation() {
+    transformToArray(this._registerInputs, this._bootInputs.bind(this));
+  }
+
+  private _bootInputs(
+    param: TrivuleInputParms,
+    indexOrInputName: string | number,
+  ) {
+    if (!this.container) {
+      this._registerInputs[indexOrInputName] = param;
+      return this;
+    }
+    let selector = param.selector;
+    if (param.selector) {
+      selector =
+        getHTMLElementBySelector(param.selector, this.container) ?? selector;
+    }
+    if (typeof selector === 'string') {
+      const s = this.parameter.getInputSelector(selector);
+
+      selector = getHTMLElementBySelector(s as string, this.container);
+    }
+
+    if (!selector) {
+      const name = isNumber(indexOrInputName).passes
+        ? undefined
+        : indexOrInputName;
+      if (name) {
+        const s = this.parameter.getInputSelector(name);
+        selector =
+          getHTMLElementBySelector(s as string, this.container) ?? undefined;
+      }
+    } else {
+      param.selector = undefined;
+    }
+
+    if (typeof param.realTime !== 'boolean') {
+      param.realTime = this.config.realTime;
+    }
+
+    param.validClass = param.validClass ?? this.config.validClass;
+    param.invalidClass = param.invalidClass ?? this.config.invalidClass;
+    param.autoValidate = param.autoValidate ?? this.config.auto;
+    param.feedbackElement =
+      param.feedbackElement ?? this.config.feedbackSelector;
+    param.selector = selector as ValidatableInput;
+
+    this.addTrivuleInput(
+      new TrivuleInput(selector as ValidatableInput, param, this.parameter),
+    );
+    return param;
   }
 }
