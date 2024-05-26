@@ -4,7 +4,7 @@
   "description": "Trivule is a user-friendly JavaScript library for HTML form validation.",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
-  "typings": "./types/src/index.d.ts",
+  "typings": "./types/index.d.ts",
   "files": [
     "./dist",
     "./types"
