@@ -717,42 +717,6 @@ export class TrivuleInput extends AbstractInputralidator {
     );
     return this;
   }
-  insertAfterRule(rule: {
-    oldRule: string | Rule;
-    newRule: string | Rule;
-    message?: string | null;
-    param?: RuleParam;
-    validate?: RuleCallBack | undefined;
-    local?: string;
-  }): this {
-    this.rules.insertAfter(
-      rule.oldRule,
-      rule.newRule,
-      rule.message,
-      rule.param,
-      rule.validate,
-      rule.local,
-    );
-    return this;
-  }
-  insertBeforeRule(rule: {
-    oldRule: string | Rule;
-    newRule: string | Rule;
-    message?: string | null;
-    param?: RuleParam;
-    validate?: RuleCallBack | undefined;
-    local?: string;
-  }): this {
-    this.rules.insertBefore(
-      rule.oldRule,
-      rule.newRule,
-      rule.message,
-      rule.param,
-      rule.validate,
-      rule.local,
-    );
-    return this;
-  }
 
   enableRealTime() {
     this.realTime = true;

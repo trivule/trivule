@@ -225,11 +225,13 @@ export class InputRule {
 
   insertAfter(
     existingRule: string,
-    newRule: string,
-    message?: string | null,
-    param?: RuleParam,
-    validate?: RuleCallBack,
-    local?: string,
+    incomming: {
+      rule: string;
+      message?: string | null;
+      param?: RuleParam;
+      validate?: RuleCallBack;
+      local?: string;
+    },
   ): this {
     const existingIndex = this.items.findIndex(
       (item) => item.name === existingRule,
@@ -238,7 +240,13 @@ export class InputRule {
       this.items.splice(
         existingIndex + 1,
         0,
-        this.createRule(newRule, message, param, validate, local),
+        this.createRule(
+          incomming.rule,
+          incomming.message,
+          incomming.param,
+          incomming.validate,
+          incomming.local,
+        ),
       );
     }
     return this;

@@ -50,29 +50,7 @@ export interface ITrivuleInput {
     validate?: RuleCallBack;
     local?: string;
   }): this;
-  appendRule(rule: {
-    rule: string;
-    message?: string | null;
-    param?: RuleParam;
-    validate?: RuleCallBack;
-    local?: string;
-  }): this;
-  insertBeforeRule(rule: {
-    oldRule: string | Rule;
-    newRule: string | Rule;
-    message?: string | null;
-    param?: RuleParam;
-    validate?: RuleCallBack | undefined;
-    local?: string;
-  }): this;
-  insertAfterRule(rule: {
-    oldRule: string | Rule;
-    newRule: string | Rule;
-    message?: string | null;
-    param?: RuleParam;
-    validate?: RuleCallBack | undefined;
-    local?: string;
-  }): this;
+
   getRules(): RuleType[];
 }
 
