@@ -629,9 +629,41 @@ export class TrivuleInput extends AbstractInputralidator {
     this.appendRule(rule);
     return this;
   }
+  /**
+   * Checks if the Trivule input has a specific validation rule.
+   *
+   * @param rule The name of the rule to check for.
+   * @returns  True if the rule exists, false otherwise.
+   *
+   * @example
+   * ```typescript
+   * console.log(trivuleInput.hasRule('required')); // Output: true
+   * ```
+   */
   hasRule(rule: string): boolean {
     return this.rules.has(rule);
   }
+  /**
+   * Appends a validation rule to the Trivule input.
+   *
+   * @param rule An object containing the validation rule definition.
+   *
+   * @property {string} rule.rule - The name of the validation rule.
+   * @property {string | null} [rule.message] - An optional custom message to display for the rule violation.
+   * @property {RuleParam} [rule.param] - An optional object containing additional parameters for the rule.
+   * @property {RuleCallBack} [rule.validate] - An optional custom validation function for the rule.
+   * @property {string} [rule.local] - An optional locale key to use for message translation.
+   *
+   * @returns This Trivule input instance.
+   *
+   * @example
+   * ```typescript
+   * trivuleInput.appendRule({
+   *   rule: 'required',
+   *   message: 'This field is required',
+   * });
+   * ```
+   */
   appendRule(rule: {
     rule: string;
     message?: string | null;
@@ -648,6 +680,27 @@ export class TrivuleInput extends AbstractInputralidator {
     );
     return this;
   }
+  /**
+   * Prepends a validation rule to the Trivule input.
+   *
+   * @param rule An object containing the validation rule definition.
+   *
+   * @property {string} rule.rule - The name of the validation rule.
+   * @property {string | null} [rule.message] - An optional custom message to display for the rule violation.
+   * @property {RuleParam} [rule.param] - An optional object containing additional parameters for the rule.
+   * @property {RuleCallBack} [rule.validate] - An optional custom validation function for the rule.
+   * @property {string} [rule.local] - An optional locale key to use for message translation.
+   *
+   * @returns This Trivule input instance.
+   *
+   * @example
+   * ```typescript
+   * trivuleInput.prependRule({
+   *   rule: 'required',
+   *   message: 'This field is required',
+   * });
+   * ```
+   */
   prependRule(rule: {
     rule: string;
     message?: string | null;
@@ -655,7 +708,7 @@ export class TrivuleInput extends AbstractInputralidator {
     validate?: RuleCallBack;
     local?: string;
   }): this {
-    this.rules.prepend(
+    this.$rules.prepend(
       rule.rule,
       rule.message,
       rule.param,
