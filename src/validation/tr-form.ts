@@ -106,10 +106,11 @@ export class TrivuleForm {
       this.bind(containerOrConfig);
       this.setConfig(config);
     } else {
+      config = config ?? containerOrConfig;
       if (config?.element) {
         this.bind(config.element);
       }
-      this.setConfig(config ?? containerOrConfig);
+      this.setConfig(config);
     }
   }
 
@@ -374,7 +375,6 @@ export class TrivuleForm {
     TrLocal.LANG = lang ?? TrLocal.DEFAULT_LANG;
 
     this.parameter.setFeedbackSelector(this.config.feedbackSelector);
-    this._syncRules();
   }
 
   /**
@@ -564,14 +564,6 @@ export class TrivuleForm {
       //Open _emitOnFails, for the next tr.form.fails event
       this._emitOnFails = true;
     }
-  }
-  /**
-   * Syncronize form rules with the global rules
-   */
-  private _syncRules() {
-    this._formValidator.getFormRules().forEach((r) => {
-      this.rule(r.ruleName, r.call.bind(this._formValidator));
-    });
   }
 
   /**

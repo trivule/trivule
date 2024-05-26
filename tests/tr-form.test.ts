@@ -118,4 +118,26 @@ describe('TrivuleForm', () => {
     trivuleForm.enableRealTime();
     expect(ageInput?.isRealTimeEnabled()).toBe(true);
   });
+  describe('bind', () => {
+    let trForm = new TrivuleForm();
+    test('Should return null for the native element', () => {
+      expect(trForm.getNativeElement()).toBeNull();
+    });
+
+    test('Should return the native element with ', () => {
+      trForm = new TrivuleForm();
+      trForm.bind(formInstance.form);
+      expect(trForm.getNativeElement()).toBe(formInstance.form);
+    });
+    test('Should return the native element with config', () => {
+      trForm = new TrivuleForm({
+        element: formInstance.form,
+      });
+      expect(trForm.getNativeElement()).toBe(formInstance.form);
+    });
+    test('Should return the native element', () => {
+      trForm = new TrivuleForm(formInstance.form);
+      expect(trForm.getNativeElement()).toBe(formInstance.form);
+    });
+  });
 });
