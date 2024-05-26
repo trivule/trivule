@@ -21,8 +21,16 @@
 
 This release provides significant improvements and new features aimed at enhancing the flexibility and performance of form validation. The introduction of real-time validation control, optional initialization, and imperative validation rules allows for a more customizable and efficient development experience. The addition of global feedback elements simplifies the process of providing user feedback on form validation.
 
-#### v1.2.0 (2024-05-26)
-- Add a $rules property to the TrivuleInput instance to expose advanced operations such as removing, adding or deleting a rule.
-- Add dynamic rule (callback on the InputRule)
-- Enhance conditonnal validation
-- Perfomance enhancement
+ #### v1.2.0 (2024-05-26)
+
+##### Enhancements
+
+- **Advanced Rule Management:** Added a `$rules` property to the `TrivuleInput` instance, allowing for advanced operations such as adding, removing, or modifying validation rules on-the-fly. This provides greater flexibility in managing form validation dynamically.
+- **Dynamic Rule Definition:** Introduced support for dynamic rules via callback functions in the `InputRule`, enabling more complex and context-aware validation logic.
+- **Conditional Validation Improvements:** Enhanced conditional validation mechanisms, making it easier to implement and manage complex validation scenarios based on various conditions.
+- **Performance Optimization:** Continued improvements to the performance of the validation system, ensuring faster validation checks and reduced overhead.
+
+##### Features
+
+- **Dynamic Rule Callbacks:** Implemented dynamic rule callbacks that allow validation logic to be defined and executed based on runtime conditions, providing more powerful and flexible validation capabilities.
+ 
