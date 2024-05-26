@@ -104,4 +104,7 @@
     "skipLibCheck": true, /* Skip type checking all .d.ts files. */
   },
    "exclude": ["**/*.test.ts"],
+   "typeAcquisition": {
+    "exclude": ["jest"]
+   }
 }
