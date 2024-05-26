@@ -1,4 +1,10 @@
-import { fileBetween, isFile, isMimes, maxFileSize, minFileSize } from '.';
+import {
+  fileBetween,
+  isFile,
+  isMimes,
+  maxFileSize,
+  minFileSize,
+} from '../../src/rules';
 // Mocking a File object for testing
 const createFile = (name: any, size: any) => {
   const file = new File([], name, { type: 'text/plain' });

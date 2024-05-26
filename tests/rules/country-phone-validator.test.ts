@@ -1,4 +1,4 @@
-import { CountryPhoneValidator } from './country-phone-validator';
+import { CountryPhoneValidator } from '../../src/rules/phone/country-phone-validator';
 
 describe('CountryPhoneValidator', () => {
   it('should validate a phone number in Togo', () => {

@@ -1,6 +1,6 @@
-import { TrivuleInputParms } from '../contracts';
-import { TrivuleForm } from './tr-form';
-import { TrivuleInput } from './tr-input';
+import { TrivuleInputParms } from '../src/contracts';
+import { TrivuleForm } from '../src/validation/tr-form';
+import { TrivuleInput } from '../src/validation/tr-input';
 
 // Création d'une classe pour le formulaire
 class MyForm {

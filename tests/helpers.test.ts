@@ -1,4 +1,4 @@
-import { dataset_get } from './helpers';
+import { dataset_get } from '../src/utils/helpers';
 
 describe('dataset_get function', () => {
   test('should return defaults if element is null or undefined', () => {

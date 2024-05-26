@@ -1,4 +1,4 @@
-import { TrivuleInput } from './tr-input';
+import { TrivuleInput } from '../src/validation/tr-input';
 
 describe('TrivuleInput', () => {
   describe('getRules', () => {

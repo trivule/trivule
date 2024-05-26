@@ -1,4 +1,4 @@
-import { contains, endWith, startWith, length } from '.';
+import { contains, endWith, startWith, length } from '../../src/rules';
 import {
   email,
   excludes,
@@ -11,7 +11,7 @@ import {
   startWithUpper,
   stringBetween,
   url,
-} from './string';
+} from '../../src/rules/string';
 //Email
 describe('email rule', () => {
   test('should return true for valid email', () => {

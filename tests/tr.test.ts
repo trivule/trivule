@@ -1,4 +1,4 @@
-import { TrBag } from './tr-bag';
+import { TrBag } from '../src/validation/tr-bag';
 
 describe('TrBag', () => {
   it('should return true if a rule exists in the rules bag', () => {

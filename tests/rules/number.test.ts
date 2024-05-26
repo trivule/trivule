@@ -7,7 +7,7 @@ import {
   minRule,
   modulo,
   numberBetween,
-} from './number';
+} from '../../src/rules/number';
 
 test('minRule should return true when input is greater than or equal to min', () => {
   // Test with a string input

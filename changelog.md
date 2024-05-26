@@ -21,6 +21,8 @@
 
 This release provides significant improvements and new features aimed at enhancing the flexibility and performance of form validation. The introduction of real-time validation control, optional initialization, and imperative validation rules allows for a more customizable and efficient development experience. The addition of global feedback elements simplifies the process of providing user feedback on form validation.
 
-#### v1.2.0
-- Add a $rules property to the TrivuleInput instance to enable advanced operations such as removing, adding or deleting a rule.
+#### v1.2.0 (2024-05-26)
+- Add a $rules property to the TrivuleInput instance to expose advanced operations such as removing, adding or deleting a rule.
+- Add dynamic rule (callback on the InputRule)
+- Enhance conditonnal validation
 - Perfomance enhancement

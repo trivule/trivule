@@ -31,7 +31,6 @@ trivuleForm.failed(); // Get only failed inputs
 trivuleForm.inputs(); //get all inputs
 
 trivuleForm.onUpdate((form) => {
-  console.log(form);
   const percent = (form.validated().length / trivuleForm.all().length) * 100;
 
   const nc = document.getElementById('number-increment');
@@ -61,5 +60,10 @@ trivuleForm.onUpdate((form) => {
 });
 
 const emailInput = trivuleForm.get('email');
-emailInput?.appendRule({ rule: 'endWith:@gmail.com' });
-console.log(emailInput);
+if (emailInput) {
+  emailInput.appendRule({ rule: 'endWith:@gmail.com' });
+  emailInput.$rules.insertBefore('endWith', {
+    rule: 'startWith:contact',
+  });
+  emailInput.$rules.assignMessage('startWith', 'Start with contact');
+}

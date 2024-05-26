@@ -1,5 +1,5 @@
-import { isSubObject } from '../utils';
-import { TrLocal } from './tr-local';
+import { isSubObject } from '../../src/utils';
+import { TrLocal } from '../../src/locale/tr-local';
 
 describe('TrLocal', () => {
   beforeEach(() => {

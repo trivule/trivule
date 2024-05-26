@@ -1,5 +1,5 @@
-import { TrValidation } from '.';
-import { InputRule } from '../messages';
+import { TrValidation } from '../src/validation';
+import { InputRule } from '../src/messages';
 
 describe('TrValidation', () => {
   let trvalidation: TrValidation;

@@ -1,4 +1,4 @@
-import { TrMessages } from '.';
+import { TrMessages } from '../../src/messages';
 
 describe('TrMessages', () => {
   it('should get messages for valid rules', () => {

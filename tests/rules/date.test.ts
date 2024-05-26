@@ -1,4 +1,9 @@
-import { dateAfter, dateBefore, dateBetween, isDate } from './date';
+import {
+  dateAfter,
+  dateBefore,
+  dateBetween,
+  isDate,
+} from '../../src/rules/date';
 
 describe('isDate', () => {
   test('should return true for a valid date in UTC format', () => {
