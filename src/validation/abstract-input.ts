@@ -51,7 +51,6 @@ export abstract class AbstractInputralidator {
     emitEvent: true,
     autoValidate: true,
     failsOnfirst: true,
-    events: ['blur', 'change', 'input'],
     validClass: '',
     invalidClass: 'is-invalid',
     type: 'text',
@@ -107,12 +106,14 @@ export abstract class AbstractInputralidator {
    */
 
   protected _setEvent(events?: string[]) {
-    const ev = tr_attr_get<string | undefined>(this.inputElement, 'events', '');
+    const ev = tr_attr_get<string | undefined>(
+      this.inputElement,
+      'events',
+      undefined,
+    );
 
     if (ev) {
-      this.param.events = ev.split('|').length
-        ? ev.split('|')
-        : this.param.events;
+      events = ev.split('|').length ? ev.split('|') : this.param.events;
     }
 
     this.events = this.eventToArray(events ?? this.param.events);
@@ -396,7 +397,7 @@ export abstract class AbstractInputralidator {
     this.setShowMessage();
     this._setTrValidationClass();
 
-    this._setEvent(params?.events);
+    this._setEvent(params?.events ?? this._events);
 
     //Set the validation rules
     const rules: string | string[] | Rule[] | undefined = tr_attr_get(
@@ -458,7 +459,10 @@ export abstract class AbstractInputralidator {
   protected eventToArray(value?: string | string[]) {
     let values: string[] = [];
     if (typeof value !== 'string') {
-      return [];
+      if (!Array.isArray(value)) {
+        return [];
+      }
+      values = value;
     }
     if (typeof value === 'string') {
       values = value.split('|');

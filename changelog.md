@@ -20,3 +20,7 @@
 - **Enhanced Event Handling:** Updated methods `onFails`, `onPasses`, and `onUpdate` for `TrivuleInput` and `TrivuleForm` to improve event handling and customization.
 
 This release provides significant improvements and new features aimed at enhancing the flexibility and performance of form validation. The introduction of real-time validation control, optional initialization, and imperative validation rules allows for a more customizable and efficient development experience. The addition of global feedback elements simplifies the process of providing user feedback on form validation.
+
+#### v1.2.0
+- Add a $rules property to the TrivuleInput instance to enable advanced operations such as removing, adding or deleting a rule.
+- Perfomance enhancement

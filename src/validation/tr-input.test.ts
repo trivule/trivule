@@ -288,4 +288,25 @@ describe('TrivuleInput', () => {
       expect(trivuleInput.getNativeAttribute('data-tr-rules')).toBe('test');
     });
   });
+
+  describe('setEvents', () => {
+    let input = document.createElement('input');
+    input.setAttribute('data-tr-rules', 'required');
+    const trivuleInput = new TrivuleInput(input);
+    it('Should return defaults events, if not events provided', () => {
+      expect(trivuleInput.events).toEqual(['change', 'blur', 'input']);
+    });
+
+    it('Should return the provided events', () => {
+      trivuleInput.setEventTriggers('change');
+      expect(trivuleInput.events).toEqual(['change']);
+    });
+    input = document.createElement('input');
+    input.setAttribute('data-tr-rules', 'required');
+    input.setAttribute('data-tr-events', 'keyup');
+    const trivuleInput1 = new TrivuleInput(input);
+    it('Should return the provided events', () => {
+      expect(trivuleInput1.events).toEqual(['keyup']);
+    });
+  });
 });

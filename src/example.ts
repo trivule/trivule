@@ -15,10 +15,6 @@ trivuleForm.make([
   },
 ]);
 
-trivuleForm.validated(); // Get only validated inputs
-trivuleForm.failed(); // Get only failed inputs
-trivuleForm.inputs(); //get all inputs
-
 trivuleForm.make({
   email: {
     rules: ['required', 'email', 'maxlength:60'],
@@ -30,7 +26,12 @@ trivuleForm.make({
   },
 });
 
+trivuleForm.validated(); // Get only validated inputs
+trivuleForm.failed(); // Get only failed inputs
+trivuleForm.inputs(); //get all inputs
+
 trivuleForm.onUpdate((form) => {
+  console.log(form);
   const percent = (form.validated().length / trivuleForm.all().length) * 100;
 
   const nc = document.getElementById('number-increment');
@@ -59,13 +60,6 @@ trivuleForm.onUpdate((form) => {
   }
 });
 
-trivuleForm.make({
-  email: {
-    rules: ['required', 'email', 'maxlength:60'],
-    feedbackElement: '.invalid-feedback',
-    realTime: false,
-  },
-});
-
 const emailInput = trivuleForm.get('email');
 emailInput?.appendRule({ rule: 'endWith:@gmail.com' });
+console.log(emailInput);
