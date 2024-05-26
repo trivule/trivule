@@ -34,3 +34,5 @@ This release provides significant improvements and new features aimed at enhanci
 
 - **Dynamic Rule Callbacks:** Implemented dynamic rule callbacks that allow validation logic to be defined and executed based on runtime conditions, providing more powerful and flexible validation capabilities.
  
+ #### 1.2.1 (2024-05-26)
+ - fix import of declaration files
