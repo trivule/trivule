@@ -8,6 +8,7 @@ import {
   ITrivuleInputObject,
   ITrivuleInputCallback,
   ValidatableInput,
+  CssSelector,
 } from '../contracts';
 import { TrLocal } from '../locale/tr-local';
 import { isBoolean, isNumber } from '../rules';
@@ -87,31 +88,38 @@ export class TrivuleForm {
   private _onUpdateCallbacks: TrivuleFormHandler[] = [];
 
   private _wasInit = false;
-  constructor(container: ValidatableForm, config?: TrivuleFormConfig) {
+  private _wasBound = false;
+  constructor(
+    containerOrConfig?: ValidatableForm | TrivuleFormConfig,
+    config?: TrivuleFormConfig,
+  ) {
     this.parameter = new TrParameter();
-    this.setContainer(container);
-    this._formValidator = new FormValidator(this.container);
-    this.setConfig(config);
-    this._initTrivuleInputs();
-    this.init();
+    //If the container is provided and is resolvable we bind it automatically
+    //if the container is config, we check if element attribut exists and bind it
+    //If config is provided we assign it
+    if (
+      typeof containerOrConfig === 'string' ||
+      containerOrConfig instanceof HTMLElement
+    ) {
+      this.bind(containerOrConfig);
+      this.setConfig(config);
+    } else {
+      if (config?.element) {
+        this.bind(config.element);
+      }
+      this.setConfig(config ?? containerOrConfig);
+    }
   }
 
-  private setContainer(container: ValidatableForm) {
-    if (!(container instanceof HTMLElement)) {
-      const el = document.querySelector<HTMLFormElement>(container);
-      if (el) {
-        container = el;
-      }
+  setSubmitButton(selector?: CssSelector) {
+    let submitButton: HTMLButtonElement | null = null;
+    if (selector) {
+      submitButton = getHTMLElementBySelector<HTMLButtonElement>(selector);
     }
-
-    if (!(container instanceof HTMLElement)) {
-      throw new Error("The 'html container or html form' doesn't exist.");
+    if (!submitButton) {
+      submitButton =
+        this.container.querySelector<HTMLButtonElement>('[data-tr-submit]');
     }
-
-    this.container = container;
-
-    const submitButton =
-      this.container.querySelector<HTMLElement>('[data-tr-submit]');
 
     if (submitButton) {
       this.submitButton = submitButton;
@@ -902,5 +910,31 @@ export class TrivuleForm {
     this.each((i) => {
       i.setInvalidClass(cls);
     });
+  }
+
+  bind(form?: ValidatableForm) {
+    if (this._wasBound) {
+      return this;
+    }
+    if (form) {
+      const element = getHTMLElementBySelector(form);
+      if (element instanceof HTMLElement) {
+        this.container = element;
+      }
+    }
+    if (!(this.container instanceof HTMLElement)) {
+      if (this.config.element) {
+        const element = getHTMLElementBySelector(this.config.element);
+        if (element instanceof HTMLElement) {
+          this.container = element;
+        }
+      }
+    }
+    if (this.container instanceof HTMLElement) {
+      this._formValidator = new FormValidator(this.container);
+      this._initTrivuleInputs();
+      this.init();
+      this._wasBound = true;
+    }
   }
 }

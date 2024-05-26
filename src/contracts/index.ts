@@ -108,7 +108,7 @@ export type ValidatableInput =
 /**
  * Represents a validatable HTML form element.
  */
-export type ValidatableForm = HTMLElement | string | 'form';
+export type ValidatableForm = CssSelector;
 /**
  * The possible input types expected to be gotten
  */
@@ -235,6 +235,7 @@ export type TrivuleFormConfig = {
 
   feedbackSelector?: string;
   realTime?: boolean;
+  element?: ValidatableForm;
 };
 
 export type TrivuleHooks = 'before.init' | 'after.init' | 'destroy' | string;

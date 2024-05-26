@@ -21,7 +21,7 @@
 
 This release provides significant improvements and new features aimed at enhancing the flexibility and performance of form validation. The introduction of real-time validation control, optional initialization, and imperative validation rules allows for a more customizable and efficient development experience. The addition of global feedback elements simplifies the process of providing user feedback on form validation.
 
- #### v1.2.0 (2024-05-26)
+#### v1.2.0 (2024-05-26)
 
 ##### Enhancements
 
@@ -33,6 +33,7 @@ This release provides significant improvements and new features aimed at enhanci
 ##### Features
 
 - **Dynamic Rule Callbacks:** Implemented dynamic rule callbacks that allow validation logic to be defined and executed based on runtime conditions, providing more powerful and flexible validation capabilities.
- 
- #### 1.2.1 (2024-05-26)
- - fix import of declaration files
+
+#### 1.2.1 (2024-05-26)
+
+- fix import of declaration files
