@@ -13,12 +13,23 @@ export class InputRule {
     this.set(rules, messages, local);
   }
 
+  /**
+   * Removes a validation rule from the InputRule instance.
+   * @param  rule - The name of the rule to remove.
+   * @returns Returns the current InputRule instance for method chaining.
+   */
   remove(rule: string): this {
     const { ruleName } = getRule(rule);
     this.items = this.items.filter((item) => item.name !== ruleName);
+    //Delete the rule message
+    delete this.messages[ruleName];
     return this;
   }
-
+  /**
+   * Retrieves a validation rule from the InputRule instance.
+   * @param {string | Rule} rule - Optional. The name of the rule to retrieve.
+   * @returns Returns the validation rule if found, an array of all rules if no specific rule is provided, or null if the rule is not found.
+   */
   get(rule?: string | Rule) {
     if (rule) {
       const { ruleName } = getRule(rule);
@@ -26,14 +37,27 @@ export class InputRule {
     }
     return this.items;
   }
+  /**
+   * Gets the number of validation rules in the InputRule instance.
+   */
   get length() {
     return this.items.length;
   }
+  /**
+   * Retrieves the validation rule at the specified index in the InputRule instance.
+   * @param {number} index - The index of the rule to retrieve.
+   * @returns The validation rule at the specified index.
+   */
   atIndex(index: number) {
     return this.items[index];
   }
+  /**
+   * Clears all validation rules and associated messages from the InputRule instance.
+   * @returns - Returns the current InputRule instance after clearing.
+   */
   clear() {
     this.items = [];
+    this.messages = {};
     return this;
   }
   ruleNameAsArray() {
@@ -42,7 +66,16 @@ export class InputRule {
   messageAsArray() {
     return this.items.map((rule) => rule.message);
   }
-
+  /**
+   * Adds a new validation rule to the InputRule instance.
+   * If the rule already exists, it is first removed and then added again.
+   * @param {string | Rule} rule - The name of the rule to add or a valid Trivule rule.
+   * @param {string | null} message - Optional. The custom error message for the rule.
+   * @param {RuleParam} param - Optional. The parameters for the rule.
+   * @param {RuleCallBack} validate - Optional. The validation callback function for the rule.
+   * @param {string} local - Optional. The locale to use for retrieving localized error messages.
+   * @returns - Returns the current InputRule instance after adding the rule.
+   */
   add(
     rule: string | Rule,
     message?: string | null,
@@ -60,8 +93,12 @@ export class InputRule {
     const { ruleName } = getRule(rule);
     return this.items.some((item) => item.name === ruleName);
   }
-
-  createRule(
+  /**
+   * Checks if a validation rule exists in the InputRule instance.
+   * @param {string | Rule} rule - The name of the rule to check or a valid Trivule rule.
+   * @returns {boolean} - Returns true if the rule exists, otherwise returns false.
+   */
+  private createRule(
     originaleRule: string,
     message?: string | null,
     param?: RuleParam,
@@ -121,6 +158,14 @@ export class InputRule {
     );
     return matches[0] ?? [];
   }
+  /**
+   * Sets validation rules and associated messages for the InputRule instance.
+   * @param {Rule[] | string[] | Rule | string} rules - The validation rules to set.
+   * @param {string | string[] | Record<string, string> | null} messages - Optional. Custom error messages for the validation rules.
+   * @param {string} local - Optional. The locale to use for retrieving localized error messages.
+   * @returns - Returns the current InputRule instance after setting the rules.
+   */
+
   set(
     rules: Rule[] | string[] | Rule | string,
     messages?: string | string[] | Record<string, string> | null,
@@ -150,10 +195,20 @@ export class InputRule {
     return this;
   }
 
+  /**
+   * Maps over the validation rules in the InputRule instance and applies a function to each rule.
+   * @param {Function} call - The function to apply to each rule. It receives two parameters: the rule itself and its index in the array.
+   * @returns An array containing the results of applying the function to each rule.
+   */
   map<T = unknown>(call: (r: RuleType, i: number) => T) {
     return this.items.map(call);
   }
-
+  /**
+   * Replaces a validation rule with another rule in the InputRule instance.
+   * @param {string} outgoing - The name of the rule to replace.
+   * @param {string} incoming - The name of the rule to replace with.
+   * @returns - Returns the current InputRule instance after replacing the rule.
+   */
   replace(outgoing: string, incoming: string) {
     const { ruleName } = getRule(outgoing);
     const index = this.items.findIndex((r) => r.name === ruleName);
@@ -162,11 +217,22 @@ export class InputRule {
     }
     return this;
   }
-
+  /**
+   * Retrieves all validation rules stored in the InputRule instance.
+   * @returns - An array containing all validation rules.
+   */
   all() {
     return this.items;
   }
-
+  /**
+   * Adds a new validation rule to the InputRule instance and returns the current instance.
+   * @param {string} rule - The name of the rule to add.
+   * @param {string | null} message - Optional. The custom error message for the rule.
+   * @param {RuleParam} param - Optional. The parameters for the rule.
+   * @param {RuleCallBack} validate - Optional. The validation callback function for the rule.
+   * @param {string} local - Optional. The locale to use for retrieving localized error messages.
+   * @returns - Returns the current InputRule instance after adding the rule.
+   */
   push(
     rule: string,
     message?: string | null,
@@ -177,10 +243,22 @@ export class InputRule {
     this.add(rule, message, param, validate, local);
     return this;
   }
+  /**
+   * Retrieves all custom error messages associated with validation rules in the InputRule instance.
+   * @returns - An object containing all custom error messages.
+   */
   getMessages() {
     return this.messages;
   }
-
+  /**
+   * Adds a new validation rule to the InputRule instance and returns the current instance.
+   * @param {string} rule - The name of the rule to add.
+   * @param {string | null} message - Optional. The custom error message for the rule.
+   * @param {RuleParam} param - Optional. The parameters for the rule.
+   * @param {RuleCallBack} validate - Optional. The validation callback function for the rule.
+   * @param {string} local - Optional. The locale to use for retrieving localized error messages.
+   * @returns - Returns the current InputRule instance after adding the rule.
+   */
   append(
     rule: string,
     message?: string | null,
@@ -191,6 +269,15 @@ export class InputRule {
     this.push(rule, message, param, validate, local);
     return this;
   }
+  /**
+   * Adds a new validation rule to the beginning of the InputRule instance and returns the current instance.
+   * @param {string} rule - The name of the rule to add.
+   * @param {string | null} message - Optional. The custom error message for the rule.
+   * @param {RuleParam} param - Optional. The parameters for the rule.
+   * @param {RuleCallBack} validate - Optional. The validation callback function for the rule.
+   * @param {string} local - Optional. The locale to use for retrieving localized error messages.
+   * @returns - Returns the current InputRule instance after adding the rule.
+   */
   prepend(
     rule: string,
     message?: string | null,
@@ -201,7 +288,12 @@ export class InputRule {
     this.items.unshift(this.createRule(rule, message, param, validate, local));
     return this;
   }
-
+  /**
+   * Inserts a new validation rule before an existing rule in the InputRule instance and returns the current instance.
+   * @param {string} existingRule - The name of the existing rule before which the new rule will be inserted.
+   * @param {string | Rule | { rule: string; message?: string | null; param?: RuleParam; validate?: RuleCallBack; local?: string; }} incomming - The new rule to insert.
+   * @returns - Returns the current InputRule instance after inserting the new rule.
+   */
   insertBefore(
     existingRule: string,
     incomming:
@@ -237,7 +329,12 @@ export class InputRule {
     }
     return this;
   }
-
+  /**
+   * Inserts a new validation rule after an existing rule in the InputRule instance and returns the current instance.
+   * @param {string} existingRule - The name of the existing rule after which the new rule will be inserted.
+   * @param {string | Rule | { rule: string; message?: string | null; param?: RuleParam; validate?: RuleCallBack; local?: string; }} incomming - The new rule to insert.
+   * @returns - Returns the current InputRule instance after inserting the new rule.
+   */
   insertAfter(
     existingRule: string,
     incomming:
@@ -292,6 +389,11 @@ export class InputRule {
 
     return this;
   }
+  /**
+   * Retrieves the message associated with a specific validation rule.
+   * @param {string | Rule} rule - The name of the validation rule or the rule itself.
+   * @returns {string | null} - The message associated with the specified rule, or null if the message is not found.
+   */
 
   getMessage(rule: string | Rule): string | null {
     const { ruleName } = getRule(rule);
