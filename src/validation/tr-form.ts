@@ -871,6 +871,8 @@ export class TrivuleForm {
   }
   /**
    * Binds the form element or selector to the TrivuleForm instance once it is an HTMLElement.
+   * Can be called without argument,if argument is not provided
+   * it attempts to resolve the element using the element selector indicate on the config
    *
    * @param form - The HTML form element or a CSS selector string for the form to bind.
    * If an HTML element is provided, it directly binds the element. If a selector string is provided,
@@ -913,6 +915,10 @@ export class TrivuleForm {
       this._resolveInputValidation();
       this._resolveEventListeners();
     }
+  }
+
+  bindElement(form?: ValidatableForm) {
+    return this.bind(form);
   }
   private _addEvents(string: string, call: EventCallback): void {
     if (!this._eventCallbacks[string]) {
