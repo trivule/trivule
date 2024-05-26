@@ -1,0 +1,8 @@
+{
+  "bail": 1,
+  "coverageProvider": "v8",
+  "transform": {
+    "\\.(ts)$": "ts-jest"
+  },
+  "testEnvironment": "jsdom"
+}
