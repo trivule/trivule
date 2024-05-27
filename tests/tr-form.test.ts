@@ -1,8 +1,6 @@
-import { TrivuleInputParms } from '../src/contracts';
 import { TrivuleForm } from '../src/validation/tr-form';
 import { TrivuleInput } from '../src/validation/tr-input';
 
-// Création d'une classe pour le formulaire
 class MyForm {
   form: HTMLFormElement;
   nameInput: HTMLInputElement;
@@ -62,7 +60,6 @@ class MyForm {
   }
 }
 
-// Instanciation du formulaire
 const formInstance = new MyForm();
 
 describe('TrivuleForm', () => {
@@ -158,6 +155,44 @@ describe('TrivuleForm', () => {
     test('Should return the native element', () => {
       trForm = new TrivuleForm(formInstance.form);
       expect(trForm.getNativeElement()).toBe(formInstance.form);
+    });
+  });
+
+  describe('afterBinding && beforeBinding', () => {
+    let form: TrivuleForm;
+
+    beforeEach(() => {
+      form = new TrivuleForm();
+    });
+
+    describe('afterBinding', () => {
+      it('should register a callback for after binding', () => {
+        const callback = jest.fn();
+        form.afterBinding(callback);
+        form.bind(formInstance.form);
+        expect(callback).toHaveBeenCalled();
+      });
+
+      it('should allow method chaining', () => {
+        const callback = jest.fn();
+        const returnValue = form.afterBinding(callback);
+        expect(returnValue).toBe(form);
+      });
+    });
+
+    describe('beforeBinding', () => {
+      it('should register a callback for before binding', () => {
+        const callback = jest.fn();
+        form.beforeBinding(callback);
+        form.bind(formInstance.form);
+        expect(callback).toHaveBeenCalled();
+      });
+
+      it('should allow method chaining', () => {
+        const callback = jest.fn();
+        const returnValue = form.beforeBinding(callback);
+        expect(returnValue).toBe(form);
+      });
     });
   });
 });

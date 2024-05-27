@@ -36,6 +36,7 @@ import { TrParameter } from './utils/parameter';
 export class TrivuleForm {
   private _eventCallbacks: Record<string, EventCallback[]> = {};
   private _registerInputs: Record<string | number, TrivuleInputParms> = {};
+  private _lifeCycleCallbacks: Record<string, TrivuleFormHandler[]> = {};
   private __calledCount = 0;
   /**
    * This status indicates the current state of the form
@@ -890,6 +891,7 @@ export class TrivuleForm {
    */
 
   bind(form?: ValidatableForm) {
+    this._executeLifeCycleCallbacks('before.binding');
     if (this._wasBound) {
       return this;
     }
@@ -907,6 +909,7 @@ export class TrivuleForm {
         }
       }
     }
+
     if (this.container instanceof HTMLElement) {
       this._formValidator = new FormValidator(this.container);
       this._initTrivuleInputs();
@@ -914,6 +917,7 @@ export class TrivuleForm {
       this._wasBound = true;
       this._resolveInputValidation();
       this._resolveEventListeners();
+      this._executeLifeCycleCallbacks('after.binding');
     }
   }
 
@@ -995,5 +999,63 @@ export class TrivuleForm {
       new TrivuleInput(selector as ValidatableInput, param, this.parameter),
     );
     return param;
+  }
+
+  /**
+   * Registers a callback to be executed before the form element is bound.
+   * @param fn - The callback function to be executed before binding.
+   * @returns The instance of the form to allow method chaining.
+   * @example
+   * const form = new TrivuleForm();
+   * form.beforeBinding((form) => {
+   *   console.log('Form binding is about to start.');
+   * });
+   */
+  beforeBinding(fn: TrivuleFormHandler) {
+    this._addLifeCycleCallback('before.binding', fn);
+    return this;
+  }
+
+  /**
+   * Adds a lifecycle callback to the specified lifecycle event.
+   * @param name - The name of the lifecycle event.
+   * @param call - The callback function to be added.
+   * @private
+   */
+  private _addLifeCycleCallback(name: string, call: TrivuleFormHandler) {
+    if (!this._lifeCycleCallbacks[name]) {
+      this._lifeCycleCallbacks[name] = [call];
+    } else {
+      this._lifeCycleCallbacks[name].push(call);
+    }
+  }
+
+  /**
+   * Executes all the callbacks associated with the specified lifecycle event.
+   * @param name - The name of the lifecycle event.
+   * @private
+   */
+  private _executeLifeCycleCallbacks(name: string): void {
+    const callbacks = this._lifeCycleCallbacks[name];
+    if (callbacks) {
+      transformToArray(callbacks, (fn) => {
+        this.__call(fn, this);
+      });
+    }
+  }
+
+  /**
+   * Registers a callback to be executed after the form element has been bound.
+   * @param fn - The callback function to be executed after binding.
+   * @returns The instance of the form to allow method chaining.
+   * @example
+   * const form = new TrivuleForm();
+   * form.afterBinding((form) => {
+   *   console.log('Form has been bound.');
+   * });
+   */
+  afterBinding(fn: TrivuleFormHandler) {
+    this._addLifeCycleCallback('after.binding', fn);
+    return this;
   }
 }
