@@ -212,8 +212,84 @@ TrRule.add('notSudo', (input) => {
 
 [Get Started with Trivule](https://www.trivule.com/docs)
 
-## Quick start
 
+## Usage Guide in a Framework
+
+Welcome to the Trivule installation and usage guide.
+
+### Install Trivule with npm
+
+Install Trivule in your project. This guide uses Trivule version v1.3.0. If you are using an older version, you should migrate to version v1.3.0.
+
+```sh
+npm install trivule
+```
+### Imperative Approach
+
+The imperative approach requires explicit control over your project's lifecycle and component initialization.
+
+#### Project Lifecycle
+
+- **Unique Initialization**: Avoid initializing `TrivuleForm` in a frequently called hook. Prefer initializing it outside of a hook if possible to avoid repeated reinitializations.
+- **Form Element Lookup**: Use the `bind` method to locate the form element to be validated. This lookup is performed only once for optimal performance. Ensure the DOM is ready before calling this method. You can call it in a hook that indicates the form is ready.
+
+#### Using the afterBinding Hook
+
+Use the `afterBinding` hook to register your callbacks, which will be executed as soon as the form element is available.
+
+Example:
+
+```javascript
+import TrivuleForm from 'trivule';
+
+const form = new TrivuleForm();
+
+// Define your validation rules here
+form.afterBinding((form) => {
+  form.make({
+    fieldName: {
+      rules: "required|min:2"
+    }
+  });
+});
+
+// React
+useEffect(() => {
+  form.bind(/*selector*/);
+}, []);
+
+// Angular
+ngAfterViewInit() {
+  form.bind(/*selector*/);
+}
+
+// Vue
+mounted() {
+  form.bind(/*selector*/);
+}
+
+//etc
+```
+
+### Important Points
+
+- `bind` only executes code after finding the target element.
+- Trivule does not monitor the DOM to check if your element is available. Call the `bind` method when you are certain the `form` is in the DOM.
+
+### Declarative Approach
+
+1. **Define the Form**: Ensure your form is correctly defined with declarative attributes.
+2. **Call the bind Method**: Do this when the form is available in the DOM.
+
+Example:
+
+```html
+<form id="yourFormId">
+  <input type="text" name="fieldName" data-tr-rules="required|min:2">
+</form>
+```
+
+## Quick start
 - [Single Input Validation](/docs/input-validation.md)
 - [Form Validation](/docs/form-validation.md)
 
