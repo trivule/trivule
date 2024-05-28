@@ -228,7 +228,7 @@ npm install trivule
 
 The imperative approach requires explicit control over your project's lifecycle and component initialization.
 
-#### Project Lifecycle
+#### Your Framework lifecyle
 
 - **Unique Initialization**: Avoid initializing `TrivuleForm` in a frequently called hook. Prefer initializing it outside of a hook if possible to avoid repeated reinitializations.
 - **Form Element Lookup**: Use the `bind` method to locate the form element to be validated. This lookup is performed only once for optimal performance. Ensure the DOM is ready before calling this method. You can call it in a hook that indicates the form is ready.
